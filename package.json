@@ -1,0 +1,28 @@
+{
+  "name": "oneforall",
+  "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container",
+  "version": "1.0.0",
+  "main": "esnext/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "detect-collisions": "^2.5.4",
+    "docsify-cli": "^4.4.3",
+    "esm": "^3.2.25",
+    "jest": "^27.0.6",
+    "pixi-shim": "^2.3.1",
+    "pixi.js": "^6.0.4",
+    "prettier": "^2.3.2",
+    "prettier-config-standard": "^4.0.0",
+    "rxjs": "^7.3.0",
+    "ts-dependency-injection": "^1.2.2",
+    "ts-jest": "^27.0.4",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "test": "jest --verbose --silent",
+    "test-build": "node -r esm ./test-build.js",
+    "format": "yarn prettier ./src/*.ts --write",
+    "build": "tsc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "target": "es2017",
+    "outDir": "esnext",
+    "paths": {
+      "mini-signals": ["./node_modules/mini-signals/index.js"]
+    }
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["src/*.spec.ts", "*.js"]
+}
