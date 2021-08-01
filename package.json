@@ -1,5 +1,5 @@
 {
-  "name": "oneforall",
+  "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container",
   "version": "1.0.0",
   "main": "esnext/index.js",
