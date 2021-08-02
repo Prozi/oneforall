@@ -1,10 +1,12 @@
 import 'pixi-shim'
+import 'pixi.js-legacy'
 import * as PIXI from 'pixi.js'
 import { GameObject } from './game-object'
 import { StateMachine } from './state-machine'
 import { CircleBody } from './circle-body'
 import { Sprite } from './sprite'
 import { Prefab } from './prefab'
+import { Scene } from './scene'
 
 describe('GIVEN Prefab', () => {
   it('THEN can be instantiated', () => {
@@ -22,15 +24,19 @@ describe('GIVEN Prefab', () => {
   })
 
   it('THEN can create 100 instances', () => {
+    const scene: Scene = new Scene({ visible: true })
     const soldierPrefab: Prefab = new Prefab(
       'Soldier',
       (go: GameObject & any) => {
         go.state = new StateMachine(go)
         go.sprite = new Sprite(go, PIXI.Texture.WHITE)
+
         go.body = new CircleBody(go, 40)
         go.body.x = Math.random() * innerWidth
         go.body.y = Math.random() * innerHeight
+
         go.update()
+        scene.addChild(go)
       }
     )
 

@@ -2,7 +2,7 @@
 
 - GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics
 
-- with PIXI.js support with Sprite, Container, Scene
+- with WebGL support with PIXI: Sprite, Container, Scene
 
 - with lifecycle management (proper destroy)
 
@@ -12,22 +12,58 @@
 
 - written in typescript exported as npm es6 module
 
-```javascript
-import { GameObject, Prefab, StateMachine, Sprite, CircleBody } from 'oneforall'
+---
 
+```
+<game>
+├── [Physics]
+└── [Scene]
+    ├── [HTMLCanvas]
+    ├── [GameObject "Map"]
+    │   ├── [PolygonBody]
+    │   └── [Container]
+    │       └──[100x Sprite]
+    ├── [GameObject "Player" from Prefab]
+    │   ├── [CircleBody]
+    │   ├── [Sprite]
+    │   └── [StateMachine]
+    └── [100x GameObject "Enemy" from Prefab]
+        ├── [CircleBody]
+        ├── [Sprite]
+        └── [StateMachine]
+```
+
+---
+
+```javascript
+import {
+  Scene,
+  GameObject,
+  Prefab,
+  StateMachine,
+  Sprite,
+  CircleBody
+} from '@jacekpietal/oneforall'
+
+const scene: Scene = new Scene({ visible: true })
 const soldierPrefab: Prefab = new Prefab('Soldier', (go: GameObject & any) => {
   go.state = new StateMachine(go)
   go.sprite = new Sprite(go, PIXI.Texture.WHITE)
+
   go.body = new CircleBody(go, 40)
   go.body.x = Math.random() * innerWidth
   go.body.y = Math.random() * innerHeight
+
   go.update()
+  scene.addChild(go)
 })
 
 const soldiers: GameObject[] = new Array(100)
   .fill(0)
   .map((_) => GameObject.instantiate(soldierPrefab))
 ```
+
+---
 
 ```
 $ jest --verbose --silent
@@ -112,6 +148,8 @@ Snapshots:   0 total
 Time:        22.862 s
 Done in 25.38s.
 ```
+
+---
 
 ```
 $ node -r esm ./test-build.js

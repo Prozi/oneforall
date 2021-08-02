@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs';
+import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { AutoInject } from '@jacekpietal/dependency-injection';
 import { Application } from './application';
 import { Physics } from './physics';
@@ -15,14 +15,25 @@ export class Scene {
         this.children = new Set();
         this.children$ = new Subject();
         this.container = new PIXI.Container();
+        this.destroy$ = new Subject();
         this.name = options.name || 'Scene';
         this.container.visible = options.visible || false;
-        this.container.position.set(options.x || 0, options.y || 0);
         this.container.scale.set(options.scale || 1);
+        if (options.autoSize) {
+            this.enableAutoSize();
+        }
         this.stage.addChild(this.container);
     }
     get stage() {
         return this.pixi.stage;
+    }
+    enableAutoSize() {
+        this.pixi.renderer.resize(innerWidth, innerHeight);
+        fromEvent(window, 'resize')
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+            this.pixi.renderer.resize(innerWidth, innerHeight);
+        });
     }
     update() {
         this.physics.update();
@@ -31,6 +42,8 @@ export class Scene {
     destroy() {
         this.stage.removeChild(this.container);
         this.container.destroy();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
     addChild(child) {
         if (this.children.has(child)) {
