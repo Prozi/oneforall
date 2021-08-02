@@ -1,11 +1,11 @@
 import { Polygon, Collisions, Result, Body } from 'detect-collisions'
-import { Singleton } from 'ts-dependency-injection'
+import { Injectable } from '@jacekpietal/dependency-injection'
 
 export interface IBody extends Body {
   isTrigger?: boolean
 }
 
-@Singleton
+@Injectable
 export class Physics {
   readonly system: Collisions = new Collisions()
   readonly result: Result = this.system.createResult()

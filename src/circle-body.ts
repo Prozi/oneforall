@@ -1,5 +1,5 @@
 import { Polygon } from 'detect-collisions'
-import { AutoInject } from 'ts-dependency-injection'
+import { AutoInject } from '@jacekpietal/dependency-injection'
 import { Physics } from './physics'
 import { Component } from './component'
 import { GameObject } from './game-object'

@@ -1,6 +1,7 @@
 import 'pixi-shim'
 import 'pixi.js-legacy'
 import { GameObject } from './game-object'
+import { StateMachine } from './state-machine'
 import { Scene } from './scene'
 
 describe('GIVEN Scene', () => {
@@ -21,5 +22,24 @@ describe('GIVEN Scene', () => {
     scene.addChild(new GameObject())
 
     expect(scene.children.size).toBe(3)
+  })
+
+  it('THEN scene propagates update to gameobject to component', () => {
+    const scene = new Scene({
+      name: 'MyScene1',
+      scale: 2,
+      visible: true
+    })
+    const go = new GameObject()
+    const state = new StateMachine(go)
+
+    jest.spyOn(go, 'update')
+    jest.spyOn(state, 'update')
+
+    scene.addChild(go)
+    scene.update()
+
+    expect(go.update).toHaveBeenCalled()
+    expect(state.update).toHaveBeenCalled()
   })
 })

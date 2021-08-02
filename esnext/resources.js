@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Resources_1;
 import Cache from 'latermom';
 import * as PIXI from 'pixi.js';
-import { Singleton } from 'ts-dependency-injection';
+import { Injectable } from '@jacekpietal/dependency-injection';
 let Resources = Resources_1 = class Resources {
     constructor(path = '/') {
         this.cache = new Cache(async (url) => {
@@ -50,6 +50,6 @@ let Resources = Resources_1 = class Resources {
     }
 };
 Resources = Resources_1 = __decorate([
-    Singleton
+    Injectable
 ], Resources);
 export { Resources };

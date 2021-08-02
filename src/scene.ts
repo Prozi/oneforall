@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Subject } from 'rxjs'
-import { AutoInject } from 'ts-dependency-injection'
+import { AutoInject } from '@jacekpietal/dependency-injection'
 import { Application } from './application'
 import { GameObject } from './game-object'
 import { Physics } from './physics'

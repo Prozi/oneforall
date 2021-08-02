@@ -1,8 +1,8 @@
 import Cache from 'latermom'
 import * as PIXI from 'pixi.js'
-import { Singleton } from 'ts-dependency-injection'
+import { Injectable } from '@jacekpietal/dependency-injection'
 
-@Singleton
+@Injectable
 export class Resources {
   private cache: Cache
 

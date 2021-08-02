@@ -5,13 +5,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as PIXI from 'pixi.js';
-import { Singleton } from 'ts-dependency-injection';
+import { Injectable } from '@jacekpietal/dependency-injection';
 let Application = class Application extends PIXI.Application {
     constructor(options = {}) {
         super(Object.assign({ autoStart: false, sharedTicker: false, sharedLoader: false }, options));
     }
 };
 Application = __decorate([
-    Singleton
+    Injectable
 ], Application);
 export { Application };

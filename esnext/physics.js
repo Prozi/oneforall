@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Collisions } from 'detect-collisions';
-import { Singleton } from 'ts-dependency-injection';
+import { Injectable } from '@jacekpietal/dependency-injection';
 let Physics = class Physics {
     constructor() {
         this.system = new Collisions();
@@ -58,6 +58,6 @@ let Physics = class Physics {
     }
 };
 Physics = __decorate([
-    Singleton
+    Injectable
 ], Physics);
 export { Physics };
