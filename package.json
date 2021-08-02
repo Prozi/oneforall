@@ -47,5 +47,9 @@
     "scene",
     "webgl",
     "pixi.js"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Prozi/oneforall.git"
+  }
 }
