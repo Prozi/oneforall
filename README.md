@@ -61,6 +61,10 @@ const soldierPrefab: Prefab = new Prefab('Soldier', (go: GameObject & any) => {
 const soldiers: GameObject[] = new Array(100)
   .fill(0)
   .map((_) => GameObject.instantiate(soldierPrefab))
+
+document.body.appendChild(scene.pixi.view)
+
+scene.pixi.start()
 ```
 
 ---
