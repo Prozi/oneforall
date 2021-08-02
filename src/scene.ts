@@ -5,8 +5,9 @@ import { Application } from './application'
 import { GameObject } from './game-object'
 import { Physics } from './physics'
 import { Resources } from './resources'
+import { Lifecycle } from './component'
 
-export class Scene {
+export class Scene extends Lifecycle {
   readonly name: string
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
@@ -17,6 +18,7 @@ export class Scene {
 
   container: PIXI.Container = new PIXI.Container()
   destroy$: Subject<void> = new Subject()
+  animationFrame: number
 
   constructor(
     options: {
@@ -26,6 +28,7 @@ export class Scene {
       scale?: number
     } = {}
   ) {
+    super()
     this.name = options.name || 'Scene'
 
     this.container.visible = options.visible || false
@@ -40,6 +43,26 @@ export class Scene {
 
   get stage(): PIXI.Container {
     return this.pixi.stage
+  }
+
+  stop(): void {
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame)
+    }
+
+    this.pixi.stop()
+  }
+
+  start(): void {
+    const loop = () => {
+      this.update()
+
+      this.animationFrame = requestAnimationFrame(loop)
+    }
+
+    loop()
+
+    this.pixi.start()
   }
 
   enableAutoSize(): void {
@@ -58,20 +81,24 @@ export class Scene {
     Array.from(this.children.values()).forEach((child: GameObject) =>
       child.update()
     )
+
+    super.update()
   }
 
   destroy(): void {
     this.stage.removeChild(this.container)
     this.container.destroy()
+    this.stop()
 
-    this.destroy$.next()
-    this.destroy$.complete()
+    super.destroy()
   }
 
   addChild(child: GameObject): void {
     if (this.children.has(child)) {
       return
     }
+
+    child.parent = this
 
     this.children.add(child)
     this.children$.next()
@@ -81,6 +108,8 @@ export class Scene {
     if (!this.children.has(child)) {
       return
     }
+
+    child.parent = null
 
     this.children.delete(child)
     this.children$.next()

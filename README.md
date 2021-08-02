@@ -16,17 +16,22 @@
 
 ```
 <game>
-├── [Physics]
 └── [Scene]
-    ├── [HTMLCanvas]
+    ├── [Physics]
+    ├── [Resources]
+    ├── [PIXI.Application]
+    │   └── [HTMLCanvas]
+    │
     ├── [GameObject "Map"]
     │   ├── [PolygonBody]
     │   └── [Container]
     │       └──[100x Sprite]
+    │
     ├── [GameObject "Player" from Prefab]
     │   ├── [CircleBody]
     │   ├── [Sprite]
     │   └── [StateMachine]
+    │
     └── [100x GameObject "Enemy" from Prefab]
         ├── [CircleBody]
         ├── [Sprite]
@@ -36,35 +41,31 @@
 ---
 
 ```javascript
+import { takeUntil } from 'rxjs'
+import { Scene, GameObject } from '@jacekpietal/oneforall'
 import {
-  Scene,
-  GameObject,
-  Prefab,
-  StateMachine,
-  Sprite,
-  CircleBody
-} from '@jacekpietal/oneforall'
+  prefab,
+  preload,
+  follow
+} from '@jacekpietal/oneforall/demo/sprite.prefab'
 
-const scene: Scene = new Scene({ visible: true })
-const soldierPrefab: Prefab = new Prefab('Soldier', (go: GameObject & any) => {
-  go.state = new StateMachine(go)
-  go.sprite = new Sprite(go, PIXI.Texture.WHITE)
+const scene: Scene = new Scene({ visible: true, autoSize: true })
+const sprites: GameObject[] = []
 
-  go.body = new CircleBody(go, 40)
-  go.body.x = Math.random() * innerWidth
-  go.body.y = Math.random() * innerHeight
+preload().then(async () => {
+  for (let i = 0; i < 1000; i++) {
+    const sprite: GameObject = await GameObject.instantiate(prefab)
 
-  go.update()
-  scene.addChild(go)
+    scene.addChild(sprite)
+    sprites.push(sprite)
+    sprite.update$
+      .pipe(takeUntil(scene.destroy$))
+      .subscribe(follow(sprite, sprites))
+  }
+
+  scene.pixi.renderer.backgroundColor = 0xcccccc
+  scene.start()
 })
-
-const soldiers: GameObject[] = new Array(100)
-  .fill(0)
-  .map((_) => GameObject.instantiate(soldierPrefab))
-
-document.body.appendChild(scene.pixi.view)
-
-scene.pixi.start()
 ```
 
 ---

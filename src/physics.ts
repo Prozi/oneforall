@@ -10,6 +10,31 @@ export class Physics {
   readonly system: Collisions = new Collisions()
   readonly result: Result = this.system.createResult()
 
+  static pushBack(
+    body: Body,
+    { overlap, overlap_x, overlap_y }: Partial<Result>
+  ): void {
+    body.x -= overlap * overlap_x
+    body.y -= overlap * overlap_y
+  }
+
+  static createCirclePoints(radius: number): number[][] {
+    const steps: number = Math.max(5, radius / 2)
+    const points: number[][] = []
+
+    for (let i = 0; i < steps; i++) {
+      const r = (2 * Math.PI * i) / steps
+
+      points.push([Math.cos(r) * radius, Math.sin(r) * radius])
+    }
+
+    return points
+  }
+
+  get bodies(): Body[] {
+    return this.system['_bvh']._bodies
+  }
+
   createPolygon(x: number, y: number, points: number[][]): Polygon {
     return this.system.createPolygon(x, y, points)
   }
@@ -19,7 +44,7 @@ export class Physics {
       throw new Error('Radius must be greater than 0')
     }
 
-    return this.createPolygon(x, y, this.createCirclePoints(radius))
+    return this.createPolygon(x, y, Physics.createCirclePoints(radius))
   }
 
   remove(body: Body): void {
@@ -28,6 +53,12 @@ export class Physics {
 
   update(): void {
     this.system.update()
+
+    Array.from(this.bodies).forEach((body: Body) => {
+      this.detectCollisions(body).forEach((result: Partial<Result>) => {
+        Physics.pushBack(body, result)
+      })
+    })
   }
 
   detectCollisions(input: Body, tolerance = 0.001): Partial<Result>[] {
@@ -49,26 +80,5 @@ export class Physics {
         return
       })
       .filter((result: Result | undefined) => !!result)
-  }
-
-  pushBack(
-    body: Body,
-    { overlap, overlap_x, overlap_y }: Partial<Result>
-  ): void {
-    body.x -= overlap * overlap_x
-    body.y -= overlap * overlap_y
-  }
-
-  private createCirclePoints(radius: number): number[][] {
-    const steps: number = Math.max(5, radius / 2)
-    const points: number[][] = []
-
-    for (let i = 0; i < steps; i++) {
-      const r = (2 * Math.PI * i) / steps
-
-      points.push([Math.cos(r) * radius, Math.sin(r) * radius])
-    }
-
-    return points
   }
 }

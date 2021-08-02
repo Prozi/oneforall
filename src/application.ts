@@ -10,5 +10,7 @@ export class Application extends PIXI.Application {
       sharedLoader: false,
       ...options
     })
+
+    document.body.appendChild(this.view)
   }
 }

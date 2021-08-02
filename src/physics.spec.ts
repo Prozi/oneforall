@@ -56,7 +56,7 @@ describe('GIVEN Physics', () => {
 
     system.update()
     system.detectCollisions(body1).forEach((result: Partial<Result>) => {
-      system.pushBack(body1, result)
+      Physics.pushBack(body1, result)
     })
     system.update()
 

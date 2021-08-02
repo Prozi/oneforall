@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "esnext/index.js",
   "license": "MIT",
   "devDependencies": {
@@ -17,7 +17,8 @@
     "ts-loader": "^9.2.4",
     "typescript": "^4.3.5",
     "webpack": "^5.48.0",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.3.2",
@@ -27,10 +28,12 @@
     "rxjs": "^7.3.0"
   },
   "scripts": {
+    "dev": "webpack serve",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
     "test-demo": "webpack && node node_modules/@jacekpietal/bouncer.js/bin demo",
     "format": "prettier ./src/*.ts --write",
+    "format-demo": "prettier ./demo/*.ts --write",
     "build": "tsc"
   },
   "keywords": [

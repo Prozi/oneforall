@@ -10,8 +10,10 @@ import { AutoInject } from '@jacekpietal/dependency-injection';
 import { Application } from './application';
 import { Physics } from './physics';
 import { Resources } from './resources';
-export class Scene {
+import { Lifecycle } from './component';
+export class Scene extends Lifecycle {
     constructor(options = {}) {
+        super();
         this.children = new Set();
         this.children$ = new Subject();
         this.container = new PIXI.Container();
@@ -27,6 +29,20 @@ export class Scene {
     get stage() {
         return this.pixi.stage;
     }
+    stop() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        this.pixi.stop();
+    }
+    start() {
+        const loop = () => {
+            this.update();
+            this.animationFrame = requestAnimationFrame(loop);
+        };
+        loop();
+        this.pixi.start();
+    }
     enableAutoSize() {
         this.pixi.renderer.resize(innerWidth, innerHeight);
         fromEvent(window, 'resize')
@@ -38,17 +54,19 @@ export class Scene {
     update() {
         this.physics.update();
         Array.from(this.children.values()).forEach((child) => child.update());
+        super.update();
     }
     destroy() {
         this.stage.removeChild(this.container);
         this.container.destroy();
-        this.destroy$.next();
-        this.destroy$.complete();
+        this.stop();
+        super.destroy();
     }
     addChild(child) {
         if (this.children.has(child)) {
             return;
         }
+        child.parent = this;
         this.children.add(child);
         this.children$.next();
     }
@@ -56,6 +74,7 @@ export class Scene {
         if (!this.children.has(child)) {
             return;
         }
+        child.parent = null;
         this.children.delete(child);
         this.children$.next();
     }

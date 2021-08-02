@@ -22,7 +22,6 @@ export class Lifecycle implements ILifecycle {
   static destroy(lifecycle: ILifecycle): void {
     lifecycle.destroy$.next()
     lifecycle.destroy$.complete()
-    lifecycle.update$.complete()
   }
 
   static update(lifecycle: ILifecycle): void {

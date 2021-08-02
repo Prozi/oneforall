@@ -5,16 +5,19 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: './demo/index.ts',
   output: {
-    path: path.resolve('./demo/build'),
+    path: path.resolve('./demo'),
     filename: 'demo.bundle.js'
   },
   resolve: {
-    fallback: { buffer: false, process: false, path: false },
     extensions: ['.ts', '.tsx', '.js']
   },
   module: {
-    rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' }
-    ]
+    rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
+  },
+  devServer: {
+    contentBase: path.resolve('./demo'),
+    filename: 'demo.bundle.js',
+    compress: false,
+    port: 4200
   }
 }

@@ -9,7 +9,7 @@ import Cache from 'latermom';
 import * as PIXI from 'pixi.js';
 import { Injectable } from '@jacekpietal/dependency-injection';
 let Resources = Resources_1 = class Resources {
-    constructor(path = '/') {
+    constructor(path = '') {
         this.cache = new Cache(async (url) => {
             try {
                 return await Resources_1.loadResource(`${path}${url}`);

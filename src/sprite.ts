@@ -17,6 +17,10 @@ export class Sprite extends PIXI.Sprite implements IComponent {
   }
 
   update(): void {
+    if (!this.parent) {
+      this.gameObject.parent?.stage.addChild(this)
+    }
+
     this.x = this.gameObject.x
     this.y = this.gameObject.y
 
@@ -24,6 +28,8 @@ export class Sprite extends PIXI.Sprite implements IComponent {
   }
 
   destroy(): void {
+    this.gameObject.parent?.stage.removeChild(this)
+
     super.destroy()
 
     Component.destroy(this)

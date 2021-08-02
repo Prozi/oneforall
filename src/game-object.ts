@@ -1,11 +1,15 @@
 import { Subject } from 'rxjs'
-import { IComponent } from './component'
+import { IComponent, ILifecycle, Lifecycle } from './component'
 import { Prefab } from './prefab'
+import { Scene } from './scene'
 
-export class GameObject {
+export class GameObject implements ILifecycle {
+  readonly update$: Subject<void> = new Subject()
+  readonly destroy$: Subject<void> = new Subject()
   readonly components: Set<IComponent> = new Set()
   readonly components$: Subject<void> = new Subject()
 
+  parent: Scene
   name: string
   x: number
   y: number
@@ -16,14 +20,20 @@ export class GameObject {
     this.y = y
   }
 
-  static instantiate(prefab: Prefab): GameObject {
-    return prefab.instantiate()
+  static async instantiate(prefab: Prefab): Promise<GameObject> {
+    return await prefab.instantiate()
   }
 
   update(): void {
     Array.from(this.components.values()).forEach((component: IComponent) =>
       component.update()
     )
+
+    Lifecycle.update(this)
+  }
+
+  destroy(): void {
+    Lifecycle.destroy(this)
   }
 
   addComponent(component: IComponent): void {

@@ -10,7 +10,7 @@ import { Scene } from './scene'
 
 describe('GIVEN Prefab', () => {
   it('THEN can be instantiated', () => {
-    const prefab = new Prefab('MyPrefab', (go: GameObject & any) => {
+    const prefab = new Prefab('MyPrefab', (go: GameObject | any) => {
       go.x = 120
       go.y = 60
       go.state = new StateMachine(go)
@@ -27,7 +27,7 @@ describe('GIVEN Prefab', () => {
     const scene: Scene = new Scene({ visible: true })
     const soldierPrefab: Prefab = new Prefab(
       'Soldier',
-      (go: GameObject & any) => {
+      (go: GameObject | any) => {
         go.state = new StateMachine(go)
         go.sprite = new Sprite(go, PIXI.Texture.WHITE)
 
