@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "esnext/index.js",
   "license": "MIT",
   "devDependencies": {

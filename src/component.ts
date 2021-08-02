@@ -55,7 +55,7 @@ export class Component extends Lifecycle implements IComponent {
   }
 
   static update(component: Component): void {
-    Lifecycle.update(component);
+    Lifecycle.update(component)
   }
 
   destroy(): void {
