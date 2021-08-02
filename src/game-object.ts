@@ -21,9 +21,9 @@ export class GameObject {
   }
 
   update(): void {
-    const components: IComponent[] = Array.from(this.components.values())
-
-    components.forEach((component: IComponent) => component.update())
+    Array.from(this.components.values()).forEach((component: IComponent) =>
+      component.update()
+    )
   }
 
   addComponent(component: IComponent): void {
@@ -45,14 +45,14 @@ export class GameObject {
   }
 
   getComponentOfType(type: string): IComponent {
-    const components: IComponent[] = Array.from(this.components.values())
-
-    return components.find(({ name }) => name === type)
+    return Array.from(this.components.values()).find(
+      ({ name }) => name === type
+    )
   }
 
   getComponentsOfType(type: string): IComponent[] {
-    const components: IComponent[] = Array.from(this.components.values())
-
-    return components.filter(({ name }) => name === type)
+    return Array.from(this.components.values()).filter(
+      ({ name }) => name === type
+    )
   }
 }

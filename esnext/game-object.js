@@ -11,8 +11,7 @@ export class GameObject {
         return prefab.instantiate();
     }
     update() {
-        const components = Array.from(this.components.values());
-        components.forEach((component) => component.update());
+        Array.from(this.components.values()).forEach((component) => component.update());
     }
     addComponent(component) {
         if (this.components.has(component)) {
@@ -29,11 +28,9 @@ export class GameObject {
         this.components$.next();
     }
     getComponentOfType(type) {
-        const components = Array.from(this.components.values());
-        return components.find(({ name }) => name === type);
+        return Array.from(this.components.values()).find(({ name }) => name === type);
     }
     getComponentsOfType(type) {
-        const components = Array.from(this.components.values());
-        return components.filter(({ name }) => name === type);
+        return Array.from(this.components.values()).filter(({ name }) => name === type);
     }
 }

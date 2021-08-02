@@ -9,8 +9,7 @@ export class CircleBody extends Component {
   readonly polygon: Polygon
   readonly radius: number
 
-  @AutoInject(Physics)
-  physics: Physics
+  @AutoInject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, radius: number) {
     super(gameObject)

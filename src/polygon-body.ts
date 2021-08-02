@@ -8,8 +8,7 @@ export class PolygonBody extends Component {
   readonly name: string = 'PolygonBody'
   readonly polygon: Polygon
 
-  @AutoInject(Physics)
-  physics: Physics
+  @AutoInject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, points: number[][]) {
     super(gameObject)
