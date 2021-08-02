@@ -2,7 +2,7 @@
 
 - GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics
 
-- with PIXI.js support with Sprite and Container
+- with PIXI.js support with Sprite, Container, Scene
 
 - with lifecycle management (proper destroy)
 
