@@ -24,6 +24,9 @@ export class Scene extends Lifecycle {
         if (options.autoSize) {
             this.enableAutoSize();
         }
+        if (options.autoSort) {
+            this.enableAutoSort();
+        }
         this.stage.addChild(this.container);
     }
     get stage() {
@@ -49,6 +52,11 @@ export class Scene extends Lifecycle {
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
             this.pixi.renderer.resize(innerWidth, innerHeight);
+        });
+    }
+    enableAutoSort() {
+        this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.pixi.stage.children.sort((a, b) => a.y - b.y);
         });
     }
     update() {

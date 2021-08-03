@@ -2,14 +2,12 @@
   "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene",
   "version": "1.0.8",
-  "main": "dist/index.js",
-  "exports": {
-    "./": "./dist/"
-  },
+  "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "@jacekpietal/bouncer.js": "^2.26.0",
     "@types/jest": "^26.0.24",
+    "cross-env": "^7.0.3",
     "esm": "^3.2.25",
     "jest": "^27.0.6",
     "pixi-shim": "^2.3.2",
@@ -25,7 +23,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
-    "dev": "webpack serve",
+    "dev": "cross-env NODE_ENV=development webpack serve",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
     "test-docs": "webpack && node node_modules/@jacekpietal/bouncer.js/bin docs",

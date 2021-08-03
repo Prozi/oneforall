@@ -25,6 +25,7 @@ export class Scene extends Lifecycle {
       name?: string
       visible?: boolean
       autoSize?: boolean
+      autoSort?: boolean
       scale?: number
     } = {}
   ) {
@@ -36,6 +37,10 @@ export class Scene extends Lifecycle {
 
     if (options.autoSize) {
       this.enableAutoSize()
+    }
+
+    if (options.autoSort) {
+      this.enableAutoSort()
     }
 
     this.stage.addChild(this.container)
@@ -73,6 +78,12 @@ export class Scene extends Lifecycle {
       .subscribe(() => {
         this.pixi.renderer.resize(innerWidth, innerHeight)
       })
+  }
+
+  enableAutoSort(): void {
+    this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.pixi.stage.children.sort((a, b) => a.y - b.y)
+    })
   }
 
   update(): void {

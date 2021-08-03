@@ -3,28 +3,41 @@ import {
   GameObject,
   Prefab,
   StateMachine,
-  Sprite,
   CircleBody,
   Physics,
   Resources
 } from '..'
+import {
+  AnimatedContainer,
+  IAnimatedContainerData
+} from '../animated-container'
 
-export async function preload(): Promise<PIXI.Texture> {
-  const { texture } = await Resources.loadResource('./github-logo.png')
+export async function preload(path: string): Promise<{
+  data: IAnimatedContainerData
+  texture: PIXI.Texture
+}> {
+  const { data } = await Resources.loadResource(`${path}.json`)
+  const { texture } = await Resources.loadResource(data.tileset)
 
-  return texture
+  return {
+    data,
+    texture
+  }
 }
 
-export const prefab: Prefab = new Prefab(
-  'SpritePrefab',
-  async (gameObject: GameObject | any) => {
-    gameObject.sprite = new Sprite(gameObject, await preload())
-    gameObject.state = new StateMachine(gameObject, '[state] static')
-    gameObject.body = new CircleBody(gameObject, gameObject.sprite.width / 2)
+export function createPrefab(
+  data: IAnimatedContainerData,
+  texture: PIXI.Texture
+) {
+  return new Prefab('SpritePrefab', async (gameObject: GameObject | any) => {
+    gameObject.state = new StateMachine(gameObject, '[state] initial')
+    gameObject.sprite = new AnimatedContainer(gameObject, data, texture)
+    gameObject.sprite.setState('run')
+    gameObject.body = new CircleBody(gameObject, 24)
     gameObject.body.x = Math.random() * innerWidth
     gameObject.body.y = Math.random() * innerHeight
-  }
-)
+  })
+}
 
 export function update(
   gameObject: GameObject | any,
@@ -36,24 +49,36 @@ export function update(
         gameObjects[Math.floor(Math.random() * gameObjects.length)]
 
       if (Math.random() < 0.5) {
-        gameObject.state.setState('[state] forwards target')
+        gameObject.state.setState('[state] move-forwards')
       } else {
-        gameObject.state.setState('[state] backwards target')
+        gameObject.state.setState('[state] move-backwards')
       }
     }
 
+    if (Math.random() < 0.05) {
+      gameObject.sprite.setState('wow', false)
+    }
+
     if (gameObject.target) {
-      const overlap: number =
-        gameObject.state.state === '[state] forwards target' ? 1 : -1
       const arc: number = Math.atan2(
         gameObject.y - gameObject.target.y,
         gameObject.x - gameObject.target.x
       )
+      const overlap_x: number = Math.cos(arc)
+      const overlap_y: number = Math.sin(arc)
+      const overlap: number =
+        gameObject.state.state === '[state] move-forwards' ? 1 : -1
+
+      if (gameObject.sprite instanceof AnimatedContainer) {
+        const flip: number = Math.sign(overlap * overlap_x) || 1
+
+        gameObject.sprite.setScale(-flip, 1)
+      }
 
       Physics.pushBack(gameObject.body, {
         overlap,
-        overlap_x: Math.cos(arc),
-        overlap_y: Math.sin(arc)
+        overlap_x,
+        overlap_y
       })
     }
   }

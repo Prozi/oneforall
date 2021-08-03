@@ -1,12 +1,18 @@
 import { takeUntil } from 'rxjs'
-import { Scene, GameObject } from '../src'
-import { preload, prefab, update } from '../src/demo/sprite.prefab'
+import { Scene, GameObject, Prefab } from '../src'
+import { preload, createPrefab, update } from '../src/demo/sprite.prefab'
 
-const scene: Scene | any = new Scene({ visible: true, autoSize: true })
-const sprites: Array<GameObject | any> = []
+const scene: Scene = new Scene({
+  visible: true,
+  autoSize: true,
+  autoSort: true
+})
+const sprites: Array<GameObject> = []
 
-preload().then(async () => {
-  for (let i = 0; i < 1000; i++) {
+preload('./cave-boy').then(async ({ data, texture }) => {
+  const prefab: Prefab = createPrefab(data, texture)
+
+  for (let i = 0; i < 500; i++) {
     const sprite: GameObject = await GameObject.instantiate(prefab)
 
     scene.addChild(sprite)

@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  mode: 'production',
+  mode: process.env.NODE_ENV || 'production',
   devtool: false,
   entry: './docs/demo.ts',
   output: {

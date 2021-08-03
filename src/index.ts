@@ -1,3 +1,4 @@
+export * from './animated-container'
 export * from './application'
 export * from './circle-body'
 export * from './component'
