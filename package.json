@@ -1,8 +1,11 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "dist/index.js",
+  "exports": {
+    "./": "./dist/"
+  },
   "license": "MIT",
   "devDependencies": {
     "@jacekpietal/bouncer.js": "^2.26.0",
