@@ -26,7 +26,7 @@ export const prefab: Prefab = new Prefab(
   }
 )
 
-export function follow(
+export function update(
   gameObject: GameObject | any,
   gameObjects: Array<GameObject>
 ): () => void {
@@ -36,10 +36,19 @@ export function follow(
         gameObjects[Math.floor(Math.random() * gameObjects.length)]
     }
 
+    if (Math.random() < 0.05) {
+      gameObject.state.setState('RUN_AWAY')
+    }
+
+    if (Math.random() < 0.05) {
+      gameObject.state.setState('INITIAL_STATE')
+    }
+
     if (gameObject.target) {
+      const direction: number = gameObject.state.state !== 'RUN_AWAY' ? 1 : -1
       const arc: number = Math.atan2(
-        gameObject.y - gameObject.target.y,
-        gameObject.x - gameObject.target.x
+        direction * (gameObject.y - gameObject.target.y),
+        direction * (gameObject.x - gameObject.target.x)
       )
 
       Physics.pushBack(gameObject.body, {

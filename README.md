@@ -44,9 +44,9 @@
 import { takeUntil } from 'rxjs'
 import { Scene, GameObject } from '@jacekpietal/oneforall'
 import {
-  prefab,
   preload,
-  follow
+  prefab,
+  update
 } from '@jacekpietal/oneforall/demo/sprite.prefab'
 
 const scene: Scene = new Scene({ visible: true, autoSize: true })
@@ -60,7 +60,7 @@ preload().then(async () => {
     sprites.push(sprite)
     sprite.update$
       .pipe(takeUntil(scene.destroy$))
-      .subscribe(follow(sprite, sprites))
+      .subscribe(update(sprite, sprites))
   }
 
   scene.pixi.renderer.backgroundColor = 0xcccccc
