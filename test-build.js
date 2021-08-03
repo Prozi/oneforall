@@ -1,6 +1,6 @@
 import 'pixi-shim'
-import { GameObject } from './esnext/index.js'
-import { Component } from './esnext/component.js';
+import { GameObject } from './dist/index.js'
+import { Component } from './dist/component.js';
 
 const go = new GameObject();
 const component = new Component(go);

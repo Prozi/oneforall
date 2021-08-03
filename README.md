@@ -47,7 +47,7 @@ import {
   preload,
   prefab,
   update
-} from '@jacekpietal/oneforall/docs/sprite.prefab'
+} from '@jacekpietal/oneforall/demo/sprite.prefab'
 
 const scene: Scene | any = new Scene({ visible: true, autoSize: true })
 const sprites: Array<GameObject | any> = []

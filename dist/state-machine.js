@@ -1,13 +1,13 @@
 import { Subject } from 'rxjs';
 import { Component } from './component';
 export class StateMachine extends Component {
-    constructor() {
-        super(...arguments);
+    constructor(gameObject, initialState = 'INITIAL_STATE') {
+        super(gameObject);
         this.name = 'StateMachine';
         this.state$ = new Subject();
         this.change$ = new Subject();
-        this.state = 'INITIAL_STATE';
         this.validators = {};
+        this.state = initialState;
     }
     setState(newState) {
         if (!this.validateStateChange(newState)) {

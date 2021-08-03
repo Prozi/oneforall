@@ -1,8 +1,8 @@
 const path = require('path')
 
 module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
+  mode: 'production',
+  devtool: false,
   entry: './docs/demo.ts',
   output: {
     path: path.resolve('./docs'),

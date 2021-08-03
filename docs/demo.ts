@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs'
-import { Scene, GameObject } from '../esnext'
-import { preload, prefab, update } from './sprite.prefab'
+import { Scene, GameObject } from '../src'
+import { preload, prefab, update } from '../src/demo/sprite.prefab'
 
 const scene: Scene | any = new Scene({ visible: true, autoSize: true })
 const sprites: Array<GameObject | any> = []

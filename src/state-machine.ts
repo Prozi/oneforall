@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs'
+import { GameObject } from './game-object'
 import { Component } from './component'
 
 export class StateMachine extends Component {
@@ -6,7 +7,13 @@ export class StateMachine extends Component {
   readonly state$: Subject<string> = new Subject()
   readonly change$: Subject<string[]> = new Subject()
 
-  state: string = 'INITIAL_STATE'
+  state: string
+
+  constructor(gameObject: GameObject, initialState: string = 'INITIAL_STATE') {
+    super(gameObject)
+
+    this.state = initialState
+  }
 
   private validators: {
     [fromState: string]: Array<(newState: string) => boolean>
