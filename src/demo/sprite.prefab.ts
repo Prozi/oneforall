@@ -8,12 +8,12 @@ import {
   Resources
 } from '..'
 import {
-  AnimatedContainer,
-  IAnimatedContainerData
-} from '../animated-container'
+  Animator,
+  IAnimatorData
+} from '../animator'
 
 export async function preload(path: string): Promise<{
-  data: IAnimatedContainerData
+  data: IAnimatorData
   texture: PIXI.Texture
 }> {
   const { data } = await Resources.loadResource(`${path}.json`)
@@ -26,12 +26,12 @@ export async function preload(path: string): Promise<{
 }
 
 export function createPrefab(
-  data: IAnimatedContainerData,
+  data: IAnimatorData,
   texture: PIXI.Texture
 ) {
   return new Prefab('SpritePrefab', async (gameObject: GameObject | any) => {
     gameObject.state = new StateMachine(gameObject, '[state] initial')
-    gameObject.sprite = new AnimatedContainer(gameObject, data, texture)
+    gameObject.sprite = new Animator(gameObject, data, texture)
     gameObject.sprite.setState('run')
     gameObject.body = new CircleBody(gameObject, 24)
     gameObject.body.x = Math.random() * innerWidth
@@ -69,7 +69,7 @@ export function update(
       const overlap: number =
         gameObject.state.state === '[state] move-forwards' ? 1 : -1
 
-      if (gameObject.sprite instanceof AnimatedContainer) {
+      if (gameObject.sprite instanceof Animator) {
         const flip: number = Math.sign(overlap * overlap_x) || 1
 
         gameObject.sprite.setScale(-flip, 1)

@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
-  "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene",
-  "version": "1.0.8",
+  "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene, Animator",
+  "version": "1.0.9",
   "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {
@@ -44,6 +44,7 @@
     "physics",
     "container",
     "scene",
+    "animator",
     "webgl",
     "pixi.js"
   ],

@@ -1,4 +1,4 @@
-export * from './animated-container'
+export * from './animator'
 export * from './application'
 export * from './circle-body'
 export * from './component'

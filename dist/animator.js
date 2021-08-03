@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Container } from './container';
-export class AnimatedContainer extends Container {
+export class Animator extends Container {
     /**
      * create animated container
      * @param animations
@@ -9,7 +9,7 @@ export class AnimatedContainer extends Container {
      */
     constructor(gameObject, data, { baseTexture }) {
         super(gameObject);
-        this.name = 'AnimatedContainer';
+        this.name = 'Animator';
         Object.values(data.animations).forEach((frames) => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
                 const x = (frame * data.tilewidth) % data.width;

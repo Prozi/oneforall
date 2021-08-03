@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { GameObject } from './game-object'
 import { Container } from './container'
 
-export interface IAnimatedContainerData {
+export interface IAnimatorData {
   animations: { [name: string]: Array<number | string> }
   width: number
   height: number
@@ -10,8 +10,8 @@ export interface IAnimatedContainerData {
   tileheight: number
 }
 
-export class AnimatedContainer extends Container {
-  readonly name: string = 'AnimatedContainer'
+export class Animator extends Container {
+  readonly name: string = 'Animator'
 
   states: string[]
   state?: string
@@ -25,7 +25,7 @@ export class AnimatedContainer extends Container {
    */
   constructor(
     gameObject: GameObject,
-    data: IAnimatedContainerData,
+    data: IAnimatorData,
     { baseTexture }: PIXI.Texture
   ) {
     super(gameObject)
