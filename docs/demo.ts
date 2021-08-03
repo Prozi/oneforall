@@ -1,9 +1,9 @@
 import { takeUntil } from 'rxjs'
-import { Scene, GameObject } from '../src'
+import { Scene, GameObject } from '../esnext'
 import { preload, prefab, update } from './sprite.prefab'
 
-const scene: Scene = new Scene({ visible: true, autoSize: true })
-const sprites: GameObject[] = []
+const scene: Scene | any = new Scene({ visible: true, autoSize: true })
+const sprites: Array<GameObject | any> = []
 
 preload().then(async () => {
   for (let i = 0; i < 1000; i++) {

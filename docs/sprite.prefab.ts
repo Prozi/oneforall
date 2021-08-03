@@ -7,7 +7,7 @@ import {
   CircleBody,
   Physics,
   Resources
-} from '../src'
+} from '../esnext'
 
 export async function preload(): Promise<PIXI.Texture> {
   const { texture } = await Resources.loadResource('./github-logo.png')
