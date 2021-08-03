@@ -51,8 +51,12 @@ export class Physics {
     this.system.remove(body)
   }
 
-  update(): void {
+  update(pushBack: boolean = true): void {
     this.system.update()
+
+    if (!pushBack) {
+      return
+    }
 
     Array.from(this.bodies).forEach((body: Body) => {
       this.detectCollisions(body).forEach((result: Partial<Result>) => {

@@ -9,13 +9,13 @@ import { Prefab } from './prefab'
 import { Scene } from './scene'
 
 describe('GIVEN Prefab', () => {
-  it('THEN can be instantiated', () => {
-    const prefab = new Prefab('MyPrefab', (go: GameObject | any) => {
+  it('THEN can be instantiated', async () => {
+    const prefab = new Prefab('MyPrefab', async (go: GameObject | any) => {
       go.x = 120
       go.y = 60
       go.state = new StateMachine(go)
     })
-    const instance: GameObject = GameObject.instantiate(prefab)
+    const instance: GameObject = await GameObject.instantiate(prefab)
 
     expect(instance).toBeTruthy()
     expect(instance.x).toBe(120)
@@ -23,11 +23,11 @@ describe('GIVEN Prefab', () => {
     expect(instance.name).toBe('MyPrefab')
   })
 
-  it('THEN can create 100 instances', () => {
+  it('THEN can create 100 instances', async () => {
     const scene: Scene = new Scene({ visible: true })
-    const soldierPrefab: Prefab = new Prefab(
+    const prefab: Prefab = new Prefab(
       'Soldier',
-      (go: GameObject | any) => {
+      async (go: GameObject | any) => {
         go.state = new StateMachine(go)
         go.sprite = new Sprite(go, PIXI.Texture.WHITE)
 
@@ -40,14 +40,16 @@ describe('GIVEN Prefab', () => {
       }
     )
 
-    const soldiers: GameObject[] = new Array(100)
+    const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)
-      .map((_) => GameObject.instantiate(soldierPrefab))
+      .map(async () => await GameObject.instantiate(prefab))
 
-    expect(soldiers).toBeTruthy()
-    expect(soldiers.length).toBe(100)
-    expect(soldiers[0]).toBeInstanceOf(GameObject)
-    expect(soldiers[0].x).not.toBe(0)
-    expect(soldiers[0].y).not.toBe(0)
+    const gameObjects: GameObject[] = await Promise.all(promises)
+
+    expect(gameObjects).toBeTruthy()
+    expect(gameObjects.length).toBe(100)
+    expect(gameObjects[0]).toBeInstanceOf(GameObject)
+    expect(gameObjects[0].x).not.toBe(0)
+    expect(gameObjects[0].y).not.toBe(0)
   })
 })

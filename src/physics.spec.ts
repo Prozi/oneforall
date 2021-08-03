@@ -33,7 +33,7 @@ describe('GIVEN Physics', () => {
     const body1 = system.createCircle(30, 30, 50)
     const body2 = system.createCircle(20, 20, 50)
 
-    system.update()
+    system.update(false)
 
     expect(system.detectCollisions(body1).length).toBe(1)
   })

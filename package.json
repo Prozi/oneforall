@@ -31,10 +31,11 @@
     "dev": "webpack serve",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
-    "test-demo": "webpack && node node_modules/@jacekpietal/bouncer.js/bin demo",
+    "test-docs": "webpack && node node_modules/@jacekpietal/bouncer.js/bin docs",
     "format": "prettier ./src/*.ts --write",
-    "format-demo": "prettier ./demo/*.ts --write",
-    "build": "tsc"
+    "format-docs": "prettier ./docs/*.ts --write",
+    "build": "tsc",
+    "precommit": "yarn format && yarn format-docs && yarn test-build && yarn test && yarn test-docs"
   },
   "keywords": [
     "gameobject",

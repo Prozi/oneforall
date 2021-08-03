@@ -11,6 +11,9 @@ export class Application extends PIXI.Application {
       ...options
     })
 
-    document.body.appendChild(this.view)
+    // silent fail in tests
+    try {
+      document.body.appendChild(this.view)
+    } catch (err) {}
   }
 }

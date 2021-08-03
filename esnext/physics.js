@@ -40,8 +40,11 @@ let Physics = Physics_1 = class Physics {
     remove(body) {
         this.system.remove(body);
     }
-    update() {
+    update(pushBack = true) {
         this.system.update();
+        if (!pushBack) {
+            return;
+        }
         Array.from(this.bodies).forEach((body) => {
             this.detectCollisions(body).forEach((result) => {
                 Physics_1.pushBack(body, result);

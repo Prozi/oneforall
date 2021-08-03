@@ -9,7 +9,11 @@ import { Injectable } from '@jacekpietal/dependency-injection';
 let Application = class Application extends PIXI.Application {
     constructor(options = {}) {
         super(Object.assign({ autoStart: false, sharedTicker: false, sharedLoader: false }, options));
-        document.body.appendChild(this.view);
+        // silent fail in tests
+        try {
+            document.body.appendChild(this.view);
+        }
+        catch (err) { }
     }
 };
 Application = __decorate([

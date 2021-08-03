@@ -3,9 +3,9 @@ const path = require('path')
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: './demo/index.ts',
+  entry: './docs/demo.ts',
   output: {
-    path: path.resolve('./demo'),
+    path: path.resolve('./docs'),
     filename: 'demo.bundle.js'
   },
   resolve: {
@@ -15,7 +15,7 @@ module.exports = {
     rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
   },
   devServer: {
-    contentBase: path.resolve('./demo'),
+    contentBase: path.resolve('./docs'),
     filename: 'demo.bundle.js',
     compress: false,
     port: 4200

@@ -160,6 +160,20 @@ Done in 25.38s.
 $ node -r esm ./test-build.js
 ...
 <ref *1> GameObject {
+  'update$': Subject {
+    closed: false,
+    observers: [],
+    isStopped: false,
+    hasError: false,
+    thrownError: null
+  },
+  'destroy$': Subject {
+    closed: false,
+    observers: [],
+    isStopped: false,
+    hasError: false,
+    thrownError: null
+  },
   components: Set(1) {
     Component {
       name: 'Component',
@@ -196,6 +210,20 @@ $ node -r esm ./test-build.js
     thrownError: null
   },
   gameObject: GameObject {
+    'update$': Subject {
+      closed: false,
+      observers: [],
+      isStopped: false,
+      hasError: false,
+      thrownError: null
+    },
+    'destroy$': Subject {
+      closed: false,
+      observers: [],
+      isStopped: false,
+      hasError: false,
+      thrownError: null
+    },
     components: Set(1) { [Circular *1] },
     'components$': Subject {
       closed: false,
@@ -209,5 +237,4 @@ $ node -r esm ./test-build.js
     y: 0
   }
 }
-Done in 5.26s.
 ```
