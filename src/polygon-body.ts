@@ -6,7 +6,7 @@ import { GameObject } from './game-object'
 
 export class PolygonBody extends Component {
   readonly name: string = 'PolygonBody'
-  readonly polygon: Polygon
+  readonly polygon: Polygon | any
 
   @AutoInject(Physics) physics: Physics
 
@@ -18,6 +18,8 @@ export class PolygonBody extends Component {
       this.gameObject.y,
       points
     )
+
+    this.polygon.gameObject = this.gameObject
   }
 
   get x(): number {

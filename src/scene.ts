@@ -67,6 +67,7 @@ export class Scene extends Lifecycle {
 
     loop()
 
+    this.stage.scale.set(this.container.scale.x, this.container.scale.y)
     this.pixi.start()
   }
 

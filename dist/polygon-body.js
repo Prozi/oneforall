@@ -12,6 +12,7 @@ export class PolygonBody extends Component {
         super(gameObject);
         this.name = 'PolygonBody';
         this.polygon = this.physics.createPolygon(this.gameObject.x, this.gameObject.y, points);
+        this.polygon.gameObject = this.gameObject;
     }
     get x() {
         return this.polygon.x;

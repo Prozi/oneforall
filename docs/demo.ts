@@ -5,14 +5,15 @@ import { preload, createPrefab, update } from '../src/demo/sprite.prefab'
 const scene: Scene = new Scene({
   visible: true,
   autoSize: true,
-  autoSort: true
+  autoSort: true,
+  scale: 1.3
 })
 const sprites: Array<GameObject> = []
 
 preload('./cave-boy').then(async ({ data, texture }) => {
   const prefab: Prefab = createPrefab(data, texture)
 
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 50; i++) {
     const sprite: GameObject = await GameObject.instantiate(prefab)
 
     scene.addChild(sprite)

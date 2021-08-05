@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Physics_1;
 import { Collisions } from 'detect-collisions';
 import { Injectable } from '@jacekpietal/dependency-injection';
+import { Subject } from 'rxjs';
 let Physics = Physics_1 = class Physics {
     constructor() {
         this.system = new Collisions();
@@ -48,6 +49,7 @@ let Physics = Physics_1 = class Physics {
         Array.from(this.bodies).forEach((body) => {
             this.detectCollisions(body).forEach((result) => {
                 Physics_1.pushBack(body, result);
+                Physics_1.collision$.next(body.gameObject);
             });
         });
     }
@@ -69,6 +71,7 @@ let Physics = Physics_1 = class Physics {
             .filter((result) => !!result);
     }
 };
+Physics.collision$ = new Subject();
 Physics = Physics_1 = __decorate([
     Injectable
 ], Physics);

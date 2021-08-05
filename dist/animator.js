@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Container } from './container';
+import { Subject } from 'rxjs';
 export class Animator extends Container {
     /**
      * create animated container
@@ -10,6 +11,7 @@ export class Animator extends Container {
     constructor(gameObject, data, { baseTexture }) {
         super(gameObject);
         this.name = 'Animator';
+        this.complete$ = new Subject();
         Object.values(data.animations).forEach((frames) => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
                 const x = (frame * data.tilewidth) % data.width;
@@ -62,7 +64,11 @@ export class Animator extends Container {
             animation.visible = true;
             if (!loop) {
                 animation.onComplete = () => {
-                    this.setState(stateWhenFinished);
+                    this.complete$.next([this.state, stateWhenFinished]);
+                    if (this.state === state) {
+                        animation.onComplete = () => { };
+                        this.setState(stateWhenFinished);
+                    }
                 };
             }
         }

@@ -1,5 +1,7 @@
 import { Polygon, Collisions, Result, Body } from 'detect-collisions'
 import { Injectable } from '@jacekpietal/dependency-injection'
+import { GameObject } from './game-object'
+import { Subject } from 'rxjs'
 
 export interface IBody extends Body {
   isTrigger?: boolean
@@ -7,6 +9,8 @@ export interface IBody extends Body {
 
 @Injectable
 export class Physics {
+  static readonly collision$: Subject<GameObject> = new Subject()
+
   readonly system: Collisions = new Collisions()
   readonly result: Result = this.system.createResult()
 
@@ -58,9 +62,11 @@ export class Physics {
       return
     }
 
-    Array.from(this.bodies).forEach((body: Body) => {
+    Array.from(this.bodies).forEach((body: Body | any) => {
       this.detectCollisions(body).forEach((result: Partial<Result>) => {
         Physics.pushBack(body, result)
+
+        Physics.collision$.next(body.gameObject)
       })
     })
   }

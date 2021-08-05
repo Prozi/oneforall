@@ -23,8 +23,17 @@ export class StateMachine extends Component {
     getValidators(fromState) {
         return this.validators[fromState];
     }
+    destroy() {
+        this.state$.complete();
+        this.change$.complete();
+        super.destroy();
+    }
     validateStateChange(newState) {
-        const transitionValidators = this.validators[this.state] || [];
-        return transitionValidators.every((transitionValidator) => transitionValidator(newState));
+        if (!this.state) {
+            return true;
+        }
+        const fromAllStates = this.validators['*'] || [];
+        const fromCurrentState = this.validators[this.state] || [];
+        return [...fromAllStates, ...fromCurrentState].every((validator) => validator(newState));
     }
 }

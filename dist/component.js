@@ -8,6 +8,7 @@ export class Lifecycle {
     static destroy(lifecycle) {
         lifecycle.destroy$.next();
         lifecycle.destroy$.complete();
+        lifecycle.update$.complete();
     }
     static update(lifecycle) {
         lifecycle.update$.next();

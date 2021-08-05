@@ -6,7 +6,7 @@ import { GameObject } from './game-object'
 
 export class CircleBody extends Component {
   readonly name: string = 'CircleBody'
-  readonly polygon: Polygon
+  readonly polygon: Polygon | any
   readonly radius: number
 
   @AutoInject(Physics) physics: Physics
@@ -20,6 +20,8 @@ export class CircleBody extends Component {
       this.gameObject.y,
       this.radius
     )
+
+    this.polygon.gameObject = this.gameObject
   }
 
   get x(): number {

@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { GameObject } from './game-object'
 import { Container } from './container'
+import { Subject } from 'rxjs'
 
 export interface IAnimatorData {
   animations: { [name: string]: Array<number | string> }
@@ -12,6 +13,7 @@ export interface IAnimatorData {
 
 export class Animator extends Container {
   readonly name: string = 'Animator'
+  readonly complete$: Subject<[string, string]> = new Subject()
 
   states: string[]
   state?: string
@@ -113,7 +115,12 @@ export class Animator extends Container {
 
       if (!loop) {
         animation.onComplete = () => {
-          this.setState(stateWhenFinished)
+          this.complete$.next([this.state, stateWhenFinished])
+
+          if (this.state === state) {
+            animation.onComplete = () => {}
+            this.setState(stateWhenFinished)
+          }
         }
       }
     }

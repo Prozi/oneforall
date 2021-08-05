@@ -13,6 +13,7 @@ export class CircleBody extends Component {
         this.name = 'CircleBody';
         this.radius = radius;
         this.polygon = this.physics.createCircle(this.gameObject.x, this.gameObject.y, this.radius);
+        this.polygon.gameObject = this.gameObject;
     }
     get x() {
         return this.polygon.x;

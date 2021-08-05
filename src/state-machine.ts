@@ -2,6 +2,8 @@ import { Subject } from 'rxjs'
 import { GameObject } from './game-object'
 import { Component } from './component'
 
+export type TStateValidator = (newState: string) => boolean
+
 export class StateMachine extends Component {
   readonly name: string = 'StateMachine'
   readonly state$: Subject<string> = new Subject()
@@ -16,7 +18,7 @@ export class StateMachine extends Component {
   }
 
   private validators: {
-    [fromState: string]: Array<(newState: string) => boolean>
+    [fromState: string]: TStateValidator[]
   } = {}
 
   setState(newState: string): void {
@@ -30,24 +32,31 @@ export class StateMachine extends Component {
     this.state$.next(this.state)
   }
 
-  setValidators(
-    fromState: string,
-    validators: Array<(newState: string) => boolean>
-  ): void {
+  setValidators(fromState: string, validators: TStateValidator[]): void {
     this.validators[fromState] = validators
   }
 
-  getValidators(fromState: string): Array<(newState: string) => boolean> {
+  getValidators(fromState: string): TStateValidator[] {
     return this.validators[fromState]
   }
 
-  private validateStateChange(newState: string): boolean {
-    const transitionValidators: Array<(newState: string) => boolean> =
-      this.validators[this.state] || []
+  destroy(): void {
+    this.state$.complete()
+    this.change$.complete()
 
-    return transitionValidators.every(
-      (transitionValidator: (newState: string) => boolean) =>
-        transitionValidator(newState)
+    super.destroy()
+  }
+
+  private validateStateChange(newState: string): boolean {
+    if (!this.state) {
+      return true
+    }
+
+    const fromAllStates = this.validators['*'] || []
+    const fromCurrentState = this.validators[this.state] || []
+
+    return [...fromAllStates, ...fromCurrentState].every(
+      (validator: TStateValidator) => validator(newState)
     )
   }
 }
