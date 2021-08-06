@@ -1,5 +1,5 @@
 import { Polygon } from 'detect-collisions'
-import { AutoInject } from '@jacekpietal/dependency-injection'
+import { Inject } from '@jacekpietal/dependency-injection'
 import { Physics } from './physics'
 import { Component } from './component'
 import { GameObject } from './game-object'
@@ -8,7 +8,7 @@ export class PolygonBody extends Component {
   readonly name: string = 'PolygonBody'
   readonly polygon: Polygon | any
 
-  @AutoInject(Physics) physics: Physics
+  @Inject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, points: number[][]) {
     super(gameObject)

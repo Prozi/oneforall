@@ -1,5 +1,5 @@
 import { Polygon } from 'detect-collisions'
-import { AutoInject } from '@jacekpietal/dependency-injection'
+import { Inject } from '@jacekpietal/dependency-injection'
 import { Physics } from './physics'
 import { Component } from './component'
 import { GameObject } from './game-object'
@@ -9,7 +9,7 @@ export class CircleBody extends Component {
   readonly polygon: Polygon | any
   readonly radius: number
 
-  @AutoInject(Physics) physics: Physics
+  @Inject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, radius: number) {
     super(gameObject)

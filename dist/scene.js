@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import * as PIXI from 'pixi.js';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
-import { AutoInject } from '@jacekpietal/dependency-injection';
+import { Inject } from '@jacekpietal/dependency-injection';
 import { Application } from './application';
 import { Physics } from './physics';
 import { Resources } from './resources';
@@ -95,11 +95,11 @@ export class Scene extends Lifecycle {
     }
 }
 __decorate([
-    AutoInject(Application)
+    Inject(Application)
 ], Scene.prototype, "pixi", void 0);
 __decorate([
-    AutoInject(Resources)
+    Inject(Resources)
 ], Scene.prototype, "resouces", void 0);
 __decorate([
-    AutoInject(Physics)
+    Inject(Physics)
 ], Scene.prototype, "physics", void 0);

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { fromEvent, Subject, takeUntil } from 'rxjs'
-import { AutoInject } from '@jacekpietal/dependency-injection'
+import { Inject } from '@jacekpietal/dependency-injection'
 import { Application } from './application'
 import { GameObject } from './game-object'
 import { Physics } from './physics'
@@ -12,9 +12,9 @@ export class Scene extends Lifecycle {
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
 
-  @AutoInject(Application) pixi: Application
-  @AutoInject(Resources) resouces: Resources
-  @AutoInject(Physics) physics: Physics
+  @Inject(Application) pixi: Application
+  @Inject(Resources) resouces: Resources
+  @Inject(Physics) physics: Physics
 
   container: PIXI.Container = new PIXI.Container()
   destroy$: Subject<void> = new Subject()
