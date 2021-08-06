@@ -35,7 +35,7 @@ const scene: Scene = new Scene({
   autoSize: true,
   autoSort: true
 })
-const sprites: Array<GameObject> = []
+const sprites: GameObject[] = []
 
 preload('./cave-boy').then(async ({ data, texture }) => {
   const prefab: Prefab = createPrefab(data, texture)

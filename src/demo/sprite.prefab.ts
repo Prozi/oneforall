@@ -56,7 +56,7 @@ function stateChangeAllowed(gameObject: GameObject | any) {
 
 export function update(
   gameObject: GameObject | any,
-  gameObjects: Array<GameObject>
+  gameObjects: GameObject[]
 ): () => void {
   return () => {
     if (Math.random() < 0.05) {
