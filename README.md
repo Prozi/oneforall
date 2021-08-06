@@ -1,8 +1,9 @@
-<h1>oneforall</h1>
+# @jacekpietal/oneforall
+https://github.com/Prozi/oneforall/
 
 - GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics
 
-- with WebGL support with PIXI: Sprite, Container, Scene
+- with WebGL support with PIXI: Sprite, Container, Scene, Animator
 
 - with lifecycle management (proper destroy)
 
@@ -12,33 +13,13 @@
 
 - written in typescript exported as npm es6 module
 
----
-
+## Installation
 ```
-<game>
-└── [Scene]
-    ├── [Physics]
-    ├── [Resources]
-    ├── [PIXI.Application]
-    │   └── [HTMLCanvas]
-    │
-    ├── [GameObject "Map"]
-    │   ├── [PolygonBody]
-    │   └── [Container]
-    │       └──[100x Sprite]
-    │
-    ├── [GameObject "Player" from Prefab]
-    │   ├── [CircleBody]
-    │   ├── [Sprite]
-    │   └── [StateMachine]
-    │
-    └── [100x GameObject "Enemy" from Prefab]
-        ├── [CircleBody]
-        ├── [Sprite]
-        └── [StateMachine]
+yarn add @jacekpietal/oneforall -D
 ```
 
----
+## Demo
+https://prozi.github.io/oneforall/
 
 ```javascript
 import { takeUntil } from 'rxjs'
@@ -74,7 +55,28 @@ preload('./cave-boy').then(async ({ data, texture }) => {
 })
 ```
 
----
+## Architecture
+```
+<game>
+└─ [Scene]
+    ├─ [Physics]
+    ├─ [Resources]
+    ├─ [PIXI.Application]
+    │   └─ [HTMLCanvas]
+    ├─ [GameObject "Map"]
+    │   ├─ [PolygonBody]
+    │   └─ [Container]
+    │       └─[100x "Tile" Sprite]
+    ├─ [GameObject "Player" from Prefab]
+    │   ├─ [CircleBody]
+    │   ├─ [Sprite]
+    │   └─ [StateMachine]
+    └─ [100x GameObject "Enemy" from Prefab]
+        ├─ [CircleBody]
+        ├─ [Sprite]
+        └─ [StateMachine]
+```
+## Tests
 
 ```
 $ jest --verbose --silent
@@ -159,8 +161,6 @@ Snapshots:   0 total
 Time:        22.862 s
 Done in 25.38s.
 ```
-
----
 
 ```
 $ node -r esm ./test-build.js
