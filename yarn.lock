@@ -1942,10 +1942,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-2.5.4.tgz#790a845cc4aef343a10cc2a44be9e02ee32e9c98"
-  integrity sha512-VpXDmeey/jUX4d9S2mHi9k4cBIGIIheJbvllvJEZNi15h4EKYc4YWdY9D/UC/izjDTnr1iH+EUlRp8+OMGJb1A==
+detect-collisions@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-2.5.6.tgz#89ed3b785709c96b75de6eb46b3b1614339981cf"
+  integrity sha512-EKjZ00A9qUOhqjn12nhIPiw6qmFNdz0gO6/VngEQAxDX7cqLOyYQEbAzMFw44CngV9pyQIpdEXu3MwS+on02ug==
 
 detect-newline@^3.0.0:
   version "3.1.0"

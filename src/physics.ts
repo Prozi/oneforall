@@ -1,4 +1,4 @@
-import { Polygon, Collisions, Result, Body } from 'detect-collisions'
+import { Polygon, Collisions, Result, Body, Circle } from 'detect-collisions'
 import { Injectable } from '@jacekpietal/dependency-injection'
 import { GameObject } from './game-object'
 import { Subject } from 'rxjs'
@@ -22,19 +22,6 @@ export class Physics {
     body.y -= overlap * overlap_y
   }
 
-  static createCirclePoints(radius: number): number[][] {
-    const steps: number = Math.max(5, radius / 2)
-    const points: number[][] = []
-
-    for (let i = 0; i < steps; i++) {
-      const r = (2 * Math.PI * i) / steps
-
-      points.push([Math.cos(r) * radius, Math.sin(r) * radius])
-    }
-
-    return points
-  }
-
   get bodies(): Body[] {
     return this.system['_bvh']._bodies
   }
@@ -43,12 +30,12 @@ export class Physics {
     return this.system.createPolygon(x, y, points)
   }
 
-  createCircle(x: number, y: number, radius: number): Polygon {
+  createCircle(x: number, y: number, radius: number): Circle {
     if (radius <= 0) {
       throw new Error('Radius must be greater than 0')
     }
 
-    return this.createPolygon(x, y, Physics.createCirclePoints(radius))
+    return this.system.createCircle(x, y, radius)
   }
 
   remove(body: Body): void {

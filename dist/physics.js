@@ -17,15 +17,6 @@ let Physics = Physics_1 = class Physics {
         body.x -= overlap * overlap_x;
         body.y -= overlap * overlap_y;
     }
-    static createCirclePoints(radius) {
-        const steps = Math.max(5, radius / 2);
-        const points = [];
-        for (let i = 0; i < steps; i++) {
-            const r = (2 * Math.PI * i) / steps;
-            points.push([Math.cos(r) * radius, Math.sin(r) * radius]);
-        }
-        return points;
-    }
     get bodies() {
         return this.system['_bvh']._bodies;
     }
@@ -36,7 +27,7 @@ let Physics = Physics_1 = class Physics {
         if (radius <= 0) {
             throw new Error('Radius must be greater than 0');
         }
-        return this.createPolygon(x, y, Physics_1.createCirclePoints(radius));
+        return this.system.createCircle(x, y, radius);
     }
     remove(body) {
         this.system.remove(body);
