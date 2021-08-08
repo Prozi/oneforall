@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics, Sprite, Container, Scene, Animator",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {
