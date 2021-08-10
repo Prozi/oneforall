@@ -10,11 +10,14 @@ import { Scene } from './scene'
 
 describe('GIVEN Prefab', () => {
   it('THEN can be instantiated', async () => {
-    const prefab = new Prefab('MyPrefab', async (go: GameObject | any) => {
-      go.x = 120
-      go.y = 60
-      go.state = new StateMachine(go)
-    })
+    const prefab = new Prefab(
+      'MyPrefab',
+      async (go: GameObject & { [prop: string]: any }) => {
+        go.x = 120
+        go.y = 60
+        go.state = new StateMachine(go)
+      }
+    )
     const instance: GameObject = await GameObject.instantiate(prefab)
 
     expect(instance).toBeTruthy()
@@ -27,7 +30,7 @@ describe('GIVEN Prefab', () => {
     const scene: Scene = new Scene({ visible: true })
     const prefab: Prefab = new Prefab(
       'Soldier',
-      async (go: GameObject | any) => {
+      async (go: GameObject & { [prop: string]: any }) => {
         go.state = new StateMachine(go)
         go.sprite = new Sprite(go, PIXI.Texture.WHITE)
 

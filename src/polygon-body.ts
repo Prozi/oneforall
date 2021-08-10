@@ -6,7 +6,7 @@ import { GameObject } from './game-object'
 
 export class PolygonBody extends Component {
   readonly name: string = 'PolygonBody'
-  readonly polygon: Polygon | any
+  readonly polygon: Polygon & { [prop: string]: any }
 
   @Inject(Physics) physics: Physics
 

@@ -6,25 +6,11 @@ import {
   StateMachine,
   CircleBody,
   Physics,
-  Resources
 } from '..'
 import { Animator, IAnimatorData } from '../animator'
 
-export async function preload(path: string): Promise<{
-  data: IAnimatorData
-  texture: PIXI.Texture
-}> {
-  const { data } = await Resources.loadResource(`${path}.json`)
-  const { texture } = await Resources.loadResource(data.tileset)
-
-  return {
-    data,
-    texture
-  }
-}
-
 export function createPrefab(data: IAnimatorData, texture: PIXI.Texture) {
-  return new Prefab('SpritePrefab', async (gameObject: GameObject | any) => {
+  return new Prefab('SpritePrefab', async (gameObject: GameObject & { [prop: string]: any }) => {
     gameObject.body = new CircleBody(gameObject, 24)
     gameObject.body.x = Math.random() * innerWidth
     gameObject.body.y = Math.random() * innerHeight
@@ -43,19 +29,12 @@ export function createPrefab(data: IAnimatorData, texture: PIXI.Texture) {
   })
 }
 
-Physics.collision$.subscribe((gameObject: GameObject | any) => {
-  if (stateChangeAllowed(gameObject)) {
-    gameObject.target = null
-    gameObject.sprite.setState('wow2', false, 'idle')
-  }
-})
-
-function stateChangeAllowed(gameObject: GameObject | any) {
-  return ['idle', 'run'].includes(gameObject.sprite.state)
+export function stateChangeAllowed(gameObject: GameObject & { [prop: string]: any }) {
+  return ['idle', 'run'].includes(gameObject.sprite?.state)
 }
 
 export function update(
-  gameObject: GameObject | any,
+  gameObject: GameObject & { [prop: string]: any },
   gameObjects: GameObject[]
 ): () => void {
   return () => {

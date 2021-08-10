@@ -1,17 +1,33 @@
-# @jacekpietal/oneforall
-https://github.com/Prozi/oneforall/
+# one for all
 
-- GameObject, Prefab, StateMachine, Sprite, CircleBody, PolygonBody, Physics
+set of classes to better organize 2d game development
 
-- with WebGL support with PIXI: Sprite, Container, Scene, Animator
+- [Unity inspired architecture](https://docs.unity3d.com/Manual/CreatingGameplay.html)
+- [state management](https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867)
+- [reactive events](https://www.learnrxjs.io/learn-rxjs/subjects)
+- [lifecycle cleanup management](https://www.html5gamedevs.com/topic/44780-best-way-to-remove-objects-from-the-stage/)
+- [collision detection](https://npmjs.com/package/detect-collisions)
+- [drawing on webgl canvas](https://npmjs.com/package/pixi.js)
 
-- with lifecycle management (proper destroy)
-
-- with rxjs events
-
-- thoroughly unit tested
-
-- written in typescript exported as npm es6 module
+```
+<Gameplay>
+  ├─ [Resources Loader (PIXI.Loader + Cache)]
+  ├─ [2D Physics (Collision Detection)]
+  ├─ [2D Drawing Engine (PIXI.Application)]
+  │   └─ [HTMLCanvas]
+  └─ [Scene "Scene1"]
+      ├─ [GameObject "Level1" (from Prefab)]
+      │   ├─ [100x Sprite "TileSprite"]
+      │   └─ [30x PolygonBody "TileCollider"]
+      ├─ [GameObject "Player" (from Prefab)]
+      │   ├─ [CircleBody]
+      │   ├─ [Sprite]
+      │   └─ [StateMachine]
+      └─ [50x GameObject "Enemy" (from Prefab)]
+          ├─ [CircleBody]
+          ├─ [Sprite]
+          └─ [StateMachine]
+```
 
 ## Installation
 ```
@@ -19,7 +35,6 @@ yarn add @jacekpietal/oneforall -D
 ```
 
 ## Demo
-https://prozi.github.io/oneforall/
 
 ```javascript
 import { takeUntil } from 'rxjs'
@@ -30,52 +45,67 @@ import {
   update
 } from '@jacekpietal/oneforall/dist/demo/sprite.prefab'
 
-const scene: Scene = new Scene({
-  visible: true,
-  autoSize: true,
-  autoSort: true
-})
-const sprites: GameObject[] = []
+async function start() {
+  // create PIXI.Scene with bonuses
+  const scene: Scene = new Scene({
+    visible: true,
+    autoSize: true,
+    autoSort: true,
+    scale: 1.3
+  })
 
-preload('./cave-boy').then(async ({ data, texture }) => {
+  // wait to load cave-boy.json and cave-boy.png
+  const { data } = await Resources.loadResource('./cave-boy.json')
+  const { texture } = await Resources.loadResource(data.tileset)
+  // create prefab once
   const prefab: Prefab = createPrefab(data, texture)
+  // create 50 sprites using prefab
+  const sprites = await Promise.all(
+    Array.from({ length: 50 }, () => GameObject.instantiate(prefab))
+  )
 
-  for (let i = 0; i < 500; i++) {
-    const sprite: GameObject = await GameObject.instantiate(prefab)
-
+  // extend sprites
+  sprites.forEach((sprite: GameObject) => {
+    // add to scene
     scene.addChild(sprite)
-    sprites.push(sprite)
+    // subscribe to our own update function
     sprite.update$
       .pipe(takeUntil(scene.destroy$))
       .subscribe(update(sprite, sprites))
-  }
+  })
 
-  scene.pixi.renderer.backgroundColor = 0xcccccc
+  Physics.collision$.subscribe((gameObject: GameObject & { [prop: string]: any }) => {
+    if (stateChangeAllowed(gameObject)) {
+      gameObject.target = null
+      gameObject.sprite.setState('wow2', false, 'idle')
+    }
+  })
+
   scene.start()
-})
-```
+}
 
-## Architecture
+start()
 ```
-<game>
-└─ [Scene]
-    ├─ [Physics]
-    ├─ [Resources]
-    ├─ [PIXI.Application]
-    │   └─ [HTMLCanvas]
-    ├─ [GameObject "Map"]
-    │   ├─ [PolygonBody]
-    │   └─ [Container]
-    │       └─[100x "Tile" Sprite]
-    ├─ [GameObject "Player" from Prefab]
-    │   ├─ [CircleBody]
-    │   ├─ [Sprite]
-    │   └─ [StateMachine]
-    └─ [100x GameObject "Enemy" from Prefab]
-        ├─ [CircleBody]
-        ├─ [Sprite]
-        └─ [StateMachine]
-```
+just the above code results in:
+https://prozi.github.io/oneforall/
+
+take a look at [sprite.prefab](https://github.com/Prozi/oneforall/blob/main/src/demo/sprite.prefab.ts)
+to see how the Prefab class was used in the demo
+
+## Classes this library exports
+
+- GameObject
+- Prefab
+- StateMachine
+- Sprite
+- CircleBody
+- PolygonBody
+- Physics
+- Sprite
+- Container
+- Scene
+- Animator
+
 ## Tests
 
 ```

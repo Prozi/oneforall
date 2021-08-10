@@ -1,14 +1,6 @@
 import { takeUntil } from 'rxjs';
-import { Prefab, StateMachine, CircleBody, Physics, Resources } from '..';
+import { Prefab, StateMachine, CircleBody, Physics, } from '..';
 import { Animator } from '../animator';
-export async function preload(path) {
-    const { data } = await Resources.loadResource(`${path}.json`);
-    const { texture } = await Resources.loadResource(data.tileset);
-    return {
-        data,
-        texture
-    };
-}
 export function createPrefab(data, texture) {
     return new Prefab('SpritePrefab', async (gameObject) => {
         gameObject.body = new CircleBody(gameObject, 24);
@@ -26,14 +18,9 @@ export function createPrefab(data, texture) {
         gameObject.state = new StateMachine(gameObject, '[state] initial');
     });
 }
-Physics.collision$.subscribe((gameObject) => {
-    if (stateChangeAllowed(gameObject)) {
-        gameObject.target = null;
-        gameObject.sprite.setState('wow2', false, 'idle');
-    }
-});
-function stateChangeAllowed(gameObject) {
-    return ['idle', 'run'].includes(gameObject.sprite.state);
+export function stateChangeAllowed(gameObject) {
+    var _a;
+    return ['idle', 'run'].includes((_a = gameObject.sprite) === null || _a === void 0 ? void 0 : _a.state);
 }
 export function update(gameObject, gameObjects) {
     return () => {

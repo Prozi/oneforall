@@ -1,12 +1,12 @@
-import { Polygon } from 'detect-collisions'
 import { Inject } from '@jacekpietal/dependency-injection'
+import { Circle } from 'detect-collisions'
 import { Physics } from './physics'
 import { Component } from './component'
 import { GameObject } from './game-object'
 
 export class CircleBody extends Component {
   readonly name: string = 'CircleBody'
-  readonly polygon: Polygon | any
+  readonly polygon: Circle & { [prop: string]: any }
   readonly radius: number
 
   @Inject(Physics) physics: Physics

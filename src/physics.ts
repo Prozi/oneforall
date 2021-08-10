@@ -49,7 +49,7 @@ export class Physics {
       return
     }
 
-    Array.from(this.bodies).forEach((body: Body | any) => {
+    Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
       this.detectCollisions(body).forEach((result: Partial<Result>) => {
         Physics.pushBack(body, result)
 
