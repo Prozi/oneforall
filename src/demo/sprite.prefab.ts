@@ -29,7 +29,7 @@ export function createPrefab(data: IAnimatorData, texture: PIXI.Texture) {
   })
 }
 
-export function stateChangeAllowed(gameObject: GameObject & { [prop: string]: any }) {
+export function stateChangeAllowed(gameObject: GameObject & { [prop: string]: any }): boolean {
   return ['idle', 'run'].includes(gameObject.sprite?.state)
 }
 
