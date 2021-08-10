@@ -38,7 +38,7 @@ yarn add @jacekpietal/oneforall -D
 
 ```typescript
 import { filter, takeUntil } from 'rxjs'
-import { Scene, GameObject } from '@jacekpietal/oneforall'
+import { Scene, GameObject, Prefab, Resources, Physics } from '../src'
 import {
   createPrefab,
   stateChangeAllowed,
