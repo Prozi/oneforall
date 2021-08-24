@@ -5,6 +5,7 @@ import { Subject } from 'rxjs'
 
 export interface IBody extends Body {
   isTrigger?: boolean
+  isStatic?: boolean
 }
 
 @Injectable
@@ -15,9 +16,13 @@ export class Physics {
   readonly result: Result = this.system.createResult()
 
   static pushBack(
-    body: Body,
+    body: Body & { isStatic?: boolean },
     { overlap, overlap_x, overlap_y }: Partial<Result>
   ): void {
+    if (body.isStatic) {
+      console.warn('pushBack on static body', body)
+    }
+
     body.x -= overlap * overlap_x
     body.y -= overlap * overlap_y
   }
@@ -50,6 +55,10 @@ export class Physics {
     }
 
     Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
+      if (body.isStatic) {
+        return
+      }
+
       this.detectCollisions(body).forEach((result: Partial<Result>) => {
         Physics.pushBack(body, result)
 

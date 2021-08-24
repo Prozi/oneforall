@@ -14,6 +14,9 @@ let Physics = Physics_1 = class Physics {
         this.result = this.system.createResult();
     }
     static pushBack(body, { overlap, overlap_x, overlap_y }) {
+        if (body.isStatic) {
+            console.warn('pushBack on static body', body);
+        }
         body.x -= overlap * overlap_x;
         body.y -= overlap * overlap_y;
     }
@@ -38,6 +41,9 @@ let Physics = Physics_1 = class Physics {
             return;
         }
         Array.from(this.bodies).forEach((body) => {
+            if (body.isStatic) {
+                return;
+            }
             this.detectCollisions(body).forEach((result) => {
                 Physics_1.pushBack(body, result);
                 Physics_1.collision$.next(body.gameObject);
