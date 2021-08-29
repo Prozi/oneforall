@@ -12,6 +12,7 @@ export class Animator extends Container {
         super(gameObject);
         this.name = 'Animator';
         this.complete$ = new Subject();
+        this.state$ = new Subject();
         Object.values(data.animations).forEach((frames) => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
                 const x = (frame * data.tilewidth) % data.width;
@@ -64,7 +65,7 @@ export class Animator extends Container {
             animation.visible = true;
             if (!loop) {
                 animation.onComplete = () => {
-                    this.complete$.next([this.state, stateWhenFinished]);
+                    this.complete$.next(this.state);
                     if (this.state === state) {
                         animation.onComplete = () => { };
                         this.setState(stateWhenFinished);
@@ -74,5 +75,6 @@ export class Animator extends Container {
         }
         this.animation = animation;
         this.state = state;
+        this.state$.next(this.state);
     }
 }

@@ -13,7 +13,8 @@ export interface IAnimatorData {
 
 export class Animator extends Container {
   readonly name: string = 'Animator'
-  readonly complete$: Subject<[string, string]> = new Subject()
+  readonly complete$: Subject<string> = new Subject()
+  readonly state$: Subject<string> = new Subject()
 
   states: string[]
   state?: string
@@ -115,7 +116,7 @@ export class Animator extends Container {
 
       if (!loop) {
         animation.onComplete = () => {
-          this.complete$.next([this.state, stateWhenFinished])
+          this.complete$.next(this.state)
 
           if (this.state === state) {
             animation.onComplete = () => {}
@@ -127,5 +128,6 @@ export class Animator extends Container {
 
     this.animation = animation
     this.state = state
+    this.state$.next(this.state)
   }
 }
