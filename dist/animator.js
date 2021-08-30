@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Container } from './container';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 export class Animator extends Container {
     /**
      * create animated container
@@ -12,7 +12,7 @@ export class Animator extends Container {
         super(gameObject);
         this.name = 'Animator';
         this.complete$ = new Subject();
-        this.state$ = new Subject();
+        this.state$ = new BehaviorSubject('');
         Object.values(data.animations).forEach((frames) => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
                 const x = (frame * data.tilewidth) % data.width;

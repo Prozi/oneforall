@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { GameObject } from './game-object'
 import { Container } from './container'
-import { Subject } from 'rxjs'
+import { BehaviorSubject, Subject } from 'rxjs'
 
 export interface IAnimatorData {
   animations: { [name: string]: Array<number | string> }
@@ -14,7 +14,7 @@ export interface IAnimatorData {
 export class Animator extends Container {
   readonly name: string = 'Animator'
   readonly complete$: Subject<string> = new Subject()
-  readonly state$: Subject<string> = new Subject()
+  readonly state$: BehaviorSubject<string> = new BehaviorSubject('')
 
   states: string[]
   state?: string
