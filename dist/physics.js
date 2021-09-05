@@ -57,11 +57,19 @@ let Physics = Physics_1 = class Physics {
             if (body.isTrigger) {
                 return;
             }
-            if (input.collides(body, this.result)) {
-                const { overlap, overlap_x, overlap_y } = this.result;
-                if (Math.abs(overlap) > tolerance) {
-                    return { overlap, overlap_x, overlap_y };
-                }
+            if (input.collides(body, this.result) &&
+                Math.abs(this.result.overlap) > tolerance) {
+                const { collision, a, b, a_in_b, b_in_a, overlap, overlap_x, overlap_y } = this.result;
+                return {
+                    collision,
+                    a,
+                    b,
+                    a_in_b,
+                    b_in_a,
+                    overlap,
+                    overlap_x,
+                    overlap_y
+                };
             }
             return;
         })

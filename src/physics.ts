@@ -67,7 +67,7 @@ export class Physics {
     })
   }
 
-  detectCollisions(input: Body, tolerance = 0.001): Partial<Result>[] {
+  detectCollisions(input: Body, tolerance = 0.001): Result[] {
     return input
       .potentials()
       .map((body: IBody) => {
@@ -75,11 +75,30 @@ export class Physics {
           return
         }
 
-        if (input.collides(body, this.result)) {
-          const { overlap, overlap_x, overlap_y } = this.result
+        if (
+          input.collides(body, this.result) &&
+          Math.abs(this.result.overlap) > tolerance
+        ) {
+          const {
+            collision,
+            a,
+            b,
+            a_in_b,
+            b_in_a,
+            overlap,
+            overlap_x,
+            overlap_y
+          } = this.result
 
-          if (Math.abs(overlap) > tolerance) {
-            return { overlap, overlap_x, overlap_y }
+          return {
+            collision,
+            a,
+            b,
+            a_in_b,
+            b_in_a,
+            overlap,
+            overlap_x,
+            overlap_y
           }
         }
 
