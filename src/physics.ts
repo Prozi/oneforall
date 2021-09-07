@@ -71,6 +71,11 @@ export class Physics {
   }
 
   detectCollisions(input: Body, tolerance = 0.001): Result[] {
+    // removed collider doesnt collide
+    if (!(input as any)._bvh) {
+      return []
+    }
+
     return input
       .potentials()
       .map((body: IBody) => {

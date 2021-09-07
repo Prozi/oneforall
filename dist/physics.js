@@ -54,6 +54,10 @@ let Physics = Physics_1 = class Physics {
         this.system.update();
     }
     detectCollisions(input, tolerance = 0.001) {
+        // removed collider doesnt collide
+        if (!input._bvh) {
+            return [];
+        }
         return input
             .potentials()
             .map((body) => {
