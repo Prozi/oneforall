@@ -36,7 +36,6 @@ let Physics = Physics_1 = class Physics {
         this.system.remove(body);
     }
     update(pushBack = true) {
-        this.system.update();
         if (!pushBack) {
             return;
         }
@@ -46,9 +45,13 @@ let Physics = Physics_1 = class Physics {
             }
             this.detectCollisions(body).forEach((result) => {
                 Physics_1.pushBack(body, result);
-                Physics_1.collision$.next(body.gameObject);
+                Physics_1.collision$.next([
+                    result.a.gameObject,
+                    result.b.gameObject
+                ]);
             });
         });
+        this.system.update();
     }
     detectCollisions(input, tolerance = 0.001) {
         return input

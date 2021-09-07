@@ -3,6 +3,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowJs": true,
+    "lib": ["dom"],
     "moduleResolution": "node",
     "target": "es2017",
     "outDir": "dist",

@@ -1,10 +1,6 @@
-import { filter, takeUntil } from 'rxjs'
+import { takeUntil } from 'rxjs'
 import { Scene, GameObject, Prefab, Resources, Physics } from '../src'
-import {
-  createPrefab,
-  stateChangeAllowed,
-  update
-} from '../src/demo/sprite.prefab'
+import { createPrefab, update } from '../src/demo/sprite.prefab'
 
 async function start() {
   // create PIXI.Scene with bonuses
@@ -37,10 +33,12 @@ async function start() {
 
   // on collision try to set sprite animation to wow
   Physics.collision$
-    .pipe(takeUntil(scene.destroy$), filter(stateChangeAllowed))
-    .subscribe((gameObject: GameObject & { [prop: string]: any }) => {
-      gameObject.target = null
-      gameObject.sprite.setState('wow2', false, 'idle')
+    .pipe(takeUntil(scene.destroy$))
+    .subscribe((gameObjects: Array<GameObject & { [prop: string]: any }>) => {
+      gameObjects.forEach((gameObject) => {
+        gameObject.target = null
+        gameObject.sprite.setState('wow2', false, 'idle')
+      })
     })
 
   scene.start()

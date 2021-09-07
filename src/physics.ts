@@ -10,7 +10,7 @@ export interface IBody extends Body {
 
 @Injectable
 export class Physics {
-  static readonly collision$: Subject<GameObject> = new Subject()
+  static readonly collision$: Subject<GameObject[]> = new Subject()
 
   readonly system: Collisions = new Collisions()
   readonly result: Result = this.system.createResult()
@@ -48,8 +48,6 @@ export class Physics {
   }
 
   update(pushBack: boolean = true): void {
-    this.system.update()
-
     if (!pushBack) {
       return
     }
@@ -62,9 +60,14 @@ export class Physics {
       this.detectCollisions(body).forEach((result: Partial<Result>) => {
         Physics.pushBack(body, result)
 
-        Physics.collision$.next(body.gameObject)
+        Physics.collision$.next([
+          (result.a as any).gameObject,
+          (result.b as any).gameObject
+        ])
       })
     })
+
+    this.system.update()
   }
 
   detectCollisions(input: Body, tolerance = 0.001): Result[] {
