@@ -16,21 +16,20 @@ export class Scene extends Lifecycle {
         super();
         this.children = new Set();
         this.children$ = new Subject();
-        this.container = new PIXI.Container();
+        this.stage = new PIXI.Container();
         this.destroy$ = new Subject();
         this.name = options.name || 'Scene';
-        this.container.visible = options.visible || false;
-        this.container.scale.set(options.scale || 1);
+        // 1 additonal layer
+        this.stage.visible = options.visible || false;
+        this.stage.scale.set(options.scale || 1);
         if (options.autoSize) {
             this.enableAutoSize();
         }
         if (options.autoSort) {
             this.enableAutoSort();
         }
-        this.stage.addChild(this.container);
-    }
-    get stage() {
-        return this.pixi.stage;
+        // real stage
+        this.pixi.stage.addChild(this.stage);
     }
     stop() {
         if (this.animationFrame) {
@@ -44,7 +43,7 @@ export class Scene extends Lifecycle {
             this.animationFrame = requestAnimationFrame(loop);
         };
         loop();
-        this.stage.scale.set(this.container.scale.x, this.container.scale.y);
+        this.pixi.stage.scale.set(this.stage.scale.x, this.stage.scale.y);
         this.pixi.start();
     }
     enableAutoSize() {
@@ -57,7 +56,7 @@ export class Scene extends Lifecycle {
     }
     enableAutoSort() {
         this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.pixi.stage.children.sort((a, b) => a.y - b.y);
+            this.stage.children.sort((a, b) => a.y - b.y);
         });
     }
     update() {
@@ -66,8 +65,9 @@ export class Scene extends Lifecycle {
         super.update();
     }
     destroy() {
-        this.stage.removeChild(this.container);
-        this.container.destroy();
+        var _a;
+        (_a = this.stage.parent) === null || _a === void 0 ? void 0 : _a.removeChild(this.stage);
+        this.stage.destroy();
         this.stop();
         super.destroy();
     }

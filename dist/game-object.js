@@ -18,18 +18,26 @@ export class GameObject {
         Lifecycle.update(this);
     }
     destroy() {
+        Array.from(this.components.values()).forEach((component) => component.destroy());
         Lifecycle.destroy(this);
     }
-    addComponent(component) {
+    addComponent(component, key = '') {
         if (this.components.has(component)) {
             return;
         }
         this.components.add(component);
         this.components$.next();
+        if (key) {
+            this[key] = component;
+        }
+        return component;
     }
-    removeComponent(component) {
+    removeComponent(component, key = '') {
         if (!this.components.has(component)) {
             return;
+        }
+        if (key && this[key]) {
+            this[key] = null;
         }
         this.components.delete(component);
         this.components$.next();

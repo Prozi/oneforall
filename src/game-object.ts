@@ -33,21 +33,35 @@ export class GameObject implements ILifecycle {
   }
 
   destroy(): void {
+    Array.from(this.components.values()).forEach((component: IComponent) =>
+      component.destroy()
+    )
+
     Lifecycle.destroy(this)
   }
 
-  addComponent(component: IComponent): void {
+  addComponent(component: IComponent, key: string = ''): IComponent {
     if (this.components.has(component)) {
       return
     }
 
     this.components.add(component)
     this.components$.next()
+
+    if (key) {
+      this[key] = component
+    }
+
+    return component
   }
 
-  removeComponent(component: IComponent): void {
+  removeComponent(component: IComponent, key: string = ''): void {
     if (!this.components.has(component)) {
       return
+    }
+
+    if (key && this[key]) {
+      this[key] = null
     }
 
     this.components.delete(component)

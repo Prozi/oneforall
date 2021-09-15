@@ -16,7 +16,7 @@ export class Scene extends Lifecycle {
   @Inject(Resources) resouces: Resources
   @Inject(Physics) physics: Physics
 
-  container: PIXI.Container = new PIXI.Container()
+  stage: PIXI.Container = new PIXI.Container()
   destroy$: Subject<void> = new Subject()
   animationFrame: number
 
@@ -32,8 +32,9 @@ export class Scene extends Lifecycle {
     super()
     this.name = options.name || 'Scene'
 
-    this.container.visible = options.visible || false
-    this.container.scale.set(options.scale || 1)
+    // 1 additonal layer
+    this.stage.visible = options.visible || false
+    this.stage.scale.set(options.scale || 1)
 
     if (options.autoSize) {
       this.enableAutoSize()
@@ -43,11 +44,8 @@ export class Scene extends Lifecycle {
       this.enableAutoSort()
     }
 
-    this.stage.addChild(this.container)
-  }
-
-  get stage(): PIXI.Container {
-    return this.pixi.stage
+    // real stage
+    this.pixi.stage.addChild(this.stage)
   }
 
   stop(): void {
@@ -67,7 +65,7 @@ export class Scene extends Lifecycle {
 
     loop()
 
-    this.stage.scale.set(this.container.scale.x, this.container.scale.y)
+    this.pixi.stage.scale.set(this.stage.scale.x, this.stage.scale.y)
     this.pixi.start()
   }
 
@@ -83,7 +81,7 @@ export class Scene extends Lifecycle {
 
   enableAutoSort(): void {
     this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.pixi.stage.children.sort((a, b) => a.y - b.y)
+      this.stage.children.sort((a, b) => a.y - b.y)
     })
   }
 
@@ -98,8 +96,8 @@ export class Scene extends Lifecycle {
   }
 
   destroy(): void {
-    this.stage.removeChild(this.container)
-    this.container.destroy()
+    this.stage.parent?.removeChild(this.stage)
+    this.stage.destroy()
     this.stop()
 
     super.destroy()
