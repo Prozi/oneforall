@@ -22,6 +22,7 @@ export class CircleBody extends Component {
     )
 
     this.polygon.gameObject = this.gameObject
+    this.gameObject.addComponent(this)
   }
 
   get x(): number {

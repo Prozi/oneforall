@@ -14,6 +14,7 @@ export class CircleBody extends Component {
         this.radius = radius;
         this.polygon = this.physics.createCircle(this.gameObject.x, this.gameObject.y, this.radius);
         this.polygon.gameObject = this.gameObject;
+        this.gameObject.addComponent(this);
     }
     get x() {
         return this.polygon.x;

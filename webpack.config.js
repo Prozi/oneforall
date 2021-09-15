@@ -15,8 +15,7 @@ module.exports = {
     rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
   },
   devServer: {
-    contentBase: path.resolve('./docs'),
-    filename: 'demo.bundle.js',
+    static: path.resolve('./docs'),
     compress: false,
     port: 4200
   }

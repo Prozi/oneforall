@@ -1,5 +1,9 @@
+import 'pixi-shim'
+import 'pixi.js-legacy'
 import { Component } from './component'
 import { GameObject } from './game-object'
+import { CircleBody } from './circle-body'
+import { Scene } from './scene'
 
 describe('GIVEN GameObject', () => {
   it('THEN you can add component', () => {
@@ -53,5 +57,24 @@ describe('GIVEN GameObject', () => {
     const component = new Component(go)
 
     expect(go.getComponentsOfType('Component').length).toBe(1)
+  })
+
+  it('THEN you can destroy 1000 bodies without problem', () => {
+    const scene = new Scene()
+
+    for (let i = 0; i < 1000; i++) {
+      const go: GameObject | any = new GameObject()
+
+      go.body = new CircleBody(go, 100)
+
+      scene.physics.update()
+      scene.physics.system.remove(go.body.polygon)
+
+      go.destroy()
+
+      expect(go.components.size).toBe(0)
+    }
+
+    expect(scene.children.size).toBe(0)
   })
 })

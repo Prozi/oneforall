@@ -12,6 +12,7 @@ export interface ILifecycle {
 
 export interface IComponent extends ILifecycle {
   readonly gameObject: GameObject
+  key?: string
 }
 
 export class Lifecycle implements ILifecycle {
