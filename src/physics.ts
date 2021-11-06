@@ -53,7 +53,7 @@ export class Physics {
     }
 
     Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
-      if (body.isStatic) {
+      if (body.isStatic || body.isTrigger) {
         return
       }
 
