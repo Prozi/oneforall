@@ -53,12 +53,14 @@ export class Physics {
     }
 
     Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
-      if (body.isStatic || body.isTrigger) {
+      if (body.isStatic) {
         return
       }
 
       this.detectCollisions(body).forEach((result: Partial<Result>) => {
-        Physics.pushBack(body, result)
+        if (!(result.b as any).isTrigger) {
+          Physics.pushBack(body, result)
+        }
 
         Physics.collision$.next([
           (result.a as any).gameObject,
