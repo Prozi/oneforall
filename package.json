@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {

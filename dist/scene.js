@@ -19,9 +19,9 @@ export class Scene extends Lifecycle {
         this.stage = new PIXI.Container();
         this.destroy$ = new Subject();
         this.name = options.name || 'Scene';
+        this.scale = options.scale || 1;
         // 1 additonal layer
         this.stage.visible = options.visible || false;
-        this.stage.scale.set(options.scale || 1);
         if (options.autoSize) {
             this.enableAutoSize();
         }
@@ -43,7 +43,7 @@ export class Scene extends Lifecycle {
             this.animationFrame = requestAnimationFrame(loop);
         };
         loop();
-        this.pixi.stage.scale.set(this.stage.scale.x, this.stage.scale.y);
+        this.pixi.stage.scale.set(this.scale);
         this.pixi.start();
     }
     enableAutoSize() {

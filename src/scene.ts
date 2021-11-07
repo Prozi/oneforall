@@ -16,6 +16,7 @@ export class Scene extends Lifecycle {
   @Inject(Resources) resouces: Resources
   @Inject(Physics) physics: Physics
 
+  scale: number
   stage: PIXI.Container = new PIXI.Container()
   destroy$: Subject<void> = new Subject()
   animationFrame: number
@@ -30,11 +31,12 @@ export class Scene extends Lifecycle {
     } = {}
   ) {
     super()
+
     this.name = options.name || 'Scene'
+    this.scale = options.scale || 1
 
     // 1 additonal layer
     this.stage.visible = options.visible || false
-    this.stage.scale.set(options.scale || 1)
 
     if (options.autoSize) {
       this.enableAutoSize()
@@ -65,7 +67,7 @@ export class Scene extends Lifecycle {
 
     loop()
 
-    this.pixi.stage.scale.set(this.stage.scale.x, this.stage.scale.y)
+    this.pixi.stage.scale.set(this.scale)
     this.pixi.start()
   }
 
