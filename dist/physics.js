@@ -40,11 +40,8 @@ let Physics = Physics_1 = class Physics {
             return;
         }
         Array.from(this.bodies).forEach((body) => {
-            if (body.isStatic) {
-                return;
-            }
             this.detectCollisions(body).forEach((result) => {
-                if (!result.b.isTrigger) {
+                if (!body.isStatic && !body.isTrigger) {
                     Physics_1.pushBack(body, result);
                 }
                 Physics_1.collision$.next([
