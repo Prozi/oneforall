@@ -47,22 +47,20 @@ export class Physics {
     this.system.remove(body)
   }
 
-  update(pushBack: boolean = true): void {
-    if (!pushBack) {
-      return
-    }
-
+  update(): void {
     Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
-      this.detectCollisions(body).forEach((result: Partial<Result>) => {
-        if (!body.isStatic && !body.isTrigger) {
-          Physics.pushBack(body, result)
-        }
+      if (!body.isStatic) {
+        this.detectCollisions(body).forEach((result: Partial<Result>) => {
+          if (!body.isTrigger) {
+            Physics.pushBack(body, result)
+          }
 
-        Physics.collision$.next([
-          (result.a as any).gameObject,
-          (result.b as any).gameObject
-        ])
-      })
+          Physics.collision$.next([
+            (result.a as any).gameObject,
+            (result.b as any).gameObject
+          ])
+        })
+      }
     })
 
     this.system.update()

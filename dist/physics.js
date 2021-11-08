@@ -35,20 +35,19 @@ let Physics = Physics_1 = class Physics {
     remove(body) {
         this.system.remove(body);
     }
-    update(pushBack = true) {
-        if (!pushBack) {
-            return;
-        }
+    update() {
         Array.from(this.bodies).forEach((body) => {
-            this.detectCollisions(body).forEach((result) => {
-                if (!body.isStatic && !body.isTrigger) {
-                    Physics_1.pushBack(body, result);
-                }
-                Physics_1.collision$.next([
-                    result.a.gameObject,
-                    result.b.gameObject
-                ]);
-            });
+            if (!body.isStatic) {
+                this.detectCollisions(body).forEach((result) => {
+                    if (!body.isTrigger) {
+                        Physics_1.pushBack(body, result);
+                    }
+                    Physics_1.collision$.next([
+                        result.a.gameObject,
+                        result.b.gameObject
+                    ]);
+                });
+            }
         });
         this.system.update();
     }

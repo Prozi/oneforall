@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {
@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^2.6.0",
+    "detect-collisions": "^2.7.0",
     "latermom": "^1.0.4",
     "pixi.js": "^6.2.0"
   }
