@@ -42,10 +42,7 @@ let Physics = Physics_1 = class Physics {
                     if (!body.isTrigger) {
                         Physics_1.pushBack(body, result);
                     }
-                    Physics_1.collision$.next([
-                        result.a.gameObject,
-                        result.b.gameObject
-                    ]);
+                    Physics_1.collision$.next(result);
                 });
             }
         });

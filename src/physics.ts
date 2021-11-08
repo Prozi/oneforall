@@ -10,7 +10,7 @@ export interface IBody extends Body {
 
 @Injectable
 export class Physics {
-  static readonly collision$: Subject<GameObject[]> = new Subject()
+  static readonly collision$: Subject<Partial<Result>> = new Subject()
 
   readonly system: Collisions = new Collisions()
   readonly result: Result = this.system.createResult()
@@ -55,10 +55,7 @@ export class Physics {
             Physics.pushBack(body, result)
           }
 
-          Physics.collision$.next([
-            (result.a as any).gameObject,
-            (result.b as any).gameObject
-          ])
+          Physics.collision$.next(result)
         })
       }
     })

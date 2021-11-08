@@ -34,7 +34,9 @@ async function start() {
   // on collision try to set sprite animation to wow
   Physics.collision$
     .pipe(takeUntil(scene.destroy$))
-    .subscribe((gameObjects: Array<GameObject & { [prop: string]: any }>) => {
+    .subscribe((result: any) => {
+      const gameObjects = [result.a.gameObject, result.b.gameObject]
+
       gameObjects.forEach((gameObject) => {
         gameObject.target = null
         gameObject.sprite.setState('wow2', false, 'idle')
