@@ -104,85 +104,88 @@ to see how the Prefab class was used in the demo
 
 ```
 $ yarn test
-PASS src/physics.spec.ts
+yarn run v1.22.17
+$ jest --verbose --silent
+ PASS  src/state-machine.spec.ts (6.792 s)
+  GIVEN StateMachine
+    ✓ THEN you can set validators (6 ms)
+    ✓ THEN you can't change state to invalid state (3 ms)
+    ✓ THEN you can change state to valid state (1 ms)
+
+ PASS  src/component.spec.ts (6.831 s)
+  GIVEN Component
+    ✓ THEN update publishes update$ (3 ms)
+    ✓ THEN destroy publishes destroy$ (1 ms)
+
+ PASS  src/physics.spec.ts (7.352 s)
   GIVEN Physics
-    ✓ THEN it can be created (2 ms)
-    ✓ THEN createPolygon works (1 ms)
+    ✓ THEN it can be created (3 ms)
+    ✓ THEN createPolygon works (3 ms)
     ✓ THEN createCircle works (1 ms)
-    ✓ THEN remove works
-    ✓ THEN detectCollisions works (1 ms)
-    ✓ THEN detectCollisions ignores bodies with isTrigger (1 ms)
-    ✓ THEN pushBack works (1 ms)
+    ✓ THEN tree.remove works (1 ms)
+    ✓ THEN getPotentials works (2 ms)
+    ✓ THEN separate ignores bodies with isTrigger (2 ms)
+    ✓ THEN checkOne with move away works (1 ms)
 
-PASS src/prefab.spec.ts
-  GIVEN Prefab
-    ✓ THEN can be instantiated (2 ms)
-    ✓ THEN can create 100 instances (30 ms)
+ PASS  src/resources.spec.ts (8.431 s)
+  GIVEN Resources
+    ✓ THEN it silently fails and proceeds (29 ms)
 
-PASS src/scene.spec.ts
-  GIVEN Scene
-    ✓ THEN it works (9 ms)
-    ✓ THEN it can have children (1 ms)
-    ✓ THEN scene propagates update to gameobject to component (2 ms)
-
-PASS src/sprite.spec.ts
-  GIVEN Sprite
-    ✓ THEN update propagates x/y changes (1 ms)
+ PASS  src/container.spec.ts (8.383 s)
+  GIVEN Container
+    ✓ THEN update propagates x/y changes (4 ms)
     ✓ THEN destroy works (1 ms)
 
-PASS src/index.spec.ts
-  GIVEN index.ts
-    ✓ THEN basic imports work
+ PASS  src/scene.spec.ts (8.44 s)
+  GIVEN Scene
+    ✓ THEN it works (13 ms)
+    ✓ THEN it can have children (2 ms)
+    ✓ THEN scene propagates update to gameobject to component (3 ms)
 
-PASS src/game-object.spec.ts
-  GIVEN GameObject
-    ✓ THEN you can add component
-    ✓ THEN update propagates to components (2 ms)
-    ✓ THEN you can remove component
-    ✓ THEN destroy removes component (1 ms)
-    ✓ THEN you can get component by name
-    ✓ THEN you can get components by name
-    ✓ THEN you can destroy 1000 bodies without problem (156 ms)
+ PASS  src/sprite.spec.ts (8.461 s)
+  GIVEN Sprite
+    ✓ THEN update propagates x/y changes (4 ms)
+    ✓ THEN destroy works (2 ms)
 
-PASS src/container.spec.ts
-  GIVEN Container
-    ✓ THEN update propagates x/y changes (1 ms)
-    ✓ THEN destroy works
-
-PASS src/circle-body.spec.ts
-  GIVEN CircleBody
-    ✓ THEN it has set property radius (1 ms)
-    ✓ THEN it can't have zero radius (11 ms)
-    ✓ THEN update propagates x/y changes
-
-PASS src/state-machine.spec.ts
-  GIVEN StateMachine
-    ✓ THEN you can set validators (1 ms)
-    ✓ THEN you can't change state to invalid state (1 ms)
-    ✓ THEN you can change state to valid state
-
-PASS src/application.spec.ts
+ PASS  src/application.spec.ts (8.501 s)
   GIVEN Application
-    ✓ THEN it works (3 ms)
+    ✓ THEN it works (11 ms)
 
-PASS src/resources.spec.ts
-  GIVEN Resources
-    ✓ THEN it silently fails and proceeds (14 ms)
+ PASS  src/prefab.spec.ts (8.591 s)
+  GIVEN Prefab
+    ✓ THEN can be instantiated (3 ms)
+    ✓ THEN can create 100 instances (20 ms)
 
-PASS src/polygon-body.spec.ts
+ PASS  src/polygon-body.spec.ts
   GIVEN PolygonBody
+    ✓ THEN update propagates x/y changes (3 ms)
+
+ PASS  src/index.spec.ts (8.599 s)
+  GIVEN index.ts
+    ✓ THEN basic imports work (2 ms)
+
+ PASS  src/circle-body.spec.ts
+  GIVEN CircleBody
+    ✓ THEN it has set property radius (3 ms)
+    ✓ THEN it can't have zero radius (8 ms)
     ✓ THEN update propagates x/y changes
 
-PASS src/component.spec.ts
-  GIVEN Component
-    ✓ THEN update publishes update$ (2 ms)
-    ✓ THEN destroy publishes destroy$ (2 ms)
+ PASS  src/game-object.spec.ts (30.102 s)
+  GIVEN GameObject
+    ✓ THEN you can add component (3 ms)
+    ✓ THEN update propagates to components (4 ms)
+    ✓ THEN you can remove component (1 ms)
+    ✓ THEN destroy removes component (1 ms)
+    ✓ THEN you can get component by name (1 ms)
+    ✓ THEN you can get components by name
+    ✓ THEN you can destroy 1000 bodies without problem (21672 ms)
 
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks.
 Test Suites: 13 passed, 13 total
 Tests:       35 passed, 35 total
 Snapshots:   0 total
-Time:        5.694 s, estimated 6 s
+Time:        31.118 s
+Done in 32.51s.
 ```
 
 ```

@@ -6,16 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { System } from 'detect-collisions';
 import { Injectable } from '@jacekpietal/dependency-injection';
-import { Subject } from 'rxjs';
 let Physics = class Physics extends System {
-    remove(body) {
-        this.tree.remove(body);
-    }
-    getPotentials(body) {
-        return super.getPotentials(body).filter(({ isTrigger }) => !isTrigger);
-    }
 };
-Physics.collision$ = new Subject();
 Physics = __decorate([
     Injectable
 ], Physics);

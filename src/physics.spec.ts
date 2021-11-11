@@ -25,15 +25,15 @@ describe('GIVEN Physics', () => {
     expect(system.createCircle({}, 50)).toBeTruthy()
   })
 
-  it('THEN remove works', () => {
+  it('THEN tree.remove works', () => {
     const system = new Physics()
     const body = system.createCircle({}, 50)
-    const removeBody = () => system.remove(body)
+    const removeBody = () => system.tree.remove(body)
 
     expect(removeBody).not.toThrow()
   })
 
-  it('THEN detectCollisions works', () => {
+  it('THEN getPotentials works', () => {
     const system = new Physics()
     const body1 = system.createCircle({ x: 30, y: 30 }, 50)
     const body2 = system.createCircle({ x: 20, y: 20 }, 50)
@@ -43,18 +43,22 @@ describe('GIVEN Physics', () => {
     expect(system.getPotentials(body1).length).toBe(1)
   })
 
-  it('THEN detectCollisions ignores bodies with isTrigger', () => {
+  it('THEN separate ignores bodies with isTrigger', () => {
     const system = new Physics()
-    const body1 = system.createCircle({ x: 30, y: 30 }, 50)
-    const body2 = system.createCircle({ x: 20, y: 20 }, 50) as IBody
+    const body1: IBody = system.createCircle({ x: 30, y: 30 }, 50)
+    const body2: IBody = system.createCircle({ x: 20, y: 20 }, 50)
 
-    system.update()
     body2.isTrigger = true
 
-    expect(system.getPotentials(body1).length).toBe(0)
+    expect(system.getPotentials(body1).length).toBe(1)
+
+    system.separate()
+    system.update()
+
+    expect(system.getPotentials(body1).length).toBe(1)
   })
 
-  it('THEN pushBack works', () => {
+  it('THEN checkOne with move away works', () => {
     const system = new Physics()
     const body1: any = system.createCircle({ x: 30, y: 30 }, 50)
     const body2: any = system.createCircle({ x: 20, y: 20 }, 50)

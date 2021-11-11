@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^3.0.3",
+    "detect-collisions": "^3.0.4",
     "latermom": "^1.0.4",
     "pixi.js": "^6.2.0"
   }
