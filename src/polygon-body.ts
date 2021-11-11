@@ -1,53 +1,56 @@
+import { Subject } from 'rxjs'
 import { Polygon } from 'detect-collisions'
 import { Inject } from '@jacekpietal/dependency-injection'
 import { Physics } from './physics'
-import { Component } from './component'
 import { GameObject } from './game-object'
+import { IComponent, Lifecycle } from '.'
 
-export class PolygonBody extends Component {
+export class PolygonBody extends Polygon implements IComponent {
   readonly name: string = 'PolygonBody'
-  readonly polygon: Polygon & { [prop: string]: any }
+  readonly gameObject: GameObject
+  readonly update$: Subject<void> = new Subject()
+  readonly destroy$: Subject<void> = new Subject()
 
   @Inject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, points: number[][]) {
-    super(gameObject)
-
-    this.polygon = this.physics.createPolygon(
-      this.gameObject.x,
-      this.gameObject.y,
-      points
+    super(
+      gameObject,
+      points.map(([x, y]) => ({ x, y }))
     )
 
-    this.polygon.gameObject = this.gameObject
+    this.gameObject = gameObject
+    this.gameObject.addComponent(this)
+
+    this.physics.tree.insert(this)
   }
 
   get x(): number {
-    return this.polygon.x
+    return (this as any).pos.x
   }
 
   set x(x: number) {
-    this.polygon.x = x
+    ;(this as any).pos.x = x
   }
 
   get y(): number {
-    return this.polygon.y
+    return (this as any).pos.y
   }
 
   set y(y: number) {
-    this.polygon.y = y
+    ;(this as any).pos.y = y
   }
 
   update(): void {
-    this.gameObject.x = this.polygon.x
-    this.gameObject.y = this.polygon.y
+    this.gameObject.x = this.x
+    this.gameObject.y = this.y
 
-    super.update()
+    Lifecycle.update(this)
   }
 
   destroy(): void {
-    this.physics.remove(this.polygon)
+    this.physics.tree.remove(this)
 
-    super.destroy()
+    Lifecycle.destroy(this)
   }
 }

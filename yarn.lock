@@ -1796,10 +1796,13 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-2.6.0.tgz#c0775a0d4557d8c1472585f6ac334b8bb8bfd307"
-  integrity sha512-VJfKCOJFM2G80m+DAfLKPc7V1H7ceU4y97lUaeYjBwfVcuYTQuWPXVX4h7K1nUXhloXGsu6Oli3t3pHcLEcstQ==
+detect-collisions@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.3.tgz#a945c446817202a5cb1b44be40a4761c24b1695b"
+  integrity sha512-b2hkdzk7ysCuvo87YW4k1kWOWtUeRAiHUNay0rg+a2b3DviCugteEk7WOiG9aasjnhLMggmJR3XI07Id4wrCkQ==
+  dependencies:
+    rbush "^3.0.1"
+    sat "^0.9.0"
 
 detect-newline@^3.0.0:
   version "3.1.0"
@@ -3683,10 +3686,10 @@ pirates@^4.0.1:
   dependencies:
     node-modules-regexp "^1.0.0"
 
-pixi-shim@^2.3.7:
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/pixi-shim/-/pixi-shim-2.3.7.tgz#1894abfb27aa6f27cfd978a31ba17b73bebe6cea"
-  integrity sha512-0XdtHKP5vHT8Ip+Zn+aphB0Or5pe0JRIlgUNMqiaz1Mij/+OaCF4bY6Lct/DJBCncMONlpEU9NMdKruRMTnHdw==
+pixi-shim@^2.3.15:
+  version "2.3.15"
+  resolved "https://registry.yarnpkg.com/pixi-shim/-/pixi-shim-2.3.15.tgz#db1c24d6d286a637eba7e82cc786bf44799167e0"
+  integrity sha512-Id27mJmlN3gjZLImhB2T1slG6J5TvcedUsoJMymvcg9ZJbXukeQDj84fLoDQSRaXm/zYSXF7274KkOj8q1PfXA==
   dependencies:
     jsdom "*"
     jsdom-global "*"
@@ -3856,6 +3859,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+quickselect@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-2.0.0.tgz#f19680a486a5eefb581303e023e98faaf25dd018"
+  integrity sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw==
+
 randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -3877,6 +3885,13 @@ raw-body@2.4.0:
     http-errors "1.7.2"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+rbush@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/rbush/-/rbush-3.0.1.tgz#5fafa8a79b3b9afdfe5008403a720cc1de882ecf"
+  integrity sha512-XRaVO0YecOpEuIvbhbpTrZgoiI6xBlz6hnlr6EHhd+0x9ase6EmeN+hdwwUaJvLcsFFQ8iWVF1GAK1yB0BWi0w==
+  dependencies:
+    quickselect "^2.0.0"
 
 react-is@^17.0.1:
   version "17.0.2"
@@ -4012,6 +4027,11 @@ safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+sat@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/sat/-/sat-0.9.0.tgz#02091260513c8f2482da7db9377ddfeca80f5982"
+  integrity sha512-mxdv5RZJO4tdMnUURGU3gAMcnDUEwcNJwE+lPO0/V+rBeDvFLH3wEZEOR0fH7cTN0zQaNxBEbHnyQL9DzupwQQ==
 
 saxes@^5.0.1:
   version "5.0.1"
@@ -4641,10 +4661,10 @@ webpack-sources@^3.2.0:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.0.tgz#b16973bcf844ebcdb3afde32eda1c04d0b90f89d"
   integrity sha512-fahN08Et7P9trej8xz/Z7eRu8ltyiygEo/hnRi9KqBUs80KeDcnf96ZJo++ewWd84fEf3xSX9bp4ZS9hbw0OBw==
 
-webpack@^5.62.1:
-  version "5.62.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.62.1.tgz#06f09b56a7b1bb13ed5137ad4b118358a90c9505"
-  integrity sha512-jNLtnWChS2CMZ7vqWtztv0G6fYB5hz11Zsadp5tE7e4/66zVDj7/KUeQZOsOl8Hz5KrLJH1h2eIDl6AnlyE12Q==
+webpack@^5.64.0:
+  version "5.64.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.64.0.tgz#db3e12546f755930ccc9e0e21ba660871940c615"
+  integrity sha512-UclnN24m054HaPC45nmDEosX6yXWD+UGC12YtUs5i356DleAUGMDC9LBAw37xRRfgPKYIdCYjGA7RZ1AA+ZnGg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.50"

@@ -1,4 +1,4 @@
-import { Result } from 'detect-collisions'
+import { Response } from 'detect-collisions'
 import { Physics, IBody } from './physics'
 
 describe('GIVEN Physics', () => {
@@ -11,18 +11,23 @@ describe('GIVEN Physics', () => {
   it('THEN createPolygon works', () => {
     const system = new Physics()
 
-    expect(system.createPolygon(0, 0, [])).toBeTruthy()
+    expect(
+      system.createPolygon({}, [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 }
+      ])
+    ).toBeTruthy()
   })
 
   it('THEN createCircle works', () => {
     const system = new Physics()
 
-    expect(system.createCircle(0, 0, 50)).toBeTruthy()
+    expect(system.createCircle({}, 50)).toBeTruthy()
   })
 
   it('THEN remove works', () => {
     const system = new Physics()
-    const body = system.createCircle(0, 0, 50)
+    const body = system.createCircle({}, 50)
     const removeBody = () => system.remove(body)
 
     expect(removeBody).not.toThrow()
@@ -30,36 +35,37 @@ describe('GIVEN Physics', () => {
 
   it('THEN detectCollisions works', () => {
     const system = new Physics()
-    const body1 = system.createCircle(30, 30, 50)
-    const body2 = system.createCircle(20, 20, 50)
+    const body1 = system.createCircle({ x: 30, y: 30 }, 50)
+    const body2 = system.createCircle({ x: 20, y: 20 }, 50)
 
-    system.system.update()
+    system.update()
 
-    expect(system.detectCollisions(body1).length).toBe(1)
+    expect(system.getPotentials(body1).length).toBe(1)
   })
 
   it('THEN detectCollisions ignores bodies with isTrigger', () => {
     const system = new Physics()
-    const body1 = system.createCircle(30, 30, 50)
-    const body2 = system.createCircle(20, 20, 50) as IBody
+    const body1 = system.createCircle({ x: 30, y: 30 }, 50)
+    const body2 = system.createCircle({ x: 20, y: 20 }, 50) as IBody
 
     system.update()
     body2.isTrigger = true
 
-    expect(system.detectCollisions(body1).length).toBe(0)
+    expect(system.getPotentials(body1).length).toBe(0)
   })
 
   it('THEN pushBack works', () => {
     const system = new Physics()
-    const body1 = system.createCircle(30, 30, 50)
-    const body2 = system.createCircle(20, 20, 50)
+    const body1: any = system.createCircle({ x: 30, y: 30 }, 50)
+    const body2: any = system.createCircle({ x: 20, y: 20 }, 50)
 
     system.update()
-    system.detectCollisions(body1).forEach((result: Partial<Result>) => {
-      Physics.pushBack(body1, result)
+    system.checkOne(body1, ({ overlapV }: any) => {
+      body1.pos.x -= overlapV.x
+      body1.pos.x -= overlapV.y
     })
     system.update()
 
-    expect(system.detectCollisions(body1).length).toBe(0)
+    expect(system.getPotentials(body1).length).toBe(0)
   })
 })

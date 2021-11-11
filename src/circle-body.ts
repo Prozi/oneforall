@@ -1,56 +1,57 @@
-import { Inject } from '@jacekpietal/dependency-injection'
+import { Subject } from 'rxjs'
 import { Circle } from 'detect-collisions'
+import { Inject } from '@jacekpietal/dependency-injection'
 import { Physics } from './physics'
-import { Component } from './component'
 import { GameObject } from './game-object'
+import { IComponent, Lifecycle } from '.'
 
-export class CircleBody extends Component {
+export class CircleBody extends Circle implements IComponent {
   readonly name: string = 'CircleBody'
-  readonly polygon: Circle & { [prop: string]: any }
-  readonly radius: number
+  readonly gameObject: GameObject
+  readonly update$: Subject<void> = new Subject()
+  readonly destroy$: Subject<void> = new Subject()
 
   @Inject(Physics) physics: Physics
 
   constructor(gameObject: GameObject, radius: number) {
-    super(gameObject)
+    super(gameObject, radius)
 
-    this.radius = radius
-    this.polygon = this.physics.createCircle(
-      this.gameObject.x,
-      this.gameObject.y,
-      this.radius
-    )
+    if (!radius) {
+      throw new Error("CircleBody radius can't be 0!")
+    }
 
-    this.polygon.gameObject = this.gameObject
+    this.gameObject = gameObject
     this.gameObject.addComponent(this)
+
+    this.physics.tree.insert(this)
   }
 
   get x(): number {
-    return this.polygon.x
+    return (this as any).pos.x
   }
 
   set x(x: number) {
-    this.polygon.x = x
+    ;(this as any).pos.x = x
   }
 
   get y(): number {
-    return this.polygon.y
+    return (this as any).pos.y
   }
 
   set y(y: number) {
-    this.polygon.y = y
+    ;(this as any).pos.y = y
   }
 
   update(): void {
-    this.gameObject.x = this.polygon.x
-    this.gameObject.y = this.polygon.y
+    this.gameObject.x = this.x
+    this.gameObject.y = this.y
 
-    super.update()
+    Lifecycle.update(this)
   }
 
   destroy(): void {
-    this.physics.remove(this.polygon)
+    this.physics.tree.remove(this)
 
-    super.destroy()
+    Lifecycle.destroy(this)
   }
 }

@@ -78,11 +78,8 @@ export function update(
         gameObject.sprite.setScale(-flip, 1)
       }
 
-      Physics.pushBack(gameObject.body, {
-        overlap,
-        overlap_x,
-        overlap_y
-      })
+      gameObject.body.x -= overlap_x;
+      gameObject.body.y -= overlap_y;
     }
   }
 }

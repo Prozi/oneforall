@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs';
-import { Prefab, StateMachine, CircleBody, Physics, } from '..';
+import { Prefab, StateMachine, CircleBody, } from '..';
 import { Animator } from '../animator';
 export function createPrefab(data, texture) {
     return new Prefab('SpritePrefab', async (gameObject) => {
@@ -53,11 +53,8 @@ export function update(gameObject, gameObjects) {
                 const flip = Math.sign(overlap * overlap_x) || 1;
                 gameObject.sprite.setScale(-flip, 1);
             }
-            Physics.pushBack(gameObject.body, {
-                overlap,
-                overlap_x,
-                overlap_y
-            });
+            gameObject.body.x -= overlap_x;
+            gameObject.body.y -= overlap_y;
         }
     };
 }

@@ -31,17 +31,10 @@ async function start() {
       .subscribe(update(gameObject, gameObjects))
   })
 
-  // on collision try to set sprite animation to wow
-  Physics.collision$
-    .pipe(takeUntil(scene.destroy$))
-    .subscribe((result: any) => {
-      const gameObjects = [result.a.gameObject, result.b.gameObject]
-
-      gameObjects.forEach((gameObject) => {
-        gameObject.target = null
-        gameObject.sprite.setState('wow2', false, 'idle')
-      })
-    })
+  // separate sprites
+  scene.update$.pipe(takeUntil(scene.destroy$)).subscribe(() => {
+    scene.physics.separate()
+  })
 
   scene.start()
 }

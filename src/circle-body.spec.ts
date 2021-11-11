@@ -1,3 +1,4 @@
+import 'pixi-shim'
 import { GameObject } from './game-object'
 import { CircleBody } from './circle-body'
 
@@ -6,7 +7,7 @@ describe('GIVEN CircleBody', () => {
     const go = new GameObject()
     const body = new CircleBody(go, 15)
 
-    expect(body.radius).toBe(15)
+    expect((body as any).r).toBe(15)
   })
 
   it("THEN it can't have zero radius", () => {

@@ -68,7 +68,7 @@ describe('GIVEN GameObject', () => {
       go.body = new CircleBody(go, 100)
 
       scene.physics.update()
-      scene.physics.system.remove(go.body.polygon)
+      scene.physics.tree.remove(go.polygon)
 
       go.destroy()
 

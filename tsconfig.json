@@ -3,15 +3,27 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "lib": ["dom"],
+    "lib": [
+      "dom"
+    ],
     "moduleResolution": "node",
     "target": "es2017",
     "outDir": "dist",
     "paths": {
-      "mini-signals": ["./node_modules/mini-signals/index.js"]
+      "mini-signals": [
+        "./node_modules/mini-signals/index.js"
+      ]
     }
   },
-  "files": ["src/index.ts", "src/demo/sprite.prefab.ts"],
-  "include": ["src/*.ts"],
-  "exclude": ["src/*.spec.ts", "*.js"]
+  "files": [
+    "src/index.ts",
+    "src/demo/sprite.prefab.ts"
+  ],
+  "include": [
+    "src/*.ts"
+  ],
+  "exclude": [
+    "src/*.spec.ts",
+    "*.js"
+  ]
 }

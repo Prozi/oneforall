@@ -1,110 +1,21 @@
-import { Polygon, Collisions, Result, Body, Circle } from 'detect-collisions'
+import { System, ICollider } from 'detect-collisions'
 import { Injectable } from '@jacekpietal/dependency-injection'
-import { GameObject } from './game-object'
 import { Subject } from 'rxjs'
 
-export interface IBody extends Body {
+export interface IBody extends ICollider {
   isTrigger?: boolean
   isStatic?: boolean
 }
 
 @Injectable
-export class Physics {
-  static readonly collision$: Subject<Partial<Result>> = new Subject()
+export class Physics extends System {
+  static readonly collision$: Subject<Partial<Response>> = new Subject()
 
-  readonly system: Collisions = new Collisions()
-  readonly result: Result = this.system.createResult()
-
-  static pushBack(
-    body: Body & { isStatic?: boolean },
-    { overlap, overlap_x, overlap_y }: Partial<Result>
-  ): void {
-    if (body.isStatic) {
-      console.warn('pushBack on static body', body)
-    }
-
-    body.x -= overlap * overlap_x
-    body.y -= overlap * overlap_y
+  remove(body: IBody): void {
+    this.tree.remove(body)
   }
 
-  get bodies(): Body[] {
-    return this.system['_bvh']._bodies
-  }
-
-  createPolygon(x: number, y: number, points: number[][]): Polygon {
-    return this.system.createPolygon(x, y, points)
-  }
-
-  createCircle(x: number, y: number, radius: number): Circle {
-    if (radius <= 0) {
-      throw new Error('Radius must be greater than 0')
-    }
-
-    return this.system.createCircle(x, y, radius)
-  }
-
-  remove(body: Body): void {
-    this.system.remove(body)
-  }
-
-  update(): void {
-    Array.from(this.bodies).forEach((body: Body & { [prop: string]: any }) => {
-      if (!body.isStatic) {
-        this.detectCollisions(body).forEach((result: Partial<Result>) => {
-          if (!body.isTrigger) {
-            Physics.pushBack(body, result)
-          }
-
-          Physics.collision$.next(result)
-        })
-      }
-    })
-
-    this.system.update()
-  }
-
-  detectCollisions(input: Body, tolerance = 0.001): Result[] {
-    // removed collider doesnt collide
-    if (!(input as any)._bvh) {
-      return []
-    }
-
-    return input
-      .potentials()
-      .map((body: IBody) => {
-        if (body.isTrigger) {
-          return
-        }
-
-        if (
-          input.collides(body, this.result) &&
-          Math.abs(this.result.overlap) > tolerance
-        ) {
-          const {
-            collision,
-            a,
-            b,
-            a_in_b,
-            b_in_a,
-            overlap,
-            overlap_x,
-            overlap_y
-          } = this.result
-
-          return {
-            collision,
-            a,
-            b,
-            a_in_b,
-            b_in_a,
-            overlap,
-            overlap_x,
-            overlap_y
-          }
-        }
-
-        return
-      })
-      .filter((result: Result | undefined) => !!result)
+  getPotentials(body: IBody): IBody[] {
+    return super.getPotentials(body).filter(({ isTrigger }: any) => !isTrigger)
   }
 }
