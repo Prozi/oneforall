@@ -20,7 +20,7 @@ export class CircleBody extends Circle {
         }
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
-        this.physics.tree.insert(this);
+        this.physics.insert(this);
     }
     get x() {
         return this.pos.x;
@@ -42,7 +42,7 @@ export class CircleBody extends Circle {
         Lifecycle.update(this);
     }
     destroy() {
-        this.physics.tree.remove(this);
+        this.physics.remove(this);
         Lifecycle.destroy(this);
     }
 }

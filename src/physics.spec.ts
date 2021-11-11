@@ -1,5 +1,4 @@
-import { Response } from 'detect-collisions'
-import { Physics, IBody } from './physics'
+import { Physics } from './physics'
 
 describe('GIVEN Physics', () => {
   it('THEN it can be created', () => {
@@ -25,10 +24,10 @@ describe('GIVEN Physics', () => {
     expect(system.createCircle({}, 50)).toBeTruthy()
   })
 
-  it('THEN tree.remove works', () => {
+  it('THEN remove works', () => {
     const system = new Physics()
     const body = system.createCircle({}, 50)
-    const removeBody = () => system.tree.remove(body)
+    const removeBody = () => system.remove(body)
 
     expect(removeBody).not.toThrow()
   })
@@ -45,8 +44,8 @@ describe('GIVEN Physics', () => {
 
   it('THEN separate ignores bodies with isTrigger', () => {
     const system = new Physics()
-    const body1: IBody = system.createCircle({ x: 30, y: 30 }, 50)
-    const body2: IBody = system.createCircle({ x: 20, y: 20 }, 50)
+    const body1: any = system.createCircle({ x: 30, y: 30 }, 50)
+    const body2: any = system.createCircle({ x: 20, y: 20 }, 50)
 
     body2.isTrigger = true
 

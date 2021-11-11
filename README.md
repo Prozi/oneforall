@@ -122,7 +122,7 @@ $ jest --verbose --silent
     ✓ THEN it can be created (3 ms)
     ✓ THEN createPolygon works (3 ms)
     ✓ THEN createCircle works (1 ms)
-    ✓ THEN tree.remove works (1 ms)
+    ✓ THEN remove works (1 ms)
     ✓ THEN getPotentials works (2 ms)
     ✓ THEN separate ignores bodies with isTrigger (2 ms)
     ✓ THEN checkOne with move away works (1 ms)

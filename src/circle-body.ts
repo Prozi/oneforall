@@ -23,7 +23,7 @@ export class CircleBody extends Circle implements IComponent {
     this.gameObject = gameObject
     this.gameObject.addComponent(this)
 
-    this.physics.tree.insert(this)
+    this.physics.insert(this)
   }
 
   get x(): number {
@@ -50,7 +50,7 @@ export class CircleBody extends Circle implements IComponent {
   }
 
   destroy(): void {
-    this.physics.tree.remove(this)
+    this.physics.remove(this)
 
     Lifecycle.destroy(this)
   }

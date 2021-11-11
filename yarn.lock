@@ -913,6 +913,11 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.3.2.tgz#fc8c2825e4ed2142473b4a81064e6e081463d1b3"
   integrity sha512-eI5Yrz3Qv4KPUa/nSIAi0h+qX0XyewOliug5F2QAtuRg6Kjg6jfmxe1GIwoIRhZspD1A0RP8ANrPwvEXXtRFog==
 
+"@types/rbush@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/rbush/-/rbush-3.0.0.tgz#b6887d99b159e87ae23cd14eceff34f139842aa6"
+  integrity sha512-W3ue/GYWXBOpkRm0VSoifrP3HV0Ni47aVJWvXyWMcbtpBy/l/K/smBRiJ+fI8f7shXRjZBiux+iJzYbh7VmcZg==
+
 "@types/retry@^0.12.0":
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.1.tgz#d8f1c0d0dc23afad6dc16a9e993a0865774b4065"
@@ -1796,10 +1801,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.4.tgz#453d2779810c5aa6b21bc97418db3d76d6054794"
-  integrity sha512-HxVkH861KaywHW5fxVT7kvrHc1KGbbo0/H6/jsd6BGDjCuldyXI6nUcGR8TfLy2gBHZsjjieGB83t7xAJN4BMA==
+detect-collisions@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.5.tgz#eec7f553f3f974d3d2d19859c541d2e44c411b68"
+  integrity sha512-PfQiwH1c3FTik6+iqEPqjAJirJxXPndGmoFwCwzJks3XEkuHYL8C0ontLcDSDcXeSkwvnMm4HYvVwPla9lcrew==
   dependencies:
     rbush "^3.0.1"
     sat "^0.9.0"
