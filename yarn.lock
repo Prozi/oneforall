@@ -1785,10 +1785,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.7.tgz#e808a6959199475156ed17723791579af8d0de90"
-  integrity sha512-4O1y66HVTsxbP33jVTi5W8g5DiAOqm+bwO3IUthijrevwlkVwM2qHItqFPRLQBhGk0bZetwGK/B3UsSjF0xVAw==
+detect-collisions@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.9.tgz#445e29acfd7ba29b9ff25a5673a4344ff729deed"
+  integrity sha512-5X5xi8gYkob71OVjY7nfMAz/tgVxSxxHG0yMzaAw+ZSjARBD3+pfLbWOMOtzRN2u4gr0EtDCZSK3QnoviNKxFw==
   dependencies:
     rbush "^3.0.1"
     sat "^0.9.0"
@@ -4445,7 +4445,7 @@ typescript@^4.4.4:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
   integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==
 
-"uWebSockets.js@github:uNetworking/uWebSockets.js#v20.1.0":
+uWebSockets.js@uNetworking/uWebSockets.js#v20.1.0:
   version "20.1.0"
   resolved "https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/4dec549959d6910870f4e308e952e570bdd8a2d9"
 
@@ -4590,10 +4590,10 @@ webpack-dev-middleware@^5.2.1:
     range-parser "^1.2.1"
     schema-utils "^3.1.0"
 
-webpack-dev-server@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.4.0.tgz#10ec17088f840c9ccb2ebb0b43c49ec293206f7e"
-  integrity sha512-+S0XRIbsopVjPFjCO8I07FXYBWYqkFmuP56ucGMTs2hA/gV4q2M9xTmNo5Tg4o8ffRR+Nm3AsXnQXxKRyYovrA==
+webpack-dev-server@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.5.0.tgz#614b5112cfa4730a4801bb4ddebb3be5b0d70497"
+  integrity sha512-Ss4WptsUjYa+3hPI4iYZYEc8FrtnfkaPrm5WTjk9ux5kiCS718836srs0ppKMHRaCHP5mQ6g4JZGcfDdGbCjpQ==
   dependencies:
     ansi-html-community "^0.0.8"
     bonjour "^3.5.0"

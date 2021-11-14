@@ -103,89 +103,86 @@ to see how the Prefab class was used in the demo
 ## Tests
 
 ```
-$ yarn test
-yarn run v1.22.17
 $ jest --verbose --silent
- PASS  src/state-machine.spec.ts (6.792 s)
-  GIVEN StateMachine
-    ✓ THEN you can set validators (6 ms)
-    ✓ THEN you can't change state to invalid state (3 ms)
-    ✓ THEN you can change state to valid state (1 ms)
-
- PASS  src/component.spec.ts (6.831 s)
-  GIVEN Component
-    ✓ THEN update publishes update$ (3 ms)
-    ✓ THEN destroy publishes destroy$ (1 ms)
-
- PASS  src/physics.spec.ts (7.352 s)
+ PASS  src/physics.spec.ts (6.187 s)
   GIVEN Physics
     ✓ THEN it can be created (3 ms)
-    ✓ THEN createPolygon works (3 ms)
+    ✓ THEN createPolygon works (2 ms)
     ✓ THEN createCircle works (1 ms)
     ✓ THEN remove works (1 ms)
     ✓ THEN getPotentials works (2 ms)
-    ✓ THEN separate ignores bodies with isTrigger (2 ms)
+    ✓ THEN separate ignores bodies with isTrigger (1 ms)
     ✓ THEN checkOne with move away works (1 ms)
 
- PASS  src/resources.spec.ts (8.431 s)
-  GIVEN Resources
-    ✓ THEN it silently fails and proceeds (29 ms)
+ PASS  src/component.spec.ts (6.686 s)
+  GIVEN Component
+    ✓ THEN update publishes update$ (4 ms)
+    ✓ THEN destroy publishes destroy$ (1 ms)
 
- PASS  src/container.spec.ts (8.383 s)
+ PASS  src/state-machine.spec.ts (7.036 s)
+  GIVEN StateMachine
+    ✓ THEN you can set validators (2 ms)
+    ✓ THEN you can't change state to invalid state (2 ms)
+    ✓ THEN you can change state to valid state
+
+ PASS  src/sprite.spec.ts (7.789 s)
+  GIVEN Sprite
+    ✓ THEN update propagates x/y changes (3 ms)
+    ✓ THEN destroy works (1 ms)
+
+ PASS  src/container.spec.ts (7.934 s)
   GIVEN Container
     ✓ THEN update propagates x/y changes (4 ms)
     ✓ THEN destroy works (1 ms)
 
- PASS  src/scene.spec.ts (8.44 s)
+ PASS  src/resources.spec.ts (8.038 s)
+  GIVEN Resources
+    ✓ THEN it silently fails and proceeds (25 ms)
+
+ PASS  src/application.spec.ts
+  GIVEN Application
+    ✓ THEN it works (14 ms)
+
+ PASS  src/scene.spec.ts (8.297 s)
   GIVEN Scene
-    ✓ THEN it works (13 ms)
-    ✓ THEN it can have children (2 ms)
+    ✓ THEN it works (16 ms)
+    ✓ THEN it can have children (1 ms)
     ✓ THEN scene propagates update to gameobject to component (3 ms)
 
- PASS  src/sprite.spec.ts (8.461 s)
-  GIVEN Sprite
-    ✓ THEN update propagates x/y changes (4 ms)
-    ✓ THEN destroy works (2 ms)
-
- PASS  src/application.spec.ts (8.501 s)
-  GIVEN Application
-    ✓ THEN it works (11 ms)
-
- PASS  src/prefab.spec.ts (8.591 s)
+ PASS  src/prefab.spec.ts (8.317 s)
   GIVEN Prefab
-    ✓ THEN can be instantiated (3 ms)
-    ✓ THEN can create 100 instances (20 ms)
+    ✓ THEN can be instantiated (4 ms)
+    ✓ THEN can create 100 instances (23 ms)
 
- PASS  src/polygon-body.spec.ts
+ PASS  src/circle-body.spec.ts (8.413 s)
+  GIVEN CircleBody
+    ✓ THEN it has set property radius (4 ms)
+    ✓ THEN it can't have zero radius (10 ms)
+    ✓ THEN update propagates x/y changes (1 ms)
+
+ PASS  src/polygon-body.spec.ts (8.382 s)
   GIVEN PolygonBody
     ✓ THEN update propagates x/y changes (3 ms)
 
- PASS  src/index.spec.ts (8.599 s)
-  GIVEN index.ts
-    ✓ THEN basic imports work (2 ms)
-
- PASS  src/circle-body.spec.ts
-  GIVEN CircleBody
-    ✓ THEN it has set property radius (3 ms)
-    ✓ THEN it can't have zero radius (8 ms)
-    ✓ THEN update propagates x/y changes
-
- PASS  src/game-object.spec.ts (30.102 s)
+ PASS  src/game-object.spec.ts (8.474 s)
   GIVEN GameObject
     ✓ THEN you can add component (3 ms)
-    ✓ THEN update propagates to components (4 ms)
-    ✓ THEN you can remove component (1 ms)
+    ✓ THEN update propagates to components (2 ms)
+    ✓ THEN you can remove component
     ✓ THEN destroy removes component (1 ms)
-    ✓ THEN you can get component by name (1 ms)
+    ✓ THEN you can get component by name
     ✓ THEN you can get components by name
-    ✓ THEN you can destroy 1000 bodies without problem (21672 ms)
+    ✓ THEN you can destroy 1000 bodies without problem (71 ms)
+
+ PASS  src/index.spec.ts
+  GIVEN index.ts
+    ✓ THEN basic imports work (1 ms)
 
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks.
 Test Suites: 13 passed, 13 total
 Tests:       35 passed, 35 total
 Snapshots:   0 total
-Time:        31.118 s
-Done in 32.51s.
+Time:        9.502 s
 ```
 
 ```
