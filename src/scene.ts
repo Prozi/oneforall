@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js'
 import { fromEvent, Subject, takeUntil } from 'rxjs'
+import { System } from 'detect-collisions'
 import { Inject } from '@jacekpietal/dependency-injection'
 import { Application } from './application'
 import { GameObject } from './game-object'
-import { Physics } from './physics'
 import { Resources } from './resources'
 import { Lifecycle } from './component'
 
@@ -14,8 +14,8 @@ export class Scene extends Lifecycle {
 
   @Inject(Application) pixi: Application
   @Inject(Resources) resouces: Resources
-  @Inject(Physics) physics: Physics
 
+  physics: System = new System()
   scale: number
   stage: PIXI.Container = new PIXI.Container()
   destroy$: Subject<void> = new Subject()

@@ -6,9 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import * as PIXI from 'pixi.js';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { System } from 'detect-collisions';
 import { Inject } from '@jacekpietal/dependency-injection';
 import { Application } from './application';
-import { Physics } from './physics';
 import { Resources } from './resources';
 import { Lifecycle } from './component';
 export class Scene extends Lifecycle {
@@ -16,6 +16,7 @@ export class Scene extends Lifecycle {
         super();
         this.children = new Set();
         this.children$ = new Subject();
+        this.physics = new System();
         this.stage = new PIXI.Container();
         this.destroy$ = new Subject();
         this.name = options.name || 'Scene';
@@ -100,6 +101,3 @@ __decorate([
 __decorate([
     Inject(Resources)
 ], Scene.prototype, "resouces", void 0);
-__decorate([
-    Inject(Physics)
-], Scene.prototype, "physics", void 0);

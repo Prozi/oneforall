@@ -12,10 +12,10 @@ set of classes to better organize 2d game development
 ```
 <Gameplay>
   ├─ [Resources Loader (PIXI.Loader + Cache)]
-  ├─ [2D Physics (Collision Detection)]
   ├─ [2D Drawing Engine (PIXI.Application)]
   │   └─ [HTMLCanvas]
   └─ [Scene "Scene1"]
+      ├─ [2D Physics (Collision Detection)]
       ├─ [GameObject "Level1" (from Prefab)]
       │   ├─ [100x Sprite "TileSprite"]
       │   └─ [30x PolygonBody "TileCollider"]
@@ -38,7 +38,7 @@ yarn add @jacekpietal/oneforall -D
 
 ```typescript
 import { filter, takeUntil } from 'rxjs'
-import { Scene, GameObject, Prefab, Resources, Physics } from '@jacekpietal/oneforall'
+import { Scene, GameObject, Prefab, Resources } from '@jacekpietal/oneforall'
 import { createPrefab, update } from '@jacekpietal/oneforall/dist/demo/sprite.prefab'
 
 async function start() {
@@ -88,7 +88,6 @@ to see how the Prefab class was used in the demo
 
 ## Classes this library exports
 
-- Physics
 - Resources
 - Scene
 - GameObject
@@ -104,85 +103,75 @@ to see how the Prefab class was used in the demo
 
 ```
 $ jest --verbose --silent
- PASS  src/physics.spec.ts (6.187 s)
-  GIVEN Physics
-    ✓ THEN it can be created (3 ms)
-    ✓ THEN createPolygon works (2 ms)
-    ✓ THEN createCircle works (1 ms)
-    ✓ THEN remove works (1 ms)
-    ✓ THEN getPotentials works (2 ms)
-    ✓ THEN separate ignores bodies with isTrigger (1 ms)
-    ✓ THEN checkOne with move away works (1 ms)
-
- PASS  src/component.spec.ts (6.686 s)
+ PASS  src/component.spec.ts (6.029 s)
   GIVEN Component
     ✓ THEN update publishes update$ (4 ms)
     ✓ THEN destroy publishes destroy$ (1 ms)
 
- PASS  src/state-machine.spec.ts (7.036 s)
+ PASS  src/state-machine.spec.ts (6.397 s)
   GIVEN StateMachine
-    ✓ THEN you can set validators (2 ms)
+    ✓ THEN you can set validators (3 ms)
     ✓ THEN you can't change state to invalid state (2 ms)
-    ✓ THEN you can change state to valid state
+    ✓ THEN you can change state to valid state (1 ms)
 
- PASS  src/sprite.spec.ts (7.789 s)
-  GIVEN Sprite
-    ✓ THEN update propagates x/y changes (3 ms)
-    ✓ THEN destroy works (1 ms)
-
- PASS  src/container.spec.ts (7.934 s)
+ PASS  src/container.spec.ts (7.438 s)
   GIVEN Container
     ✓ THEN update propagates x/y changes (4 ms)
     ✓ THEN destroy works (1 ms)
 
- PASS  src/resources.spec.ts (8.038 s)
+ PASS  src/sprite.spec.ts (7.693 s)
+  GIVEN Sprite
+    ✓ THEN update propagates x/y changes (5 ms)
+    ✓ THEN destroy works (1 ms)
+
+ PASS  src/resources.spec.ts (7.671 s)
   GIVEN Resources
-    ✓ THEN it silently fails and proceeds (25 ms)
+    ✓ THEN it silently fails and proceeds (19 ms)
 
- PASS  src/application.spec.ts
-  GIVEN Application
-    ✓ THEN it works (14 ms)
-
- PASS  src/scene.spec.ts (8.297 s)
-  GIVEN Scene
-    ✓ THEN it works (16 ms)
-    ✓ THEN it can have children (1 ms)
-    ✓ THEN scene propagates update to gameobject to component (3 ms)
-
- PASS  src/prefab.spec.ts (8.317 s)
-  GIVEN Prefab
-    ✓ THEN can be instantiated (4 ms)
-    ✓ THEN can create 100 instances (23 ms)
-
- PASS  src/circle-body.spec.ts (8.413 s)
-  GIVEN CircleBody
-    ✓ THEN it has set property radius (4 ms)
-    ✓ THEN it can't have zero radius (10 ms)
-    ✓ THEN update propagates x/y changes (1 ms)
-
- PASS  src/polygon-body.spec.ts (8.382 s)
+ PASS  src/polygon-body.spec.ts (7.732 s)
   GIVEN PolygonBody
-    ✓ THEN update propagates x/y changes (3 ms)
+    ✓ THEN update propagates x/y changes (4 ms)
 
- PASS  src/game-object.spec.ts (8.474 s)
-  GIVEN GameObject
-    ✓ THEN you can add component (3 ms)
-    ✓ THEN update propagates to components (2 ms)
-    ✓ THEN you can remove component
-    ✓ THEN destroy removes component (1 ms)
-    ✓ THEN you can get component by name
-    ✓ THEN you can get components by name
-    ✓ THEN you can destroy 1000 bodies without problem (71 ms)
+ PASS  src/application.spec.ts (7.742 s)
+  GIVEN Application
+    ✓ THEN it works (15 ms)
 
  PASS  src/index.spec.ts
   GIVEN index.ts
-    ✓ THEN basic imports work (1 ms)
+    ✓ THEN basic imports work (2 ms)
+
+ PASS  src/prefab.spec.ts (7.706 s)
+  GIVEN Prefab
+    ✓ THEN can be instantiated (4 ms)
+    ✓ THEN can create 100 instances (14 ms)
+
+ PASS  src/circle-body.spec.ts (7.886 s)
+  GIVEN CircleBody
+    ✓ THEN it has set property radius (2 ms)
+    ✓ THEN it can't have zero radius (6 ms)
+    ✓ THEN update propagates x/y changes
+
+ PASS  src/game-object.spec.ts (7.923 s)
+  GIVEN GameObject
+    ✓ THEN you can add component (2 ms)
+    ✓ THEN update propagates to components (1 ms)
+    ✓ THEN you can remove component (1 ms)
+    ✓ THEN destroy removes component
+    ✓ THEN you can get component by name (1 ms)
+    ✓ THEN you can get components by name
+    ✓ THEN you can destroy 1000 bodies without problem (63 ms)
+
+ PASS  src/scene.spec.ts (7.928 s)
+  GIVEN Scene
+    ✓ THEN it works (9 ms)
+    ✓ THEN it can have children (1 ms)
+    ✓ THEN scene propagates update to gameobject to component (1 ms)
 
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks.
-Test Suites: 13 passed, 13 total
-Tests:       35 passed, 35 total
+Test Suites: 12 passed, 12 total
+Tests:       28 passed, 28 total
 Snapshots:   0 total
-Time:        9.502 s
+Time:        8.986 s, estimated 9 s
 ```
 
 ```

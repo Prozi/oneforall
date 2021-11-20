@@ -1,7 +1,5 @@
 import { Subject } from 'rxjs'
 import { Polygon } from 'detect-collisions'
-import { Inject } from '@jacekpietal/dependency-injection'
-import { Physics } from './physics'
 import { GameObject } from './game-object'
 import { IComponent, Lifecycle } from '.'
 
@@ -11,8 +9,6 @@ export class PolygonBody extends Polygon implements IComponent {
   readonly update$: Subject<void> = new Subject()
   readonly destroy$: Subject<void> = new Subject()
 
-  @Inject(Physics) physics: Physics
-
   constructor(gameObject: GameObject, points: number[][]) {
     super(
       gameObject,
@@ -21,8 +17,6 @@ export class PolygonBody extends Polygon implements IComponent {
 
     this.gameObject = gameObject
     this.gameObject.addComponent(this)
-
-    this.physics.insert(this)
   }
 
   get x(): number {
@@ -49,8 +43,6 @@ export class PolygonBody extends Polygon implements IComponent {
   }
 
   destroy(): void {
-    this.physics.remove(this)
-
     Lifecycle.destroy(this)
   }
 }

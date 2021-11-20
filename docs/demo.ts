@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs'
-import { Scene, GameObject, Prefab, Resources, Physics } from '../src'
+import { Scene, GameObject, Prefab, Resources } from '../src'
 import { createPrefab, update } from '../src/demo/sprite.prefab'
 
 async function start() {

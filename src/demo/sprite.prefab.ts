@@ -5,7 +5,6 @@ import {
   Prefab,
   StateMachine,
   CircleBody,
-  Physics,
 } from '..'
 import { Animator, IAnimatorData } from '../animator'
 
