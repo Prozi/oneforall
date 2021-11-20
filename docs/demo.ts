@@ -22,9 +22,10 @@ async function start() {
   )
 
   // extend sprites
-  gameObjects.forEach((gameObject: GameObject) => {
+  gameObjects.forEach((gameObject: any) => {
     // add to scene
     scene.addChild(gameObject)
+    scene.physics.insert(gameObject.body)
     // subscribe to our own update function
     gameObject.update$
       .pipe(takeUntil(scene.destroy$))
