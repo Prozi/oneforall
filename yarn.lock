@@ -1785,10 +1785,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^3.0.11:
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.11.tgz#1ef7420fe389a8646e04b5269f52f618b4c0001b"
-  integrity sha512-i1tQGzORJmRXng9yLOLBZC8Qa6u+TFqpP7g0+UBaeuFh9MGI+itkoICjnZc36MYn28v31abZ70jWLGhD1wp+0g==
+detect-collisions@^3.0.12:
+  version "3.0.12"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.0.12.tgz#f09d36441fa70977aa8b85a3f1684684a8e8bf84"
+  integrity sha512-RxnQIuhtzAPBDuKeqe6AWexpoIuO0dDdHI1P//Kxzny1I0p1ECwtvjJYUda7jLthT2hescw8aP2SjcCBHTzEmQ==
   dependencies:
     rbush "^3.0.1"
     sat "^0.9.0"
