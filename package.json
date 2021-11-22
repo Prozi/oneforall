@@ -1,8 +1,9 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.9.3",
-  "main": "./dist/index.js",
+  "version": "1.10.0",
+  "main": "dist/index.js",
+  "types": "out/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@jacekpietal/bouncer.js": "^2.27.1",
@@ -28,7 +29,7 @@
     "dev": "cross-env NODE_ENV=development webpack serve",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
-    "test-docs": "webpack && bouncer.js docs",
+    "test-docs": "webpack && cp dist/demo/demo.bundle.js docs && bouncer.js docs",
     "format": "prettier ./src/*.ts --write",
     "format-docs": "prettier ./docs/*.ts --write",
     "build": "tsc",

@@ -4,11 +4,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { System } from 'detect-collisions';
+import * as PIXI from 'pixi.js';
 import { Injectable } from '@jacekpietal/dependency-injection';
-let Physics = class Physics extends System {
+let Application = class Application extends PIXI.Application {
+    constructor(options = {}) {
+        super(Object.assign({ autoStart: false, sharedTicker: false, sharedLoader: false }, options));
+        // silent fail in tests
+        try {
+            document.body.appendChild(this.view);
+        }
+        catch (err) { }
+    }
 };
-Physics = __decorate([
+Application = __decorate([
     Injectable
-], Physics);
-export { Physics };
+], Application);
+export { Application };

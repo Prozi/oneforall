@@ -1,22 +1,19 @@
-const path = require('path')
+const path = `${__dirname}/dist/demo/`;
 
 module.exports = {
-  mode: process.env.NODE_ENV || 'production',
-  devtool: false,
-  entry: './docs/demo.ts',
+  entry: "./docs/demo.ts",
+  mode: "development",
+  target: "web",
   output: {
-    path: path.resolve('./docs'),
-    filename: 'demo.bundle.js'
-  },
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    path,
+    filename: "demo.bundle.js",
   },
   module: {
-    rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
-  },
-  devServer: {
-    static: path.resolve('./docs'),
-    compress: false,
-    port: 4200
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+      },
+    ]
   }
-}
+};
