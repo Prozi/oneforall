@@ -1,0 +1,1 @@
+{"version":3,"file":"prefab.d.ts","sourceRoot":"","sources":["../src/prefab.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,eAAe,CAAA;AAE1C,qBAAa,MAAO,SAAQ,UAAU;IACpC,OAAO,CAAC,cAAc,CAAuC;gBAG3D,IAAI,EAAE,MAAqB,EAC3B,cAAc,EAAE,CAAC,MAAM,EAAE,UAAU,KAAK,OAAO,CAAC,IAAI,CAAC;IAOjD,WAAW,IAAI,OAAO,CAAC,UAAU,CAAC;CAOzC"}

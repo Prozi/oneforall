@@ -28,3 +28,4 @@ export declare class Component extends Lifecycle implements IComponent {
     static update(component: Component): void;
     destroy(): void;
 }
+//# sourceMappingURL=component.d.ts.map

@@ -15,3 +15,4 @@ export declare class PolygonBody extends Polygon implements IComponent {
     update(): void;
     destroy(): void;
 }
+//# sourceMappingURL=polygon-body.d.ts.map

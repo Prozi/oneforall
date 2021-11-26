@@ -15,3 +15,4 @@ export declare class CircleBody extends Circle implements IComponent {
     update(): void;
     destroy(): void;
 }
+//# sourceMappingURL=circle-body.d.ts.map

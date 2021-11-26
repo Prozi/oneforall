@@ -34,3 +34,4 @@ export declare class Scene extends Lifecycle {
     getChildOfType(type: string): GameObject;
     getChildrenOfType(type: string): GameObject[];
 }
+//# sourceMappingURL=scene.d.ts.map

@@ -8,3 +8,4 @@ export declare class Resources {
     }>;
     get(url: string): Promise<PIXI.ILoaderResource>;
 }
+//# sourceMappingURL=resources.d.ts.map

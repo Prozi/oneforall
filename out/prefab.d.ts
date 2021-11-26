@@ -4,3 +4,4 @@ export declare class Prefab extends GameObject {
     constructor(name: string, createFunction: (prefab: GameObject) => Promise<void>);
     instantiate(): Promise<GameObject>;
 }
+//# sourceMappingURL=prefab.d.ts.map

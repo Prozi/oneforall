@@ -10,3 +10,4 @@ export * from './resources';
 export * from './scene';
 export * from './sprite';
 export * from './state-machine';
+//# sourceMappingURL=index.d.ts.map

@@ -8,3 +8,4 @@ export declare function stateChangeAllowed(gameObject: GameObject & {
 export declare function update(gameObject: GameObject & {
     [prop: string]: any;
 }, gameObjects: GameObject[]): () => void;
+//# sourceMappingURL=sprite.prefab.d.ts.map

@@ -15,3 +15,4 @@ export declare class StateMachine extends Component {
     destroy(): void;
     private validateStateChange;
 }
+//# sourceMappingURL=state-machine.d.ts.map

@@ -11,3 +11,4 @@ export declare class Container extends PIXI.Container implements IComponent {
     update(): void;
     destroy(): void;
 }
+//# sourceMappingURL=container.d.ts.map

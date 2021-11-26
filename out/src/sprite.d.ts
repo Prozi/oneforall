@@ -11,3 +11,4 @@ export declare class Sprite extends PIXI.Sprite implements IComponent {
     update(): void;
     destroy(): void;
 }
+//# sourceMappingURL=sprite.d.ts.map

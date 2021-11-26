@@ -34,3 +34,4 @@ export declare class Animator extends Container {
      */
     setState(state: string, loop?: boolean, stateWhenFinished?: string): void;
 }
+//# sourceMappingURL=animator.d.ts.map

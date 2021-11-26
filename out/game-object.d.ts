@@ -20,3 +20,4 @@ export declare class GameObject implements ILifecycle {
     getComponentOfType(type: string): IComponent;
     getComponentsOfType(type: string): IComponent[];
 }
+//# sourceMappingURL=game-object.d.ts.map
