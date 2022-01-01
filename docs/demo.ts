@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs'
-import { Scene, GameObject, Prefab, Resources } from '../out'
-import { createPrefab, update } from '../out/demo/sprite.prefab'
+import { Scene, GameObject, Prefab, Resources } from '../dist'
+import { createPrefab, update } from '../dist/demo/sprite.prefab'
 
 async function start() {
   // create PIXI.Scene with bonuses

@@ -1,105 +1,67 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.GameObject = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _rxjs = require('rxjs');
-
-var _component = require('./component');
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GameObject = exports.GameObject = function () {
-    function GameObject() {
-        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'GameObject';
-        var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-        var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-        _classCallCheck(this, GameObject);
-
-        this.update$ = new _rxjs.Subject();
-        this.destroy$ = new _rxjs.Subject();
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameObject = void 0;
+const rxjs_1 = require("rxjs");
+const component_1 = require("./component");
+class GameObject {
+    constructor(name = 'GameObject', x = 0, y = 0) {
+        this.update$ = new rxjs_1.Subject();
+        this.destroy$ = new rxjs_1.Subject();
         this.components = new Set();
-        this.components$ = new _rxjs.Subject();
+        this.components$ = new rxjs_1.Subject();
         this.name = name;
         this.x = x;
         this.y = y;
     }
-
-    _createClass(GameObject, [{
-        key: 'update',
-        value: function update() {
-            Array.from(this.components.values()).forEach(function (component) {
-                return component.update();
-            });
-            _component.Lifecycle.update(this);
+    static instantiate(prefab) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prefab.instantiate();
+        });
+    }
+    update() {
+        Array.from(this.components.values()).forEach((component) => component.update());
+        component_1.Lifecycle.update(this);
+    }
+    destroy() {
+        Array.from(this.components.values()).forEach((component) => this.removeComponent(component));
+        component_1.Lifecycle.destroy(this);
+    }
+    addComponent(component, key = component.key || '') {
+        if (this.components.has(component)) {
+            return;
         }
-    }, {
-        key: 'destroy',
-        value: function destroy() {
-            var _this = this;
-
-            Array.from(this.components.values()).forEach(function (component) {
-                return _this.removeComponent(component);
-            });
-            _component.Lifecycle.destroy(this);
+        this.components.add(component);
+        this.components$.next();
+        if (key) {
+            component.key = key;
+            this[key] = component;
         }
-    }, {
-        key: 'addComponent',
-        value: function addComponent(component) {
-            var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : component.key || '';
-
-            if (this.components.has(component)) {
-                return;
-            }
-            this.components.add(component);
-            this.components$.next();
-            if (key) {
-                component.key = key;
-                this[key] = component;
-            }
-            return component;
+        return component;
+    }
+    removeComponent(component, key = component.key || '') {
+        if (!this.components.has(component)) {
+            return;
         }
-    }, {
-        key: 'removeComponent',
-        value: function removeComponent(component) {
-            var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : component.key || '';
-
-            if (!this.components.has(component)) {
-                return;
-            }
-            if (key && this[key]) {
-                this[key] = null;
-            }
-            this.components.delete(component);
-            this.components$.next();
+        if (key && this[key]) {
+            this[key] = null;
         }
-    }, {
-        key: 'getComponentOfType',
-        value: function getComponentOfType(type) {
-            return Array.from(this.components.values()).find(function (_ref) {
-                var name = _ref.name;
-                return name === type;
-            });
-        }
-    }, {
-        key: 'getComponentsOfType',
-        value: function getComponentsOfType(type) {
-            return Array.from(this.components.values()).filter(function (_ref2) {
-                var name = _ref2.name;
-                return name === type;
-            });
-        }
-    }], [{
-        key: 'instantiate',
-        value: async function instantiate(prefab) {
-            return await prefab.instantiate();
-        }
-    }]);
-
-    return GameObject;
-}();
+        this.components.delete(component);
+        this.components$.next();
+    }
+    getComponentOfType(type) {
+        return Array.from(this.components.values()).find(({ name }) => name === type);
+    }
+    getComponentsOfType(type) {
+        return Array.from(this.components.values()).filter(({ name }) => name === type);
+    }
+}
+exports.GameObject = GameObject;

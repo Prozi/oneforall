@@ -1,46 +1,43 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.createPrefab = createPrefab;
-exports.stateChangeAllowed = stateChangeAllowed;
-exports.update = update;
-
-var _rxjs = require('rxjs');
-
-var _ = require('..');
-
-var _animator = require('../animator');
-
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.update = exports.stateChangeAllowed = exports.createPrefab = void 0;
+const rxjs_1 = require("rxjs");
+const __1 = require("..");
+const animator_1 = require("../animator");
 function createPrefab(data, texture) {
-    return new _.Prefab('SpritePrefab', async function (gameObject) {
-        gameObject.body = new _.CircleBody(gameObject, 24);
+    return new __1.Prefab('SpritePrefab', (gameObject) => __awaiter(this, void 0, void 0, function* () {
+        gameObject.body = new __1.CircleBody(gameObject, 24);
         gameObject.body.x = Math.random() * innerWidth;
         gameObject.body.y = Math.random() * innerHeight;
-        gameObject.sprite = new _animator.Animator(gameObject, data, texture);
+        gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
         gameObject.sprite.setState('wow2', false, 'idle');
-        gameObject.sprite.complete$.pipe((0, _rxjs.takeUntil)(gameObject.destroy$)).subscribe(function (_ref) {
-            var _ref2 = _slicedToArray(_ref, 2),
-                _oldState = _ref2[0],
-                newState = _ref2[1];
-
+        gameObject.sprite.complete$
+            .pipe((0, rxjs_1.takeUntil)(gameObject.destroy$))
+            .subscribe(([_oldState, newState]) => {
             if (newState === 'idle') {
                 gameObject.target = null;
             }
         });
-        gameObject.state = new _.StateMachine(gameObject, '[state] initial');
-    });
+        gameObject.state = new __1.StateMachine(gameObject, '[state] initial');
+    }));
 }
+exports.createPrefab = createPrefab;
 function stateChangeAllowed(gameObject) {
     var _a;
     return ['idle', 'run'].includes((_a = gameObject.sprite) === null || _a === void 0 ? void 0 : _a.state);
 }
+exports.stateChangeAllowed = stateChangeAllowed;
 function update(gameObject, gameObjects) {
-    return function () {
+    return () => {
         if (Math.random() < 0.05) {
             gameObject.target = {
                 x: innerWidth / 2 / gameObject.parent.stage.scale.x,
@@ -51,21 +48,23 @@ function update(gameObject, gameObjects) {
             gameObject.sprite.setState('attack', false, 'idle');
         }
         if (stateChangeAllowed(gameObject) && Math.random() < 0.05) {
-            gameObject.target = gameObjects[Math.floor(Math.random() * gameObjects.length)];
+            gameObject.target =
+                gameObjects[Math.floor(Math.random() * gameObjects.length)];
             if (Math.random() < 0.8) {
                 gameObject.state.setState('[state] move-forwards');
-            } else {
+            }
+            else {
                 gameObject.state.setState('[state] move-backwards');
             }
             gameObject.sprite.setState('run', true);
         }
         if (gameObject.target) {
-            var arc = Math.atan2(gameObject.y - gameObject.target.y, gameObject.x - gameObject.target.x);
-            var overlap_x = Math.cos(arc);
-            var overlap_y = Math.sin(arc);
-            var overlap = gameObject.state.state === '[state] move-forwards' ? 1 : -1;
-            if (gameObject.sprite instanceof _animator.Animator) {
-                var flip = Math.sign(overlap * overlap_x) || 1;
+            const arc = Math.atan2(gameObject.y - gameObject.target.y, gameObject.x - gameObject.target.x);
+            const overlap_x = Math.cos(arc);
+            const overlap_y = Math.sin(arc);
+            const overlap = gameObject.state.state === '[state] move-forwards' ? 1 : -1;
+            if (gameObject.sprite instanceof animator_1.Animator) {
+                const flip = Math.sign(overlap * overlap_x) || 1;
                 gameObject.sprite.setScale(-flip, 1);
             }
             gameObject.body.x -= overlap_x;
@@ -73,3 +72,4 @@ function update(gameObject, gameObjects) {
         }
     };
 }
+exports.update = update;

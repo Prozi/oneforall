@@ -1,149 +1,24 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _animator = require('./animator');
-
-Object.keys(_animator).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _animator[key];
-    }
-  });
-});
-
-var _application = require('./application');
-
-Object.keys(_application).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _application[key];
-    }
-  });
-});
-
-var _circleBody = require('./circle-body');
-
-Object.keys(_circleBody).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _circleBody[key];
-    }
-  });
-});
-
-var _component = require('./component');
-
-Object.keys(_component).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _component[key];
-    }
-  });
-});
-
-var _container = require('./container');
-
-Object.keys(_container).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _container[key];
-    }
-  });
-});
-
-var _gameObject = require('./game-object');
-
-Object.keys(_gameObject).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _gameObject[key];
-    }
-  });
-});
-
-var _polygonBody = require('./polygon-body');
-
-Object.keys(_polygonBody).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _polygonBody[key];
-    }
-  });
-});
-
-var _prefab = require('./prefab');
-
-Object.keys(_prefab).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _prefab[key];
-    }
-  });
-});
-
-var _resources = require('./resources');
-
-Object.keys(_resources).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _resources[key];
-    }
-  });
-});
-
-var _scene = require('./scene');
-
-Object.keys(_scene).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _scene[key];
-    }
-  });
-});
-
-var _sprite = require('./sprite');
-
-Object.keys(_sprite).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _sprite[key];
-    }
-  });
-});
-
-var _stateMachine = require('./state-machine');
-
-Object.keys(_stateMachine).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _stateMachine[key];
-    }
-  });
-});
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./animator"), exports);
+__exportStar(require("./application"), exports);
+__exportStar(require("./circle-body"), exports);
+__exportStar(require("./component"), exports);
+__exportStar(require("./container"), exports);
+__exportStar(require("./game-object"), exports);
+__exportStar(require("./polygon-body"), exports);
+__exportStar(require("./prefab"), exports);
+__exportStar(require("./resources"), exports);
+__exportStar(require("./scene"), exports);
+__exportStar(require("./sprite"), exports);
+__exportStar(require("./state-machine"), exports);
