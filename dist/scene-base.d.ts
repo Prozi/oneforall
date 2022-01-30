@@ -13,6 +13,7 @@ export declare class SceneBase extends Lifecycle {
     readonly name: string;
     readonly children: Set<GameObject>;
     readonly children$: Subject<void>;
+    stage: any;
     physics: System;
     scale: number;
     destroy$: Subject<void>;

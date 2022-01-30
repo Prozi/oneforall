@@ -16,6 +16,7 @@ export class SceneBase extends Lifecycle {
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
 
+  stage: any = { addChild() {}, removeChild() {}, children: [] }
   physics: System = new System()
   scale: number
   destroy$: Subject<void> = new Subject()

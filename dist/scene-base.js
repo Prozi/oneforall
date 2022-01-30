@@ -9,6 +9,7 @@ class SceneBase extends component_1.Lifecycle {
         super();
         this.children = new Set();
         this.children$ = new rxjs_1.Subject();
+        this.stage = { addChild() { }, removeChild() { }, children: [] };
         this.physics = new detect_collisions_1.System();
         this.destroy$ = new rxjs_1.Subject();
         this.name = options.name || 'Scene';
