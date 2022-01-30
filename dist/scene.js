@@ -27,22 +27,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require("pixi.js"));
-const rxjs_1 = require("rxjs");
-const detect_collisions_1 = require("detect-collisions");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 const application_1 = require("./application");
 const resources_1 = require("./resources");
-const component_1 = require("./component");
-class Scene extends component_1.Lifecycle {
+const scene_base_1 = require("./scene-base");
+const rxjs_1 = require("rxjs");
+class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
-        super();
-        this.children = new Set();
-        this.children$ = new rxjs_1.Subject();
-        this.physics = new detect_collisions_1.System();
+        super(options);
         this.stage = new PIXI.Container();
-        this.destroy$ = new rxjs_1.Subject();
-        this.name = options.name || 'Scene';
-        this.scale = options.scale || 1;
         // 1 additonal layer
         this.stage.visible = options.visible || false;
         if (options.autoSize) {
@@ -54,20 +47,24 @@ class Scene extends component_1.Lifecycle {
         // real stage
         this.pixi.stage.addChild(this.stage);
     }
-    stop() {
-        if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-        }
-        this.pixi.stop();
-    }
     start() {
-        const loop = () => {
-            this.update();
-            this.animationFrame = requestAnimationFrame(loop);
-        };
-        loop();
         this.pixi.stage.scale.set(this.scale);
         this.pixi.start();
+        super.start();
+    }
+    stop() {
+        this.pixi.stop();
+        super.stop();
+    }
+    destroy() {
+        this.stage.parent.removeChild(this.stage);
+        this.stage.destroy();
+        super.destroy();
+    }
+    enableAutoSort() {
+        this.update$.pipe((0, rxjs_1.takeUntil)(this.destroy$)).subscribe(() => {
+            this.stage.children.sort((a, b) => a.y - b.y);
+        });
     }
     enableAutoSize() {
         this.pixi.renderer.resize(innerWidth, innerHeight);
@@ -76,45 +73,6 @@ class Scene extends component_1.Lifecycle {
             .subscribe(() => {
             this.pixi.renderer.resize(innerWidth, innerHeight);
         });
-    }
-    enableAutoSort() {
-        this.update$.pipe((0, rxjs_1.takeUntil)(this.destroy$)).subscribe(() => {
-            this.stage.children.sort((a, b) => a.y - b.y);
-        });
-    }
-    update() {
-        this.physics.update();
-        Array.from(this.children.values()).forEach((child) => child.update());
-        super.update();
-    }
-    destroy() {
-        var _a;
-        (_a = this.stage.parent) === null || _a === void 0 ? void 0 : _a.removeChild(this.stage);
-        this.stage.destroy();
-        this.stop();
-        super.destroy();
-    }
-    addChild(child) {
-        if (this.children.has(child)) {
-            return;
-        }
-        child.parent = this;
-        this.children.add(child);
-        this.children$.next();
-    }
-    removeChild(child) {
-        if (!this.children.has(child)) {
-            return;
-        }
-        child.parent = null;
-        this.children.delete(child);
-        this.children$.next();
-    }
-    getChildOfType(type) {
-        return Array.from(this.children.values()).find(({ name }) => name === type);
-    }
-    getChildrenOfType(type) {
-        return Array.from(this.children.values()).filter(({ name }) => name === type);
     }
 }
 __decorate([
