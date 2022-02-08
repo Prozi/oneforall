@@ -1,11 +1,10 @@
-import * as PIXI from 'pixi.js';
-import { GameObject, Prefab } from '..';
-import { IAnimatorData } from '../animator';
-export declare function createPrefab(data: IAnimatorData, texture: PIXI.Texture): Prefab;
-export declare function stateChangeAllowed(gameObject: GameObject & {
+import { GameObject } from '../game-object';
+export declare function createSprite({ scene, data, texture }: {
+    scene: any;
+    data: any;
+    texture: any;
+}): any;
+export declare function updateSprite(gameObject: GameObject & {
     [prop: string]: any;
-}): boolean;
-export declare function update(gameObject: GameObject & {
-    [prop: string]: any;
-}, gameObjects: GameObject[]): () => void;
+}): void;
 //# sourceMappingURL=sprite.prefab.d.ts.map

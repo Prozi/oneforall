@@ -63,15 +63,8 @@ class Animator extends container_1.Container {
      * @param stateWhenFinished
      */
     setState(state, loop = true, stateWhenFinished = 'idle') {
-        const indexes = this.states
-            .map((direction, index) => ({
-            direction,
-            index
-        }))
-            .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
-            .map(({ index }) => index);
-        // random of above candidates
-        const targetIndex = indexes[Math.floor(indexes.length * Math.random())];
+        const exactIndex = this.getExactStateIndex(state);
+        const targetIndex = exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state);
         this.children
             .filter((child, index) => child instanceof PIXI.AnimatedSprite &&
             child.visible &&
@@ -81,7 +74,7 @@ class Animator extends container_1.Container {
             child.stop();
         });
         const animation = this.children[targetIndex];
-        if (animation) {
+        if (animation && animation !== this.animation) {
             animation.loop = loop;
             animation.gotoAndPlay(0);
             animation.visible = true;
@@ -98,6 +91,20 @@ class Animator extends container_1.Container {
         this.animation = animation;
         this.state = state;
         this.state$.next(this.state);
+    }
+    getExactStateIndex(state) {
+        return this.states.indexOf(state);
+    }
+    getFuzzyStateIndex(state) {
+        const indexes = this.states
+            .map((direction, index) => ({
+            direction,
+            index
+        }))
+            .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
+            .map(({ index }) => index);
+        // random of above candidates
+        return indexes[Math.floor(indexes.length * Math.random())];
     }
 }
 exports.Animator = Animator;

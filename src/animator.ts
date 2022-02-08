@@ -81,17 +81,9 @@ export class Animator extends Container {
     loop: boolean = true,
     stateWhenFinished: string = 'idle'
   ): void {
-    const indexes: number[] = this.states
-      .map((direction: string, index: number) => ({
-        direction,
-        index
-      }))
-      .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
-      .map(({ index }) => index)
-
-    // random of above candidates
+    const exactIndex: number = this.getExactStateIndex(state)
     const targetIndex: number =
-      indexes[Math.floor(indexes.length * Math.random())]
+      exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state)
 
     ;(this.children as PIXI.AnimatedSprite[])
       .filter(
@@ -109,7 +101,7 @@ export class Animator extends Container {
       targetIndex
     ] as PIXI.AnimatedSprite
 
-    if (animation) {
+    if (animation && animation !== this.animation) {
       animation.loop = loop
       animation.gotoAndPlay(0)
       animation.visible = true
@@ -129,5 +121,22 @@ export class Animator extends Container {
     this.animation = animation
     this.state = state
     this.state$.next(this.state)
+  }
+
+  private getExactStateIndex(state: string): number {
+    return this.states.indexOf(state)
+  }
+
+  private getFuzzyStateIndex(state: string): number {
+    const indexes: number[] = this.states
+      .map((direction: string, index: number) => ({
+        direction,
+        index
+      }))
+      .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
+      .map(({ index }) => index)
+
+    // random of above candidates
+    return indexes[Math.floor(indexes.length * Math.random())]
   }
 }

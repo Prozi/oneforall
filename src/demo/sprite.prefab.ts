@@ -1,84 +1,76 @@
-import * as PIXI from 'pixi.js'
 import { takeUntil } from 'rxjs'
-import {
-  GameObject,
-  Prefab,
-  StateMachine,
-  CircleBody,
-} from '..'
-import { Animator, IAnimatorData } from '../animator'
+import { GameObject } from '../game-object'
+import { CircleBody } from '../circle-body'
+import { Scene } from '../scene'
+import { Animator } from '../animator'
 
-export function createPrefab(data: IAnimatorData, texture: PIXI.Texture) {
-  return new Prefab('SpritePrefab', async (gameObject: GameObject & { [prop: string]: any }) => {
-    gameObject.body = new CircleBody(gameObject, 24)
-    gameObject.body.x = Math.random() * innerWidth
-    gameObject.body.y = Math.random() * innerHeight
+export function createSprite({ scene, data, texture }) {
+  // a base molecule
+  const gameObject: any = new GameObject('Sprite')
 
-    gameObject.sprite = new Animator(gameObject, data, texture)
-    gameObject.sprite.setState('wow2', false, 'idle')
-    gameObject.sprite.complete$
-      .pipe(takeUntil(gameObject.destroy$))
-      .subscribe(([_oldState, newState]: string[]) => {
-        if (newState === 'idle') {
-          gameObject.target = null
-        }
-      })
+  // create body to detect-collisions
+  gameObject.body = new CircleBody(gameObject, 20)
+  gameObject.body.x = Math.random() * innerWidth
+  gameObject.body.y = Math.random() * innerHeight
 
-    gameObject.state = new StateMachine(gameObject, '[state] initial')
-  })
+  // create animator with few animations from json + texture
+  gameObject.sprite = new Animator(gameObject, data, texture)
+  gameObject.sprite.setState('idle', true)
+
+  // add to scene
+  scene.addChild(gameObject)
+  scene.physics.insert(gameObject.body)
+
+  // subscribe to its own update function
+  gameObject.update$
+    .pipe(takeUntil(scene.destroy$))
+    .subscribe(() => updateSprite(gameObject))
+
+  return gameObject
 }
 
-export function stateChangeAllowed(gameObject: GameObject & { [prop: string]: any }): boolean {
-  return ['idle', 'run'].includes(gameObject.sprite?.state)
-}
+export function updateSprite(
+  gameObject: GameObject & { [prop: string]: any }
+): void {
+  const scene: Scene = gameObject.parent // always
 
-export function update(
-  gameObject: GameObject & { [prop: string]: any },
-  gameObjects: GameObject[]
-): () => void {
-  return () => {
-    if (Math.random() < 0.05) {
-      gameObject.target = {
-        x: innerWidth / 2 / gameObject.parent.stage.scale.x,
-        y: innerHeight / 2 / gameObject.parent.stage.scale.y
-      }
+  if (Math.random() < 0.05) {
+    gameObject.target = {
+      x: innerWidth / 2 / gameObject.parent.stage.scale.x,
+      y: innerHeight / 2 / gameObject.parent.stage.scale.y
+    }
+  }
+
+  if (Math.random() < 0.05) {
+    gameObject.sprite.setState('roll', false, 'idle')
+  }
+
+  if (Math.random() < 0.05) {
+    const gameObjects = Array.from(scene.children)
+
+    gameObject.target =
+      gameObjects[Math.floor(Math.random() * gameObjects.length)]
+
+    gameObject.sprite.setState('run', true)
+  }
+
+  if (gameObject.target) {
+    const arc: number = Math.atan2(
+      gameObject.target.y - gameObject.y,
+      gameObject.target.x - gameObject.x
+    )
+    const overlapX: number = Math.cos(arc)
+    const overlapY: number = Math.sin(arc)
+
+    if (gameObject.sprite instanceof Animator) {
+      const flip: number = Math.sign(overlapX) || 1
+
+      gameObject.sprite.setScale(flip, 1)
     }
 
-    if (stateChangeAllowed(gameObject) && Math.random() < 0.05) {
-      gameObject.sprite.setState('attack', false, 'idle')
-    }
-
-    if (stateChangeAllowed(gameObject) && Math.random() < 0.05) {
-      gameObject.target =
-        gameObjects[Math.floor(Math.random() * gameObjects.length)]
-
-      if (Math.random() < 0.8) {
-        gameObject.state.setState('[state] move-forwards')
-      } else {
-        gameObject.state.setState('[state] move-backwards')
-      }
-
-      gameObject.sprite.setState('run', true)
-    }
-
-    if (gameObject.target) {
-      const arc: number = Math.atan2(
-        gameObject.y - gameObject.target.y,
-        gameObject.x - gameObject.target.x
-      )
-      const overlap_x: number = Math.cos(arc)
-      const overlap_y: number = Math.sin(arc)
-      const overlap: number =
-        gameObject.state.state === '[state] move-forwards' ? 1 : -1
-
-      if (gameObject.sprite instanceof Animator) {
-        const flip: number = Math.sign(overlap * overlap_x) || 1
-
-        gameObject.sprite.setScale(-flip, 1)
-      }
-
-      gameObject.body.x -= overlap_x;
-      gameObject.body.y -= overlap_y;
-    }
+    gameObject.body.setPosition(
+      gameObject.body.x + overlapX,
+      gameObject.body.y + overlapY
+    )
   }
 }

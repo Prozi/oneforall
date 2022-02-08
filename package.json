@@ -15,6 +15,7 @@
     "@types/rbush": "^3.0.0",
     "cross-env": "^7.0.3",
     "esm": "^3.2.25",
+    "express": "^4.17.2",
     "jest": "^27.5.1",
     "pixi-shim": "^2.3.19",
     "pixi.js-legacy": "^6.2.2",
@@ -25,14 +26,13 @@
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
     "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-cli": "^4.9.2"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve",
+    "start": "bouncer.js docs --express",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
-    "test-docs": "webpack && cp dist/demo/demo.bundle.js docs && bouncer.js docs",
+    "test-docs": "webpack && cp dist/demo/demo.bundle.js docs && yarn start",
     "format": "prettier ./src/*.ts --write",
     "format-docs": "prettier ./docs/*.ts --write",
     "build": "tsc",
@@ -62,7 +62,6 @@
     "@jacekpietal/dependency-injection": "^1.4.0",
     "detect-collisions": "^3.2.1",
     "latermom": "^1.0.4",
-    "pixi.js": "^6.2.2",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.6.0"
+    "pixi.js": "^6.2.2"
   }
 }

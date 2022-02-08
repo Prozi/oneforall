@@ -30,6 +30,7 @@ set of classes to better organize 2d game development
 ```
 
 ## Installation
+
 ```
 yarn add @jacekpietal/oneforall -D
 ```
@@ -37,39 +38,25 @@ yarn add @jacekpietal/oneforall -D
 ## Demo
 
 ```typescript
-import { filter, takeUntil } from 'rxjs'
-import { Scene, GameObject, Prefab, Resources } from '@jacekpietal/oneforall'
-import { createPrefab, update } from '@jacekpietal/oneforall/dist/demo/sprite.prefab'
+import { takeUntil } from 'rxjs'
+import { Scene, Resources } from '@jacekpietal/oneforall'
+import { createSprite } from '@jacekpietal/oneforall/dist/demo/sprite.prefab'
 
 async function start() {
-  // create PIXI.Scene with bonuses
+  // create Scene
   const scene: Scene = new Scene({
+    // with few optional params
     visible: true,
     autoSize: true,
-    autoSort: true,
-    scale: 1.3
+    autoSort: true
   })
 
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
   const { data } = await Resources.loadResource('./cave-boy.json')
   const { texture } = await Resources.loadResource(data.tileset)
-  // create prefab once
-  const prefab: Prefab = createPrefab(data, texture)
-  // create 50 sprites using prefab
-  const gameObjects = await Promise.all(
-    Array.from({ length: 50 }, () => GameObject.instantiate(prefab))
-  )
 
-  // extend sprites
-  gameObjects.forEach((gameObject: any) => {
-    // add to scene
-    scene.addChild(gameObject)
-    scene.physics.insert(gameObject.body)
-    // subscribe to our own update function
-    gameObject.update$
-      .pipe(takeUntil(scene.destroy$))
-      .subscribe(update(gameObject, gameObjects))
-  })
+  // create 50 sprites from that
+  Array.from({ length: 50 }, () => createSprite({ scene, data, texture }))
 
   // separate sprites
   scene.update$.pipe(takeUntil(scene.destroy$)).subscribe(() => {
@@ -81,6 +68,82 @@ async function start() {
 
 start()
 ```
+
+```typescript
+export function createSprite({ scene, data, texture }) {
+  // a base molecule
+  const gameObject: any = new GameObject('Sprite')
+
+  // create body to detect-collisions
+  gameObject.body = new CircleBody(gameObject, 20)
+  gameObject.body.x = Math.random() * innerWidth
+  gameObject.body.y = Math.random() * innerHeight
+
+  // create animator with few animations from json + texture
+  gameObject.sprite = new Animator(gameObject, data, texture)
+  gameObject.sprite.setState('idle', true)
+
+  // add to scene
+  scene.addChild(gameObject)
+  scene.physics.insert(gameObject.body)
+
+  // subscribe to its own update function
+  gameObject.update$
+    .pipe(takeUntil(scene.destroy$))
+    .subscribe(() => updateSprite(gameObject))
+
+  return gameObject
+}
+```
+
+```typescript
+export function updateSprite(
+  gameObject: GameObject & { [prop: string]: any }
+): void {
+  const scene: Scene = gameObject.parent // always
+
+  if (Math.random() < 0.05) {
+    gameObject.target = {
+      x: innerWidth / 2 / gameObject.parent.stage.scale.x,
+      y: innerHeight / 2 / gameObject.parent.stage.scale.y
+    }
+  }
+
+  if (Math.random() < 0.05) {
+    gameObject.sprite.setState('roll', false, 'idle')
+  }
+
+  if (Math.random() < 0.05) {
+    const gameObjects = Array.from(scene.children)
+
+    gameObject.target =
+      gameObjects[Math.floor(Math.random() * gameObjects.length)]
+
+    gameObject.sprite.setState('run', true)
+  }
+
+  if (gameObject.target) {
+    const arc: number = Math.atan2(
+      gameObject.target.y - gameObject.y,
+      gameObject.target.x - gameObject.x
+    )
+    const overlapX: number = Math.cos(arc)
+    const overlapY: number = Math.sin(arc)
+
+    if (gameObject.sprite instanceof Animator) {
+      const flip: number = Math.sign(overlapX) || 1
+
+      gameObject.sprite.setScale(flip, 1)
+    }
+
+    gameObject.body.setPosition(
+      gameObject.body.x + overlapX,
+      gameObject.body.y + overlapY
+    )
+  }
+}
+```
+
 just the above code results in:
 https://prozi.github.io/oneforall/
 

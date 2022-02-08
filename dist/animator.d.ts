@@ -33,5 +33,7 @@ export declare class Animator extends Container {
      * @param stateWhenFinished
      */
     setState(state: string, loop?: boolean, stateWhenFinished?: string): void;
+    private getExactStateIndex;
+    private getFuzzyStateIndex;
 }
 //# sourceMappingURL=animator.d.ts.map
