@@ -10,8 +10,7 @@ function createSprite({ scene, data, texture }) {
     const gameObject = new game_object_1.GameObject('Sprite');
     // create body to detect-collisions
     gameObject.body = new circle_body_1.CircleBody(gameObject, 20);
-    gameObject.body.x = Math.random() * innerWidth;
-    gameObject.body.y = Math.random() * innerHeight;
+    gameObject.body.setPosition(Math.random() * innerWidth, Math.random() * innerHeight);
     // create animator with few animations from json + texture
     gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
     gameObject.sprite.setState('idle', true);

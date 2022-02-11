@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,19 +9,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@jacekpietal/bouncer.js": "^3.4.0",
     "@types/jest": "^27.4.0",
-    "@types/offscreencanvas": "^2019.6.4",
-    "@types/rbush": "^3.0.0",
-    "cross-env": "^7.0.3",
+    "chef-express": "^1.0.12",
     "esm": "^3.2.25",
-    "express": "^4.17.2",
     "jest": "^27.5.1",
+    "latermom": "^1.0.4",
     "pixi-shim": "^2.3.19",
     "pixi.js-legacy": "^6.2.2",
     "prettier": "^2.5.1",
     "prettier-config-standard": "^4.0.0",
-    "rxjs": "^7.5.2",
+    "rxjs": "^7.5.4",
     "ts-jest": "^27.1.3",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
@@ -29,7 +26,7 @@
     "webpack-cli": "^4.9.2"
   },
   "scripts": {
-    "start": "bouncer.js docs --express",
+    "start": "chef-express docs",
     "test": "jest --verbose --silent",
     "test-build": "yarn build && node -r esm ./test-build.js",
     "test-docs": "webpack && cp dist/demo/demo.bundle.js docs && yarn start",
@@ -60,7 +57,8 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^3.2.1",
+    "@types/offscreencanvas": "^2019.6.4",
+    "detect-collisions": "^3.2.2",
     "pixi.js": "^6.2.2"
   }
 }

@@ -10,8 +10,10 @@ export function createSprite({ scene, data, texture }) {
 
   // create body to detect-collisions
   gameObject.body = new CircleBody(gameObject, 20)
-  gameObject.body.x = Math.random() * innerWidth
-  gameObject.body.y = Math.random() * innerHeight
+  gameObject.body.setPosition(
+    Math.random() * innerWidth,
+    Math.random() * innerHeight
+  )
 
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture)
