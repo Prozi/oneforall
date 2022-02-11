@@ -1,15 +1,17 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "license": "MIT",
+  "dependencies": {
+    "@jacekpietal/dependency-injection": "^1.4.0"
+  },
   "devDependencies": {
-    "@jacekpietal/dependency-injection": "^1.4.0",
     "@types/jest": "^27.4.0",
     "@types/offscreencanvas": "^2019.6.4",
     "chef-express": "^1.0.12",
