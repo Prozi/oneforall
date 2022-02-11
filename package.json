@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,12 +9,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@jacekpietal/dependency-injection": "^1.4.0",
     "@types/jest": "^27.4.0",
+    "@types/offscreencanvas": "^2019.6.4",
     "chef-express": "^1.0.12",
+    "detect-collisions": "^3.2.2",
     "esm": "^3.2.25",
     "jest": "^27.5.1",
     "latermom": "^1.0.4",
     "pixi-shim": "^2.3.19",
+    "pixi.js": "^6.2.2",
     "pixi.js-legacy": "^6.2.2",
     "prettier": "^2.5.1",
     "prettier-config-standard": "^4.0.0",
@@ -54,11 +58,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Prozi/oneforall.git"
-  },
-  "dependencies": {
-    "@jacekpietal/dependency-injection": "^1.4.0",
-    "@types/offscreencanvas": "^2019.6.4",
-    "detect-collisions": "^3.2.2",
-    "pixi.js": "^6.2.2"
   }
 }
