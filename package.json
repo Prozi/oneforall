@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.11.3",
+  "version": "1.11.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -14,12 +14,12 @@
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/offscreencanvas": "^2019.6.4",
-    "chef-express": "^1.0.12",
-    "detect-collisions": "^3.2.2",
+    "chef-express": "^1.0.19",
+    "detect-collisions": "^3.2.3",
     "esm": "^3.2.25",
     "jest": "^27.5.1",
     "latermom": "^1.0.4",
-    "pixi-shim": "^2.3.19",
+    "pixi-shim": "^2.3.21",
     "pixi.js": "^6.2.2",
     "pixi.js-legacy": "^6.2.2",
     "prettier": "^2.5.1",

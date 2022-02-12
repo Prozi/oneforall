@@ -1358,19 +1358,19 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chef-core@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/chef-core/-/chef-core-1.0.2.tgz#8fe89f69e080794f2de715a00b59ebd2136cf9aa"
-  integrity sha512-b0JLGnUQaKV+BQJn5MY4hSKmFkaVaazEVT/PPSVS6g98J7TnNYQd2YdnxKDEYR6deoC02InRsj9H3ve2y6TkOw==
+chef-core@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/chef-core/-/chef-core-1.0.9.tgz#e2553f681e2388603bf416c4635b75f2691d0038"
+  integrity sha512-RGgHogxNk92DbX9izKvCwCjSXaBQaGBTMyEIWlNCrqrCZWtFg05wOX8bSU5aOGDgeiYpALsYALlcJpS8N3xHjQ==
   dependencies:
     mime-types "^2.1.34"
 
-chef-express@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/chef-express/-/chef-express-1.0.12.tgz#fe06cb6a12096911bd2dadd203228ba5580a22fc"
-  integrity sha512-g4vuG+iztQyHYssLGO12qC5sgxaO1IvldZP2U3HWnLgX0LVqAMe/779Y1cWGm0jEAE7g2sGSaGjXKgenKG4rFg==
+chef-express@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/chef-express/-/chef-express-1.0.19.tgz#126e0c5fb9ba2861b569f86fff978031ec6ec8ca"
+  integrity sha512-SRtgtPK5p2zd7YGZ+2vNWJnSu+Aehq+D1eLnHCLhdsXBHgcvxNCHhdnQYiXPxKOIqC9WnOhs12Fv+T14ScRP9Q==
   dependencies:
-    chef-core "^1.0.2"
+    chef-core "^1.0.9"
     express "^4.17.2"
 
 chrome-trace-event@^1.0.2:
@@ -1594,10 +1594,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-collisions@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.2.2.tgz#82865865b0246c283685b00055e3f27822069245"
-  integrity sha512-nFQwi4BFs/SYtEOu7b8TN3YEe+GfXP+boYTCY1v5POJqJC+ubZsXpCAWvP6O4i0SkX9dMBhFrungAUwKQlYwEw==
+detect-collisions@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-3.2.3.tgz#64ac383a6703ea9562c85cdcde6decd0a6f297d1"
+  integrity sha512-X2LsLkVsqaa/C5n4Bm+8v4qWOFzcx/rqJvN/pWAJfDHANKzfBP25Y5s6za9UuR4xln5oRiDxnW6geIsBWLu91Q==
   dependencies:
     "@types/rbush" "^3.0.0"
     "@types/sat" "^0.0.31"
@@ -3048,10 +3048,10 @@ pirates@^4.0.4:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
   integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
 
-pixi-shim@^2.3.19:
-  version "2.3.19"
-  resolved "https://registry.yarnpkg.com/pixi-shim/-/pixi-shim-2.3.19.tgz#e6b50e0faaaf2c325669269a0451ce5d1408d312"
-  integrity sha512-HTBbugfBe+v/Hzv/r1czmY8r2X+GGHQNsiAEHd6O51Tz5AUet/cgjAqdBvoN//SFwZPUwTa5C+mo+hbGhq3HlA==
+pixi-shim@^2.3.21:
+  version "2.3.21"
+  resolved "https://registry.yarnpkg.com/pixi-shim/-/pixi-shim-2.3.21.tgz#a13b1000bc4be0e99318d69254f19090caf46208"
+  integrity sha512-J2Fay1EA7WZMQ01fxPnb+PBCxExOeGrx0DFtFMCcM7xdOLwBGi+6RJbe3ehjJEuVsTIPGHd/n1TOESWMnhyZlw==
   dependencies:
     jsdom "*"
     jsdom-global "*"
