@@ -3,7 +3,7 @@ version: 2.1
 executors:
   my:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: cimg/base:stable
 
 jobs:
   build:
@@ -11,7 +11,7 @@ jobs:
     steps:
       # apt prepare
       - run: sudo apt-get update
-      - run: sudo apt install -y nodejs npm node-gyp nodejs-dev libssl1.0-dev clang gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+      - run: sudo apt install -y nodejs npm node-gyp libnode-dev clang gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
       # verify
       - run: clang --version
       - run: clang++ --version

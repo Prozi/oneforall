@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "chef-express docs",
-    "test": "jest --verbose --silent --forceExit",
+    "test": "jest --verbose --forceExit",
     "test-build": "yarn build && node -r esm ./test-build.js",
     "test-docs": "webpack && cp dist/demo/demo.bundle.js docs && yarn start",
     "format": "prettier ./src/*.ts --write",
