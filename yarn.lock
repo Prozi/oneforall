@@ -3261,7 +3261,7 @@ pixi-shim@^2.3.21:
     jsdom "*"
     jsdom-global "*"
 
-pixi.js-legacy@~6.0.0:
+pixi.js-legacy@~6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/pixi.js-legacy/-/pixi.js-legacy-6.0.4.tgz#70eea5827a86c6110e35cfffbdc64c345a413590"
   integrity sha512-kyDNIrLKqPaqvSrObk6XpwsQeExFmNux6O4/vdI4e8JuYHhpEvjbVjus0l2lX7f2BFA3J36uvrh2siSwJLS65w==
@@ -3278,7 +3278,7 @@ pixi.js-legacy@~6.0.0:
     "@pixi/canvas-text" "6.0.4"
     pixi.js "6.0.4"
 
-pixi.js@6.0.4, pixi.js@~6.0.0:
+pixi.js@6.0.4, pixi.js@~6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-6.0.4.tgz#86a44cdedd9150e59660781e440cb6f5dfdfb574"
   integrity sha512-zAlwr5x9xytaflmZiZWl/ZhlSf+lZzeJG+Hexa7Buf7cvEhHPfSITy4NNk0+qnMXKooQidikBmypShDsj2jAdg==
