@@ -1,5 +1,5 @@
 import 'pixi-shim'
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js-legacy'
 import { Sprite } from './sprite'
 import { GameObject } from './game-object'
 
