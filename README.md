@@ -2,6 +2,10 @@
 
 set of classes to better organize 2d game development
 
+[![GitHub version](https://badge.fury.io/gh/Prozi%2Foneforall.svg)](https://badge.fury.io/gh/Prozi%2Foneforall)
+[<img src="https://snyk.io/test/github/Prozi/oneforall/badge.svg" alt="https://snyk.io/test/github/Prozi/oneforall" />](https://snyk.io/test/github/Prozi/oneforall)
+[<img src="https://circleci.com/gh/Prozi/oneforall.svg?style=svg" alt="https://circleci.com/gh/Prozi/oneforall" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
+
 - [Unity inspired architecture](https://docs.unity3d.com/Manual/CreatingGameplay.html)
 - [state management](https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867)
 - [reactive events](https://www.learnrxjs.io/learn-rxjs/subjects)
