@@ -26,7 +26,7 @@ jobs:
       - run: sudo chown -R $(whoami) /usr/local/bin /usr/local/lib /usr/local/include /usr/local/share
       # upgrade node + add yarn
       - run: npm i -g n
-      - run: n 12
+      - run: n 16
       - run: npm i -g yarn
       - run: node --version
       - run: npm --version
