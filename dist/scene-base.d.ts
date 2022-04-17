@@ -1,8 +1,8 @@
-import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs';
 import { System } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { Lifecycle } from './lifecycle';
+import { IStage } from './stage-base';
 export declare type SceneOptions = {
     name?: string;
     visible?: boolean;
@@ -10,12 +10,6 @@ export declare type SceneOptions = {
     autoSort?: boolean;
     scale?: number;
 };
-export interface IStage {
-    addChild: (child: PIXI.DisplayObject) => void;
-    removeChild: (child: PIXI.DisplayObject) => void;
-    children: PIXI.DisplayObject[];
-    scale: PIXI.Point;
-}
 export declare class SceneBase extends Lifecycle {
     readonly name: string;
     readonly children: Set<GameObject>;
