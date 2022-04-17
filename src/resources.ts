@@ -6,7 +6,7 @@ import { Injectable } from '@jacekpietal/dependency-injection'
 export class Resources {
   private cache: Cache
 
-  constructor(path: string = '') {
+  constructor(path = '') {
     this.cache = new Cache(async (url: string) => {
       try {
         return await Resources.loadResource(`${path}${url}`)

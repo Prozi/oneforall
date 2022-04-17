@@ -4,7 +4,7 @@ import { Container } from './container'
 import { BehaviorSubject, Subject } from 'rxjs'
 
 export interface IAnimatorData {
-  animations: { [name: string]: Array<number | string> }
+  animations: { [name: string]: (number | string)[] }
   width: number
   height: number
   tilewidth: number
@@ -62,7 +62,7 @@ export class Animator extends Container {
     this.states = Object.keys(data.animations)
   }
 
-  setScale(x: number = 1, y: number = x): void {
+  setScale(x = 1, y: number = x): void {
     ;(this.children as PIXI.AnimatedSprite[]).forEach(
       (child: PIXI.AnimatedSprite) => {
         child.scale.set(x, y)
@@ -76,11 +76,7 @@ export class Animator extends Container {
    * @param loop
    * @param stateWhenFinished
    */
-  setState(
-    state: string,
-    loop: boolean = true,
-    stateWhenFinished: string = 'idle'
-  ): void {
+  setState(state: string, loop = true, stateWhenFinished = 'idle'): void {
     const exactIndex: number = this.getExactStateIndex(state)
     const targetIndex: number =
       exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state)
@@ -111,7 +107,8 @@ export class Animator extends Container {
           this.complete$.next(this.state)
 
           if (this.state === state) {
-            animation.onComplete = () => {}
+            animation.onComplete = null
+
             this.setState(stateWhenFinished)
           }
         }

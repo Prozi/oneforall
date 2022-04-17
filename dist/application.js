@@ -36,10 +36,9 @@ let Application = class Application extends PIXI.Application {
     constructor(options = {}) {
         super(Object.assign({ autoStart: false, sharedTicker: false, sharedLoader: false }, options));
         // silent fail in tests
-        try {
+        if (typeof jest === 'undefined') {
             document.body.appendChild(this.view);
         }
-        catch (err) { }
     }
 };
 Application = __decorate([

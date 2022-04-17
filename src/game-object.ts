@@ -1,7 +1,9 @@
+import { TBody } from 'detect-collisions'
 import { Subject } from 'rxjs'
-import { IComponent, ILifecycle, Lifecycle } from './component'
+import { Scene } from '.'
+import { IComponent, ILifecycle, Lifecycle } from './lifecycle'
 import { Prefab } from './prefab'
-import { Scene } from './scene'
+import { SceneBase } from './scene-base'
 
 export class GameObject implements ILifecycle {
   readonly update$: Subject<void> = new Subject()
@@ -9,12 +11,14 @@ export class GameObject implements ILifecycle {
   readonly components: Set<IComponent> = new Set()
   readonly components$: Subject<void> = new Subject()
 
-  parent: Scene
+  body?: TBody
+
+  parent: Scene | SceneBase
   name: string
   x: number
   y: number
 
-  constructor(name: string = 'GameObject', x: number = 0, y: number = 0) {
+  constructor(name = 'GameObject', x = 0, y = 0) {
     this.name = name
     this.x = x
     this.y = y

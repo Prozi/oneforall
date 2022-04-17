@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js'
 import { Injectable } from '@jacekpietal/dependency-injection'
 
+declare var jest: object
+
 @Injectable
 export class Application extends PIXI.Application {
   constructor(options: PIXI.IApplicationOptions = {}) {
@@ -12,8 +14,8 @@ export class Application extends PIXI.Application {
     })
 
     // silent fail in tests
-    try {
+    if (typeof jest === 'undefined') {
       document.body.appendChild(this.view)
-    } catch (err) {}
+    }
   }
 }

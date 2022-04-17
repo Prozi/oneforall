@@ -63,7 +63,7 @@ describe('GIVEN GameObject', () => {
     const scene = new Scene()
 
     for (let i = 0; i < 1000; i++) {
-      const go: GameObject | any = new GameObject()
+      const go: GameObject = new GameObject()
 
       go.body = new CircleBody(go, 100)
 

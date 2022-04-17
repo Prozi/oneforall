@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameObject = void 0;
 const rxjs_1 = require("rxjs");
-const component_1 = require("./component");
+const lifecycle_1 = require("./lifecycle");
 class GameObject {
     constructor(name = 'GameObject', x = 0, y = 0) {
         this.update$ = new rxjs_1.Subject();
@@ -29,11 +29,11 @@ class GameObject {
     }
     update() {
         Array.from(this.components.values()).forEach((component) => component.update());
-        component_1.Lifecycle.update(this);
+        lifecycle_1.Lifecycle.update(this);
     }
     destroy() {
         Array.from(this.components.values()).forEach((component) => this.removeComponent(component));
-        component_1.Lifecycle.destroy(this);
+        lifecycle_1.Lifecycle.destroy(this);
     }
     addComponent(component, key = component.key || '') {
         if (this.components.has(component)) {

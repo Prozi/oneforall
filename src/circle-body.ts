@@ -1,39 +1,28 @@
 import { Subject } from 'rxjs'
-import { Circle } from 'detect-collisions'
+import { Oval } from 'detect-collisions'
 import { GameObject } from './game-object'
-import { IComponent, Lifecycle } from '.'
+import { IComponent, Lifecycle } from './lifecycle'
 
-export class CircleBody extends Circle implements IComponent {
+export class CircleBody extends Oval implements IComponent {
   readonly name: string = 'CircleBody'
   readonly gameObject: GameObject
   readonly update$: Subject<void> = new Subject()
   readonly destroy$: Subject<void> = new Subject()
 
-  constructor(gameObject: GameObject, radius: number) {
-    super(gameObject, radius)
+  constructor(
+    gameObject: GameObject,
+    radiusX: number,
+    radiusY: number = radiusX,
+    step = 10
+  ) {
+    super(gameObject, radiusX, radiusY, step)
 
-    if (!radius) {
-      throw new Error("CircleBody radius can't be 0!")
+    if (!radiusX || !radiusY) {
+      throw new Error("CircleBody radius[X|Y] can't be 0!")
     }
 
     this.gameObject = gameObject
     this.gameObject.addComponent(this)
-  }
-
-  get x(): number {
-    return (this as any).pos.x
-  }
-
-  set x(x: number) {
-    ;(this as any).pos.x = x
-  }
-
-  get y(): number {
-    return (this as any).pos.y
-  }
-
-  set y(y: number) {
-    ;(this as any).pos.y = y
   }
 
   update(): void {

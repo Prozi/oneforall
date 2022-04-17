@@ -4,7 +4,7 @@ import { Container } from './container';
 import { BehaviorSubject, Subject } from 'rxjs';
 export interface IAnimatorData {
     animations: {
-        [name: string]: Array<number | string>;
+        [name: string]: (number | string)[];
     };
     width: number;
     height: number;

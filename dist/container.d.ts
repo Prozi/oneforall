@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs';
-import { IComponent } from './component';
 import { GameObject } from './game-object';
+import { IComponent } from './lifecycle';
 export declare class Container extends PIXI.Container implements IComponent {
     readonly name: string;
     readonly gameObject: GameObject;

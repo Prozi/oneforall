@@ -8,16 +8,15 @@ import { Sprite } from './sprite'
 import { Prefab } from './prefab'
 import { Scene } from './scene'
 
+type TGameObject = GameObject & { state: StateMachine; sprite: Sprite }
+
 describe('GIVEN Prefab', () => {
   it('THEN can be instantiated', async () => {
-    const prefab = new Prefab(
-      'MyPrefab',
-      async (go: GameObject & { [prop: string]: any }) => {
-        go.x = 120
-        go.y = 60
-        go.state = new StateMachine(go)
-      }
-    )
+    const prefab = new Prefab('MyPrefab', async (go: GameObject) => {
+      go.x = 120
+      go.y = 60
+      ;(go as TGameObject).state = new StateMachine(go)
+    })
     const instance: GameObject = await GameObject.instantiate(prefab)
 
     expect(instance).toBeTruthy()
@@ -28,20 +27,17 @@ describe('GIVEN Prefab', () => {
 
   it('THEN can create 100 instances', async () => {
     const scene: Scene = new Scene({ visible: true })
-    const prefab: Prefab = new Prefab(
-      'Soldier',
-      async (go: GameObject & { [prop: string]: any }) => {
-        go.state = new StateMachine(go)
-        go.sprite = new Sprite(go, PIXI.Texture.WHITE)
+    const prefab: Prefab = new Prefab('Soldier', async (go: GameObject) => {
+      ;(go as TGameObject).state = new StateMachine(go)
+      ;(go as TGameObject).sprite = new Sprite(go, PIXI.Texture.WHITE)
 
-        go.body = new CircleBody(go, 40)
-        go.body.x = Math.random() * innerWidth
-        go.body.y = Math.random() * innerHeight
+      go.body = new CircleBody(go, 40)
+      go.body.x = Math.random() * innerWidth
+      go.body.y = Math.random() * innerHeight
 
-        go.update()
-        scene.addChild(go)
-      }
-    )
+      go.update()
+      scene.addChild(go)
+    })
 
     const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)

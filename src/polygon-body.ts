@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Polygon } from 'detect-collisions'
 import { GameObject } from './game-object'
-import { IComponent, Lifecycle } from '.'
+import { IComponent, Lifecycle } from './lifecycle'
 
 export class PolygonBody extends Polygon implements IComponent {
   readonly name: string = 'PolygonBody'
@@ -17,22 +17,6 @@ export class PolygonBody extends Polygon implements IComponent {
 
     this.gameObject = gameObject
     this.gameObject.addComponent(this)
-  }
-
-  get x(): number {
-    return (this as any).pos.x
-  }
-
-  set x(x: number) {
-    ;(this as any).pos.x = x
-  }
-
-  get y(): number {
-    return (this as any).pos.y
-  }
-
-  set y(y: number) {
-    ;(this as any).pos.y = y
   }
 
   update(): void {

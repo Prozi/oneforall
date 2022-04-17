@@ -1,15 +1,23 @@
+import * as PIXI from 'pixi.js'
 import { takeUntil } from 'rxjs'
 import { GameObject } from '../game-object'
 import { CircleBody } from '../circle-body'
 import { Scene } from '../scene'
 import { Animator } from '../animator'
+import { Vector } from 'detect-collisions'
+
+export type TGameObject = GameObject & {
+  body: CircleBody
+  sprite: Animator
+  target?: Vector
+}
 
 export function createSprite({ scene, data, texture }) {
   // a base molecule
-  const gameObject: any = new GameObject('Sprite')
+  const gameObject: TGameObject = new GameObject('Sprite') as TGameObject
 
   // create body to detect-collisions
-  gameObject.body = new CircleBody(gameObject, 20)
+  gameObject.body = new CircleBody(gameObject, 20, 14)
   gameObject.body.setPosition(
     Math.random() * innerWidth,
     Math.random() * innerHeight
@@ -18,6 +26,9 @@ export function createSprite({ scene, data, texture }) {
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture)
   gameObject.sprite.setState('idle', true)
+  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
+    child.anchor.set(0.5, 0.8)
+  )
 
   // add to scene
   scene.addChild(gameObject)
@@ -31,10 +42,8 @@ export function createSprite({ scene, data, texture }) {
   return gameObject
 }
 
-export function updateSprite(
-  gameObject: GameObject & { [prop: string]: any }
-): void {
-  const scene: Scene = gameObject.parent // always
+export function updateSprite(gameObject: TGameObject): void {
+  const scene: Scene = gameObject.parent as Scene
 
   if (Math.random() < 0.05) {
     gameObject.target = {

@@ -86,7 +86,7 @@ class Animator extends container_1.Container {
                 animation.onComplete = () => {
                     this.complete$.next(this.state);
                     if (this.state === state) {
-                        animation.onComplete = () => { };
+                        animation.onComplete = null;
                         this.setState(stateWhenFinished);
                     }
                 };

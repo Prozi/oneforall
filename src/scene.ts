@@ -51,7 +51,9 @@ export class Scene extends SceneBase {
 
   enableAutoSort(): void {
     this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.stage.children.sort((a, b) => a.y - b.y)
+      this.stage.children.sort(
+        (a: PIXI.DisplayObject, b: PIXI.DisplayObject) => a.y - b.y
+      )
     })
   }
 

@@ -11,7 +11,7 @@ export class StateMachine extends Component {
 
   state: string
 
-  constructor(gameObject: GameObject, initialState: string = 'INITIAL_STATE') {
+  constructor(gameObject: GameObject, initialState = 'INITIAL_STATE') {
     super(gameObject)
 
     this.state = initialState

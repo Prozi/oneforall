@@ -9,11 +9,12 @@ function createSprite({ scene, data, texture }) {
     // a base molecule
     const gameObject = new game_object_1.GameObject('Sprite');
     // create body to detect-collisions
-    gameObject.body = new circle_body_1.CircleBody(gameObject, 20);
+    gameObject.body = new circle_body_1.CircleBody(gameObject, 20, 14);
     gameObject.body.setPosition(Math.random() * innerWidth, Math.random() * innerHeight);
     // create animator with few animations from json + texture
     gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
     gameObject.sprite.setState('idle', true);
+    gameObject.sprite.children.forEach((child) => child.anchor.set(0.5, 0.8));
     // add to scene
     scene.addChild(gameObject);
     scene.physics.insert(gameObject.body);
@@ -25,7 +26,7 @@ function createSprite({ scene, data, texture }) {
 }
 exports.createSprite = createSprite;
 function updateSprite(gameObject) {
-    const scene = gameObject.parent; // always
+    const scene = gameObject.parent;
     if (Math.random() < 0.05) {
         gameObject.target = {
             x: innerWidth / 2 / gameObject.parent.stage.scale.x,

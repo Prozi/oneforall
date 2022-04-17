@@ -1,7 +1,8 @@
+import * as PIXI from 'pixi.js'
 import { Subject } from 'rxjs'
 import { System } from 'detect-collisions'
 import { GameObject } from './game-object'
-import { Lifecycle } from './component'
+import { Lifecycle } from './lifecycle'
 
 export type SceneOptions = {
   name?: string
@@ -11,12 +12,28 @@ export type SceneOptions = {
   scale?: number
 }
 
+export interface IStage {
+  addChild: (child: PIXI.DisplayObject) => void
+  removeChild: (child: PIXI.DisplayObject) => void
+  children: PIXI.DisplayObject[]
+  scale: PIXI.Point
+}
+
 export class SceneBase extends Lifecycle {
   readonly name: string
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
 
-  stage: any = { addChild() {}, removeChild() {}, children: [] }
+  stage: IStage = {
+    addChild() {
+      console.warn('missing addChild implementation')
+    },
+    removeChild() {
+      console.warn('missing removeChild implementation')
+    },
+    children: [],
+    scale: new PIXI.Point(1, 1)
+  }
   physics: System = new System()
   scale: number
   destroy$: Subject<void> = new Subject()
@@ -66,7 +83,7 @@ export class SceneBase extends Lifecycle {
       return
     }
 
-    child.parent = this as any
+    child.parent = this
 
     this.children.add(child)
     this.children$.next()
