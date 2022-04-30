@@ -1,9 +1,9 @@
 import { Subject } from 'rxjs'
-import { Oval } from 'detect-collisions'
+import { Ellipse } from 'detect-collisions'
 import { GameObject } from './game-object'
 import { IComponent, Lifecycle } from './lifecycle'
 
-export class CircleBody extends Oval implements IComponent {
+export class CircleBody extends Ellipse implements IComponent {
   readonly name: string = 'CircleBody'
   readonly gameObject: GameObject
   readonly update$: Subject<void> = new Subject()
@@ -13,12 +13,12 @@ export class CircleBody extends Oval implements IComponent {
     gameObject: GameObject,
     radiusX: number,
     radiusY: number = radiusX,
-    step = 10
+    step?: number
   ) {
     super(gameObject, radiusX, radiusY, step)
 
     if (!radiusX || !radiusY) {
-      throw new Error("CircleBody radius[X|Y] can't be 0!")
+      throw new Error("CircleBody radius can't be 0!")
     }
 
     this.gameObject = gameObject

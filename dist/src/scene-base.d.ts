@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs';
 import { System } from 'detect-collisions';
 import { GameObject } from './game-object';
-import { Lifecycle } from './component';
+import { Lifecycle } from './lifecycle';
+import { IStage } from './stage-base';
 export declare type SceneOptions = {
     name?: string;
     visible?: boolean;
@@ -13,7 +14,7 @@ export declare class SceneBase extends Lifecycle {
     readonly name: string;
     readonly children: Set<GameObject>;
     readonly children$: Subject<void>;
-    stage: any;
+    stage: IStage;
     physics: System;
     scale: number;
     destroy$: Subject<void>;

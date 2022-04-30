@@ -1,13 +1,16 @@
+import { TBody } from 'detect-collisions';
 import { Subject } from 'rxjs';
-import { IComponent, ILifecycle } from './component';
+import { Scene } from '.';
+import { IComponent, ILifecycle } from './lifecycle';
 import { Prefab } from './prefab';
-import { Scene } from './scene';
+import { SceneBase } from './scene-base';
 export declare class GameObject implements ILifecycle {
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;
     readonly components: Set<IComponent>;
     readonly components$: Subject<void>;
-    parent: Scene;
+    body?: TBody;
+    parent: Scene | SceneBase;
     name: string;
     x: number;
     y: number;
