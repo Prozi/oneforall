@@ -28,15 +28,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -48,14 +39,14 @@ const PIXI = __importStar(require("pixi.js"));
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
     constructor(path = '') {
-        this.cache = new latermom_1.default((url) => __awaiter(this, void 0, void 0, function* () {
+        this.cache = new latermom_1.default(async (url) => {
             try {
-                return yield Resources_1.loadResource(`${path}${url}`);
+                return await Resources_1.loadResource(`${path}${url}`);
             }
             catch (err) {
                 console.error(err);
             }
-        }));
+        });
     }
     static loadResource(path) {
         const resource = PIXI.Loader.shared.resources[path];
@@ -83,10 +74,8 @@ let Resources = Resources_1 = class Resources {
             });
         });
     }
-    get(url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.cache.get(url);
-        });
+    async get(url) {
+        return this.cache.get(url);
     }
 };
 Resources = Resources_1 = __decorate([

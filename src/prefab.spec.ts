@@ -27,17 +27,20 @@ describe('GIVEN Prefab', () => {
 
   it('THEN can create 100 instances', async () => {
     const scene: Scene = new Scene({ visible: true })
-    const prefab: Prefab = new Prefab('Soldier', async (go: GameObject) => {
-      ;(go as TGameObject).state = new StateMachine(go)
-      ;(go as TGameObject).sprite = new Sprite(go, PIXI.Texture.WHITE)
+    const prefab: Prefab = new Prefab(
+      'Soldier',
+      async (go: GameObject & any) => {
+        go.state = new StateMachine(go)
+        go.sprite = new Sprite(go, PIXI.Texture.WHITE)
 
-      go.body = new CircleBody(go, 40)
-      go.body.x = Math.random() * innerWidth
-      go.body.y = Math.random() * innerHeight
+        go.body = new CircleBody(go, 40)
+        go.body.x = Math.random() * innerWidth
+        go.body.y = Math.random() * innerHeight
 
-      go.update()
-      scene.addChild(go)
-    })
+        go.update()
+        scene.addChild(go)
+      }
+    )
 
     const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)

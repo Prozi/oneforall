@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PolygonBody = void 0;
 const rxjs_1 = require("rxjs");
 const detect_collisions_1 = require("detect-collisions");
-const lifecycle_1 = require("./lifecycle");
+const component_1 = require("./component");
 class PolygonBody extends detect_collisions_1.Polygon {
     constructor(gameObject, points) {
         super(gameObject, points.map(([x, y]) => ({ x, y })));
@@ -16,10 +16,10 @@ class PolygonBody extends detect_collisions_1.Polygon {
     update() {
         this.gameObject.x = this.x;
         this.gameObject.y = this.y;
-        lifecycle_1.Lifecycle.update(this);
+        component_1.Component.update(this);
     }
     destroy() {
-        lifecycle_1.Lifecycle.destroy(this);
+        component_1.Component.destroy(this);
     }
 }
 exports.PolygonBody = PolygonBody;

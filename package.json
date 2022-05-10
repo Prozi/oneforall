@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "1.13.0",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -18,13 +18,13 @@
     "@babel/plugin-transform-modules-commonjs": "^7.17.9",
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-typescript": "^7.16.7",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^27.5.0",
     "@types/offscreencanvas": "^2019.6.4",
-    "babel-jest": "^28.0.3",
-    "chef-express": "^1.1.0",
+    "babel-jest": "^28.1.0",
+    "chef-express": "^1.2.0",
     "detect-collisions": "^4.0.2",
     "esm": "^3.2.25",
-    "jest": "^28.0.3",
+    "jest": "^28.1.0",
     "latermom": "^1.0.4",
     "pixi-shim": "^2.3.21",
     "pixi.js": "6.0.4",
@@ -32,10 +32,11 @@
     "prettier": "^2.6.2",
     "prettier-config-standard": "^5.0.0",
     "rxjs": "^7.5.5",
-    "ts-loader": "^9.2.9",
+    "ts-loader": "^9.3.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "tslint": "^6.1.3",
     "typescript": "^4.6.4",
-    "webpack": "^5.72.0",
+    "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2"
   },
   "scripts": {
@@ -43,11 +44,12 @@
     "lint": "yarn tslint 'src/**/*.ts' --fix",
     "test": "jest --silent --verbose --forceExit",
     "sanity": "yarn build && node -r esm ./test-build.js",
-    "demo": "webpack && cp dist/demo/demo.bundle.js docs && yarn start",
+    "demo": "webpack && yarn start",
     "format": "prettier ./src/*.ts --write",
     "format-docs": "prettier ./docs/*.ts --write",
+    "prebuild": "rm -rf dist",
     "build": "tsc",
-    "precommit": "yarn lint && yarn format && yarn format-docs && yarn test && yarn sanity"
+    "precommit": "yarn sanity && yarn lint && yarn format && yarn format-docs && yarn test && webpack"
   },
   "keywords": [
     "gameobject",

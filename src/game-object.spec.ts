@@ -10,7 +10,7 @@ describe('GIVEN GameObject', () => {
     const go = new GameObject()
     const component = new Component(go)
 
-    expect(go.components.size).toBe(1)
+    expect(go.components.length).toBe(1)
   })
 
   it('THEN update propagates to components', () => {
@@ -33,7 +33,7 @@ describe('GIVEN GameObject', () => {
 
     go.removeComponent(component)
 
-    expect(go.components.size).toBe(0)
+    expect(go.components.length).toBe(0)
   })
 
   it('THEN destroy removes component', () => {
@@ -42,7 +42,7 @@ describe('GIVEN GameObject', () => {
 
     component.destroy()
 
-    expect(go.components.size).toBe(0)
+    expect(go.components.length).toBe(0)
   })
 
   it('THEN you can get component by name', () => {
@@ -64,14 +64,13 @@ describe('GIVEN GameObject', () => {
 
     for (let i = 0; i < 1000; i++) {
       const go: GameObject = new GameObject()
+      const body = new CircleBody(go, 100)
 
-      go.body = new CircleBody(go, 100)
-
-      scene.physics.remove(go.body)
+      scene.physics.remove(body)
 
       go.destroy()
 
-      expect(go.components.size).toBe(0)
+      expect(go.components.length).toBe(0)
     }
 
     expect(scene.children.size).toBe(0)

@@ -1,19 +1,22 @@
-const path = `${__dirname}/dist/demo/`;
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = {
-  entry: "./docs/demo.ts",
-  mode: "development",
-  target: "web",
+  entry: './docs/demo.ts',
+  mode: 'development',
+  target: 'web',
   output: {
-    path,
-    filename: "demo.bundle.js",
+    path: `${__dirname}/docs/`,
+    filename: 'demo.bundle.js'
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
-      },
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig-demo.json'
+        }
+      }
     ]
   }
-};
+}

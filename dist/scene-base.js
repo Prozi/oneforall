@@ -8,12 +8,12 @@ const stage_base_1 = require("./stage-base");
 class SceneBase extends lifecycle_1.Lifecycle {
     constructor(options = {}) {
         super();
+        this.name = 'SceneBase';
         this.children = new Set();
         this.children$ = new rxjs_1.Subject();
         this.stage = new stage_base_1.StageBase();
         this.physics = new detect_collisions_1.System();
         this.destroy$ = new rxjs_1.Subject();
-        this.name = options.name || 'Scene';
         this.scale = options.scale || 1;
     }
     stop() {

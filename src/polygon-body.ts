@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs'
 import { Polygon } from 'detect-collisions'
 import { GameObject } from './game-object'
-import { IComponent, Lifecycle } from './lifecycle'
+import { IComponent } from './lifecycle'
+import { Component } from './component'
 
 export class PolygonBody extends Polygon implements IComponent {
   readonly name: string = 'PolygonBody'
@@ -23,10 +24,10 @@ export class PolygonBody extends Polygon implements IComponent {
     this.gameObject.x = this.x
     this.gameObject.y = this.y
 
-    Lifecycle.update(this)
+    Component.update(this)
   }
 
   destroy(): void {
-    Lifecycle.destroy(this)
+    Component.destroy(this)
   }
 }

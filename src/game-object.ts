@@ -1,4 +1,3 @@
-import { TBody } from 'detect-collisions'
 import { Subject } from 'rxjs'
 import { Scene } from '.'
 import { IComponent, ILifecycle, Lifecycle } from './lifecycle'
@@ -8,10 +7,7 @@ import { SceneBase } from './scene-base'
 export class GameObject implements ILifecycle {
   readonly update$: Subject<void> = new Subject()
   readonly destroy$: Subject<void> = new Subject()
-  readonly components: Set<IComponent> = new Set()
-  readonly components$: Subject<void> = new Subject()
-
-  body?: TBody
+  readonly components: IComponent[] = []
 
   parent: Scene | SceneBase
   name: string
@@ -29,65 +25,42 @@ export class GameObject implements ILifecycle {
   }
 
   update(): void {
-    Array.from(this.components.values()).forEach((component: IComponent) =>
-      component.update()
-    )
+    this.components.forEach((component: IComponent) => component.update())
 
     Lifecycle.update(this)
   }
 
   destroy(): void {
-    Array.from(this.components.values()).forEach((component: IComponent) =>
-      this.removeComponent(component)
-    )
+    this.components.forEach((component: IComponent) => component.destroy())
 
     Lifecycle.destroy(this)
   }
 
-  addComponent(
-    component: IComponent,
-    key: string = component.key || ''
-  ): IComponent {
-    if (this.components.has(component)) {
-      return
+  addComponent(component: IComponent): boolean {
+    if (this.components.includes(component)) {
+      return false
     }
 
-    this.components.add(component)
-    this.components$.next()
+    this.components.push(component)
 
-    if (key) {
-      component.key = key
-      this[key] = component
-    }
-
-    return component
+    return true
   }
 
-  removeComponent(
-    component: IComponent,
-    key: string = component.key || ''
-  ): void {
-    if (!this.components.has(component)) {
-      return
+  removeComponent(component: IComponent): boolean {
+    if (!this.components.includes(component)) {
+      return false
     }
 
-    if (key && this[key]) {
-      this[key] = null
-    }
+    this.components.splice(this.components.indexOf(component), 1)
 
-    this.components.delete(component)
-    this.components$.next()
+    return true
   }
 
   getComponentOfType(type: string): IComponent {
-    return Array.from(this.components.values()).find(
-      ({ name }) => name === type
-    )
+    return this.components.find(({ name }) => name === type)
   }
 
   getComponentsOfType(type: string): IComponent[] {
-    return Array.from(this.components.values()).filter(
-      ({ name }) => name === type
-    )
+    return this.components.filter(({ name }) => name === type)
   }
 }

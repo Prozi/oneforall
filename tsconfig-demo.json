@@ -3,18 +3,16 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "declaration": true,
-    "declarationMap": true,
     "moduleResolution": "node",
     "target": "es2017",
     "module": "none",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "paths": {
       "mini-signals": ["./node_modules/mini-signals/index.js"]
     }
   },
-  "files": ["src/index.ts"],
+  "files": ["docs/demo.ts"],
   "include": ["src/*.ts", "src/**/*.ts"],
   "exclude": ["src/*.spec.ts", "*.js"]
 }

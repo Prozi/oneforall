@@ -13,7 +13,7 @@ export type SceneOptions = {
 }
 
 export class SceneBase extends Lifecycle {
-  readonly name: string
+  readonly name: string = 'SceneBase'
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
 
@@ -26,7 +26,6 @@ export class SceneBase extends Lifecycle {
   constructor(options: SceneOptions = {}) {
     super()
 
-    this.name = options.name || 'Scene'
     this.scale = options.scale || 1
   }
 

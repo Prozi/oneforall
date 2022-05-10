@@ -20,6 +20,6 @@ describe('GIVEN Sprite', () => {
 
     sprite.destroy()
 
-    expect(go.components.size).toBe(0)
+    expect(go.components.length).toBe(0)
   })
 })
