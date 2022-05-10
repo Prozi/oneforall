@@ -1,5 +1,3 @@
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-
 module.exports = {
   entry: './docs/demo.ts',
   mode: 'development',
