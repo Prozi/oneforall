@@ -1,22 +1,22 @@
-import { GameObject } from './game-object'
+import { GameObject } from "./game-object";
 
 export class Prefab extends GameObject {
-  private createFunction: (prefab: GameObject) => Promise<void>
+  private createFunction: (prefab: GameObject) => Promise<void>;
 
   constructor(
-    name = 'GameObject',
+    name = "GameObject",
     createFunction: (prefab: GameObject) => Promise<void>
   ) {
-    super(name, 0, 0)
+    super(name, 0, 0);
 
-    this.createFunction = createFunction
+    this.createFunction = createFunction;
   }
 
   async instantiate(): Promise<GameObject> {
-    const gameObject = new GameObject(this.name, this.x, this.y)
+    const gameObject = new GameObject(this.name, this.x, this.y);
 
-    await this.createFunction(gameObject)
+    await this.createFunction(gameObject);
 
-    return gameObject
+    return gameObject;
   }
 }

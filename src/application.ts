@@ -1,7 +1,7 @@
-import * as PIXI from 'pixi.js'
-import { Injectable } from '@jacekpietal/dependency-injection'
+import * as PIXI from "pixi.js";
+import { Injectable } from "@jacekpietal/dependency-injection";
 
-declare var jest: object
+declare var jest: object;
 
 @Injectable
 export class Application extends PIXI.Application {
@@ -10,12 +10,12 @@ export class Application extends PIXI.Application {
       autoStart: false,
       sharedTicker: false,
       sharedLoader: false,
-      ...options
-    })
+      ...options,
+    });
 
     // silent fail in tests
-    if (typeof jest === 'undefined') {
-      document.body.appendChild(this.view)
+    if (typeof jest === "undefined") {
+      document.body.appendChild(this.view);
     }
   }
 }

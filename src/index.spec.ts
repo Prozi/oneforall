@@ -1,8 +1,8 @@
-import 'pixi-shim'
-import { GameObject } from '.'
+import "pixi-shim";
+import { GameObject } from ".";
 
-describe('GIVEN index.ts', () => {
-  it('THEN basic imports work', () => {
-    expect(new GameObject()).toBeTruthy()
-  })
-})
+describe("GIVEN index.ts", () => {
+  it("THEN basic imports work", () => {
+    expect(new GameObject()).toBeTruthy();
+  });
+});

@@ -1,97 +1,97 @@
-import { Subject } from 'rxjs/internal/Subject'
-import { System } from 'detect-collisions'
-import { GameObject } from './game-object'
-import { Lifecycle } from './lifecycle'
-import { IStage, StageBase } from './stage-base'
+import { Subject } from "rxjs/internal/Subject";
+import { System } from "detect-collisions";
+import { GameObject } from "./game-object";
+import { Lifecycle } from "./lifecycle";
+import { IStage, StageBase } from "./stage-base";
 
 export interface SceneOptions {
-  name?: string
-  visible?: boolean
-  autoSize?: boolean
-  autoSort?: boolean
-  scale?: number
-  nodeMaxEntries?: number
+  name?: string;
+  visible?: boolean;
+  autoSize?: boolean;
+  autoSort?: boolean;
+  scale?: number;
+  nodeMaxEntries?: number;
 }
 
 export class SceneBase extends Lifecycle {
-  readonly name: string = 'Scene'
-  readonly children: Set<GameObject> = new Set()
-  readonly children$: Subject<void> = new Subject()
+  readonly name: string = "Scene";
+  readonly children: Set<GameObject> = new Set();
+  readonly children$: Subject<void> = new Subject();
 
-  stage: IStage = new StageBase()
-  physics: System
-  scale: number
-  destroy$: Subject<void> = new Subject()
-  animationFrame: number
+  stage: IStage = new StageBase();
+  physics: System;
+  scale: number;
+  destroy$: Subject<void> = new Subject();
+  animationFrame: number;
 
   constructor(options: SceneOptions = {}) {
-    super()
+    super();
 
-    this.physics = new System(options.nodeMaxEntries)
-    this.scale = options.scale || 1
+    this.physics = new System(options.nodeMaxEntries);
+    this.scale = options.scale || 1;
   }
 
   stop(): void {
     if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame)
+      cancelAnimationFrame(this.animationFrame);
     }
   }
 
   start(): void {
     const loop = () => {
-      this.update()
+      this.update();
 
-      this.animationFrame = requestAnimationFrame(loop)
-    }
+      this.animationFrame = requestAnimationFrame(loop);
+    };
 
-    loop()
+    loop();
   }
 
   update(): void {
-    this.physics.update()
+    this.physics.update();
 
     Array.from(this.children.values()).forEach((child: GameObject) =>
       child.update()
-    )
+    );
 
-    super.update()
+    super.update();
   }
 
   destroy(): void {
-    this.stop()
+    this.stop();
 
-    super.destroy()
+    super.destroy();
   }
 
   addChild(child: GameObject): void {
     if (this.children.has(child)) {
-      return
+      return;
     }
 
-    child.parent = this
+    child.parent = this;
 
-    this.children.add(child)
-    this.children$.next()
+    this.children.add(child);
+    this.children$.next();
   }
 
   removeChild(child: GameObject): void {
     if (!this.children.has(child)) {
-      return
+      return;
     }
 
-    child.parent = null
+    child.parent = null;
 
-    this.children.delete(child)
-    this.children$.next()
+    this.children.delete(child);
+    this.children$.next();
   }
 
   getChildOfType(type: string): GameObject {
-    return Array.from(this.children.values()).find(({ name }) => name === type)
+    return Array.from(this.children.values()).find(({ name }) => name === type);
   }
 
   getChildrenOfType(type: string): GameObject[] {
     return Array.from(this.children.values()).filter(
       ({ name }) => name === type
-    )
+    );
   }
 }
