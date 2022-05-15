@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { IComponent } from './lifecycle';
 export declare class Sprite extends PIXI.Sprite implements IComponent {

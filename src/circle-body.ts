@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/internal/Subject'
 import { Ellipse } from 'detect-collisions'
 import { GameObject } from './game-object'
 import { IComponent } from './lifecycle'

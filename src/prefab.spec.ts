@@ -44,7 +44,7 @@ describe('GIVEN Prefab', () => {
 
     const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)
-      .map(async () => await GameObject.instantiate(prefab))
+      .map(async () => GameObject.instantiate(prefab))
 
     const gameObjects: GameObject[] = await Promise.all(promises)
 

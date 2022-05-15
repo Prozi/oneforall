@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lifecycle = void 0;
-const rxjs_1 = require("rxjs");
+const Subject_1 = require("rxjs/internal/Subject");
 class Lifecycle {
     constructor() {
         this.name = 'Lifecycle';
-        this.update$ = new rxjs_1.Subject();
-        this.destroy$ = new rxjs_1.Subject();
+        this.update$ = new Subject_1.Subject();
+        this.destroy$ = new Subject_1.Subject();
     }
     static destroy(lifecycle) {
         lifecycle.destroy$.next();

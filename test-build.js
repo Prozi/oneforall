@@ -1,9 +1,9 @@
-import 'pixi-shim'
-import { GameObject } from './dist/index.js'
-import { Component } from './dist/component.js';
+require('pixi-shim')
 
-const go = new GameObject();
-const component = new Component(go);
+const { GameObject, Component } = require('./dist/index.js')
 
-console.info(go);
-console.info(component);
+const go = new GameObject()
+const component = new Component(go)
+
+console.info(go)
+console.info(component)

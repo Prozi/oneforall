@@ -25,14 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sprite = void 0;
 const PIXI = __importStar(require("pixi.js"));
-const rxjs_1 = require("rxjs");
+const Subject_1 = require("rxjs/internal/Subject");
 const component_1 = require("./component");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
         super(texture);
         this.name = 'Sprite';
-        this.update$ = new rxjs_1.Subject();
-        this.destroy$ = new rxjs_1.Subject();
+        this.update$ = new Subject_1.Subject();
+        this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }

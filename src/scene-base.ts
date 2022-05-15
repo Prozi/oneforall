@@ -1,10 +1,10 @@
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/internal/Subject'
 import { System } from 'detect-collisions'
 import { GameObject } from './game-object'
 import { Lifecycle } from './lifecycle'
 import { IStage, StageBase } from './stage-base'
 
-export type SceneOptions = {
+export interface SceneOptions {
   name?: string
   visible?: boolean
   autoSize?: boolean

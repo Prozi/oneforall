@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js'
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject'
+import { Subject } from 'rxjs/internal/Subject'
 import { GameObject } from './game-object'
 import { Container } from './container'
-import { BehaviorSubject, Subject } from 'rxjs'
 
 export interface IAnimatorData {
   animations: { [name: string]: (number | string)[] }
@@ -64,50 +65,57 @@ export class Animator extends Container {
     )
   }
 
-  getAnimation(state: string): PIXI.AnimatedSprite {
+  getAnimationIndex(state: string): number {
     const exactIndex: number = this.getExactStateIndex(state)
-    const targetIndex: number =
-      exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state)
 
+    return exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state)
+  }
+
+  setAnimation(animation: PIXI.AnimatedSprite): void {
     ;(this.children as PIXI.AnimatedSprite[])
       .filter(
-        (child: PIXI.AnimatedSprite, index: number) =>
-          child instanceof PIXI.AnimatedSprite &&
-          child.visible &&
-          index !== targetIndex
+        (child: PIXI.AnimatedSprite) =>
+          child instanceof PIXI.AnimatedSprite && child !== animation
       )
       .forEach((child: PIXI.AnimatedSprite) => {
         child.visible = false
         child.stop()
       })
 
-    return this.children[targetIndex] as PIXI.AnimatedSprite
+    this.animation = animation
   }
 
-  setState(state: string, loop = true, stateWhenFinished = 'idle'): void {
-    const animation = this.getAnimation(state)
+  setState(state: string, loop = true, stateWhenFinished = 'idle'): string {
+    const index: number = this.getAnimationIndex(state)
+    const animation = this.children[index] as PIXI.AnimatedSprite
 
-    if (animation && animation !== this.animation) {
-      animation.loop = loop
-      animation.gotoAndPlay(0)
-      animation.visible = true
+    if (!animation || animation === this.animation) {
+      return ''
+    }
 
-      if (!loop && stateWhenFinished) {
-        animation.onComplete = () => {
-          this.complete$.next(this.state)
+    this.setAnimation(animation)
 
-          if (this.getFuzzyStateIndex(state) !== -1) {
-            animation.onComplete = null
+    animation.loop = loop
+    animation.gotoAndPlay(0)
+    animation.visible = true
 
-            this.setState(stateWhenFinished)
-          }
+    if (!loop && stateWhenFinished) {
+      animation.onComplete = () => {
+        this.complete$.next(this.state)
+
+        if (this.getFuzzyStateIndex(state) !== -1) {
+          animation.onComplete = null
+
+          this.setState(stateWhenFinished)
         }
       }
     }
 
-    this.animation = animation
     this.state = state
     this.state$.next(this.state)
+
+    // return exactly the state (maybe fuzzy)
+    return this.states[index]
   }
 
   private getExactStateIndex(state: string): number {

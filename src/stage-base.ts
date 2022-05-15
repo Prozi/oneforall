@@ -1,10 +1,10 @@
 import * as PIXI from 'pixi.js'
 
 export interface IStage {
-  addChild: (child: PIXI.DisplayObject) => void
-  removeChild: (child: PIXI.DisplayObject) => void
   children: PIXI.DisplayObject[]
   scale: PIXI.Point
+  addChild(child: PIXI.DisplayObject): void
+  removeChild(child: PIXI.DisplayObject): void
 }
 
 export class StageBase implements IStage {

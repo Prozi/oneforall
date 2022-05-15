@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StateMachine = void 0;
-const rxjs_1 = require("rxjs");
+const Subject_1 = require("rxjs/internal/Subject");
 const component_1 = require("./component");
 class StateMachine extends component_1.Component {
     constructor(gameObject, initialState = 'INITIAL_STATE') {
         super(gameObject);
         this.name = 'StateMachine';
-        this.state$ = new rxjs_1.Subject();
-        this.change$ = new rxjs_1.Subject();
+        this.state$ = new Subject_1.Subject();
+        this.change$ = new Subject_1.Subject();
         this.validators = {};
         this.state = initialState;
     }

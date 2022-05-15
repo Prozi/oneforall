@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/internal/Subject'
 import { GameObject } from './game-object'
 import { Component } from './component'
 
@@ -11,15 +11,15 @@ export class StateMachine extends Component {
 
   state: string
 
+  private validators: {
+    [fromState: string]: TStateValidator[]
+  } = {}
+
   constructor(gameObject: GameObject, initialState = 'INITIAL_STATE') {
     super(gameObject)
 
     this.state = initialState
   }
-
-  private validators: {
-    [fromState: string]: TStateValidator[]
-  } = {}
 
   setState(newState: string): void {
     if (!this.validateStateChange(newState)) {

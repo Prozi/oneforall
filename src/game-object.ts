@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/internal/Subject'
 import { Scene } from '.'
 import { IComponent, ILifecycle, Lifecycle } from './lifecycle'
 import { Prefab } from './prefab'
@@ -21,7 +21,7 @@ export class GameObject implements ILifecycle {
   }
 
   static async instantiate(prefab: Prefab): Promise<GameObject> {
-    return await prefab.instantiate()
+    return prefab.instantiate()
   }
 
   update(): void {

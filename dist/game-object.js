@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameObject = void 0;
-const rxjs_1 = require("rxjs");
+const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
 class GameObject {
     constructor(name = 'GameObject', x = 0, y = 0) {
-        this.update$ = new rxjs_1.Subject();
-        this.destroy$ = new rxjs_1.Subject();
+        this.update$ = new Subject_1.Subject();
+        this.destroy$ = new Subject_1.Subject();
         this.components = [];
         this.name = name;
         this.x = x;
         this.y = y;
     }
     static async instantiate(prefab) {
-        return await prefab.instantiate();
+        return prefab.instantiate();
     }
     update() {
         this.components.forEach((component) => component.update());

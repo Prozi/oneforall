@@ -31,11 +31,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require("pixi.js"));
+const operators_1 = require("rxjs/operators");
+const fromEvent_1 = require("rxjs/internal/observable/fromEvent");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 const application_1 = require("./application");
 const resources_1 = require("./resources");
 const scene_base_1 = require("./scene-base");
-const rxjs_1 = require("rxjs");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
         super(options);
@@ -66,14 +67,14 @@ class Scene extends scene_base_1.SceneBase {
         super.destroy();
     }
     enableAutoSort() {
-        this.update$.pipe((0, rxjs_1.takeUntil)(this.destroy$)).subscribe(() => {
+        this.update$.pipe((0, operators_1.takeUntil)(this.destroy$)).subscribe(() => {
             this.stage.children.sort((a, b) => a.y - b.y);
         });
     }
     enableAutoSize() {
         this.pixi.renderer.resize(innerWidth, innerHeight);
-        (0, rxjs_1.fromEvent)(window, 'resize')
-            .pipe((0, rxjs_1.takeUntil)(this.destroy$))
+        (0, fromEvent_1.fromEvent)(window, 'resize')
+            .pipe((0, operators_1.takeUntil)(this.destroy$))
             .subscribe(() => {
             this.pixi.renderer.resize(innerWidth, innerHeight);
         });

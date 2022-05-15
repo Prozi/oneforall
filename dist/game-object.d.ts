@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 import { Scene } from '.';
 import { IComponent, ILifecycle } from './lifecycle';
 import { Prefab } from './prefab';

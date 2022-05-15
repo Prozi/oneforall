@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SceneBase = void 0;
-const rxjs_1 = require("rxjs");
+const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
 const lifecycle_1 = require("./lifecycle");
 const stage_base_1 = require("./stage-base");
@@ -10,9 +10,9 @@ class SceneBase extends lifecycle_1.Lifecycle {
         super();
         this.name = 'Scene';
         this.children = new Set();
-        this.children$ = new rxjs_1.Subject();
+        this.children$ = new Subject_1.Subject();
         this.stage = new stage_base_1.StageBase();
-        this.destroy$ = new rxjs_1.Subject();
+        this.destroy$ = new Subject_1.Subject();
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.scale = options.scale || 1;
     }

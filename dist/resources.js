@@ -53,7 +53,7 @@ let Resources = Resources_1 = class Resources {
         if (resource) {
             return Promise.resolve(resource);
         }
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             const loader = new PIXI.Loader();
             loader.add(path);
             loader.load(() => {
@@ -65,7 +65,7 @@ let Resources = Resources_1 = class Resources {
         });
     }
     static loadResources(resources) {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             const loader = new PIXI.Loader();
             loader.add(resources);
             loader.load(() => {

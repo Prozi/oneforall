@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { Component } from './component';
 export declare type TStateValidator = (newState: string) => boolean;
@@ -7,8 +7,8 @@ export declare class StateMachine extends Component {
     readonly state$: Subject<string>;
     readonly change$: Subject<string[]>;
     state: string;
-    constructor(gameObject: GameObject, initialState?: string);
     private validators;
+    constructor(gameObject: GameObject, initialState?: string);
     setState(newState: string): void;
     setValidators(fromState: string, validators: TStateValidator[]): void;
     getValidators(fromState: string): TStateValidator[];

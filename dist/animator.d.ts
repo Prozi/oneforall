@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { Container } from './container';
-import { BehaviorSubject, Subject } from 'rxjs';
 export interface IAnimatorData {
     animations: {
         [name: string]: (number | string)[];
@@ -20,8 +21,9 @@ export declare class Animator extends Container {
     animation?: PIXI.AnimatedSprite;
     constructor(gameObject: GameObject, data: IAnimatorData, { baseTexture }: PIXI.Texture);
     setScale(x?: number, y?: number): void;
-    getAnimation(state: string): PIXI.AnimatedSprite;
-    setState(state: string, loop?: boolean, stateWhenFinished?: string): void;
+    getAnimationIndex(state: string): number;
+    setAnimation(animation: PIXI.AnimatedSprite): void;
+    setState(state: string, loop?: boolean, stateWhenFinished?: string): string;
     private getExactStateIndex;
     private getFuzzyStateIndex;
 }

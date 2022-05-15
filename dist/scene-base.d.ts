@@ -1,16 +1,16 @@
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 import { System } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { Lifecycle } from './lifecycle';
 import { IStage } from './stage-base';
-export declare type SceneOptions = {
+export interface SceneOptions {
     name?: string;
     visible?: boolean;
     autoSize?: boolean;
     autoSort?: boolean;
     scale?: number;
     nodeMaxEntries?: number;
-};
+}
 export declare class SceneBase extends Lifecycle {
     readonly name: string;
     readonly children: Set<GameObject>;

@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js'
+import { takeUntil } from 'rxjs/operators'
+import { fromEvent } from 'rxjs/internal/observable/fromEvent'
 import { Inject } from '@jacekpietal/dependency-injection'
 import { Application } from './application'
 import { Resources } from './resources'
 import { SceneBase, SceneOptions } from './scene-base'
-import { fromEvent, takeUntil } from 'rxjs'
 
 export class Scene extends SceneBase {
   @Inject(Application) pixi: Application

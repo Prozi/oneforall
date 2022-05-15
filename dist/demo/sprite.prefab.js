@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSprite = exports.createSprite = void 0;
-const rxjs_1 = require("rxjs");
+const operators_1 = require("rxjs/operators");
 const game_object_1 = require("../game-object");
 const circle_body_1 = require("../circle-body");
 const animator_1 = require("../animator");
@@ -20,7 +20,7 @@ function createSprite({ scene, data, texture }) {
     scene.physics.insert(gameObject.body);
     // subscribe to its own update function
     gameObject.update$
-        .pipe((0, rxjs_1.takeUntil)(scene.destroy$))
+        .pipe((0, operators_1.takeUntil)(scene.destroy$))
         .subscribe(() => updateSprite(gameObject));
     return gameObject;
 }
