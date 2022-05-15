@@ -79,14 +79,15 @@ class Animator extends container_1.Container {
         animation.visible = true;
         if (!loop && stateWhenFinished) {
             animation.onComplete = () => {
+                animation.onComplete = null;
                 this.complete$.next(this.state);
-                if (this.getFuzzyStateIndex(state) !== -1) {
-                    animation.onComplete = null;
+                // exact as target state before
+                if (this.state === this.states[index]) {
                     this.setState(stateWhenFinished);
                 }
             };
         }
-        this.state = state;
+        this.state = this.states[index];
         this.state$.next(this.state);
         // return exactly the state (maybe fuzzy)
         return this.states[index];
@@ -103,7 +104,9 @@ class Animator extends container_1.Container {
             .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
             .map(({ index }) => index);
         // random of above candidates
-        return indexes[Math.floor(indexes.length * Math.random())] || -1;
+        return indexes.length
+            ? indexes[Math.floor(indexes.length * Math.random())]
+            : -1;
     }
 }
 exports.Animator = Animator;
