@@ -10,15 +10,16 @@ export type SceneOptions = {
   autoSize?: boolean
   autoSort?: boolean
   scale?: number
+  nodeMaxEntries?: number
 }
 
 export class SceneBase extends Lifecycle {
-  readonly name: string = 'SceneBase'
+  readonly name: string = 'Scene'
   readonly children: Set<GameObject> = new Set()
   readonly children$: Subject<void> = new Subject()
 
   stage: IStage = new StageBase()
-  physics: System = new System()
+  physics: System
   scale: number
   destroy$: Subject<void> = new Subject()
   animationFrame: number
@@ -26,6 +27,7 @@ export class SceneBase extends Lifecycle {
   constructor(options: SceneOptions = {}) {
     super()
 
+    this.physics = new System(options.nodeMaxEntries)
     this.scale = options.scale || 1
   }
 

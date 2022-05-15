@@ -18,20 +18,9 @@ export declare class Animator extends Container {
     states: string[];
     state?: string;
     animation?: PIXI.AnimatedSprite;
-    /**
-     * create animated container
-     * @param animations
-     * @param textures
-     * @param radius
-     */
     constructor(gameObject: GameObject, data: IAnimatorData, { baseTexture }: PIXI.Texture);
     setScale(x?: number, y?: number): void;
-    /**
-     * set character animation
-     * @param animation
-     * @param loop
-     * @param stateWhenFinished
-     */
+    getAnimation(state: string): PIXI.AnimatedSprite;
     setState(state: string, loop?: boolean, stateWhenFinished?: string): void;
     private getExactStateIndex;
     private getFuzzyStateIndex;

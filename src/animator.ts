@@ -20,12 +20,6 @@ export class Animator extends Container {
   state?: string
   animation?: PIXI.AnimatedSprite
 
-  /**
-   * create animated container
-   * @param animations
-   * @param textures
-   * @param radius
-   */
   constructor(
     gameObject: GameObject,
     data: IAnimatorData,
@@ -70,13 +64,7 @@ export class Animator extends Container {
     )
   }
 
-  /**
-   * set character animation
-   * @param animation
-   * @param loop
-   * @param stateWhenFinished
-   */
-  setState(state: string, loop = true, stateWhenFinished = 'idle'): void {
+  getAnimation(state: string): PIXI.AnimatedSprite {
     const exactIndex: number = this.getExactStateIndex(state)
     const targetIndex: number =
       exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state)
@@ -93,20 +81,22 @@ export class Animator extends Container {
         child.stop()
       })
 
-    const animation: PIXI.AnimatedSprite = this.children[
-      targetIndex
-    ] as PIXI.AnimatedSprite
+    return this.children[targetIndex] as PIXI.AnimatedSprite
+  }
+
+  setState(state: string, loop = true, stateWhenFinished = 'idle'): void {
+    const animation = this.getAnimation(state)
 
     if (animation && animation !== this.animation) {
       animation.loop = loop
       animation.gotoAndPlay(0)
       animation.visible = true
 
-      if (!loop) {
+      if (!loop && stateWhenFinished) {
         animation.onComplete = () => {
           this.complete$.next(this.state)
 
-          if (this.state === state) {
+          if (this.getFuzzyStateIndex(state) !== -1) {
             animation.onComplete = null
 
             this.setState(stateWhenFinished)
@@ -134,6 +124,6 @@ export class Animator extends Container {
       .map(({ index }) => index)
 
     // random of above candidates
-    return indexes[Math.floor(indexes.length * Math.random())]
+    return indexes[Math.floor(indexes.length * Math.random())] || -1
   }
 }

@@ -9,6 +9,7 @@ export declare type SceneOptions = {
     autoSize?: boolean;
     autoSort?: boolean;
     scale?: number;
+    nodeMaxEntries?: number;
 };
 export declare class SceneBase extends Lifecycle {
     readonly name: string;

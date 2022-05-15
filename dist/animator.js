@@ -28,12 +28,6 @@ const PIXI = __importStar(require("pixi.js"));
 const container_1 = require("./container");
 const rxjs_1 = require("rxjs");
 class Animator extends container_1.Container {
-    /**
-     * create animated container
-     * @param animations
-     * @param textures
-     * @param radius
-     */
     constructor(gameObject, data, { baseTexture }) {
         super(gameObject);
         this.name = 'Animator';
@@ -60,13 +54,7 @@ class Animator extends container_1.Container {
             child.scale.set(x, y);
         });
     }
-    /**
-     * set character animation
-     * @param animation
-     * @param loop
-     * @param stateWhenFinished
-     */
-    setState(state, loop = true, stateWhenFinished = 'idle') {
+    getAnimation(state) {
         const exactIndex = this.getExactStateIndex(state);
         const targetIndex = exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state);
         this.children
@@ -77,15 +65,18 @@ class Animator extends container_1.Container {
             child.visible = false;
             child.stop();
         });
-        const animation = this.children[targetIndex];
+        return this.children[targetIndex];
+    }
+    setState(state, loop = true, stateWhenFinished = 'idle') {
+        const animation = this.getAnimation(state);
         if (animation && animation !== this.animation) {
             animation.loop = loop;
             animation.gotoAndPlay(0);
             animation.visible = true;
-            if (!loop) {
+            if (!loop && stateWhenFinished) {
                 animation.onComplete = () => {
                     this.complete$.next(this.state);
-                    if (this.state === state) {
+                    if (this.getFuzzyStateIndex(state) !== -1) {
                         animation.onComplete = null;
                         this.setState(stateWhenFinished);
                     }
@@ -108,7 +99,7 @@ class Animator extends container_1.Container {
             .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
             .map(({ index }) => index);
         // random of above candidates
-        return indexes[Math.floor(indexes.length * Math.random())];
+        return indexes[Math.floor(indexes.length * Math.random())] || -1;
     }
 }
 exports.Animator = Animator;
