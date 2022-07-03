@@ -1,5 +1,5 @@
 import { Subject } from "rxjs/internal/Subject";
-import { Ellipse } from "detect-collisions";
+import { BodyOptions, Ellipse } from "detect-collisions";
 import { GameObject } from "./game-object";
 import { IComponent } from "./lifecycle";
 import { Component } from "./component";
@@ -14,9 +14,10 @@ export class CircleBody extends Ellipse implements IComponent {
     gameObject: GameObject,
     radiusX: number,
     radiusY: number = radiusX,
-    step?: number
+    step?: number,
+    options?: BodyOptions
   ) {
-    super(gameObject, radiusX, radiusY, step);
+    super(gameObject, radiusX, radiusY, step, options);
 
     if (!radiusX || !radiusY) {
       throw new Error("CircleBody radius can't be 0!");

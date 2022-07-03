@@ -5,8 +5,8 @@ const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
 const component_1 = require("./component");
 class PolygonBody extends detect_collisions_1.Polygon {
-    constructor(gameObject, points) {
-        super(gameObject, points.map(([x, y]) => ({ x, y })));
+    constructor(gameObject, points, options) {
+        super(gameObject, points, options);
         this.name = 'PolygonBody';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();

@@ -1,5 +1,5 @@
 import { Subject } from "rxjs/internal/Subject";
-import { Polygon } from "detect-collisions";
+import { BodyOptions, Polygon, Vector } from "detect-collisions";
 import { GameObject } from "./game-object";
 import { IComponent } from "./lifecycle";
 import { Component } from "./component";
@@ -10,11 +10,8 @@ export class PolygonBody extends Polygon implements IComponent {
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
-  constructor(gameObject: GameObject, points: number[][]) {
-    super(
-      gameObject,
-      points.map(([x, y]) => ({ x, y }))
-    );
+  constructor(gameObject: GameObject, points: Vector[], options?: BodyOptions) {
+    super(gameObject, points, options);
 
     this.gameObject = gameObject;
     this.gameObject.addComponent(this);
