@@ -8,7 +8,7 @@ const animator_1 = require("../animator");
 function createSprite({ scene, data, texture }) {
     // a base molecule
     const gameObject = new game_object_1.GameObject('Sprite');
-    // create body to detect-collisions
+    // create body
     gameObject.body = new circle_body_1.CircleBody(gameObject, 20, 14);
     gameObject.body.setPosition(Math.random() * innerWidth, Math.random() * innerHeight);
     // create animator with few animations from json + texture
