@@ -2,9 +2,9 @@
 
 set of classes to better organize 2d game development
 
-[![GitHub version](https://badge.fury.io/gh/Prozi%2Foneforall.svg)](https://badge.fury.io/gh/Prozi%2Foneforall)
-[<img src="https://snyk.io/test/github/Prozi/oneforall/badge.svg" alt="https://snyk.io/test/github/Prozi/oneforall" />](https://snyk.io/test/github/Prozi/oneforall)
-[<img src="https://circleci.com/gh/Prozi/oneforall.svg?style=svg" alt="https://circleci.com/gh/Prozi/oneforall" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
+[<img src="https://img.shields.io/npm/v/@jacekpietal/oneforall?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@jacekpietal/oneforall?activeTab=versions)
+[<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
+[<img src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge" alt="build status" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
 
 - [Unity inspired architecture](https://docs.unity3d.com/Manual/CreatingGameplay.html)
 - [state management](https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867)
@@ -78,7 +78,7 @@ export function createSprite({ scene, data, texture }) {
   // a base molecule
   const gameObject: any = new GameObject('Sprite')
 
-  // create body to detect-collisions
+  // create body
   gameObject.body = new CircleBody(gameObject, 20)
   gameObject.body.setPosition(
     Math.random() * innerWidth,

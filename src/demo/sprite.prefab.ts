@@ -16,7 +16,7 @@ export function createSprite({ scene, data, texture }) {
   // a base molecule
   const gameObject: TGameObject = new GameObject('Sprite') as TGameObject;
 
-  // create body to detect-collisions
+  // create body
   gameObject.body = new CircleBody(gameObject, 20, 14);
   gameObject.body.setPosition(
     Math.random() * innerWidth,
