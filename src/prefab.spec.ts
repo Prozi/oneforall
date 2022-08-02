@@ -31,7 +31,7 @@ describe("GIVEN Prefab", () => {
       "Soldier",
       async (go: GameObject & any) => {
         go.state = new StateMachine(go);
-        go.sprite = new Sprite(go, PIXI.Texture.WHITE);
+        go.sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
         go.body = new CircleBody(go, 40);
         go.body.x = Math.random() * innerWidth;
