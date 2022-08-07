@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^6.3.1",
+    "detect-collisions": "^6.3.5",
     "latermom": "^1.0.5",
     "rxjs": "^7.5.6"
   },
