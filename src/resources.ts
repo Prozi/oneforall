@@ -16,8 +16,8 @@ export class Resources {
     });
   }
 
-  static loadResource(path: string): Promise<PIXI.ILoaderResource> {
-    const resource: PIXI.ILoaderResource = PIXI.Loader.shared.resources[path];
+  static loadResource(path: string): Promise<PIXI.LoaderResource> {
+    const resource: PIXI.LoaderResource = PIXI.Loader.shared.resources[path];
 
     if (resource) {
       return Promise.resolve(resource);
@@ -39,7 +39,7 @@ export class Resources {
 
   static loadResources(
     resources: string[]
-  ): Promise<{ [name: string]: PIXI.ILoaderResource }> {
+  ): Promise<{ [name: string]: PIXI.LoaderResource }> {
     return new Promise((resolve) => {
       const loader: PIXI.Loader = new PIXI.Loader();
 
@@ -52,7 +52,7 @@ export class Resources {
     });
   }
 
-  async get(url: string): Promise<PIXI.ILoaderResource> {
+  async get(url: string): Promise<PIXI.LoaderResource> {
     return this.cache.get(url);
   }
 }
