@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^6.5.5",
+    "detect-collisions": "^6.5.7",
     "latermom": "^1.0.5",
     "rxjs": "^7.5.7"
   },
