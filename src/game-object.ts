@@ -26,7 +26,7 @@ export class GameObject extends Lifecycle {
   }
 
   update(): void {
-    this.components.forEach((component: ILifecycle) => {
+    this.components?.forEach((component: ILifecycle) => {
       component.update();
     });
 
@@ -34,7 +34,7 @@ export class GameObject extends Lifecycle {
   }
 
   destroy(): void {
-    this.components.forEach((component: ILifecycle) => {
+    this.components?.forEach((component: ILifecycle) => {
       component.destroy();
     });
 
