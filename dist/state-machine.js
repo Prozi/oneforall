@@ -4,9 +4,9 @@ exports.StateMachine = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const component_1 = require("./component");
 class StateMachine extends component_1.Component {
-    constructor(gameObject, initialState = 'INITIAL_STATE') {
+    constructor(gameObject, initialState = "INITIAL_STATE") {
         super(gameObject);
-        this.name = 'StateMachine';
+        this.name = "StateMachine";
         this.state$ = new Subject_1.Subject();
         this.change$ = new Subject_1.Subject();
         this.validators = {};
@@ -35,7 +35,7 @@ class StateMachine extends component_1.Component {
         if (!this.state) {
             return true;
         }
-        const fromAllStates = this.validators['*'] || [];
+        const fromAllStates = this.validators["*"] || [];
         const fromCurrentState = this.validators[this.state] || [];
         return [...fromAllStates, ...fromCurrentState].every((validator) => validator(newState));
     }

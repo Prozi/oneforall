@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import * as PIXI from "pixi.js";
 export declare class Resources {
     private cache;
     constructor(path?: string);

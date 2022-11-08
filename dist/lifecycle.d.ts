@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
+import { Subject } from "rxjs/internal/Subject";
+import { GameObject } from "./game-object";
 export interface ILifecycle {
     readonly name: string;
     update$?: Subject<void>;

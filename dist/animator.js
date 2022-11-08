@@ -31,10 +31,10 @@ const container_1 = require("./container");
 class Animator extends container_1.Container {
     constructor(gameObject, data, { baseTexture }) {
         super(gameObject);
-        this.name = 'Animator';
+        this.name = "Animator";
         this.complete$ = new Subject_1.Subject();
-        this.state$ = new BehaviorSubject_1.BehaviorSubject('');
-        Object.values(data.animations).forEach(frames => {
+        this.state$ = new BehaviorSubject_1.BehaviorSubject("");
+        Object.values(data.animations).forEach((frames) => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
                 const x = (frame * data.tilewidth) % data.width;
                 const y = Math.floor((frame * data.tilewidth) / data.width) * data.tileheight;
@@ -67,11 +67,11 @@ class Animator extends container_1.Container {
         });
         this.animation = animation;
     }
-    setState(state, loop = true, stateWhenFinished = 'idle') {
+    setState(state, loop = true, stateWhenFinished = "idle") {
         const index = this.getAnimationIndex(state);
         const animation = this.children[index];
         if (!animation || animation === this.animation) {
-            return '';
+            return "";
         }
         this.setAnimation(animation);
         animation.loop = loop;
@@ -99,7 +99,7 @@ class Animator extends container_1.Container {
         const indexes = this.states
             .map((direction, index) => ({
             direction,
-            index
+            index,
         }))
             .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
             .map(({ index }) => index);

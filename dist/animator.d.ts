@@ -1,8 +1,8 @@
-import * as PIXI from 'pixi.js';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
-import { Container } from './container';
+import * as PIXI from "pixi.js";
+import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { Subject } from "rxjs/internal/Subject";
+import { GameObject } from "./game-object";
+import { Container } from "./container";
 export interface IAnimatorData {
     animations: {
         [name: string]: (number | string)[];

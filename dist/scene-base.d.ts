@@ -1,8 +1,8 @@
-import { Subject } from 'rxjs/internal/Subject';
-import { System } from 'detect-collisions';
-import { GameObject } from './game-object';
-import { Lifecycle } from './lifecycle';
-import { IStage } from './stage-base';
+import { Subject } from "rxjs/internal/Subject";
+import { System } from "detect-collisions";
+import { GameObject } from "./game-object";
+import { Lifecycle } from "./lifecycle";
+import { IStage } from "./stage-base";
 export interface SceneOptions {
     name?: string;
     visible?: boolean;

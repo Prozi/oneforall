@@ -1,8 +1,8 @@
-import { Subject } from 'rxjs/internal/Subject';
-import { Scene } from './scene';
-import { ILifecycle, Lifecycle } from './lifecycle';
-import { Prefab } from './prefab';
-import { SceneBase } from './scene-base';
+import { Subject } from "rxjs/internal/Subject";
+import { Scene } from "./scene";
+import { ILifecycle, Lifecycle } from "./lifecycle";
+import { Prefab } from "./prefab";
+import { SceneBase } from "./scene-base";
 export declare class GameObject extends Lifecycle {
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;

@@ -1,5 +1,5 @@
-import { GameObject } from './game-object';
-import { Lifecycle } from './lifecycle';
+import { GameObject } from "./game-object";
+import { Lifecycle } from "./lifecycle";
 export declare class Component extends Lifecycle {
     readonly name: string;
     readonly gameObject: GameObject;

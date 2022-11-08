@@ -73,7 +73,7 @@ class Scene extends scene_base_1.SceneBase {
     }
     enableAutoSize() {
         this.pixi.renderer.resize(innerWidth, innerHeight);
-        (0, fromEvent_1.fromEvent)(window, 'resize')
+        (0, fromEvent_1.fromEvent)(window, "resize")
             .pipe((0, operators_1.takeUntil)(this.destroy$))
             .subscribe(() => {
             this.pixi.renderer.resize(innerWidth, innerHeight);

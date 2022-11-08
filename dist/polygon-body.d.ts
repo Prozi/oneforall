@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs/internal/Subject';
-import { BodyOptions, Polygon, Vector } from 'detect-collisions';
-import { GameObject } from './game-object';
-import { ILifecycle } from './lifecycle';
+import { Subject } from "rxjs/internal/Subject";
+import { BodyOptions, Polygon, Vector } from "detect-collisions";
+import { GameObject } from "./game-object";
+import { ILifecycle } from "./lifecycle";
 export declare class PolygonBody extends Polygon implements ILifecycle {
     readonly name: string;
     readonly gameObject: GameObject;

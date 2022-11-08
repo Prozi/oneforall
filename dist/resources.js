@@ -38,7 +38,7 @@ const latermom_1 = __importDefault(require("latermom"));
 const PIXI = __importStar(require("pixi.js"));
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
-    constructor(path = '') {
+    constructor(path = "") {
         this.cache = new latermom_1.default(async (url) => {
             try {
                 return await Resources_1.loadResource(`${path}${url}`);
@@ -53,19 +53,19 @@ let Resources = Resources_1 = class Resources {
         if (resource) {
             return Promise.resolve(resource);
         }
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const loader = new PIXI.Loader();
             loader.add(path);
             loader.load(() => {
                 Object.assign(PIXI.Loader.shared.resources, {
-                    [path]: loader.resources[path]
+                    [path]: loader.resources[path],
                 });
                 resolve(loader.resources[path]);
             });
         });
     }
     static loadResources(resources) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const loader = new PIXI.Loader();
             loader.add(resources);
             loader.load(() => {

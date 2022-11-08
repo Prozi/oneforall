@@ -30,7 +30,7 @@ const component_1 = require("./component");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
         super(texture);
-        this.name = 'Sprite';
+        this.name = "Sprite";
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;

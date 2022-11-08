@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import * as PIXI from "pixi.js";
 export interface IStage {
     children: PIXI.DisplayObject[];
     scale: PIXI.Point;

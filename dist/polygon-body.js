@@ -7,7 +7,7 @@ const lifecycle_1 = require("./lifecycle");
 class PolygonBody extends detect_collisions_1.Polygon {
     constructor(gameObject, points, options) {
         super(gameObject, points, options);
-        this.name = 'PolygonBody';
+        this.name = "PolygonBody";
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;

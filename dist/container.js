@@ -30,7 +30,7 @@ const component_1 = require("./component");
 class Container extends PIXI.Container {
     constructor(gameObject) {
         super();
-        this.name = 'Container';
+        this.name = "Container";
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;

@@ -8,7 +8,7 @@ const stage_base_1 = require("./stage-base");
 class SceneBase extends lifecycle_1.Lifecycle {
     constructor(options = {}) {
         super();
-        this.name = 'Scene';
+        this.name = "Scene";
         this.children$ = new Subject_1.Subject();
         this.children = [];
         this.stage = new stage_base_1.StageBase();
