@@ -9,8 +9,8 @@ class SceneBase extends lifecycle_1.Lifecycle {
     constructor(options = {}) {
         super();
         this.name = 'Scene';
-        this.children = new Set();
         this.children$ = new Subject_1.Subject();
+        this.children = [];
         this.stage = new stage_base_1.StageBase();
         this.destroy$ = new Subject_1.Subject();
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
@@ -30,34 +30,43 @@ class SceneBase extends lifecycle_1.Lifecycle {
     }
     update() {
         this.physics.update();
-        Array.from(this.children.values()).forEach((child) => child.update());
+        this.children.forEach((child) => {
+            child.update();
+        });
         super.update();
     }
     destroy() {
         this.stop();
+        while (this.children.length) {
+            this.children.pop().destroy();
+        }
         super.destroy();
+        this.children$.complete();
+        this.children$ = undefined;
     }
     addChild(child) {
-        if (this.children.has(child)) {
+        const index = this.children.indexOf(child);
+        if (index !== -1) {
             return;
         }
         child.parent = this;
-        this.children.add(child);
+        this.children.push(child);
         this.children$.next();
     }
     removeChild(child) {
-        if (!this.children.has(child)) {
+        const index = this.children.indexOf(child);
+        if (index === -1) {
             return;
         }
         child.parent = null;
-        this.children.delete(child);
+        this.children.splice(index, 1);
         this.children$.next();
     }
     getChildOfType(type) {
-        return Array.from(this.children.values()).find(({ name }) => name === type);
+        return this.children.find(({ name }) => name === type);
     }
     getChildrenOfType(type) {
-        return Array.from(this.children.values()).filter(({ name }) => name === type);
+        return this.children.filter(({ name }) => name === type);
     }
 }
 exports.SceneBase = SceneBase;

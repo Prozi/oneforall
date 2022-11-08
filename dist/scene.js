@@ -62,9 +62,9 @@ class Scene extends scene_base_1.SceneBase {
         super.stop();
     }
     destroy() {
+        super.destroy();
         this.stage.parent.removeChild(this.stage);
         this.stage.destroy();
-        super.destroy();
     }
     enableAutoSort() {
         this.update$.pipe((0, operators_1.takeUntil)(this.destroy$)).subscribe(() => {

@@ -1,13 +1,13 @@
 import { Subject } from 'rxjs/internal/Subject';
-import { Scene } from '.';
-import { IComponent, ILifecycle } from './lifecycle';
+import { Scene } from './scene';
+import { ILifecycle, Lifecycle } from './lifecycle';
 import { Prefab } from './prefab';
 import { SceneBase } from './scene-base';
-export declare class GameObject implements ILifecycle {
+export declare class GameObject extends Lifecycle {
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;
-    readonly components: IComponent[];
-    parent: Scene | SceneBase;
+    components: ILifecycle[];
+    parent?: Scene | SceneBase;
     name: string;
     x: number;
     y: number;
@@ -15,9 +15,9 @@ export declare class GameObject implements ILifecycle {
     static instantiate(prefab: Prefab): Promise<GameObject>;
     update(): void;
     destroy(): void;
-    addComponent(component: IComponent): boolean;
-    removeComponent(component: IComponent): boolean;
-    getComponentOfType(type: string): IComponent;
-    getComponentsOfType(type: string): IComponent[];
+    addComponent(component: ILifecycle): boolean;
+    removeComponent(component: ILifecycle): boolean;
+    getComponentOfType(type: string): ILifecycle;
+    getComponentsOfType(type: string): ILifecycle[];
 }
 //# sourceMappingURL=game-object.d.ts.map

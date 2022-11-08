@@ -24,5 +24,6 @@ __exportStar(require("./polygon-body"), exports);
 __exportStar(require("./prefab"), exports);
 __exportStar(require("./resources"), exports);
 __exportStar(require("./scene"), exports);
+__exportStar(require("./scene-base"), exports);
 __exportStar(require("./sprite"), exports);
 __exportStar(require("./state-machine"), exports);

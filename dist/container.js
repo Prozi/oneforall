@@ -43,13 +43,13 @@ class Container extends PIXI.Container {
         }
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        component_1.Component.update(this);
+        component_1.Component.prototype.update.call(this);
     }
     destroy() {
         var _a;
         (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.stage.removeChild(this);
         super.destroy();
-        component_1.Component.destroy(this);
+        component_1.Component.prototype.destroy.call(this);
     }
 }
 exports.Container = Container;

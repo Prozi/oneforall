@@ -2,22 +2,17 @@ import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 export interface ILifecycle {
     readonly name: string;
-    readonly update$: Subject<void>;
-    readonly destroy$: Subject<void>;
+    update$?: Subject<void>;
+    destroy$?: Subject<void>;
     update(): void;
     destroy(): void;
-}
-export interface IComponent extends ILifecycle {
-    readonly gameObject: GameObject;
-    key?: string;
 }
 export declare class Lifecycle implements ILifecycle {
     readonly name: string;
-    readonly update$: Subject<void>;
-    readonly destroy$: Subject<void>;
-    static destroy(lifecycle: ILifecycle): void;
-    static update(lifecycle: ILifecycle): void;
-    update(): void;
+    update$?: Subject<void>;
+    destroy$?: Subject<void>;
+    gameObject?: GameObject;
     destroy(): void;
+    update(): void;
 }
 //# sourceMappingURL=lifecycle.d.ts.map

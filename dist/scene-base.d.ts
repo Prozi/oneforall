@@ -13,8 +13,8 @@ export interface SceneOptions {
 }
 export declare class SceneBase extends Lifecycle {
     readonly name: string;
-    readonly children: Set<GameObject>;
-    readonly children$: Subject<void>;
+    children$: Subject<void>;
+    children: GameObject[];
     stage: IStage;
     physics: System;
     scale: number;

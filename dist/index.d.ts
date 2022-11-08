@@ -8,6 +8,7 @@ export * from './polygon-body';
 export * from './prefab';
 export * from './resources';
 export * from './scene';
+export * from './scene-base';
 export * from './sprite';
 export * from './state-machine';
 //# sourceMappingURL=index.d.ts.map

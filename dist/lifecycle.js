@@ -8,18 +8,16 @@ class Lifecycle {
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
     }
-    static destroy(lifecycle) {
-        lifecycle.destroy$.next();
-        lifecycle.destroy$.complete();
-    }
-    static update(lifecycle) {
-        lifecycle.update$.next();
+    destroy() {
+        this.update$.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
+        this.update$ = undefined;
+        this.destroy$ = undefined;
+        this.gameObject = undefined;
     }
     update() {
-        Lifecycle.update(this);
-    }
-    destroy() {
-        Lifecycle.destroy(this);
+        this.update$.next();
     }
 }
 exports.Lifecycle = Lifecycle;

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CircleBody = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
-const component_1 = require("./component");
+const lifecycle_1 = require("./lifecycle");
 class CircleBody extends detect_collisions_1.Ellipse {
     constructor(gameObject, radiusX, radiusY = radiusX, step, options) {
         super(gameObject, radiusX, radiusY, step, options);
@@ -19,10 +19,10 @@ class CircleBody extends detect_collisions_1.Ellipse {
     update() {
         this.gameObject.x = this.x;
         this.gameObject.y = this.y;
-        component_1.Component.update(this);
+        lifecycle_1.Lifecycle.prototype.update.call(this);
     }
     destroy() {
-        component_1.Component.destroy(this);
+        lifecycle_1.Lifecycle.prototype.destroy.call(this);
     }
 }
 exports.CircleBody = CircleBody;
