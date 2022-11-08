@@ -19,9 +19,9 @@ export class Lifecycle implements ILifecycle {
   gameObject?: GameObject;
 
   destroy(): void {
-    this.update$.complete();
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.update$?.complete();
+    this.destroy$?.next();
+    this.destroy$?.complete();
     this.update$ = undefined;
     this.destroy$ = undefined;
     this.gameObject = undefined;
