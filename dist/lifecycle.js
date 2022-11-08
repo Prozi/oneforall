@@ -4,7 +4,7 @@ exports.Lifecycle = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 class Lifecycle {
     constructor() {
-        this.name = "Lifecycle";
+        this.name = 'Lifecycle';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
     }

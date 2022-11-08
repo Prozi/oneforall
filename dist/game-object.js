@@ -4,7 +4,7 @@ exports.GameObject = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
 class GameObject extends lifecycle_1.Lifecycle {
-    constructor(name = "GameObject", x = 0, y = 0) {
+    constructor(name = 'GameObject', x = 0, y = 0) {
         super();
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
@@ -17,18 +17,19 @@ class GameObject extends lifecycle_1.Lifecycle {
         return prefab.instantiate();
     }
     update() {
-        this.components.forEach((component) => {
+        var _a;
+        (_a = this.components) === null || _a === void 0 ? void 0 : _a.forEach((component) => {
             component.update();
         });
         super.update();
     }
     destroy() {
-        var _a;
-        this.components.forEach((component) => {
+        var _a, _b;
+        (_a = this.components) === null || _a === void 0 ? void 0 : _a.forEach((component) => {
             component.destroy();
         });
         this.components = undefined;
-        (_a = this.parent) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        (_b = this.parent) === null || _b === void 0 ? void 0 : _b.removeChild(this);
         super.destroy();
     }
     addComponent(component) {
