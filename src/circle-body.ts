@@ -1,10 +1,9 @@
 import { Subject } from "rxjs/internal/Subject";
 import { BodyOptions, Ellipse } from "detect-collisions";
 import { GameObject } from "./game-object";
-import { IComponent } from "./lifecycle";
-import { Component } from "./component";
+import { ILifecycle, Lifecycle } from "./lifecycle";
 
-export class CircleBody extends Ellipse implements IComponent {
+export class CircleBody extends Ellipse implements ILifecycle {
   readonly name: string = "CircleBody";
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
@@ -31,10 +30,10 @@ export class CircleBody extends Ellipse implements IComponent {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
 
-    Component.update(this);
+    Lifecycle.prototype.update.call(this);
   }
 
   destroy(): void {
-    Component.destroy(this);
+    Lifecycle.prototype.destroy.call(this);
   }
 }

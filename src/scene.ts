@@ -44,10 +44,9 @@ export class Scene extends SceneBase {
   }
 
   destroy(): void {
+    super.destroy();
     this.stage.parent.removeChild(this.stage);
     this.stage.destroy();
-
-    super.destroy();
   }
 
   enableAutoSort(): void {

@@ -20,7 +20,7 @@ describe("GIVEN SceneBase", () => {
     scene.addChild(new GameObject());
     scene.addChild(new GameObject());
 
-    expect(scene.children.size).toBe(3);
+    expect(scene.children.length).toBe(3);
   });
 
   it("THEN scene propagates update to gameobject to component", () => {

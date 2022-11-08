@@ -1,5 +1,5 @@
 import "pixi-shim";
-import { GameObject } from ".";
+import { GameObject } from "./game-object";
 
 describe("GIVEN index.ts", () => {
   it("THEN basic imports work", () => {

@@ -1,7 +1,7 @@
 import { GameObject } from "./game-object";
-import { IComponent, Lifecycle } from "./lifecycle";
+import { Lifecycle } from "./lifecycle";
 
-export class Component extends Lifecycle implements IComponent {
+export class Component extends Lifecycle {
   readonly name: string = "Component";
   readonly gameObject: GameObject;
 
@@ -11,17 +11,10 @@ export class Component extends Lifecycle implements IComponent {
     this.gameObject.addComponent(this);
   }
 
-  static destroy(component: Component): void {
-    component.gameObject.removeComponent(component);
-
-    Lifecycle.destroy(component);
-  }
-
-  static update(component: Component): void {
-    Lifecycle.update(component);
-  }
-
   destroy(): void {
-    Component.destroy(this);
+    this.gameObject.removeComponent?.(this);
+    this.gameObject.parent?.removeChild?.(this.gameObject);
+
+    super.destroy();
   }
 }

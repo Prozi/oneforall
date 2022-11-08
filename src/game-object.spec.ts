@@ -62,17 +62,24 @@ describe("GIVEN GameObject", () => {
   it("THEN you can destroy 1000 bodies without problem", () => {
     const scene = new Scene();
 
+    jest.spyOn(scene, "addChild");
+    jest.spyOn(scene, "removeChild");
+
     for (let i = 0; i < 1000; i++) {
       const go: GameObject = new GameObject();
       const body = new CircleBody(go, 100);
 
-      scene.physics.remove(body);
+      scene.addChild(go);
 
-      go.destroy();
-
-      expect(go.components.length).toBe(0);
+      expect(go.components.length).toBe(1);
     }
 
-    expect(scene.children.size).toBe(0);
+    expect(scene.addChild).toHaveBeenCalledTimes(1000);
+    expect(scene.children.length).toBe(1000);
+
+    scene.destroy();
+
+    expect(scene.removeChild).toHaveBeenCalledTimes(1000);
+    expect(scene.children.length).toBe(0);
   });
 });

@@ -15,9 +15,9 @@ export interface SceneOptions {
 
 export class SceneBase extends Lifecycle {
   readonly name: string = "Scene";
-  readonly children: Set<GameObject> = new Set();
-  readonly children$: Subject<void> = new Subject();
 
+  children$: Subject<void> = new Subject();
+  children: GameObject[] = [];
   stage: IStage = new StageBase();
   physics: System;
   scale: number;
@@ -49,49 +49,51 @@ export class SceneBase extends Lifecycle {
 
   update(): void {
     this.physics.update();
-
-    Array.from(this.children.values()).forEach((child: GameObject) =>
-      child.update()
-    );
-
+    this.children.forEach((child: GameObject) => {
+      child.update();
+    });
     super.update();
   }
 
   destroy(): void {
     this.stop();
-
+    while (this.children.length) {
+      this.children.pop().destroy();
+    }
     super.destroy();
+    this.children$.complete();
+    this.children$ = undefined;
   }
 
   addChild(child: GameObject): void {
-    if (this.children.has(child)) {
+    const index = this.children.indexOf(child);
+    if (index !== -1) {
       return;
     }
 
     child.parent = this;
 
-    this.children.add(child);
+    this.children.push(child);
     this.children$.next();
   }
 
   removeChild(child: GameObject): void {
-    if (!this.children.has(child)) {
+    const index = this.children.indexOf(child);
+    if (index === -1) {
       return;
     }
 
     child.parent = null;
 
-    this.children.delete(child);
+    this.children.splice(index, 1);
     this.children$.next();
   }
 
   getChildOfType(type: string): GameObject {
-    return Array.from(this.children.values()).find(({ name }) => name === type);
+    return this.children.find(({ name }) => name === type);
   }
 
   getChildrenOfType(type: string): GameObject[] {
-    return Array.from(this.children.values()).filter(
-      ({ name }) => name === type
-    );
+    return this.children.filter(({ name }) => name === type);
   }
 }
