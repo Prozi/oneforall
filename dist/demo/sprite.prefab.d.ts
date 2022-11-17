@@ -2,7 +2,7 @@ import { GameObject } from '../game-object';
 import { CircleBody } from '../circle-body';
 import { Animator } from '../animator';
 import { Vector } from 'detect-collisions';
-export declare type TGameObject = GameObject & {
+export type TGameObject = GameObject & {
     body: CircleBody;
     sprite: Animator;
     target?: Vector;
