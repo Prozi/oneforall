@@ -16,43 +16,33 @@ export class Resources {
     });
   }
 
-  static loadResource(path: string): Promise<PIXI.LoaderResource> {
-    const resource: PIXI.LoaderResource = PIXI.Loader.shared.resources[path];
+  static loadResource<T = PIXI.Resource>(path: string): Promise<T> {
+    const { loader } = PIXI.Assets;
 
-    if (resource) {
-      return Promise.resolve(resource);
-    }
-
-    return new Promise((resolve) => {
-      const loader: PIXI.Loader = new PIXI.Loader();
-
-      loader.add(path);
-      loader.load(() => {
-        Object.assign(PIXI.Loader.shared.resources, {
-          [path]: loader.resources[path],
-        });
-
-        resolve(loader.resources[path]);
-      });
-    });
+    return loader.load(path);
   }
 
-  static loadResources(
+  static loadResources<T = PIXI.Resource>(
     resources: string[]
-  ): Promise<{ [name: string]: PIXI.LoaderResource }> {
+  ): Promise<{ [name: string]: T }> {
+    const promises = resources.map((path) => PIXI.Assets.load(path));
+
     return new Promise((resolve) => {
-      const loader: PIXI.Loader = new PIXI.Loader();
-
-      loader.add(resources);
-      loader.load(() => {
-        Object.assign(PIXI.Loader.shared.resources, loader.resources);
-
-        resolve(PIXI.Loader.shared.resources);
-      });
+      Promise.all(promises).then((resolved) =>
+        resolve(
+          resolved.reduce(
+            (result, loaded, index) => ({
+              ...result,
+              [resources[index]]: loaded,
+            }),
+            {}
+          )
+        )
+      );
     });
   }
 
-  async get(url: string): Promise<PIXI.LoaderResource> {
+  async get<T = PIXI.Resource>(url: string): Promise<T> {
     return this.cache.get(url);
   }
 }

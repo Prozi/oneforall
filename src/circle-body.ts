@@ -13,7 +13,7 @@ export class CircleBody extends Ellipse implements ILifecycle {
     gameObject: GameObject,
     radiusX: number,
     radiusY: number = radiusX,
-    step?: number,
+    step = 16,
     options?: BodyOptions
   ) {
     super(gameObject, radiusX, radiusY, step, options);

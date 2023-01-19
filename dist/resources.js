@@ -49,29 +49,13 @@ let Resources = Resources_1 = class Resources {
         });
     }
     static loadResource(path) {
-        const resource = PIXI.Loader.shared.resources[path];
-        if (resource) {
-            return Promise.resolve(resource);
-        }
-        return new Promise(resolve => {
-            const loader = new PIXI.Loader();
-            loader.add(path);
-            loader.load(() => {
-                Object.assign(PIXI.Loader.shared.resources, {
-                    [path]: loader.resources[path]
-                });
-                resolve(loader.resources[path]);
-            });
-        });
+        const { loader } = PIXI.Assets;
+        return loader.load(path);
     }
     static loadResources(resources) {
+        const promises = resources.map(path => PIXI.Assets.load(path));
         return new Promise(resolve => {
-            const loader = new PIXI.Loader();
-            loader.add(resources);
-            loader.load(() => {
-                Object.assign(PIXI.Loader.shared.resources, loader.resources);
-                resolve(PIXI.Loader.shared.resources);
-            });
+            Promise.all(promises).then(resolved => resolve(resolved.reduce((result, loaded, index) => (Object.assign(Object.assign({}, result), { [resources[index]]: loaded })), {})));
         });
     }
     async get(url) {
