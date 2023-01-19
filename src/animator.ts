@@ -44,7 +44,7 @@ export class Animator extends Container {
 
           texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-          return texture;
+          return { texture, time: 16.67 };
         })
       );
 

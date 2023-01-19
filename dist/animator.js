@@ -41,7 +41,7 @@ class Animator extends container_1.Container {
                 const rect = new PIXI.Rectangle(x, y, data.tilewidth, data.tileheight);
                 const texture = new PIXI.Texture(baseTexture, rect);
                 texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-                return texture;
+                return { texture, time: 16.67 };
             }));
             animatedSprite.animationSpeed = 0.1;
             animatedSprite.anchor.set(0.5, 0.5);
