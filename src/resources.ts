@@ -1,19 +1,19 @@
-import Cache from "latermom";
 import * as PIXI from "pixi.js";
+import { Cache } from "latermom";
 import { Injectable } from "@jacekpietal/dependency-injection";
 
 @Injectable
 export class Resources {
-  private cache: Cache;
+  private cache: Cache<Promise<PIXI.Resource>>;
 
-  constructor(path = "") {
+  constructor(path = "", cacheSize = 64) {
     this.cache = new Cache(async (url: string) => {
       try {
         return await Resources.loadResource(`${path}${url}`);
       } catch (err) {
         console.error(err);
       }
-    });
+    }, cacheSize);
   }
 
   static loadResource<T = PIXI.Resource>(path: string): Promise<T> {
@@ -42,7 +42,7 @@ export class Resources {
     });
   }
 
-  async get<T = PIXI.Resource>(url: string): Promise<T> {
+  async get(url: string): Promise<PIXI.Resource> {
     return this.cache.get(url);
   }
 }

@@ -28,25 +28,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var Resources_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Resources = void 0;
-const latermom_1 = __importDefault(require("latermom"));
 const PIXI = __importStar(require("pixi.js"));
+const latermom_1 = require("latermom");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
-    constructor(path = '') {
-        this.cache = new latermom_1.default(async (url) => {
+    constructor(path = '', cacheSize = 64) {
+        this.cache = new latermom_1.Cache(async (url) => {
             try {
                 return await Resources_1.loadResource(`${path}${url}`);
             }
             catch (err) {
                 console.error(err);
             }
-        });
+        }, cacheSize);
     }
     static loadResource(path) {
         const { loader } = PIXI.Assets;
