@@ -1899,20 +1899,21 @@ char-regex@^1.0.2:
   resolved "https://registry.npmjs.org/char-regex/-/char-regex-1.0.2.tgz"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chef-core@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/chef-core/-/chef-core-1.3.0.tgz"
-  integrity sha512-Sy5XDPO31pXP2Bl2Mu0mTU7V+3xQZWD0reogZo4S+rnp/RTThkbkevitPb63wyfr4b1msYfAJemBQa4ZAl/S9A==
+chef-core@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/chef-core/-/chef-core-1.4.1.tgz#b60fb7ac67bd71f56790982ca130bd366c7d8da2"
+  integrity sha512-pP/Fwmgw5vejX7z0SAR2bBsOZ+CYOywRfxAY47dxxWbMoB5GZ9+6e8ODBwNVtvM1IgrY2NwZeP1l3WWBF9qDig==
   dependencies:
+    latermom "^2.0.1"
     mime-types "^2.1.35"
 
-chef-express@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/chef-express/-/chef-express-1.3.0.tgz"
-  integrity sha512-9UESQUQ+zRE2ifrdnhVvlJ9m9lgW2J78dagH2a+Mxw60lwcM7P4dKdjbT8hCvFSy9vS24ahgsO90pa2tqjw8EQ==
+chef-express@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/chef-express/-/chef-express-1.4.0.tgz#dc2dc7509523422e42dfaab6761716a8fa39102c"
+  integrity sha512-rODXArqZzn4btYBbdfwhU6sU+6P9EQdNxPuG8wroqicNXkRBvPjQGE/QCYHOvR45CBMOM28KlL1/LFeJUC8Xpg==
   dependencies:
-    chef-core "^1.3.0"
-    express "^4.18.1"
+    chef-core "^1.4.1"
+    express "^4.18.2"
 
 chokidar@^3.5.3:
   version "3.5.3"
@@ -2186,10 +2187,10 @@ destroy@1.2.0:
   resolved "https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-7.0.0.tgz#8aee2134a979e247dbdc6da7495b534de6c1b050"
-  integrity sha512-bzMas2EvqCg3mCZaoAFUoyb+RXGIfUaJb7WXXcoC27SXW+DF3uq7LRqnm7y+YnOoJNAI+KfruqdD231ULwKdxg==
+detect-collisions@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-7.0.1.tgz#e57a5b8063061af95eb308c09ef44defa97a51fc"
+  integrity sha512-t5v8V4gL58CqAoo7SN2+CPaIXT/5pBOXtKwLGo157+1MjSaVaZAsHhZOZFTdSN+iWBO5CvKfmzXeNGAyobwXYQ==
   dependencies:
     "@types/rbush" "^3.0.0"
     "@types/sat" "^0.0.31"
@@ -2425,9 +2426,9 @@ expect@^29.4.3:
     jest-message-util "^29.4.3"
     jest-util "^29.4.3"
 
-express@^4.17.3, express@^4.18.1:
+express@^4.17.3, express@^4.18.2:
   version "4.18.2"
-  resolved "https://registry.npmjs.org/express/-/express-4.18.2.tgz"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
   integrity sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ==
   dependencies:
     accepts "~1.3.8"
