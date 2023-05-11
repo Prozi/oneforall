@@ -1,10 +1,8 @@
 {
-  "width": 642,
-  "height": 497,
+  "cols": 6,
+  "rows": 7,
   "realheight": 50,
   "realwidth": 50,
-  "tilewidth": 107,
-  "tileheight": 71,
   "tileset": "cave-boy.png",
   "count": 37,
   "animations": {

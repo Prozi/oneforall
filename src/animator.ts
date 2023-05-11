@@ -6,10 +6,10 @@ import { Container } from "./container";
 
 export interface IAnimatorData {
   animations: { [name: string]: (number | string)[] };
-  width: number;
-  height: number;
-  tilewidth: number;
-  tileheight: number;
+  cols: number;
+  rows: number;
+  animationSpeed?: number;
+  anchor?: { x: number; y: number };
 }
 
 export class Animator extends Container {
@@ -23,38 +23,45 @@ export class Animator extends Container {
 
   constructor(
     gameObject: GameObject,
-    data: IAnimatorData,
-    { baseTexture }: PIXI.Texture
+    {
+      animations,
+      cols,
+      rows,
+      animationSpeed = 200,
+      anchor = { x: 0.5, y: 0.5 },
+    }: IAnimatorData,
+    { width, height, baseTexture }: PIXI.Texture
   ) {
     super(gameObject);
 
-    Object.values(data.animations).forEach((frames) => {
+    const tilewidth = width / cols;
+    const tileheight = height / rows;
+
+    Object.values(animations).forEach((frames) => {
       const animatedSprite = new PIXI.AnimatedSprite(
         frames.map((frame: number) => {
-          const x = (frame * data.tilewidth) % data.width;
-          const y =
-            Math.floor((frame * data.tilewidth) / data.width) * data.tileheight;
+          const x = (frame * tilewidth) % width;
+          const y = Math.floor((frame * tilewidth) / width) * tileheight;
           const rect: PIXI.Rectangle = new PIXI.Rectangle(
             x,
             y,
-            data.tilewidth,
-            data.tileheight
+            tilewidth,
+            tileheight
           );
           const texture: PIXI.Texture = new PIXI.Texture(baseTexture, rect);
 
           texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-          return { texture, time: 16.67 };
+          return { texture, time: animationSpeed };
         })
       );
 
-      animatedSprite.animationSpeed = 0.1;
-      animatedSprite.anchor.set(0.5, 0.5);
+      animatedSprite.anchor.set(anchor.x, anchor.y);
 
       this.addChild(animatedSprite);
     }, {});
 
-    this.states = Object.keys(data.animations);
+    this.states = Object.keys(animations);
   }
 
   setScale(x = 1, y: number = x): void {

@@ -6,13 +6,11 @@
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "node",
-    "target": "es2017",
+    "target": "es2015",
     "module": "none",
     "outDir": "dist",
     "rootDir": "src",
-    "paths": {
-      "mini-signals": ["./node_modules/mini-signals/index.js"]
-    }
+    "skipLibCheck": true
   },
   "files": ["src/index.ts"],
   "include": ["src/*.ts", "src/**/*.ts"],

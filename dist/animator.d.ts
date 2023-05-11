@@ -7,10 +7,13 @@ export interface IAnimatorData {
     animations: {
         [name: string]: (number | string)[];
     };
-    width: number;
-    height: number;
-    tilewidth: number;
-    tileheight: number;
+    cols: number;
+    rows: number;
+    animationSpeed?: number;
+    anchor?: {
+        x: number;
+        y: number;
+    };
 }
 export declare class Animator extends Container {
     readonly name: string;
@@ -19,7 +22,7 @@ export declare class Animator extends Container {
     states: string[];
     state?: string;
     animation?: PIXI.AnimatedSprite;
-    constructor(gameObject: GameObject, data: IAnimatorData, { baseTexture }: PIXI.Texture);
+    constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: IAnimatorData, { width, height, baseTexture }: PIXI.Texture);
     setScale(x?: number, y?: number): void;
     getAnimationIndex(state: string): number;
     setAnimation(animation: PIXI.AnimatedSprite): void;

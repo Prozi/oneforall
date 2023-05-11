@@ -28,6 +28,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var Resources_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Resources = void 0;
@@ -36,14 +45,14 @@ const latermom_1 = require("latermom");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
     constructor(path = '', cacheSize = 64) {
-        this.cache = new latermom_1.Cache(async (url) => {
+        this.cache = new latermom_1.Cache((url) => __awaiter(this, void 0, void 0, function* () {
             try {
-                return await Resources_1.loadResource(`${path}${url}`);
+                return yield Resources_1.loadResource(`${path}${url}`);
             }
             catch (err) {
                 console.error(err);
             }
-        }, cacheSize);
+        }), cacheSize);
     }
     static loadResource(path) {
         const { loader } = PIXI.Assets;
@@ -55,8 +64,10 @@ let Resources = Resources_1 = class Resources {
             Promise.all(promises).then(resolved => resolve(resolved.reduce((result, loaded, index) => (Object.assign(Object.assign({}, result), { [resources[index]]: loaded })), {})));
         });
     }
-    async get(url) {
-        return this.cache.get(url);
+    get(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.cache.get(url);
+        });
     }
 };
 Resources = Resources_1 = __decorate([

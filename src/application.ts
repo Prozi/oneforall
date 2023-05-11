@@ -5,16 +5,11 @@ declare var jest: object;
 
 @Injectable
 export class Application extends PIXI.Application {
-  constructor(options: PIXI.IApplicationOptions = {}) {
+  constructor(options: Partial<PIXI.IApplicationOptions> = {}) {
     super({
       autoStart: false,
       sharedTicker: false,
       ...options,
     });
-
-    // silent fail in tests
-    if (typeof jest === "undefined") {
-      document.body.appendChild(this.view as HTMLCanvasElement);
-    }
   }
 }

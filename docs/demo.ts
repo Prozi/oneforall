@@ -12,6 +12,8 @@ async function start() {
     autoSort: true,
   });
 
+  document.body.appendChild(scene.pixi.view as any);
+
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
   const data = await Resources.loadResource<{ tileset: string }>(
     "./cave-boy.json"

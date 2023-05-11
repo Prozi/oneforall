@@ -35,10 +35,6 @@ const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Application = class Application extends PIXI.Application {
     constructor(options = {}) {
         super(Object.assign({ autoStart: false, sharedTicker: false }, options));
-        // silent fail in tests
-        if (typeof jest === 'undefined') {
-            document.body.appendChild(this.view);
-        }
     }
 };
 Application = __decorate([

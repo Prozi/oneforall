@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs/internal/Subject';
-import { System } from 'detect-collisions';
+import { System, Body } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { Lifecycle } from './lifecycle';
 import { IStage } from './stage-base';
@@ -11,12 +11,12 @@ export interface SceneOptions {
     scale?: number;
     nodeMaxEntries?: number;
 }
-export declare class SceneBase extends Lifecycle {
+export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
     readonly name: string;
     children$: Subject<void>;
     children: GameObject[];
     stage: IStage;
-    physics: System;
+    physics: System<TBody>;
     scale: number;
     destroy$: Subject<void>;
     animationFrame: number;

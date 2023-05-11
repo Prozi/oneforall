@@ -1,5 +1,5 @@
 import { Subject } from "rxjs/internal/Subject";
-import { System } from "detect-collisions";
+import { System, Body } from "detect-collisions";
 import { GameObject } from "./game-object";
 import { Lifecycle } from "./lifecycle";
 import { IStage, StageBase } from "./stage-base";
@@ -13,13 +13,13 @@ export interface SceneOptions {
   nodeMaxEntries?: number;
 }
 
-export class SceneBase extends Lifecycle {
+export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   readonly name: string = "Scene";
 
   children$: Subject<void> = new Subject();
   children: GameObject[] = [];
   stage: IStage = new StageBase();
-  physics: System;
+  physics: System<TBody>;
   scale: number;
   destroy$: Subject<void> = new Subject();
   animationFrame: number;
@@ -27,7 +27,7 @@ export class SceneBase extends Lifecycle {
   constructor(options: SceneOptions = {}) {
     super();
 
-    this.physics = new System(options.nodeMaxEntries);
+    this.physics = new System<TBody>(options.nodeMaxEntries);
     this.scale = options.scale || 1;
   }
 

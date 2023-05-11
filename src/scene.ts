@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { Body } from "detect-collisions";
 import { takeUntil } from "rxjs/operators";
 import { fromEvent } from "rxjs/internal/observable/fromEvent";
 import { Inject } from "@jacekpietal/dependency-injection";
@@ -6,7 +7,7 @@ import { Application } from "./application";
 import { Resources } from "./resources";
 import { SceneBase, SceneOptions } from "./scene-base";
 
-export class Scene extends SceneBase {
+export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 

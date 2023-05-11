@@ -29,25 +29,26 @@ const BehaviorSubject_1 = require("rxjs/internal/BehaviorSubject");
 const Subject_1 = require("rxjs/internal/Subject");
 const container_1 = require("./container");
 class Animator extends container_1.Container {
-    constructor(gameObject, data, { baseTexture }) {
+    constructor(gameObject, { animations, cols, rows, animationSpeed = 200, anchor = { x: 0.5, y: 0.5 } }, { width, height, baseTexture }) {
         super(gameObject);
         this.name = 'Animator';
         this.complete$ = new Subject_1.Subject();
         this.state$ = new BehaviorSubject_1.BehaviorSubject('');
-        Object.values(data.animations).forEach(frames => {
+        const tilewidth = width / cols;
+        const tileheight = height / rows;
+        Object.values(animations).forEach(frames => {
             const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
-                const x = (frame * data.tilewidth) % data.width;
-                const y = Math.floor((frame * data.tilewidth) / data.width) * data.tileheight;
-                const rect = new PIXI.Rectangle(x, y, data.tilewidth, data.tileheight);
+                const x = (frame * tilewidth) % width;
+                const y = Math.floor((frame * tilewidth) / width) * tileheight;
+                const rect = new PIXI.Rectangle(x, y, tilewidth, tileheight);
                 const texture = new PIXI.Texture(baseTexture, rect);
                 texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-                return { texture, time: 16.67 };
+                return { texture, time: animationSpeed };
             }));
-            animatedSprite.animationSpeed = 0.1;
-            animatedSprite.anchor.set(0.5, 0.5);
+            animatedSprite.anchor.set(anchor.x, anchor.y);
             this.addChild(animatedSprite);
         }, {});
-        this.states = Object.keys(data.animations);
+        this.states = Object.keys(animations);
     }
     setScale(x = 1, y = x) {
         this.children.forEach((child) => {
