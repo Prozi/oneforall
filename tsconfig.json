@@ -6,7 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "es2017",
     "module": "none",
     "outDir": "dist",
     "rootDir": "src",
