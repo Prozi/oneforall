@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^8.0.5",
+    "detect-collisions": "^8.1.0",
     "latermom": "^2.0.1",
     "rxjs": "^7.8.1"
   },
