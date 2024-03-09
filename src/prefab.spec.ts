@@ -29,7 +29,8 @@ describe("GIVEN Prefab", () => {
     const scene: Scene = new Scene({ visible: true });
     const prefab: Prefab = new Prefab(
       "Soldier",
-      async (go: GameObject & any) => {
+      // tslint:disable-next-line: no-any
+      async (go: any) => {
         go.state = new StateMachine(go);
         go.sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
@@ -39,7 +40,7 @@ describe("GIVEN Prefab", () => {
 
         go.update();
         scene.addChild(go);
-      }
+      },
     );
 
     const promises: Promise<GameObject>[] = new Array(100)

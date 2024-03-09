@@ -1,9 +1,9 @@
 import { Subject } from "rxjs/internal/Subject";
 import { BodyOptions, Ellipse } from "detect-collisions";
 import { GameObject } from "./game-object";
-import { ILifecycle, Lifecycle } from "./lifecycle";
+import { LifecycleProps, Lifecycle } from "./lifecycle";
 
-export class CircleBody extends Ellipse implements ILifecycle {
+export class CircleBody extends Ellipse implements LifecycleProps {
   readonly name: string = "CircleBody";
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
@@ -14,7 +14,7 @@ export class CircleBody extends Ellipse implements ILifecycle {
     radiusX: number,
     radiusY: number = radiusX,
     step = 16,
-    options?: BodyOptions
+    options?: BodyOptions,
   ) {
     super(gameObject, radiusX, radiusY, step, options);
 
@@ -23,7 +23,8 @@ export class CircleBody extends Ellipse implements ILifecycle {
     }
 
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    // tslint:disable-next-line: no-any
+    this.gameObject.addComponent(this as any);
   }
 
   update(): void {

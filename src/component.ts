@@ -7,13 +7,13 @@ export class Component extends Lifecycle {
 
   constructor(gameObject: GameObject) {
     super();
+
     this.gameObject = gameObject;
     this.gameObject.addComponent(this);
   }
 
   destroy(): void {
-    this.gameObject.removeComponent?.(this);
-    this.gameObject.parent?.removeChild?.(this.gameObject);
+    Lifecycle.prototype.destroy.call(this);
 
     super.destroy();
   }

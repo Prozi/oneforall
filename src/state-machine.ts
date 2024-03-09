@@ -56,7 +56,7 @@ export class StateMachine extends Component {
     const fromCurrentState = this.validators[this.state] || [];
 
     return [...fromAllStates, ...fromCurrentState].every(
-      (validator: TStateValidator) => validator(newState)
+      (validator: TStateValidator) => validator(newState),
     );
   }
 }

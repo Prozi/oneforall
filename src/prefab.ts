@@ -5,7 +5,7 @@ export class Prefab extends GameObject {
 
   constructor(
     name = "GameObject",
-    createFunction: (prefab: GameObject) => Promise<void>
+    createFunction: (prefab: GameObject) => Promise<void>,
   ) {
     super(name, 0, 0);
 

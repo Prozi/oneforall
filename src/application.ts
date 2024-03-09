@@ -5,8 +5,8 @@ declare var jest: object;
 
 @Injectable
 export class Application extends PIXI.Application {
-  constructor(options: Partial<PIXI.IApplicationOptions> = {}) {
-    super({
+  async init(options: Partial<PIXI.ApplicationOptions> = {}) {
+    return super.init({
       autoStart: false,
       sharedTicker: false,
       ...options,

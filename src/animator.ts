@@ -4,7 +4,7 @@ import { Subject } from "rxjs/internal/Subject";
 import { GameObject } from "./game-object";
 import { Container } from "./container";
 
-export interface IAnimatorData {
+export interface AnimatorData {
   animations: { [name: string]: (number | string)[] };
   cols: number;
   rows: number;
@@ -29,8 +29,8 @@ export class Animator extends Container {
       rows,
       animationSpeed = 200,
       anchor = { x: 0.5, y: 0.5 },
-    }: IAnimatorData,
-    { width, height, baseTexture }: PIXI.Texture
+    }: AnimatorData,
+    { width, height, source }: PIXI.Texture,
   ) {
     super(gameObject);
 
@@ -39,21 +39,24 @@ export class Animator extends Container {
 
     Object.values(animations).forEach((frames) => {
       const animatedSprite = new PIXI.AnimatedSprite(
-        frames.map((frame: number) => {
-          const x = (frame * tilewidth) % width;
-          const y = Math.floor((frame * tilewidth) / width) * tileheight;
-          const rect: PIXI.Rectangle = new PIXI.Rectangle(
+        frames.map((f: number) => {
+          const x = (f * tilewidth) % width;
+          const y = Math.floor((f * tilewidth) / width) * tileheight;
+          const frame: PIXI.Rectangle = new PIXI.Rectangle(
             x,
             y,
             tilewidth,
-            tileheight
+            tileheight,
           );
-          const texture: PIXI.Texture = new PIXI.Texture(baseTexture, rect);
+          const texture: PIXI.Texture = new PIXI.Texture({
+            source,
+            frame,
+          });
 
-          texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          texture.source.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
           return { texture, time: animationSpeed };
-        })
+        }),
       );
 
       animatedSprite.anchor.set(anchor.x, anchor.y);
@@ -68,7 +71,7 @@ export class Animator extends Container {
     (this.children as PIXI.AnimatedSprite[]).forEach(
       (child: PIXI.AnimatedSprite) => {
         child.scale.set(x, y);
-      }
+      },
     );
   }
 
@@ -82,7 +85,7 @@ export class Animator extends Container {
     (this.children as PIXI.AnimatedSprite[])
       .filter(
         (child: PIXI.AnimatedSprite) =>
-          child instanceof PIXI.AnimatedSprite && child !== animation
+          child instanceof PIXI.AnimatedSprite && child !== animation,
       )
       .forEach((child: PIXI.AnimatedSprite) => {
         child.visible = false;

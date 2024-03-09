@@ -1,9 +1,9 @@
 import { Subject } from "rxjs/internal/Subject";
 import { BodyOptions, Polygon, Vector } from "detect-collisions";
 import { GameObject } from "./game-object";
-import { ILifecycle, Lifecycle } from "./lifecycle";
+import { LifecycleProps, Lifecycle } from "./lifecycle";
 
-export class PolygonBody extends Polygon implements ILifecycle {
+export class PolygonBody extends Polygon implements LifecycleProps {
   readonly name: string = "PolygonBody";
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
@@ -13,7 +13,8 @@ export class PolygonBody extends Polygon implements ILifecycle {
     super(gameObject, points, options);
 
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    // tslint:disable-next-line: no-any
+    this.gameObject.addComponent(this as any);
   }
 
   update(): void {

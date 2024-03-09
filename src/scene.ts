@@ -6,15 +6,19 @@ import { Inject } from "@jacekpietal/dependency-injection";
 import { Application } from "./application";
 import { Resources } from "./resources";
 import { SceneBase, SceneOptions } from "./scene-base";
+import { PIXIDisplayObject } from "./stage-base";
 
 export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 
+  options: Record<string, any> = {};
   stage: PIXI.Container = new PIXI.Container();
 
   constructor(options: SceneOptions = {}) {
-    super(options);
+    super();
+
+    this.options = options;
 
     // 1 additonal layer
     this.stage.visible = options.visible || false;
@@ -31,15 +35,17 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     this.pixi.stage.addChild(this.stage);
   }
 
-  start(): void {
-    this.pixi.stage.scale.set(this.scale);
+  async start(): Promise<void> {
+    await this.pixi.init(this.options);
+
+    this.pixi.stage.scale.set(this.scale.x, this.scale.y);
     this.pixi.start();
 
     super.start();
   }
 
   stop(): void {
-    this.pixi.stop();
+    this.pixi.stop?.();
 
     super.stop();
   }
@@ -53,18 +59,18 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   enableAutoSort(): void {
     this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.stage.children.sort(
-        (a: PIXI.DisplayObject, b: PIXI.DisplayObject) => a.y - b.y
+        (a: PIXIDisplayObject, b: PIXIDisplayObject) => a.y - b.y,
       );
     });
   }
 
   enableAutoSize(): void {
-    this.pixi.renderer.resize(innerWidth, innerHeight);
+    this.pixi.resizeTo = window;
 
     fromEvent(window, "resize")
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.pixi.renderer.resize(innerWidth, innerHeight);
+        this.pixi.resizeTo = window;
       });
   }
 }

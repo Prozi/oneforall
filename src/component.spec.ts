@@ -6,7 +6,7 @@ describe("GIVEN Component", () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.update$.subscribe(() => {
+    component.update$?.subscribe(() => {
       done();
     });
 
@@ -17,7 +17,7 @@ describe("GIVEN Component", () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.destroy$.subscribe(() => {
+    component.destroy$?.subscribe(() => {
       done();
     });
 

@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 import { Subject } from "rxjs/internal/Subject";
 import { Component } from "./component";
 import { GameObject } from "./game-object";
-import { ILifecycle } from "./lifecycle";
+import { Lifecycle, LifecycleProps } from "./lifecycle";
 
-export class Container extends PIXI.Container implements ILifecycle {
+export class Container extends PIXI.Container implements LifecycleProps {
   readonly name: string = "Container";
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
@@ -19,7 +19,7 @@ export class Container extends PIXI.Container implements ILifecycle {
 
   update(): void {
     if (!this.parent) {
-      this.gameObject.parent?.stage.addChild(this);
+      this.gameObject.scene?.stage.addChild(this);
     }
 
     this.x = this.gameObject.x;
@@ -29,10 +29,8 @@ export class Container extends PIXI.Container implements ILifecycle {
   }
 
   destroy(): void {
-    this.gameObject.parent?.stage.removeChild(this);
+    Lifecycle.prototype.destroy.call(this);
 
     super.destroy();
-
-    Component.prototype.destroy.call(this);
   }
 }
