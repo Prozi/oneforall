@@ -11,16 +11,17 @@ class PolygonBody extends detect_collisions_1.Polygon {
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;
-        // tslint:disable-next-line: no-any
         this.gameObject.addComponent(this);
     }
     update() {
         this.gameObject.x = this.x;
         this.gameObject.y = this.y;
-        lifecycle_1.Lifecycle.prototype.update.call(this);
+        lifecycle_1.Lifecycle.update(this);
     }
     destroy() {
-        lifecycle_1.Lifecycle.prototype.destroy.call(this);
+        var _a;
+        (_a = this.system) === null || _a === void 0 ? void 0 : _a.remove(this);
+        lifecycle_1.Lifecycle.destroy(this);
     }
 }
 exports.PolygonBody = PolygonBody;

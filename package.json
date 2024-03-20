@@ -19,15 +19,15 @@
     "latermom": "^2.0.1",
     "pixi.js": "^8",
     "pixi.js-legacy": "^7",
-    "pixi-shim": "^2.4.1",
+    "pixi-shim": "^2.5.0",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.0",
-    "@babel/plugin-proposal-decorators": "^7.24.0",
-    "@babel/plugin-transform-class-properties": "^7.23.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
-    "@babel/preset-typescript": "^7.23.3",
+    "@babel/core": "^7.24.1",
+    "@babel/plugin-proposal-decorators": "^7.24.1",
+    "@babel/plugin-transform-class-properties": "^7.24.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.1",
+    "@babel/preset-typescript": "^7.24.1",
     "@pixi/core": "^7.4.0",
     "@pixi/display": "^7.4.0",
     "@pixi/extract": "^7.4.0",
@@ -50,7 +50,7 @@
     "typescript": "^4",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.2"
+    "webpack-dev-server": "^5.0.4"
   },
   "scripts": {
     "start": "chef-express docs",
@@ -63,7 +63,7 @@
     "format-docs": "prettier ./docs/*.ts --write",
     "prebuild": "rm -rf dist",
     "build": "tsc",
-    "precommit": "yarn lint;yarn sanity && yarn format && yarn format-docs && yarn test && webpack"
+    "precommit": "yarn format && yarn lint;yarn sanity && yarn format-docs && yarn test && webpack"
   },
   "keywords": [
     "gameobject",

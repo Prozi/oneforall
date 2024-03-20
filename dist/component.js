@@ -9,9 +9,5 @@ class Component extends lifecycle_1.Lifecycle {
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }
-    destroy() {
-        lifecycle_1.Lifecycle.prototype.destroy.call(this);
-        super.destroy();
-    }
 }
 exports.Component = Component;

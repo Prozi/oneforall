@@ -10,6 +10,5 @@ export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
     readonly destroy$: Subject<void>;
     constructor(gameObject: GameObject, texture: PIXIResource);
     update(): void;
-    destroy(): void;
 }
 //# sourceMappingURL=sprite.d.ts.map

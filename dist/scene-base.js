@@ -4,13 +4,11 @@ exports.SceneBase = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
 const lifecycle_1 = require("./lifecycle");
-const stage_base_1 = require("./stage-base");
 class SceneBase extends lifecycle_1.Lifecycle {
     constructor(options = {}) {
         super();
         this.name = 'Scene';
         this.children$ = new Subject_1.Subject();
-        this.stage = new stage_base_1.StageBase();
         this.destroy$ = new Subject_1.Subject();
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.scale = options.scale || 1;
@@ -30,18 +28,22 @@ class SceneBase extends lifecycle_1.Lifecycle {
     update() {
         this.physics.update();
         this.children.forEach((child) => {
-            child.update();
+            if (child instanceof lifecycle_1.Lifecycle) {
+                child.update();
+            }
         });
         super.update();
     }
     destroy() {
         this.stop();
         while (this.children.length) {
-            this.children.pop().destroy();
+            const component = this.children.pop();
+            // will also gameObject.removeComponent(component)
+            component.destroy();
         }
-        super.destroy();
         this.children$.complete();
         this.children$ = undefined;
+        super.destroy();
     }
     addChild(...children) {
         const result = super.addChild(...children);

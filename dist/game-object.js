@@ -25,10 +25,12 @@ class GameObject extends lifecycle_1.Lifecycle {
     }
     destroy() {
         var _a;
-        (_a = this.components) === null || _a === void 0 ? void 0 : _a.forEach((component) => {
+        while (this.components.length) {
+            const component = this.components.pop();
+            // will also gameObject.removeComponent(component)
             component.destroy();
-        });
-        this.components = undefined;
+        }
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(this);
         super.destroy();
     }
     addComponent(component) {
@@ -46,6 +48,7 @@ class GameObject extends lifecycle_1.Lifecycle {
         const index = this.components.indexOf(component);
         if (index !== -1) {
             this.components.splice(index, 1);
+            // scene.removeChild(component)
             (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(component);
         }
         return index !== -1;

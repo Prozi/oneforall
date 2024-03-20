@@ -1,24 +1,21 @@
-import * as PIXI from "pixi.js";
-import { Subject } from "rxjs/internal/Subject";
-import { System, Body } from "detect-collisions";
-import { GameObject } from "./game-object";
-import { Lifecycle } from "./lifecycle";
-import { StageProps, StageBase } from "./stage-base";
+import * as PIXI from 'pixi.js';
+import { Subject } from 'rxjs/internal/Subject';
+import { System, Body } from 'detect-collisions';
+import { GameObject } from './game-object';
+import { Lifecycle } from './lifecycle';
 
 export interface SceneOptions {
   name?: string;
   visible?: boolean;
-  autoSize?: boolean;
   autoSort?: boolean;
   scale?: number;
   nodeMaxEntries?: number;
 }
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
-  readonly name: string = "Scene";
+  readonly name: string = 'Scene';
 
   children$: Subject<void> = new Subject();
-  stage: StageProps = new StageBase();
   physics: System<TBody>;
   destroy$: Subject<void> = new Subject();
   animationFrame: number;
@@ -49,19 +46,27 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   update(): void {
     this.physics.update();
     this.children.forEach((child: GameObject) => {
-      child.update();
+      if (child instanceof Lifecycle) {
+        child.update();
+      }
     });
+
     super.update();
   }
 
   destroy(): void {
     this.stop();
+
     while (this.children.length) {
-      this.children.pop().destroy();
+      const component = this.children.pop() as Lifecycle;
+
+      // will also gameObject.removeComponent(component)
+      component.destroy();
     }
-    super.destroy();
+
     this.children$.complete();
     this.children$ = undefined;
+    super.destroy();
   }
 
   addChild(...children: PIXI.Container[]): PIXI.Container {
@@ -89,10 +94,10 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   }
 
   getChildOfType(type: string): PIXI.Container {
-    return this.children.find(({ name }) => name === type);
+    return (this.children as Lifecycle[]).find(({ name }) => name === type);
   }
 
   getChildrenOfType(type: string): PIXI.Container[] {
-    return this.children.filter(({ name }) => name === type);
+    return (this.children as Lifecycle[]).filter(({ name }) => name === type);
   }
 }

@@ -1,8 +1,8 @@
-import { GameObject } from "./game-object";
-import { Lifecycle } from "./lifecycle";
+import { GameObject } from './game-object';
+import { Lifecycle } from './lifecycle';
 
 export class Component extends Lifecycle {
-  readonly name: string = "Component";
+  readonly name: string = 'Component';
   readonly gameObject: GameObject;
 
   constructor(gameObject: GameObject) {
@@ -10,11 +10,5 @@ export class Component extends Lifecycle {
 
     this.gameObject = gameObject;
     this.gameObject.addComponent(this);
-  }
-
-  destroy(): void {
-    Lifecycle.prototype.destroy.call(this);
-
-    super.destroy();
   }
 }

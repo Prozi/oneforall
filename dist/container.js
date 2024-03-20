@@ -26,7 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
-const component_1 = require("./component");
 const lifecycle_1 = require("./lifecycle");
 class Container extends PIXI.Container {
     constructor(gameObject) {
@@ -40,15 +39,15 @@ class Container extends PIXI.Container {
     update() {
         var _a;
         if (!this.parent) {
-            (_a = this.gameObject.scene) === null || _a === void 0 ? void 0 : _a.stage.addChild(this);
+            (_a = this.gameObject.scene) === null || _a === void 0 ? void 0 : _a.addChild(this);
         }
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        component_1.Component.prototype.update.call(this);
+        lifecycle_1.Lifecycle.update(this);
     }
     destroy() {
-        lifecycle_1.Lifecycle.prototype.destroy.call(this);
         super.destroy();
+        lifecycle_1.Lifecycle.destroy(this);
     }
 }
 exports.Container = Container;

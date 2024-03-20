@@ -7,6 +7,7 @@ export interface LifecycleProps {
     readonly name: string;
     update$?: Subject<void>;
     destroy$?: Subject<void>;
+    gameObject?: GameObject;
     update(): void;
     destroy(): void;
 }
@@ -16,6 +17,8 @@ export declare class Lifecycle extends PIXI.Container implements LifecycleProps 
     destroy$?: Subject<void>;
     gameObject?: GameObject;
     scene?: Scene | SceneBase;
+    static destroy(lifecycle: LifecycleProps): void;
+    static update(lifecycle: LifecycleProps): void;
     destroy(): void;
     update(): void;
 }

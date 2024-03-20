@@ -33,18 +33,27 @@ class Lifecycle extends PIXI.Container {
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
     }
-    destroy() {
+    static destroy(lifecycle) {
         var _a, _b, _c, _d;
-        (_a = this.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(this);
-        (_b = this.update$) === null || _b === void 0 ? void 0 : _b.complete();
-        (_c = this.destroy$) === null || _c === void 0 ? void 0 : _c.next();
-        (_d = this.destroy$) === null || _d === void 0 ? void 0 : _d.complete();
-        this.update$ = undefined;
-        this.destroy$ = undefined;
-        this.gameObject = undefined;
+        console.log(((_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(lifecycle))
+            ? 'removed'
+            : 'not removed', lifecycle.name);
+        (_b = lifecycle.update$) === null || _b === void 0 ? void 0 : _b.complete();
+        (_c = lifecycle.destroy$) === null || _c === void 0 ? void 0 : _c.next();
+        (_d = lifecycle.destroy$) === null || _d === void 0 ? void 0 : _d.complete();
+        lifecycle.update$ = undefined;
+        lifecycle.destroy$ = undefined;
+        lifecycle.gameObject = undefined;
+    }
+    static update(lifecycle) {
+        var _a;
+        (_a = lifecycle.update$) === null || _a === void 0 ? void 0 : _a.next();
+    }
+    destroy() {
+        Lifecycle.destroy(this);
     }
     update() {
-        this.update$.next();
+        Lifecycle.update(this);
     }
 }
 exports.Lifecycle = Lifecycle;
