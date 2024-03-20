@@ -35,9 +35,7 @@ class Lifecycle extends PIXI.Container {
     }
     static destroy(lifecycle) {
         var _a, _b, _c, _d;
-        console.log(((_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(lifecycle))
-            ? 'removed'
-            : 'not removed', lifecycle.name);
+        (_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(lifecycle);
         (_b = lifecycle.update$) === null || _b === void 0 ? void 0 : _b.complete();
         (_c = lifecycle.destroy$) === null || _c === void 0 ? void 0 : _c.next();
         (_d = lifecycle.destroy$) === null || _d === void 0 ? void 0 : _d.complete();

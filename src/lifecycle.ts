@@ -24,12 +24,7 @@ export class Lifecycle extends PIXI.Container implements LifecycleProps {
   scene?: Scene | SceneBase;
 
   static destroy(lifecycle: LifecycleProps): void {
-    console.log(
-      lifecycle.gameObject?.removeComponent(lifecycle as Lifecycle)
-        ? 'removed'
-        : 'not removed',
-      lifecycle.name
-    );
+    lifecycle.gameObject?.removeComponent(lifecycle as Lifecycle);
 
     lifecycle.update$?.complete();
     lifecycle.destroy$?.next();
