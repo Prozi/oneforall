@@ -10,7 +10,6 @@ class SceneBase extends lifecycle_1.Lifecycle {
         super();
         this.name = 'Scene';
         this.children$ = new Subject_1.Subject();
-        this.children = [];
         this.stage = new stage_base_1.StageBase();
         this.destroy$ = new Subject_1.Subject();
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
@@ -44,23 +43,21 @@ class SceneBase extends lifecycle_1.Lifecycle {
         this.children$.complete();
         this.children$ = undefined;
     }
-    addChild(child) {
-        const index = this.children.indexOf(child);
-        if (index !== -1) {
-            return;
-        }
-        child.parent = this;
-        this.children.push(child);
+    addChild(...children) {
+        const result = super.addChild(...children);
+        children.forEach((child) => {
+            child.scene = this;
+        });
         this.children$.next();
+        return result;
     }
-    removeChild(child) {
-        const index = this.children.indexOf(child);
-        if (index === -1) {
-            return;
-        }
-        child.parent = null;
-        this.children.splice(index, 1);
+    removeChild(...children) {
+        const result = super.removeChild(...children);
+        children.forEach((child) => {
+            child.scene = null;
+        });
         this.children$.next();
+        return result;
     }
     getChildOfType(type) {
         return this.children.find(({ name }) => name === type);

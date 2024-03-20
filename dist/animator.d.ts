@@ -1,19 +1,15 @@
 import * as PIXI from 'pixi.js';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Subject } from 'rxjs/internal/Subject';
+import { Vector } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { Container } from './container';
-export interface IAnimatorData {
-    animations: {
-        [name: string]: (number | string)[];
-    };
+export interface AnimatorData {
+    animations: Record<string, (number | string)[]>;
     cols: number;
     rows: number;
     animationSpeed?: number;
-    anchor?: {
-        x: number;
-        y: number;
-    };
+    anchor?: Vector;
 }
 export declare class Animator extends Container {
     readonly name: string;
@@ -22,7 +18,7 @@ export declare class Animator extends Container {
     states: string[];
     state?: string;
     animation?: PIXI.AnimatedSprite;
-    constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: IAnimatorData, { width, height, baseTexture }: PIXI.Texture);
+    constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: AnimatorData, { width, height, source }: PIXI.Texture);
     setScale(x?: number, y?: number): void;
     getAnimationIndex(state: string): number;
     setAnimation(animation: PIXI.AnimatedSprite): void;

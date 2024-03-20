@@ -39,8 +39,10 @@ const resources_1 = require("./resources");
 const scene_base_1 = require("./scene-base");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
-        super(options);
+        super();
+        this.options = {};
         this.stage = new PIXI.Container();
+        this.options = options;
         // 1 additonal layer
         this.stage.visible = options.visible || false;
         if (options.autoSize) {
@@ -52,13 +54,15 @@ class Scene extends scene_base_1.SceneBase {
         // real stage
         this.pixi.stage.addChild(this.stage);
     }
-    start() {
-        this.pixi.stage.scale.set(this.scale);
+    async start() {
+        await this.pixi.init();
+        this.pixi.stage.scale.set(this.scale.x, this.scale.y);
         this.pixi.start();
         super.start();
     }
     stop() {
-        this.pixi.stop();
+        var _a, _b;
+        (_b = (_a = this.pixi).stop) === null || _b === void 0 ? void 0 : _b.call(_a);
         super.stop();
     }
     destroy() {
@@ -72,11 +76,11 @@ class Scene extends scene_base_1.SceneBase {
         });
     }
     enableAutoSize() {
-        this.pixi.renderer.resize(innerWidth, innerHeight);
+        this.pixi.resizeTo = window;
         (0, fromEvent_1.fromEvent)(window, 'resize')
             .pipe((0, operators_1.takeUntil)(this.destroy$))
             .subscribe(() => {
-            this.pixi.renderer.resize(innerWidth, innerHeight);
+            this.pixi.resizeTo = window;
         });
     }
 }

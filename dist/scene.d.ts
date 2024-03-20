@@ -6,9 +6,10 @@ import { SceneBase, SceneOptions } from './scene-base';
 export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     pixi: Application;
     resouces: Resources;
+    options: SceneOptions;
     stage: PIXI.Container;
     constructor(options?: SceneOptions);
-    start(): void;
+    start(): Promise<void>;
     stop(): void;
     destroy(): void;
     enableAutoSort(): void;

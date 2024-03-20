@@ -29,25 +29,30 @@ const BehaviorSubject_1 = require("rxjs/internal/BehaviorSubject");
 const Subject_1 = require("rxjs/internal/Subject");
 const container_1 = require("./container");
 class Animator extends container_1.Container {
-    constructor(gameObject, { animations, cols, rows, animationSpeed = 200, anchor = { x: 0.5, y: 0.5 } }, { width, height, baseTexture }) {
+    constructor(gameObject, { animations, cols, rows, animationSpeed = 200, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
         super(gameObject);
         this.name = 'Animator';
         this.complete$ = new Subject_1.Subject();
         this.state$ = new BehaviorSubject_1.BehaviorSubject('');
-        const tilewidth = width / cols;
-        const tileheight = height / rows;
-        Object.values(animations).forEach(frames => {
-            const animatedSprite = new PIXI.AnimatedSprite(frames.map((frame) => {
-                const x = (frame * tilewidth) % width;
-                const y = Math.floor((frame * tilewidth) / width) * tileheight;
-                const rect = new PIXI.Rectangle(x, y, tilewidth, tileheight);
-                const texture = new PIXI.Texture(baseTexture, rect);
-                texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        const tileWidth = width / cols;
+        const tileHeight = height / rows;
+        Object.values(animations).forEach(animationFrames => {
+            const animatedSprite = new PIXI.AnimatedSprite(animationFrames.map(animationFrameInput => {
+                const animationFrame = typeof animationFrameInput === 'number'
+                    ? animationFrameInput
+                    : parseInt(animationFrameInput, 10);
+                const frameWidth = Math.floor(animationFrame * tileWidth);
+                const frame = new PIXI.Rectangle(frameWidth % width, tileHeight * Math.floor(frameWidth / width), tileWidth, tileHeight);
+                const texture = new PIXI.Texture({
+                    source,
+                    frame
+                });
+                texture.source.scaleMode = PIXI.SCALE_MODES.NEAREST;
                 return { texture, time: animationSpeed };
             }));
             animatedSprite.anchor.set(anchor.x, anchor.y);
             this.addChild(animatedSprite);
-        }, {});
+        });
         this.states = Object.keys(animations);
     }
     setScale(x = 1, y = x) {
@@ -60,9 +65,8 @@ class Animator extends container_1.Container {
         return exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state);
     }
     setAnimation(animation) {
-        this.children
-            .filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation)
-            .forEach((child) => {
+        const children = this.children.filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation);
+        children.forEach((child) => {
             child.visible = false;
             child.stop();
         });

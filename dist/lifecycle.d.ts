@@ -1,17 +1,21 @@
+import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
-export interface ILifecycle {
+import { Scene } from './scene';
+import { SceneBase } from './scene-base';
+export interface LifecycleProps {
     readonly name: string;
     update$?: Subject<void>;
     destroy$?: Subject<void>;
     update(): void;
     destroy(): void;
 }
-export declare class Lifecycle implements ILifecycle {
+export declare class Lifecycle extends PIXI.Container implements LifecycleProps {
     readonly name: string;
     update$?: Subject<void>;
     destroy$?: Subject<void>;
     gameObject?: GameObject;
+    scene?: Scene | SceneBase;
     destroy(): void;
     update(): void;
 }

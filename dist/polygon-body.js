@@ -11,6 +11,7 @@ class PolygonBody extends detect_collisions_1.Polygon {
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;
+        // tslint:disable-next-line: no-any
         this.gameObject.addComponent(this);
     }
     update() {

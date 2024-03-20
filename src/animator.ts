@@ -1,15 +1,17 @@
 import * as PIXI from "pixi.js";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { Subject } from "rxjs/internal/Subject";
+import { Vector } from "detect-collisions";
+
 import { GameObject } from "./game-object";
 import { Container } from "./container";
 
 export interface AnimatorData {
-  animations: { [name: string]: (number | string)[] };
+  animations: Record<string, (number | string)[]>;
   cols: number;
   rows: number;
   animationSpeed?: number;
-  anchor?: { x: number; y: number };
+  anchor?: Vector;
 }
 
 export class Animator extends Container {
@@ -34,20 +36,25 @@ export class Animator extends Container {
   ) {
     super(gameObject);
 
-    const tilewidth = width / cols;
-    const tileheight = height / rows;
+    const tileWidth = width / cols;
+    const tileHeight = height / rows;
 
-    Object.values(animations).forEach((frames) => {
+    Object.values(animations).forEach((animationFrames) => {
       const animatedSprite = new PIXI.AnimatedSprite(
-        frames.map((f: number) => {
-          const x = (f * tilewidth) % width;
-          const y = Math.floor((f * tilewidth) / width) * tileheight;
+        animationFrames.map((animationFrameInput) => {
+          const animationFrame =
+            typeof animationFrameInput === "number"
+              ? animationFrameInput
+              : parseInt(animationFrameInput, 10);
+
+          const frameWidth = Math.floor(animationFrame * tileWidth);
           const frame: PIXI.Rectangle = new PIXI.Rectangle(
-            x,
-            y,
-            tilewidth,
-            tileheight,
+            frameWidth % width,
+            tileHeight * Math.floor(frameWidth / width),
+            tileWidth,
+            tileHeight,
           );
+
           const texture: PIXI.Texture = new PIXI.Texture({
             source,
             frame,
@@ -62,7 +69,7 @@ export class Animator extends Container {
       animatedSprite.anchor.set(anchor.x, anchor.y);
 
       this.addChild(animatedSprite);
-    }, {});
+    });
 
     this.states = Object.keys(animations);
   }
@@ -82,15 +89,15 @@ export class Animator extends Container {
   }
 
   setAnimation(animation: PIXI.AnimatedSprite): void {
-    (this.children as PIXI.AnimatedSprite[])
-      .filter(
-        (child: PIXI.AnimatedSprite) =>
-          child instanceof PIXI.AnimatedSprite && child !== animation,
-      )
-      .forEach((child: PIXI.AnimatedSprite) => {
-        child.visible = false;
-        child.stop();
-      });
+    const children = this.children.filter(
+      (child: PIXI.AnimatedSprite) =>
+        child instanceof PIXI.AnimatedSprite && child !== animation,
+    );
+
+    children.forEach((child: PIXI.AnimatedSprite) => {
+      child.visible = false;
+      child.stop();
+    });
 
     this.animation = animation;
   }

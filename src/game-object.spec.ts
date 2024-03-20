@@ -8,7 +8,7 @@ import { Scene } from "./scene";
 describe("GIVEN GameObject", () => {
   it("THEN you can add component", () => {
     const go = new GameObject();
-    new Component(go);
+    const component = new Component(go);
 
     expect(go.components.length).toBe(1);
   });
@@ -47,14 +47,14 @@ describe("GIVEN GameObject", () => {
 
   it("THEN you can get component by name", () => {
     const go = new GameObject();
-    new Component(go);
+    const component = new Component(go);
 
     expect(go.getComponentOfType("Component")).toBeTruthy();
   });
 
   it("THEN you can get components by name", () => {
     const go = new GameObject();
-    new Component(go);
+    const component = new Component(go);
 
     expect(go.getComponentsOfType("Component").length).toBe(1);
   });
@@ -67,8 +67,7 @@ describe("GIVEN GameObject", () => {
 
     for (let i = 0; i < 1000; i++) {
       const go: GameObject = new GameObject();
-
-      new CircleBody(go, 100);
+      const body = new CircleBody(go, 100);
 
       scene.addChild(go);
 

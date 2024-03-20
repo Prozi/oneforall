@@ -16,7 +16,7 @@ async function start() {
 
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
   const data = await Resources.loadResource<{ tileset: string }>(
-    "./cave-boy.json"
+    "./cave-boy.json",
   );
   const texture = await Resources.loadResource(data.tileset);
 

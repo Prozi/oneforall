@@ -12,7 +12,7 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 
-  options: Record<string, any> = {};
+  options: SceneOptions = {};
   stage: PIXI.Container = new PIXI.Container();
 
   constructor(options: SceneOptions = {}) {
@@ -36,7 +36,7 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   }
 
   async start(): Promise<void> {
-    await this.pixi.init(this.options);
+    await this.pixi.init();
 
     this.pixi.stage.scale.set(this.scale.x, this.scale.y);
     this.pixi.start();
