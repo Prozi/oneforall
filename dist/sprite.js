@@ -27,6 +27,7 @@ exports.Sprite = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const component_1 = require("./component");
+const lifecycle_1 = require("./lifecycle");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
         super(texture);
@@ -35,21 +36,20 @@ class Sprite extends PIXI.Sprite {
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
+        // found no other way to truly override PIXI.Sprite destroy and trigger Lifecycle
+        this.destroy = () => {
+            super.destroy({ texture: false, textureSource: false });
+            lifecycle_1.Lifecycle.destroy(this);
+        };
     }
     update() {
         var _a;
         if (!this.parent) {
-            (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.stage.addChild(this);
+            (_a = this.gameObject.scene) === null || _a === void 0 ? void 0 : _a.addChild(this);
         }
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        component_1.Component.prototype.update.call(this);
-    }
-    destroy() {
-        var _a;
-        (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.stage.removeChild(this);
-        super.destroy();
-        component_1.Component.prototype.destroy.call(this);
+        component_1.Component.update(this);
     }
 }
 exports.Sprite = Sprite;

@@ -1,10 +1,10 @@
-import { GameObject } from "./game-object";
+import { GameObject } from './game-object';
 
 export class Prefab extends GameObject {
   private createFunction: (prefab: GameObject) => Promise<void>;
 
   constructor(
-    name = "GameObject",
+    name = 'GameObject',
     createFunction: (prefab: GameObject) => Promise<void>
   ) {
     super(name, 0, 0);

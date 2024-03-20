@@ -29,8 +29,8 @@ function updateSprite(gameObject) {
     const scene = gameObject.parent;
     if (Math.random() < 0.05) {
         gameObject.target = {
-            x: innerWidth / 2 / gameObject.parent.stage.scale.x,
-            y: innerHeight / 2 / gameObject.parent.stage.scale.y
+            x: innerWidth / 2 / gameObject.scene.scale.x,
+            y: innerHeight / 2 / gameObject.scene.scale.y
         };
     }
     if (Math.random() < 0.05) {

@@ -1,11 +1,11 @@
-import { Subject } from "rxjs/internal/Subject";
-import { GameObject } from "./game-object";
-import { Component } from "./component";
+import { Subject } from 'rxjs/internal/Subject';
+import { GameObject } from './game-object';
+import { Component } from './component';
 
 export type TStateValidator = (newState: string) => boolean;
 
 export class StateMachine extends Component {
-  readonly name: string = "StateMachine";
+  readonly name: string = 'StateMachine';
   readonly state$: Subject<string> = new Subject();
   readonly change$: Subject<string[]> = new Subject();
 
@@ -15,7 +15,7 @@ export class StateMachine extends Component {
     [fromState: string]: TStateValidator[];
   } = {};
 
-  constructor(gameObject: GameObject, initialState = "INITIAL_STATE") {
+  constructor(gameObject: GameObject, initialState = 'INITIAL_STATE') {
     super(gameObject);
 
     this.state = initialState;
@@ -52,7 +52,7 @@ export class StateMachine extends Component {
       return true;
     }
 
-    const fromAllStates = this.validators["*"] || [];
+    const fromAllStates = this.validators['*'] || [];
     const fromCurrentState = this.validators[this.state] || [];
 
     return [...fromAllStates, ...fromCurrentState].every(

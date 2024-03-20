@@ -1,21 +1,20 @@
-import { Subject } from "rxjs/internal/Subject";
-import { Scene } from "./scene";
-import { ILifecycle, Lifecycle } from "./lifecycle";
-import { Prefab } from "./prefab";
-import { SceneBase } from "./scene-base";
+import { Subject } from 'rxjs/internal/Subject';
+import { Scene } from './scene';
+import { Lifecycle, LifecycleProps } from './lifecycle';
+import { Prefab } from './prefab';
+import { SceneBase } from './scene-base';
 
 export class GameObject extends Lifecycle {
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
-  components: ILifecycle[] = [];
-  parent?: Scene | SceneBase;
+  components: LifecycleProps[] = [];
+  scene?: Scene | SceneBase;
   name: string;
-  x: number;
-  y: number;
 
-  constructor(name = "GameObject", x = 0, y = 0) {
+  constructor(name = 'GameObject', x = 0, y = 0) {
     super();
+
     this.name = name;
     this.x = x;
     this.y = y;
@@ -26,7 +25,7 @@ export class GameObject extends Lifecycle {
   }
 
   update(): void {
-    this.components?.forEach((component: ILifecycle) => {
+    this.components?.forEach((component: Lifecycle) => {
       component.update();
     });
 
@@ -34,16 +33,18 @@ export class GameObject extends Lifecycle {
   }
 
   destroy(): void {
-    this.components?.forEach((component: ILifecycle) => {
-      component.destroy();
-    });
+    while (this.components.length) {
+      const component = this.components.pop() as Lifecycle;
 
-    this.components = undefined;
-    this.parent?.removeChild(this);
+      // will also gameObject.removeComponent(component)
+      component.destroy();
+    }
+
+    this.scene?.removeChild(this);
     super.destroy();
   }
 
-  addComponent(component: ILifecycle): boolean {
+  addComponent(component: LifecycleProps): boolean {
     const index = this.components.indexOf(component);
 
     if (index !== -1) {
@@ -51,25 +52,28 @@ export class GameObject extends Lifecycle {
     }
 
     this.components.push(component);
+    this.scene?.addChild(component as Lifecycle);
 
     return true;
   }
 
-  removeComponent(component: ILifecycle): boolean {
+  removeComponent(component: LifecycleProps): boolean {
     const index = this.components.indexOf(component);
 
     if (index !== -1) {
       this.components.splice(index, 1);
+      // scene.removeChild(component)
+      this.scene?.removeChild(component as Lifecycle);
     }
 
     return index !== -1;
   }
 
-  getComponentOfType(type: string): ILifecycle {
+  getComponentOfType(type: string): LifecycleProps {
     return this.components.find(({ name }) => name === type);
   }
 
-  getComponentsOfType(type: string): ILifecycle[] {
+  getComponentsOfType(type: string): LifecycleProps[] {
     return this.components.filter(({ name }) => name === type);
   }
 }

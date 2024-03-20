@@ -8,15 +8,22 @@ async function start() {
   const scene: Scene = new Scene({
     // with few optional params
     visible: true,
-    autoSize: true,
     autoSort: true,
   });
 
-  document.body.appendChild(scene.pixi.view as any);
+  // new since pixi 7/8
+  await scene.pixi.init({
+    autoStart: false,
+    sharedTicker: false,
+    resizeTo: window,
+    autoDensity: true,
+  });
+
+  document.body.appendChild(scene.pixi.canvas);
 
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
   const data = await Resources.loadResource<{ tileset: string }>(
-    "./cave-boy.json"
+    "./cave-boy.json",
   );
   const texture = await Resources.loadResource(data.tileset);
 
@@ -25,7 +32,7 @@ async function start() {
 
   const gfx = new PIXI.Graphics();
 
-  scene.stage.addChild(gfx);
+  scene.addChild(gfx);
 
   // separate sprites
   scene.update$?.pipe(takeUntil(scene.destroy$)).subscribe(() => {

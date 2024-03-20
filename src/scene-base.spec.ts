@@ -1,20 +1,20 @@
-import "pixi-shim";
-import { GameObject } from "./game-object";
-import { StateMachine } from "./state-machine";
-import { SceneBase } from "./scene-base";
+import 'pixi-shim';
+import { GameObject } from './game-object';
+import { StateMachine } from './state-machine';
+import { SceneBase } from './scene-base';
 
-describe("GIVEN SceneBase", () => {
-  it("THEN it works", () => {
+describe('GIVEN SceneBase', () => {
+  it('THEN it works', () => {
     const scene = new SceneBase();
 
     expect(scene).toBeTruthy();
   });
 
-  it("THEN it can have children", () => {
+  it('THEN it can have children', () => {
     const scene = new SceneBase({
-      name: "MySceneBase1",
+      name: 'MySceneBase1',
       scale: 2,
-      visible: true,
+      visible: true
     });
     scene.addChild(new GameObject());
     scene.addChild(new GameObject());
@@ -23,17 +23,17 @@ describe("GIVEN SceneBase", () => {
     expect(scene.children.length).toBe(3);
   });
 
-  it("THEN scene propagates update to gameobject to component", () => {
+  it('THEN scene propagates update to gameobject to component', () => {
     const scene = new SceneBase({
-      name: "MySceneBase1",
+      name: 'MySceneBase1',
       scale: 2,
-      visible: true,
+      visible: true
     });
     const go = new GameObject();
     const state = new StateMachine(go);
 
-    jest.spyOn(go, "update");
-    jest.spyOn(state, "update");
+    jest.spyOn(go, 'update');
+    jest.spyOn(state, 'update');
 
     scene.addChild(go);
     scene.update();

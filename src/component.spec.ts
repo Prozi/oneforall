@@ -1,23 +1,23 @@
-import { Component } from "./component";
-import { GameObject } from "./game-object";
+import { Component } from './component';
+import { GameObject } from './game-object';
 
-describe("GIVEN Component", () => {
-  it("THEN update publishes update$", (done) => {
+describe('GIVEN Component', () => {
+  it('THEN update publishes update$',done => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.update$.subscribe(() => {
+    component.update$?.subscribe(() => {
       done();
     });
 
     component.update();
   });
 
-  it("THEN destroy publishes destroy$", (done) => {
+  it('THEN destroy publishes destroy$',done => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.destroy$.subscribe(() => {
+    component.destroy$?.subscribe(() => {
       done();
     });
 

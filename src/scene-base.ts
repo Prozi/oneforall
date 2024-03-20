@@ -1,26 +1,22 @@
-import { Subject } from "rxjs/internal/Subject";
-import { System, Body } from "detect-collisions";
-import { GameObject } from "./game-object";
-import { Lifecycle } from "./lifecycle";
-import { IStage, StageBase } from "./stage-base";
+import * as PIXI from 'pixi.js';
+import { Subject } from 'rxjs/internal/Subject';
+import { System, Body } from 'detect-collisions';
+import { GameObject } from './game-object';
+import { Lifecycle } from './lifecycle';
 
 export interface SceneOptions {
   name?: string;
   visible?: boolean;
-  autoSize?: boolean;
   autoSort?: boolean;
   scale?: number;
   nodeMaxEntries?: number;
 }
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
-  readonly name: string = "Scene";
+  readonly name: string = 'Scene';
 
   children$: Subject<void> = new Subject();
-  children: GameObject[] = [];
-  stage: IStage = new StageBase();
   physics: System<TBody>;
-  scale: number;
   destroy$: Subject<void> = new Subject();
   animationFrame: number;
 
@@ -50,50 +46,58 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   update(): void {
     this.physics.update();
     this.children.forEach((child: GameObject) => {
-      child.update();
+      if (child instanceof Lifecycle) {
+        child.update();
+      }
     });
+
     super.update();
   }
 
   destroy(): void {
     this.stop();
+
     while (this.children.length) {
-      this.children.pop().destroy();
+      const component = this.children.pop() as Lifecycle;
+
+      // will also gameObject.removeComponent(component)
+      component.destroy();
     }
-    super.destroy();
+
     this.children$.complete();
     this.children$ = undefined;
+    super.destroy();
   }
 
-  addChild(child: GameObject): void {
-    const index = this.children.indexOf(child);
-    if (index !== -1) {
-      return;
-    }
+  addChild(...children: PIXI.Container[]): PIXI.Container {
+    const result = super.addChild(...children);
 
-    child.parent = this;
+    children.forEach((child: Lifecycle) => {
+      child.scene = this;
+    });
 
-    this.children.push(child);
     this.children$.next();
+
+    return result;
   }
 
-  removeChild(child: GameObject): void {
-    const index = this.children.indexOf(child);
-    if (index === -1) {
-      return;
-    }
+  removeChild(...children: PIXI.Container[]): PIXI.Container {
+    const result = super.removeChild(...children);
 
-    child.parent = null;
+    children.forEach((child: Lifecycle) => {
+      child.scene = null;
+    });
 
-    this.children.splice(index, 1);
     this.children$.next();
+
+    return result;
   }
 
-  getChildOfType(type: string): GameObject {
-    return this.children.find(({ name }) => name === type);
+  getChildOfType(type: string): PIXI.Container {
+    return (this.children as Lifecycle[]).find(({ name }) => name === type);
   }
 
-  getChildrenOfType(type: string): GameObject[] {
-    return this.children.filter(({ name }) => name === type);
+  getChildrenOfType(type: string): PIXI.Container[] {
+    return (this.children as Lifecycle[]).filter(({ name }) => name === type);
   }
 }

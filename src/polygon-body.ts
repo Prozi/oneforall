@@ -1,10 +1,10 @@
-import { Subject } from "rxjs/internal/Subject";
-import { BodyOptions, Polygon, Vector } from "detect-collisions";
-import { GameObject } from "./game-object";
-import { ILifecycle, Lifecycle } from "./lifecycle";
+import { Subject } from 'rxjs/internal/Subject';
+import { BodyOptions, Polygon, Vector } from 'detect-collisions';
+import { GameObject } from './game-object';
+import { LifecycleProps, Lifecycle } from './lifecycle';
 
-export class PolygonBody extends Polygon implements ILifecycle {
-  readonly name: string = "PolygonBody";
+export class PolygonBody extends Polygon implements LifecycleProps {
+  readonly name: string = 'PolygonBody';
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
@@ -20,10 +20,12 @@ export class PolygonBody extends Polygon implements ILifecycle {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
 
-    Lifecycle.prototype.update.call(this);
+    Lifecycle.update(this);
   }
 
   destroy(): void {
-    Lifecycle.prototype.destroy.call(this);
+    this.system?.remove(this);
+
+    Lifecycle.destroy(this);
   }
 }

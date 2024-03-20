@@ -33,9 +33,6 @@ exports.Application = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Application = class Application extends PIXI.Application {
-    constructor(options = {}) {
-        super(Object.assign({ autoStart: false, sharedTicker: false }, options));
-    }
 };
 Application = __decorate([
     dependency_injection_1.Injectable

@@ -1,13 +1,13 @@
-import "pixi-shim";
-import { GameObject } from "./game-object";
-import { PolygonBody } from "./polygon-body";
+import 'pixi-shim';
+import { GameObject } from './game-object';
+import { PolygonBody } from './polygon-body';
 
-describe("GIVEN PolygonBody", () => {
-  it("THEN update propagates x/y changes", () => {
+describe('GIVEN PolygonBody', () => {
+  it('THEN update propagates x/y changes', () => {
     const go = new GameObject();
     const body = new PolygonBody(go, [
       { x: 0, y: 0 },
-      { x: 1, y: 1 },
+      { x: 1, y: 1 }
     ]);
 
     body.x += 50;

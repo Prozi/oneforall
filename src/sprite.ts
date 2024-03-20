@@ -1,38 +1,38 @@
-import * as PIXI from "pixi.js";
-import { Subject } from "rxjs/internal/Subject";
-import { Component } from "./component";
-import { GameObject } from "./game-object";
-import { ILifecycle } from "./lifecycle";
+import * as PIXI from 'pixi.js';
+import { Subject } from 'rxjs/internal/Subject';
+import { Component } from './component';
+import { GameObject } from './game-object';
+import { Lifecycle, LifecycleProps } from './lifecycle';
+import { PIXIResource } from './resources';
 
-export class Sprite extends PIXI.Sprite implements ILifecycle {
-  readonly name: string = "Sprite";
+export class Sprite extends PIXI.Sprite implements LifecycleProps {
+  readonly name: string = 'Sprite';
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
-  constructor(gameObject: GameObject, texture: PIXI.Texture) {
+  constructor(gameObject: GameObject, texture: PIXIResource) {
     super(texture);
 
     this.gameObject = gameObject;
     this.gameObject.addComponent(this);
+
+    // found no other way to truly override PIXI.Sprite destroy and trigger Lifecycle
+    this.destroy = (): void => {
+      super.destroy({ texture: false, textureSource: false });
+
+      Lifecycle.destroy(this);
+    };
   }
 
   update(): void {
     if (!this.parent) {
-      this.gameObject.parent?.stage.addChild(this);
+      this.gameObject.scene?.addChild(this);
     }
 
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
 
-    Component.prototype.update.call(this);
-  }
-
-  destroy(): void {
-    this.gameObject.parent?.stage.removeChild(this);
-
-    super.destroy();
-
-    Component.prototype.destroy.call(this);
+    Component.update(this);
   }
 }

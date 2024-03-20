@@ -1,25 +1,25 @@
-import "pixi-shim";
-import "pixi.js-legacy";
-import { Component } from "./component";
-import { GameObject } from "./game-object";
-import { CircleBody } from "./circle-body";
-import { Scene } from "./scene";
+import 'pixi-shim';
+import 'pixi.js-legacy';
+import { Component } from './component';
+import { GameObject } from './game-object';
+import { CircleBody } from './circle-body';
+import { Scene } from './scene';
 
-describe("GIVEN GameObject", () => {
-  it("THEN you can add component", () => {
+describe('GIVEN GameObject', () => {
+  it('THEN you can add component', () => {
     const go = new GameObject();
     const component = new Component(go);
 
     expect(go.components.length).toBe(1);
   });
 
-  it("THEN update propagates to components", () => {
+  it('THEN update propagates to components', () => {
     const go = new GameObject();
     const component1 = new Component(go);
     const component2 = new Component(go);
 
-    jest.spyOn(component1, "update");
-    jest.spyOn(component2, "update");
+    jest.spyOn(component1, 'update');
+    jest.spyOn(component2, 'update');
 
     go.update();
 
@@ -27,50 +27,47 @@ describe("GIVEN GameObject", () => {
     expect(component2.update).toHaveBeenCalled();
   });
 
-  it("THEN you can remove component", () => {
+  it('THEN you can remove component', () => {
     const go = new GameObject();
     const component = new Component(go);
 
     go.removeComponent(component);
-
     expect(go.components.length).toBe(0);
   });
 
-  it("THEN destroy removes component", () => {
+  it('THEN destroy removes component', () => {
     const go = new GameObject();
     const component = new Component(go);
 
     component.destroy();
-
     expect(go.components.length).toBe(0);
   });
 
-  it("THEN you can get component by name", () => {
+  it('THEN you can get component by name', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    expect(go.getComponentOfType("Component")).toBeTruthy();
+    expect(go.getComponentOfType('Component')).toBeTruthy();
   });
 
-  it("THEN you can get components by name", () => {
+  it('THEN you can get components by name', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    expect(go.getComponentsOfType("Component").length).toBe(1);
+    expect(go.getComponentsOfType('Component').length).toBe(1);
   });
 
-  it("THEN you can destroy 1000 bodies without problem", () => {
+  it('THEN you can destroy 1000 bodies without problem', () => {
     const scene = new Scene();
 
-    jest.spyOn(scene, "addChild");
-    jest.spyOn(scene, "removeChild");
+    jest.spyOn(scene, 'addChild');
+    jest.spyOn(scene, 'removeChild');
 
     for (let i = 0; i < 1000; i++) {
       const go: GameObject = new GameObject();
       const body = new CircleBody(go, 100);
 
       scene.addChild(go);
-
       expect(go.components.length).toBe(1);
     }
 
@@ -78,7 +75,6 @@ describe("GIVEN GameObject", () => {
     expect(scene.children.length).toBe(1000);
 
     scene.destroy();
-
     expect(scene.removeChild).toHaveBeenCalledTimes(1000);
     expect(scene.children.length).toBe(0);
   });

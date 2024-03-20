@@ -1,21 +1,23 @@
-import * as PIXI from "pixi.js";
-import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
-import { Subject } from "rxjs/internal/Subject";
-import { GameObject } from "./game-object";
-import { Container } from "./container";
+import * as PIXI from 'pixi.js';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
+import { Vector } from 'detect-collisions';
 
-export interface IAnimatorData {
-  animations: { [name: string]: (number | string)[] };
+import { GameObject } from './game-object';
+import { Container } from './container';
+
+export interface AnimatorData {
+  animations: Record<string, (number | string)[]>;
   cols: number;
   rows: number;
   animationSpeed?: number;
-  anchor?: { x: number; y: number };
+  anchor?: Vector;
 }
 
 export class Animator extends Container {
-  readonly name: string = "Animator";
+  readonly name: string = 'Animator';
   readonly complete$: Subject<string> = new Subject();
-  readonly state$: BehaviorSubject<string> = new BehaviorSubject("");
+  readonly state$: BehaviorSubject<string> = new BehaviorSubject('');
 
   states: string[];
   state?: string;
@@ -28,29 +30,37 @@ export class Animator extends Container {
       cols,
       rows,
       animationSpeed = 200,
-      anchor = { x: 0.5, y: 0.5 },
-    }: IAnimatorData,
-    { width, height, baseTexture }: PIXI.Texture
+      anchor = { x: 0.5, y: 0.5 }
+    }: AnimatorData,
+    { width, height, source }: PIXI.Texture
   ) {
     super(gameObject);
 
-    const tilewidth = width / cols;
-    const tileheight = height / rows;
+    const tileWidth = width / cols;
+    const tileHeight = height / rows;
 
-    Object.values(animations).forEach((frames) => {
+    Object.values(animations).forEach(animationFrames => {
       const animatedSprite = new PIXI.AnimatedSprite(
-        frames.map((frame: number) => {
-          const x = (frame * tilewidth) % width;
-          const y = Math.floor((frame * tilewidth) / width) * tileheight;
-          const rect: PIXI.Rectangle = new PIXI.Rectangle(
-            x,
-            y,
-            tilewidth,
-            tileheight
-          );
-          const texture: PIXI.Texture = new PIXI.Texture(baseTexture, rect);
+        animationFrames.map(animationFrameInput => {
+          const animationFrame =
+            typeof animationFrameInput === 'number'
+              ? animationFrameInput
+              : parseInt(animationFrameInput, 10);
 
-          texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          const frameWidth = Math.floor(animationFrame * tileWidth);
+          const frame: PIXI.Rectangle = new PIXI.Rectangle(
+            frameWidth % width,
+            tileHeight * Math.floor(frameWidth / width),
+            tileWidth,
+            tileHeight
+          );
+
+          const texture: PIXI.Texture = new PIXI.Texture({
+            source,
+            frame
+          });
+
+          texture.source.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
           return { texture, time: animationSpeed };
         })
@@ -59,7 +69,7 @@ export class Animator extends Container {
       animatedSprite.anchor.set(anchor.x, anchor.y);
 
       this.addChild(animatedSprite);
-    }, {});
+    });
 
     this.states = Object.keys(animations);
   }
@@ -79,25 +89,25 @@ export class Animator extends Container {
   }
 
   setAnimation(animation: PIXI.AnimatedSprite): void {
-    (this.children as PIXI.AnimatedSprite[])
-      .filter(
-        (child: PIXI.AnimatedSprite) =>
-          child instanceof PIXI.AnimatedSprite && child !== animation
-      )
-      .forEach((child: PIXI.AnimatedSprite) => {
-        child.visible = false;
-        child.stop();
-      });
+    const children = this.children.filter(
+      (child: PIXI.AnimatedSprite) =>
+        child instanceof PIXI.AnimatedSprite && child !== animation
+    );
+
+    children.forEach((child: PIXI.AnimatedSprite) => {
+      child.visible = false;
+      child.stop();
+    });
 
     this.animation = animation;
   }
 
-  setState(state: string, loop = true, stateWhenFinished = "idle"): string {
+  setState(state: string, loop = true, stateWhenFinished = 'idle'): string {
     const index: number = this.getAnimationIndex(state);
     const animation = this.children[index] as PIXI.AnimatedSprite;
 
     if (!animation || animation === this.animation) {
-      return "";
+      return '';
     }
 
     this.setAnimation(animation);
@@ -134,7 +144,7 @@ export class Animator extends Container {
     const indexes: number[] = this.states
       .map((direction: string, index: number) => ({
         direction,
-        index,
+        index
       }))
       .filter(({ direction }) => direction.toLocaleLowerCase().includes(state))
       .map(({ index }) => index);

@@ -24,26 +24,32 @@ class GameObject extends lifecycle_1.Lifecycle {
         super.update();
     }
     destroy() {
-        var _a, _b;
-        (_a = this.components) === null || _a === void 0 ? void 0 : _a.forEach((component) => {
+        var _a;
+        while (this.components.length) {
+            const component = this.components.pop();
+            // will also gameObject.removeComponent(component)
             component.destroy();
-        });
-        this.components = undefined;
-        (_b = this.parent) === null || _b === void 0 ? void 0 : _b.removeChild(this);
+        }
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(this);
         super.destroy();
     }
     addComponent(component) {
+        var _a;
         const index = this.components.indexOf(component);
         if (index !== -1) {
             return false;
         }
         this.components.push(component);
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.addChild(component);
         return true;
     }
     removeComponent(component) {
+        var _a;
         const index = this.components.indexOf(component);
         if (index !== -1) {
             this.components.splice(index, 1);
+            // scene.removeChild(component)
+            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(component);
         }
         return index !== -1;
     }

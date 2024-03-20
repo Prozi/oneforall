@@ -9,11 +9,5 @@ class Component extends lifecycle_1.Lifecycle {
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }
-    destroy() {
-        var _a, _b, _c, _d;
-        (_b = (_a = this.gameObject).removeComponent) === null || _b === void 0 ? void 0 : _b.call(_a, this);
-        (_d = (_c = this.gameObject.parent) === null || _c === void 0 ? void 0 : _c.removeChild) === null || _d === void 0 ? void 0 : _d.call(_c, this.gameObject);
-        super.destroy();
-    }
 }
 exports.Component = Component;
