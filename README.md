@@ -13,24 +13,21 @@ set of classes to better organize 2d game development
 - [collision detection](https://npmjs.com/package/detect-collisions)
 - [drawing on webgl canvas](https://npmjs.com/package/pixi.js)
 
-```
-<Gameplay>
-  ├─ [Resources Loader (PIXI.Loader + Cache)]
-  ├─ [2D Drawing Engine (PIXI.Application)]
-  │   └─ [HTMLCanvas]
-  └─ [Scene "Scene1"]
-      ├─ [2D Physics (Collision Detection)]
-      ├─ [GameObject "Level1" (from Prefab)]
-      │   ├─ [100x Sprite "TileSprite"]
-      │   └─ [30x PolygonBody "TileCollider"]
-      ├─ [GameObject "Player" (from Prefab)]
-      │   ├─ [CircleBody]
-      │   ├─ [Sprite]
-      │   └─ [StateMachine]
-      └─ [50x GameObject "Enemy" (from Prefab)]
-          ├─ [CircleBody]
-          ├─ [Sprite]
-          └─ [StateMachine]
+```bash
+[Drawing: "pixi.js"]
+   └──[Physics: "collision-detection"]
+      [1x Scene: "Scene1"]
+      ├──[1x Prefab: "Level1"]
+      │  ├──[100x Sprite "TileSprite"]
+      │  └──[30x PolygonBody "TileCollider"]
+      ├──[1x Prefab: "Player"]
+      │  ├──[CircleBody]
+      │  ├──[Sprite]
+      │  └──[StateMachine]
+      └──[50x Prefab: "Enemy"]
+         ├──[CircleBody]
+         ├──[Sprite]
+         └──[StateMachine]
 ```
 
 ## Installation
@@ -42,16 +39,16 @@ yarn add @jacekpietal/oneforall -D
 ## Demo
 
 ```typescript
-import { takeUntil } from 'rxjs'
-import { Scene, Resources } from '@jacekpietal/oneforall'
-import { createSprite } from '@jacekpietal/oneforall/dist/demo/sprite.prefab'
+import { takeUntil } from "rxjs"
+import { Scene, Resources } from "@jacekpietal/oneforall"
+import { createSprite } from "@jacekpietal/oneforall/dist/demo/sprite.prefab"
 
 async function start() {
   // create Scene
   const scene: Scene = new Scene({
     // with few optional params
     visible: true,
-    autoSort: true
+    autoSort: true,
   })
 
   // new since pixi 7/8
@@ -60,12 +57,12 @@ async function start() {
     sharedTicker: false,
     resizeTo: window,
     autoDensity: true,
-  });
+  })
 
-  document.body.appendChild(scene.pixi.canvas);
+  document.body.appendChild(scene.pixi.canvas)
 
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
-  const { data } = await Resources.loadResource('./cave-boy.json')
+  const { data } = await Resources.loadResource("./cave-boy.json")
   const { texture } = await Resources.loadResource(data.tileset)
 
   // create 50 sprites from that
@@ -85,7 +82,7 @@ start()
 ```typescript
 export function createSprite({ scene, data, texture }) {
   // a base molecule
-  const gameObject: any = new GameObject('Sprite')
+  const gameObject: any = new GameObject("Sprite")
 
   // create body
   gameObject.body = new CircleBody(gameObject, 20)
@@ -96,7 +93,7 @@ export function createSprite({ scene, data, texture }) {
 
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture)
-  gameObject.sprite.setState('idle', true)
+  gameObject.sprite.setState("idle", true)
 
   // add to scene
   scene.addChild(gameObject)
@@ -120,12 +117,12 @@ export function updateSprite(
   if (Math.random() < 0.05) {
     gameObject.target = {
       x: innerWidth / 2 / gameObject.parent.stage.scale.x,
-      y: innerHeight / 2 / gameObject.parent.stage.scale.y
+      y: innerHeight / 2 / gameObject.parent.stage.scale.y,
     }
   }
 
   if (Math.random() < 0.05) {
-    gameObject.sprite.setState('roll', false, 'idle')
+    gameObject.sprite.setState("roll", false, "idle")
   }
 
   if (Math.random() < 0.05) {
@@ -134,7 +131,7 @@ export function updateSprite(
     gameObject.target =
       gameObjects[Math.floor(Math.random() * gameObjects.length)]
 
-    gameObject.sprite.setState('run', true)
+    gameObject.sprite.setState("run", true)
   }
 
   if (gameObject.target) {
