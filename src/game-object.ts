@@ -12,10 +12,10 @@ export class GameObject extends Lifecycle {
   scene?: Scene | SceneBase;
   label: string;
 
-  constructor(name = 'GameObject', x = 0, y = 0) {
+  constructor(label = 'GameObject', x = 0, y = 0) {
     super();
 
-    this.label = name;
+    this.label = label;
     this.x = x;
     this.y = y;
   }

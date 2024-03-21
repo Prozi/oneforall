@@ -94,10 +94,10 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   }
 
   getChildOfType(type: string): PIXI.Container {
-    return (this.children as Lifecycle[]).find(({ name }) => name === type);
+    return (this.children as Lifecycle[]).find(({ label }) => label === type);
   }
 
   getChildrenOfType(type: string): PIXI.Container[] {
-    return (this.children as Lifecycle[]).filter(({ name }) => name === type);
+    return (this.children as Lifecycle[]).filter(({ label }) => label === type);
   }
 }

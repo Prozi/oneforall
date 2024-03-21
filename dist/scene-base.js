@@ -62,10 +62,10 @@ class SceneBase extends lifecycle_1.Lifecycle {
         return result;
     }
     getChildOfType(type) {
-        return this.children.find(({ name }) => name === type);
+        return this.children.find(({ label }) => label === type);
     }
     getChildrenOfType(type) {
-        return this.children.filter(({ name }) => name === type);
+        return this.children.filter(({ label }) => label === type);
     }
 }
 exports.SceneBase = SceneBase;

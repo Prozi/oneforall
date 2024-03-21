@@ -4,12 +4,12 @@ exports.GameObject = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
 class GameObject extends lifecycle_1.Lifecycle {
-    constructor(name = 'GameObject', x = 0, y = 0) {
+    constructor(label = 'GameObject', x = 0, y = 0) {
         super();
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.components = [];
-        this.label = name;
+        this.label = label;
         this.x = x;
         this.y = y;
     }

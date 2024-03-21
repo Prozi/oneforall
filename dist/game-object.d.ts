@@ -9,7 +9,7 @@ export declare class GameObject extends Lifecycle {
     components: LifecycleProps[];
     scene?: Scene | SceneBase;
     label: string;
-    constructor(name?: string, x?: number, y?: number);
+    constructor(label?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
     update(): void;
     destroy(): void;

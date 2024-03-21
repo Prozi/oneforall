@@ -4,16 +4,16 @@ export class Prefab extends GameObject {
   private createFunction: (prefab: GameObject) => Promise<void>;
 
   constructor(
-    name = 'GameObject',
+    label = 'GameObject',
     createFunction: (prefab: GameObject) => Promise<void>
   ) {
-    super(name, 0, 0);
+    super(label, 0, 0);
 
     this.createFunction = createFunction;
   }
 
   async instantiate(): Promise<GameObject> {
-    const gameObject = new GameObject(this.name, this.x, this.y);
+    const gameObject = new GameObject(this.label, this.x, this.y);
 
     await this.createFunction(gameObject);
 

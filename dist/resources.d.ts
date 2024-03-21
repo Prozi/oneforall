@@ -4,7 +4,7 @@ export declare class Resources {
     constructor(path?: string, cacheSize?: number);
     static loadResource<T = PIXIResource>(path: string): Promise<T>;
     static loadResources<T = PIXIResource>(resources: string[]): Promise<{
-        [name: string]: T;
+        [label: string]: T;
     }>;
     get(url: string): Promise<PIXIResource>;
 }

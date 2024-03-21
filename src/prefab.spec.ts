@@ -24,7 +24,7 @@ describe('GIVEN Prefab', () => {
     expect(instance).toBeTruthy();
     expect(instance.x).toBe(120);
     expect(instance.y).toBe(60);
-    expect(instance.name).toBe('MyPrefab');
+    expect(instance.label).toBe('MyPrefab');
   });
 
   it('THEN can create 100 instances', async() => {

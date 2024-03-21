@@ -27,7 +27,7 @@ export class Resources {
 
   static loadResources<T = PIXIResource>(
     resources: string[]
-  ): Promise<{ [name: string]: T }> {
+  ): Promise<{ [label: string]: T }> {
     const promises = resources.map(path => PIXI.Assets.load(path));
 
     return new Promise(resolve => {

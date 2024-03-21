@@ -13,7 +13,7 @@ describe('GIVEN Scene', () => {
 
   it('THEN it can have children', () => {
     const scene = new Scene({
-      name: 'MyScene1',
+      label: 'MyScene1',
       scale: 2,
       visible: true
     });
@@ -26,7 +26,7 @@ describe('GIVEN Scene', () => {
 
   it('THEN scene propagates update to gameobject to component', () => {
     const scene = new Scene({
-      name: 'MyScene1',
+      label: 'MyScene1',
       scale: 2,
       visible: true
     });

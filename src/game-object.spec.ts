@@ -43,14 +43,14 @@ describe('GIVEN GameObject', () => {
     expect(go.components.length).toBe(0);
   });
 
-  it('THEN you can get component by name', () => {
+  it('THEN you can get component by label', () => {
     const go = new GameObject();
     const component = new Component(go);
 
     expect(go.getComponentOfType('Component')).toBeTruthy();
   });
 
-  it('THEN you can get components by name', () => {
+  it('THEN you can get components by label', () => {
     const go = new GameObject();
     const component = new Component(go);
 
