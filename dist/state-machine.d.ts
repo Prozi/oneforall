@@ -3,7 +3,7 @@ import { GameObject } from './game-object';
 import { Component } from './component';
 export type TStateValidator = (newState: string) => boolean;
 export declare class StateMachine extends Component {
-    readonly name: string;
+    readonly label: string;
     readonly state$: Subject<string>;
     readonly change$: Subject<string[]>;
     state: string;

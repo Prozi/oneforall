@@ -5,7 +5,7 @@ import { Scene } from './scene';
 import { SceneBase } from './scene-base';
 
 export interface LifecycleProps {
-  readonly name: string;
+  readonly label: string;
 
   update$?: Subject<void>;
   destroy$?: Subject<void>;
@@ -16,7 +16,7 @@ export interface LifecycleProps {
 }
 
 export class Lifecycle extends PIXI.Container implements LifecycleProps {
-  readonly name: string = 'Lifecycle';
+  readonly label: string = 'Lifecycle';
 
   update$?: Subject<void> = new Subject();
   destroy$?: Subject<void> = new Subject();

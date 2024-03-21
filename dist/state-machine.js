@@ -6,7 +6,7 @@ const component_1 = require("./component");
 class StateMachine extends component_1.Component {
     constructor(gameObject, initialState = 'INITIAL_STATE') {
         super(gameObject);
-        this.name = 'StateMachine';
+        this.label = 'StateMachine';
         this.state$ = new Subject_1.Subject();
         this.change$ = new Subject_1.Subject();
         this.validators = {};

@@ -1,7 +1,7 @@
 import { GameObject } from './game-object';
 import { Lifecycle } from './lifecycle';
 export declare class Component extends Lifecycle {
-    readonly name: string;
+    readonly label: string;
     readonly gameObject: GameObject;
     constructor(gameObject: GameObject);
 }

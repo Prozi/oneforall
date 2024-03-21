@@ -3,14 +3,14 @@ import { Subject } from 'rxjs/internal/Subject';
 import { System, Body } from 'detect-collisions';
 import { Lifecycle } from './lifecycle';
 export interface SceneOptions {
-    name?: string;
+    label?: string;
     visible?: boolean;
     autoSort?: boolean;
     scale?: number;
     nodeMaxEntries?: number;
 }
 export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
-    readonly name: string;
+    readonly label: string;
     children$: Subject<void>;
     physics: System<TBody>;
     destroy$: Subject<void>;

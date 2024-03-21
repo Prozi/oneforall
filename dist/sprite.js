@@ -31,7 +31,7 @@ const lifecycle_1 = require("./lifecycle");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
         super(texture);
-        this.name = 'Sprite';
+        this.label = 'Sprite';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;

@@ -29,7 +29,7 @@ const Subject_1 = require("rxjs/internal/Subject");
 class Lifecycle extends PIXI.Container {
     constructor() {
         super(...arguments);
-        this.name = 'Lifecycle';
+        this.label = 'Lifecycle';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
     }

@@ -30,7 +30,7 @@ const lifecycle_1 = require("./lifecycle");
 class Container extends PIXI.Container {
     constructor(gameObject) {
         super();
-        this.name = 'Container';
+        this.label = 'Container';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.gameObject = gameObject;

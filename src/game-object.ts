@@ -10,12 +10,12 @@ export class GameObject extends Lifecycle {
 
   components: LifecycleProps[] = [];
   scene?: Scene | SceneBase;
-  name: string;
+  label: string;
 
   constructor(name = 'GameObject', x = 0, y = 0) {
     super();
 
-    this.name = name;
+    this.label = name;
     this.x = x;
     this.y = y;
   }
@@ -70,10 +70,10 @@ export class GameObject extends Lifecycle {
   }
 
   getComponentOfType(type: string): LifecycleProps {
-    return this.components.find(({ name }) => name === type);
+    return this.components.find(({ label }) => label === type);
   }
 
   getComponentsOfType(type: string): LifecycleProps[] {
-    return this.components.filter(({ name }) => name === type);
+    return this.components.filter(({ label }) => label === type);
   }
 }

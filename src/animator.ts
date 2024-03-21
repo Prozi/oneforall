@@ -15,7 +15,7 @@ export interface AnimatorData {
 }
 
 export class Animator extends Container {
-  readonly name: string = 'Animator';
+  readonly label: string = 'Animator';
   readonly complete$: Subject<string> = new Subject();
   readonly state$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -60,7 +60,7 @@ export class Animator extends Container {
             frame
           });
 
-          texture.source.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          texture.source.scaleMode = 'nearest';
 
           return { texture, time: animationSpeed };
         })

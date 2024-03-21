@@ -9,7 +9,7 @@ class GameObject extends lifecycle_1.Lifecycle {
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.components = [];
-        this.name = name;
+        this.label = name;
         this.x = x;
         this.y = y;
     }
@@ -54,10 +54,10 @@ class GameObject extends lifecycle_1.Lifecycle {
         return index !== -1;
     }
     getComponentOfType(type) {
-        return this.components.find(({ name }) => name === type);
+        return this.components.find(({ label }) => label === type);
     }
     getComponentsOfType(type) {
-        return this.components.filter(({ name }) => name === type);
+        return this.components.filter(({ label }) => label === type);
     }
 }
 exports.GameObject = GameObject;

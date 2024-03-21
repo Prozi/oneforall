@@ -31,7 +31,7 @@ const container_1 = require("./container");
 class Animator extends container_1.Container {
     constructor(gameObject, { animations, cols, rows, animationSpeed = 200, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
         super(gameObject);
-        this.name = 'Animator';
+        this.label = 'Animator';
         this.complete$ = new Subject_1.Subject();
         this.state$ = new BehaviorSubject_1.BehaviorSubject('');
         const tileWidth = width / cols;
@@ -47,7 +47,7 @@ class Animator extends container_1.Container {
                     source,
                     frame
                 });
-                texture.source.scaleMode = PIXI.SCALE_MODES.NEAREST;
+                texture.source.scaleMode = 'nearest';
                 return { texture, time: animationSpeed };
             }));
             animatedSprite.anchor.set(anchor.x, anchor.y);

@@ -7,7 +7,7 @@ const lifecycle_1 = require("./lifecycle");
 class SceneBase extends lifecycle_1.Lifecycle {
     constructor(options = {}) {
         super();
-        this.name = 'Scene';
+        this.label = 'Scene';
         this.children$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);

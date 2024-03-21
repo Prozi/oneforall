@@ -8,7 +8,7 @@ export declare class GameObject extends Lifecycle {
     readonly destroy$: Subject<void>;
     components: LifecycleProps[];
     scene?: Scene | SceneBase;
-    name: string;
+    label: string;
     constructor(name?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
     update(): void;

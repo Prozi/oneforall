@@ -5,7 +5,7 @@ import { GameObject } from './game-object';
 import { Lifecycle } from './lifecycle';
 
 export interface SceneOptions {
-  name?: string;
+  label?: string;
   visible?: boolean;
   autoSort?: boolean;
   scale?: number;
@@ -13,7 +13,7 @@ export interface SceneOptions {
 }
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
-  readonly name: string = 'Scene';
+  readonly label: string = 'Scene';
 
   children$: Subject<void> = new Subject();
   physics: System<TBody>;
