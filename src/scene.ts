@@ -1,6 +1,6 @@
+import * as PIXI from 'pixi.js';
 import { Body } from 'detect-collisions';
 import { takeUntil } from 'rxjs/operators';
-import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { Inject } from '@jacekpietal/dependency-injection';
 import { Application } from './application';
 import { Resources } from './resources';
@@ -27,6 +27,12 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
 
     // real stage
     this.pixi.stage.addChild(this);
+  }
+
+  async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
+    this.pixi.init(options);
+
+    document.body.appendChild(this.pixi.canvas);
   }
 
   start(): void {

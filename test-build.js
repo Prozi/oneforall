@@ -1,9 +1,8 @@
-require('pixi-shim')
+require("pixi-shim")
 
-const { GameObject, Component } = require('./dist/index.js')
+const { GameObject, Component } = require("./dist/index.js")
 
-const go = new GameObject()
-const component = new Component(go)
+const gameObject = new GameObject()
+const component = new Component(gameObject)
 
-console.info(go)
-console.info(component)
+console.info({ gameObject: !!gameObject, component: !!component })

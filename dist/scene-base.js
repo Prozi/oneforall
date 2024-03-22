@@ -13,6 +13,8 @@ class SceneBase extends lifecycle_1.Lifecycle {
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.scale = options.scale || 1;
     }
+    // tslint:disable-next-line
+    async init(_options) { }
     stop() {
         if (this.animationFrame) {
             cancelAnimationFrame(this.animationFrame);

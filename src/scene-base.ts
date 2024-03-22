@@ -27,6 +27,9 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
     this.scale = options.scale || 1;
   }
 
+  // tslint:disable-next-line
+  async init(_options?: Record<string, any>): Promise<void> {}
+
   stop(): void {
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);

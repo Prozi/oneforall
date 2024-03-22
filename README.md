@@ -18,8 +18,8 @@ set of classes to better organize 2d game development
    └──[Physics: "collision-detection"]
       [1x Scene: "Scene1"]
       ├──[1x Prefab: "Level1"]
-      │  ├──[100x Sprite "TileSprite"]
-      │  └──[30x PolygonBody "TileCollider"]
+      │  ├──[100x Sprite: "TileSprite"]
+      │  └──[30x PolygonBody: "TileCollider"]
       ├──[1x Prefab: "Player"]
       │  ├──[CircleBody]
       │  ├──[Sprite]
@@ -178,163 +178,82 @@ to see how the Prefab class was used in the demo
 ## Tests
 
 ```
-$ jest --verbose --silent
- PASS  src/component.spec.ts (5.432 s)
-  GIVEN Component
-    ✓ THEN update publishes update$ (3 ms)
-    ✓ THEN destroy publishes destroy$ (1 ms)
+{ gameObject: true, component: true }
 
- PASS  src/state-machine.spec.ts (5.507 s)
-  GIVEN StateMachine
-    ✓ THEN you can set validators (2 ms)
-    ✓ THEN you can't change state to invalid state (2 ms)
-    ✓ THEN you can change state to valid state (1 ms)
-
- PASS  src/sprite.spec.ts (6.322 s)
-  GIVEN Sprite
-    ✓ THEN update propagates x/y changes (4 ms)
-    ✓ THEN destroy works (1 ms)
-
- PASS  src/scene.spec.ts (6.497 s)
-  GIVEN Scene
-    ✓ THEN it works (13 ms)
-    ✓ THEN it can have children (1 ms)
-    ✓ THEN scene propagates update to gameobject to component (2 ms)
-
- PASS  src/scene-base.spec.ts (6.576 s)
-  GIVEN SceneBase
-    ✓ THEN it works (2 ms)
-    ✓ THEN it can have children (1 ms)
-    ✓ THEN scene propagates update to gameobject to component (2 ms)
-
- PASS  src/container.spec.ts (6.723 s)
-  GIVEN Container
-    ✓ THEN update propagates x/y changes (3 ms)
-    ✓ THEN destroy works (5 ms)
-
- PASS  src/index.spec.ts (6.678 s)
-  GIVEN index.ts
-    ✓ THEN basic imports work (3 ms)
+ PASS  src/circle-body.spec.ts
+  GIVEN CircleBody
+    ✓ THEN it has set property radius (4 ms)
+    ✓ THEN it can't have zero radius (9 ms)
+    ✓ THEN update propagates x/y changes (1 ms)
 
  PASS  src/application.spec.ts
   GIVEN Application
-    ✓ THEN it works (12 ms)
-
- PASS  src/polygon-body.spec.ts (6.791 s)
-  GIVEN PolygonBody
-    ✓ THEN update propagates x/y changes (3 ms)
-
- PASS  src/circle-body.spec.ts (6.814 s)
-  GIVEN CircleBody
-    ✓ THEN it has set property radius (2 ms)
-    ✓ THEN it can't have zero radius (6 ms)
-    ✓ THEN update propagates x/y changes
+    ✓ THEN it works (3 ms)
 
  PASS  src/resources.spec.ts
   GIVEN Resources
-    ✓ THEN it silently fails and proceeds (14 ms)
+    ✓ THEN it silently fails and proceeds (7 ms)
 
- PASS  src/prefab.spec.ts (6.896 s)
+ PASS  src/prefab.spec.ts
   GIVEN Prefab
-    ✓ THEN can be instantiated (3 ms)
-    ✓ THEN can create 100 instances (13 ms)
+    ✓ THEN can be instantiated (4 ms)
+    ✓ THEN can create 100 instances (9 ms)
 
- PASS  src/game-object.spec.ts (6.997 s)
+ PASS  src/sprite.spec.ts
+  GIVEN Sprite
+    ✓ THEN update propagates x/y changes (3 ms)
+    ✓ THEN removeChild works
+    ✓ THEN destroy works (1 ms)
+    ✓ THEN destroy works extended
+
+ PASS  src/scene.spec.ts
+  GIVEN Scene
+    ✓ THEN it works (3 ms)
+    ✓ THEN it can have children
+    ✓ THEN scene propagates update to gameobject to component (4 ms)
+
+ PASS  src/game-object.spec.ts
   GIVEN GameObject
-    ✓ THEN you can add component (3 ms)
-    ✓ THEN update propagates to components (2 ms)
-    ✓ THEN you can remove component (1 ms)
+    ✓ THEN you can add component (4 ms)
+    ✓ THEN update propagates to components (1 ms)
+    ✓ THEN you can remove component
     ✓ THEN destroy removes component
-    ✓ THEN you can get component by name
-    ✓ THEN you can get components by name (1 ms)
-    ✓ THEN you can destroy 1000 bodies without problem (58 ms)
+    ✓ THEN you can get component by label (1 ms)
+    ✓ THEN you can get components by label
+    ✓ THEN you can destroy 1000 bodies without problem (109 ms)
 
-A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+ PASS  src/state-machine.spec.ts
+  GIVEN StateMachine
+    ✓ THEN you can set validators (1 ms)
+    ✓ THEN you can't change state to invalid state (1 ms)
+    ✓ THEN you can change state to valid state
+
+ PASS  src/component.spec.ts
+  GIVEN Component
+    ✓ THEN update publishes update$ (1 ms)
+    ✓ THEN destroy publishes destroy$
+
+ PASS  src/container.spec.ts
+  GIVEN Container
+    ✓ THEN update propagates x/y changes (1 ms)
+    ✓ THEN destroy works
+
+ PASS  src/polygon-body.spec.ts
+  GIVEN PolygonBody
+    ✓ THEN update propagates x/y changes (1 ms)
+
+ PASS  src/scene-base.spec.ts
+  GIVEN SceneBase
+    ✓ THEN it works (1 ms)
+    ✓ THEN it can have children
+    ✓ THEN scene propagates update to gameobject to component (1 ms)
+
+ PASS  src/index.spec.ts
+  GIVEN index.ts
+    ✓ THEN basic imports work (1 ms)
+
 Test Suites: 13 passed, 13 total
-Tests:       31 passed, 31 total
+Tests:       33 passed, 33 total
 Snapshots:   0 total
-Time:        7.892 s, estimated 8 s
-```
-
-```
-$ node -r esm ./test-build.js
-...
-<ref *1> GameObject {
-  'update$': Subject {
-    closed: false,
-    observers: [],
-    isStopped: false,
-    hasError: false,
-    thrownError: null
-  },
-  'destroy$': Subject {
-    closed: false,
-    observers: [],
-    isStopped: false,
-    hasError: false,
-    thrownError: null
-  },
-  components: Set(1) {
-    Component {
-      name: 'Component',
-      'update$': [Subject],
-      'destroy$': [Subject],
-      gameObject: [Circular *1]
-    }
-  },
-  'components$': Subject {
-    closed: false,
-    observers: [],
-    isStopped: false,
-    hasError: false,
-    thrownError: null
-  },
-  name: 'GameObject',
-  x: 0,
-  y: 0
-}
-<ref *1> Component {
-  name: 'Component',
-  'update$': Subject {
-    closed: false,
-    observers: [],
-    isStopped: false,
-    hasError: false,
-    thrownError: null
-  },
-  'destroy$': Subject {
-    closed: false,
-    observers: [],
-    isStopped: false,
-    hasError: false,
-    thrownError: null
-  },
-  gameObject: GameObject {
-    'update$': Subject {
-      closed: false,
-      observers: [],
-      isStopped: false,
-      hasError: false,
-      thrownError: null
-    },
-    'destroy$': Subject {
-      closed: false,
-      observers: [],
-      isStopped: false,
-      hasError: false,
-      thrownError: null
-    },
-    components: Set(1) { [Circular *1] },
-    'components$': Subject {
-      closed: false,
-      observers: [],
-      isStopped: false,
-      hasError: false,
-      thrownError: null
-    },
-    name: 'GameObject',
-    x: 0,
-    y: 0
-  }
-}
+Time:        2.438 s, estimated 3 s
 ```

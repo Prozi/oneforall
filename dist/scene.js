@@ -25,6 +25,10 @@ class Scene extends scene_base_1.SceneBase {
         // real stage
         this.pixi.stage.addChild(this);
     }
+    async init(options) {
+        this.pixi.init(options);
+        document.body.appendChild(this.pixi.canvas);
+    }
     start() {
         this.pixi.stage.scale.set(this.scale.x, this.scale.y);
         this.pixi.start();

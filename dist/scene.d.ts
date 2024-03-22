@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js';
 import { Body } from 'detect-collisions';
 import { Application } from './application';
 import { Resources } from './resources';
@@ -7,6 +8,7 @@ export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     resouces: Resources;
     options: SceneOptions;
     constructor(options?: SceneOptions);
+    init(options?: Partial<PIXI.ApplicationOptions>): Promise<void>;
     start(): void;
     stop(): void;
     destroy(): void;

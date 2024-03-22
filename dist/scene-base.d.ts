@@ -16,6 +16,7 @@ export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
     destroy$: Subject<void>;
     animationFrame: number;
     constructor(options?: SceneOptions);
+    init(_options?: Record<string, any>): Promise<void>;
     stop(): void;
     start(): void;
     update(): void;
