@@ -30,7 +30,7 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   }
 
   async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
-    this.pixi.init(options);
+    await this.pixi.init(options);
 
     document.body.appendChild(this.pixi.canvas);
   }

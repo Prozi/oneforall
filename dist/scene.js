@@ -26,7 +26,7 @@ class Scene extends scene_base_1.SceneBase {
         this.pixi.stage.addChild(this);
     }
     async init(options) {
-        this.pixi.init(options);
+        await this.pixi.init(options);
         document.body.appendChild(this.pixi.canvas);
     }
     start() {
