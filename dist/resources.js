@@ -50,9 +50,9 @@ let Resources = Resources_1 = class Resources {
         return loader.load(path);
     }
     static loadResources(resources) {
-        const promises = resources.map(path => PIXI.Assets.load(path));
-        return new Promise(resolve => {
-            Promise.all(promises).then(resolved => resolve(resolved.reduce((result, loaded, index) => (Object.assign(Object.assign({}, result), { [resources[index]]: loaded })), {})));
+        const promises = resources.map((path) => PIXI.Assets.load(path));
+        return new Promise((resolve) => {
+            Promise.all(promises).then((resolved) => resolve(resolved.reduce((result, loaded, index) => (Object.assign(Object.assign({}, result), { [resources[index]]: loaded })), {})));
         });
     }
     async get(url) {

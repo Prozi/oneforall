@@ -39,9 +39,9 @@ export class Animator extends Container {
     const tileWidth = width / cols;
     const tileHeight = height / rows;
 
-    Object.values(animations).forEach(animationFrames => {
+    Object.values(animations).forEach((animationFrames) => {
       const animatedSprite = new PIXI.AnimatedSprite(
-        animationFrames.map(animationFrameInput => {
+        animationFrames.map((animationFrameInput) => {
           const animationFrame =
             typeof animationFrameInput === 'number'
               ? animationFrameInput

@@ -13,8 +13,8 @@ import { Scene } from './scene';
 type TGameObject = GameObject & { state: StateMachine; sprite: Sprite };
 
 describe('GIVEN Prefab', () => {
-  it('THEN can be instantiated', async() => {
-    const prefab = new Prefab('MyPrefab', async(go: GameObject) => {
+  it('THEN can be instantiated', async () => {
+    const prefab = new Prefab('MyPrefab', async (go: GameObject) => {
       go.x = 120;
       go.y = 60;
       (go as TGameObject).state = new StateMachine(go);
@@ -27,12 +27,12 @@ describe('GIVEN Prefab', () => {
     expect(instance.label).toBe('MyPrefab');
   });
 
-  it('THEN can create 100 instances', async() => {
+  it('THEN can create 100 instances', async () => {
     const scene: Scene = new Scene({ visible: true });
     const prefab: Prefab = new Prefab(
       'Soldier',
       // tslint:disable-next-line: no-any
-      async(
+      async (
         go: GameObject & { state?: StateMachine; sprite?: Sprite; body?: Body }
       ) => {
         go.state = new StateMachine(go);
@@ -49,7 +49,7 @@ describe('GIVEN Prefab', () => {
 
     const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)
-      .map(async() => GameObject.instantiate(prefab));
+      .map(async () => GameObject.instantiate(prefab));
 
     const gameObjects: GameObject[] = await Promise.all(promises);
 

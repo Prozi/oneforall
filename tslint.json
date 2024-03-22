@@ -96,10 +96,9 @@
     "object-literal-sort-keys": false,
     "prefer-const": true,
     "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
-
     "align": [true, "parameters", "statements"],
     "array-type": [true, "array"],
-    "arrow-parens": [true, "ban-single-arg-parens"],
+    "arrow-parens": true,
     "arrow-return-shorthand": [true],
     "binary-expression-operand-order": true,
     "callable-types": true,
@@ -145,7 +144,15 @@
     "quotemark": [true, "single"],
     "return-undefined": true,
     "semicolon": [true, "always"],
-    "space-before-function-paren": [true, "never"],
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "never",
+        "named": "never",
+        "arrow": "always",
+        "asyncArrow": "always"
+      }
+    ],
     "space-within-parens": 0,
     "switch-final-break": true,
     "type-literal-delimiter": true,

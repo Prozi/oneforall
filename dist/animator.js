@@ -36,8 +36,8 @@ class Animator extends container_1.Container {
         this.state$ = new BehaviorSubject_1.BehaviorSubject('');
         const tileWidth = width / cols;
         const tileHeight = height / rows;
-        Object.values(animations).forEach(animationFrames => {
-            const animatedSprite = new PIXI.AnimatedSprite(animationFrames.map(animationFrameInput => {
+        Object.values(animations).forEach((animationFrames) => {
+            const animatedSprite = new PIXI.AnimatedSprite(animationFrames.map((animationFrameInput) => {
                 const animationFrame = typeof animationFrameInput === 'number'
                     ? animationFrameInput
                     : parseInt(animationFrameInput, 10);

@@ -10,7 +10,7 @@ export class Resources {
   private cache: Cache<Promise<PIXIResource>>;
 
   constructor(path = '', cacheSize = 64) {
-    this.cache = new Cache(async(url: string) => {
+    this.cache = new Cache(async (url: string) => {
       try {
         return await Resources.loadResource(`${path}${url}`);
       } catch (err) {
@@ -28,10 +28,10 @@ export class Resources {
   static loadResources<T = PIXIResource>(
     resources: string[]
   ): Promise<{ [label: string]: T }> {
-    const promises = resources.map(path => PIXI.Assets.load(path));
+    const promises = resources.map((path) => PIXI.Assets.load(path));
 
-    return new Promise(resolve => {
-      Promise.all(promises).then(resolved =>
+    return new Promise((resolve) => {
+      Promise.all(promises).then((resolved) =>
         resolve(
           resolved.reduce(
             (result, loaded, index) => ({
