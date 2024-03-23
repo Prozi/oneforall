@@ -3,7 +3,7 @@ import { BodyOptions, Ellipse } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 export declare class CircleBody extends Ellipse implements LifecycleProps {
-    readonly label: string;
+    label: string;
     readonly gameObject: GameObject;
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;

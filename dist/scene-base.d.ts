@@ -10,7 +10,7 @@ export interface SceneOptions {
     nodeMaxEntries?: number;
 }
 export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
-    readonly label: string;
+    label: string;
     children$: Subject<void>;
     physics: System<TBody>;
     destroy$: Subject<void>;

@@ -12,7 +12,7 @@ export interface AnimatorData {
     anchor?: Vector;
 }
 export declare class Animator extends Container {
-    readonly label: string;
+    label: string;
     readonly complete$: Subject<string>;
     readonly state$: BehaviorSubject<string>;
     states: string[];

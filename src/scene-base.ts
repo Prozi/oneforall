@@ -13,7 +13,7 @@ export interface SceneOptions {
 }
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
-  readonly label: string = 'Scene';
+  label = 'Scene';
 
   children$: Subject<void> = new Subject();
   physics: System<TBody>;

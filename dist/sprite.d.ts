@@ -4,7 +4,7 @@ import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 import { PIXIResource } from './resources';
 export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
-    readonly label: string;
+    label: string;
     readonly gameObject: GameObject;
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;

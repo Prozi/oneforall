@@ -3,7 +3,7 @@ import { BodyOptions, Polygon, Vector } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 export declare class PolygonBody extends Polygon implements LifecycleProps {
-    readonly label: string;
+    label: string;
     readonly gameObject: GameObject;
     readonly update$: Subject<void>;
     readonly destroy$: Subject<void>;

@@ -5,7 +5,7 @@ import { Component } from './component';
 export type TStateValidator = (newState: string) => boolean;
 
 export class StateMachine extends Component {
-  readonly label: string = 'StateMachine';
+  label = 'StateMachine';
   readonly state$: Subject<string> = new Subject();
   readonly change$: Subject<string[]> = new Subject();
 

@@ -4,7 +4,7 @@ import { GameObject } from './game-object';
 import { LifecycleProps, Lifecycle } from './lifecycle';
 
 export class PolygonBody extends Polygon implements LifecycleProps {
-  readonly label: string = 'PolygonBody';
+  label = 'PolygonBody';
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
