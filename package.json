@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
