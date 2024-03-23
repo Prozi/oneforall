@@ -15,8 +15,8 @@ set of classes to better organize 2d game development
 
 ```bash
 [Drawing: "pixi.js"]
-   ├──[Physics: "collision-detection"]
    └──[1x Scene: "Scene1"]
+      ├──[1x Physics: "collision-detection"]
       ├──[1x Prefab: "Level1"]
       │  ├──[100x Sprite: "TileSprite"]
       │  └──[30x PolygonBody: "TileCollider"]

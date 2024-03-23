@@ -2066,10 +2066,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.4.3:
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.4.3.tgz#1a0852f1361d223294b510574b0fbe332eb8ec39"
-  integrity sha512-tCH4mU6ROBqqM8Ttt/KDabUQxANlERu4EJoR0DWefBf8XvPKUaFlaJPgnwLprto2x9kQC34N6dGHSQGdlQGM8A==
+detect-collisions@^9.4.4:
+  version "9.4.4"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.4.4.tgz#eb784b432189e8e33e11bdd6bb0c7421fe2fbdd0"
+  integrity sha512-1TeABhhYOENxHj9WhZc5PpI3k3bvI0IRmJhg609GqiyaG0lESh/YYb2CwCM96LlTShuofdVvKwx/lsqF6t4n7g==
   dependencies:
     "@types/rbush" "^3.0.3"
     "@types/sat" "^0.0.35"

@@ -1,10 +1,11 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "update": "ncu -u && yarn add typescript@^4 -D",
     "start": "chef-express docs",
     "lint": "yarn tslint 'src/**/*.ts' --fix",
     "test": "jest --silent --verbose --forceExit",
@@ -29,7 +30,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^9.4.3",
+    "detect-collisions": "^9.4.4",
     "latermom": "^2.0.1",
     "pixi-shim": "^2.5.0",
     "pixi.js": "^8",
