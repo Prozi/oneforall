@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import { takeUntil } from 'rxjs/operators';
 import { GameObject } from '../game-object';
 import { CircleBody } from '../circle-body';
-import { Scene } from '../scene';
 import { Animator } from '../animator';
 import { Vector } from 'detect-collisions';
 

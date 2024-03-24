@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { System, Body } from 'detect-collisions';
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
+import { Animator } from './animator';
 
 export interface SceneOptions {
   label?: string;
@@ -77,11 +78,11 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   }
 
   addChild(...children: LifecycleProps[]): void {
-    // tslint:disable-next-line: no-any
-    children.forEach((child: any) => {
-      const sprite = child.sprite || child;
-      if (sprite instanceof PIXI.Container) {
-        this.stage.addChild(sprite);
+    children.forEach((child: LifecycleProps & { sprite?: PIXI.Container }) => {
+      if (child.sprite instanceof PIXI.Container) {
+        this.stage.addChild(child.sprite);
+      } else if (child instanceof PIXI.Container) {
+        this.stage.addChild(child);
       }
 
       child.scene = this;
@@ -92,19 +93,19 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   }
 
   removeChild(...children: LifecycleProps[]): void {
-    // tslint:disable-next-line: no-any
-    children.forEach((child: any) => {
-      const index = this.children.indexOf(child);
-      if (index !== -1) {
-        this.children.splice(index, 1);
-      }
-
-      const sprite = child.sprite || child;
-      if (sprite instanceof PIXI.Container) {
+    children.forEach((child: LifecycleProps & { sprite?: PIXI.Container }) => {
+      if (child.sprite instanceof PIXI.Container) {
+        this.stage.removeChild(child.sprite);
+      } else if (child instanceof PIXI.Container) {
         this.stage.removeChild(child);
       }
 
       child.scene = null;
+
+      const index = this.children.indexOf(child);
+      if (index !== -1) {
+        this.children.splice(index, 1);
+      }
     });
 
     this.children$.next();

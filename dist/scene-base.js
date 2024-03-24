@@ -77,11 +77,12 @@ class SceneBase {
         lifecycle_1.Lifecycle.destroy(this);
     }
     addChild(...children) {
-        // tslint:disable-next-line: no-any
         children.forEach((child) => {
-            const sprite = child.sprite || child;
-            if (sprite instanceof PIXI.Container) {
-                this.stage.addChild(sprite);
+            if (child.sprite instanceof PIXI.Container) {
+                this.stage.addChild(child.sprite);
+            }
+            else if (child instanceof PIXI.Container) {
+                this.stage.addChild(child);
             }
             child.scene = this;
         });
@@ -89,17 +90,18 @@ class SceneBase {
         this.children$.next();
     }
     removeChild(...children) {
-        // tslint:disable-next-line: no-any
         children.forEach((child) => {
+            if (child.sprite instanceof PIXI.Container) {
+                this.stage.removeChild(child.sprite);
+            }
+            else if (child instanceof PIXI.Container) {
+                this.stage.removeChild(child);
+            }
+            child.scene = null;
             const index = this.children.indexOf(child);
             if (index !== -1) {
                 this.children.splice(index, 1);
             }
-            const sprite = child.sprite || child;
-            if (sprite instanceof PIXI.Container) {
-                this.stage.removeChild(child);
-            }
-            child.scene = null;
         });
         this.children$.next();
     }
