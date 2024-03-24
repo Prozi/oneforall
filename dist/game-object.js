@@ -6,9 +6,9 @@ const lifecycle_1 = require("./lifecycle");
 class GameObject extends lifecycle_1.Lifecycle {
     constructor(label = 'GameObject', x = 0, y = 0) {
         super();
+        this.components = [];
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
-        this.components = [];
         this.label = label;
         this.x = x;
         this.y = y;
@@ -46,12 +46,12 @@ class GameObject extends lifecycle_1.Lifecycle {
     removeComponent(component) {
         var _a;
         const index = this.components.indexOf(component);
-        if (index !== -1) {
-            this.components.splice(index, 1);
-            // scene.removeChild(component)
-            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(component);
+        if (index === -1) {
+            return false;
         }
-        return index !== -1;
+        this.components.splice(index, 1);
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(component);
+        return true;
     }
     getComponentOfType(type) {
         return this.components.find(({ label }) => label === type);

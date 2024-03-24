@@ -5,6 +5,7 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export class Container extends PIXI.Container implements LifecycleProps {
   label = 'Container';
+
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();

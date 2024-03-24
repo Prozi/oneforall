@@ -78,16 +78,18 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   }
 
   addChild(...children: LifecycleProps[]): void {
-    children.forEach((child: LifecycleProps & { sprite?: PIXI.Container }) => {
-      if (child.sprite instanceof Lifecycle) {
-        this.addChild(child.sprite);
-      } else if (child.sprite instanceof PIXI.Container) {
-        this.stage.addChild(child.sprite);
+    children.forEach((child) => {
+      child.scene = this;
+
+      if (child instanceof GameObject) {
+        child.components.forEach((component) => {
+          if (component instanceof PIXI.Container) {
+            this.stage.addChild(component);
+          }
+        });
       } else if (child instanceof PIXI.Container) {
         this.stage.addChild(child);
       }
-
-      child.scene = this;
 
       const index = this.children.indexOf(child);
       if (index === -1) {
@@ -99,14 +101,18 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   }
 
   removeChild(...children: LifecycleProps[]): void {
-    children.forEach((child: LifecycleProps & { sprite?: PIXI.Container }) => {
-      if (child.sprite instanceof PIXI.Container) {
-        this.stage.removeChild(child.sprite);
+    children.forEach((child) => {
+      child.scene = null;
+
+      if (child instanceof GameObject) {
+        child.components.forEach((component) => {
+          if (component instanceof PIXI.Container) {
+            this.stage.removeChild(component);
+          }
+        });
       } else if (child instanceof PIXI.Container) {
         this.stage.removeChild(child);
       }
-
-      child.scene = null;
 
       const index = this.children.indexOf(child);
       if (index !== -1) {

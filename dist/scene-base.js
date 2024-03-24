@@ -27,6 +27,7 @@ exports.SceneBase = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
+const game_object_1 = require("./game-object");
 const lifecycle_1 = require("./lifecycle");
 class SceneBase {
     constructor(options = {}) {
@@ -78,16 +79,17 @@ class SceneBase {
     }
     addChild(...children) {
         children.forEach((child) => {
-            if (child.sprite instanceof lifecycle_1.Lifecycle) {
-                this.addChild(child.sprite);
-            }
-            else if (child.sprite instanceof PIXI.Container) {
-                this.stage.addChild(child.sprite);
+            child.scene = this;
+            if (child instanceof game_object_1.GameObject) {
+                child.components.forEach((component) => {
+                    if (component instanceof PIXI.Container) {
+                        this.stage.addChild(component);
+                    }
+                });
             }
             else if (child instanceof PIXI.Container) {
                 this.stage.addChild(child);
             }
-            child.scene = this;
             const index = this.children.indexOf(child);
             if (index === -1) {
                 this.children.push(child);
@@ -97,13 +99,17 @@ class SceneBase {
     }
     removeChild(...children) {
         children.forEach((child) => {
-            if (child.sprite instanceof PIXI.Container) {
-                this.stage.removeChild(child.sprite);
+            child.scene = null;
+            if (child instanceof game_object_1.GameObject) {
+                child.components.forEach((component) => {
+                    if (component instanceof PIXI.Container) {
+                        this.stage.removeChild(component);
+                    }
+                });
             }
             else if (child instanceof PIXI.Container) {
                 this.stage.removeChild(child);
             }
-            child.scene = null;
             const index = this.children.indexOf(child);
             if (index !== -1) {
                 this.children.splice(index, 1);

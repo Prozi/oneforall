@@ -16,6 +16,7 @@ export interface AnimatorData {
 
 export class Animator extends Container {
   label = 'Animator';
+
   readonly complete$: Subject<string> = new Subject();
   readonly state$: BehaviorSubject<string> = new BehaviorSubject('');
 

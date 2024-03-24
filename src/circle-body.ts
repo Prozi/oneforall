@@ -5,6 +5,7 @@ import { LifecycleProps, Lifecycle } from './lifecycle';
 
 export class CircleBody extends Ellipse implements LifecycleProps {
   label = 'CircleBody';
+
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
