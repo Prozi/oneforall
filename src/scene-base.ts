@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { System, Body } from 'detect-collisions';
 import { GameObject } from './game-object';
-import { Lifecycle } from './lifecycle';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export interface SceneOptions {
   label?: string;
@@ -12,16 +12,19 @@ export interface SceneOptions {
   nodeMaxEntries?: number;
 }
 
-export class SceneBase<TBody extends Body = Body> extends Lifecycle {
+export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   label = 'Scene';
+  animationFrame = 0;
   physics: System<TBody>;
-  children$: Subject<void> = new Subject();
-  destroy$: Subject<void> = new Subject();
-  animationFrame: number;
+  stage: PIXI.Container;
+  children: LifecycleProps[] = [];
+  readonly children$: Subject<void> = new Subject();
+  readonly update$: Subject<void> = new Subject();
+  readonly destroy$: Subject<void> = new Subject();
 
   constructor(options: SceneOptions = {}) {
-    super();
-
+    this.stage = new PIXI.Container();
+    this.stage.label = 'Stage';
     this.physics = new System<TBody>(options.nodeMaxEntries);
   }
 
@@ -35,10 +38,13 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   }
 
   start(): void {
-    this.stop();
-
     const frame = () => {
       this.update();
+
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+
       this.animationFrame = requestAnimationFrame(frame);
     };
 
@@ -47,59 +53,68 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
 
   update(): void {
     this.physics.update();
-    this.children.forEach((child: GameObject) => {
+    this.children.forEach((child) => {
       if (child instanceof Lifecycle) {
         child.update();
       }
     });
 
-    super.update();
+    Lifecycle.update(this);
   }
 
   destroy(): void {
     this.stop();
 
     while (this.children.length) {
-      const component = this.children.pop() as Lifecycle;
-
+      const child = this.children.pop();
       // will also gameObject.removeComponent(component)
-      component.destroy();
+      child.destroy();
     }
 
     this.children$.complete();
-    this.children$ = undefined;
-    super.destroy();
+
+    Lifecycle.destroy(this);
   }
 
-  addChild(...children: PIXI.Container[]): PIXI.Container {
-    const result = super.addChild(...children);
+  addChild(...children: LifecycleProps[]): void {
+    // tslint:disable-next-line: no-any
+    children.forEach((child: any) => {
+      const sprite = child.sprite || child;
+      if (sprite instanceof PIXI.Container) {
+        this.stage.addChild(sprite);
+      }
 
-    children.forEach((child: Lifecycle) => {
       child.scene = this;
     });
 
+    this.children.push(...children);
     this.children$.next();
-
-    return result;
   }
 
-  removeChild(...children: PIXI.Container[]): PIXI.Container {
-    const result = super.removeChild(...children);
+  removeChild(...children: LifecycleProps[]): void {
+    // tslint:disable-next-line: no-any
+    children.forEach((child: any) => {
+      const index = this.children.indexOf(child);
+      if (index !== -1) {
+        this.children.splice(index, 1);
+      }
 
-    children.forEach((child: Lifecycle) => {
+      const sprite = child.sprite || child;
+      if (sprite instanceof PIXI.Container) {
+        this.stage.removeChild(child);
+      }
+
       child.scene = null;
     });
 
     this.children$.next();
-
-    return result;
   }
 
-  getChildOfType(type: string): PIXI.Container {
-    return (this.children as Lifecycle[]).find(({ label }) => label === type);
+  getChildOfType(type: string): LifecycleProps {
+    return this.children.find(({ label }) => label === type);
   }
 
-  getChildrenOfType(type: string): PIXI.Container[] {
-    return (this.children as Lifecycle[]).filter(({ label }) => label === type);
+  getChildrenOfType(type: string): LifecycleProps[] {
+    return this.children.filter(({ label }) => label === type);
   }
 }

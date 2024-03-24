@@ -11,9 +11,7 @@ export class StateMachine extends Component {
 
   state: string;
 
-  private validators: {
-    [fromState: string]: TStateValidator[];
-  } = {};
+  private validators: Record<string, TStateValidator[]> = {};
 
   constructor(gameObject: GameObject, initialState = 'INITIAL_STATE') {
     super(gameObject);

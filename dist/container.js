@@ -37,10 +37,6 @@ class Container extends PIXI.Container {
         this.gameObject.addComponent(this);
     }
     update() {
-        var _a;
-        if (!this.parent) {
-            (_a = this.gameObject.scene) === null || _a === void 0 ? void 0 : _a.addChild(this);
-        }
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
         lifecycle_1.Lifecycle.update(this);

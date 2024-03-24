@@ -52,7 +52,7 @@ export class GameObject extends Lifecycle {
     }
 
     this.components.push(component);
-    this.scene?.addChild(component as Lifecycle);
+    this.scene?.addChild(component);
 
     return true;
   }
@@ -63,7 +63,7 @@ export class GameObject extends Lifecycle {
     if (index !== -1) {
       this.components.splice(index, 1);
       // scene.removeChild(component)
-      this.scene?.removeChild(component as Lifecycle);
+      this.scene?.removeChild(component);
     }
 
     return index !== -1;

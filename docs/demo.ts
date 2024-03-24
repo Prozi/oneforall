@@ -6,20 +6,19 @@ import { createSprite } from "../dist/demo/sprite.prefab";
 async function start() {
   // create Scene
   const scene: Scene = new Scene({
-    // with few optional params
     visible: true,
     autoSort: true,
   });
 
   // new since pixi 7/8
-  await scene.pixi.init({
-    autoStart: false,
-    sharedTicker: false,
+  await scene.init({
     resizeTo: window,
     autoDensity: true,
+    autoStart: false,
+    sharedTicker: false,
   });
 
-  document.body.appendChild(scene.pixi.canvas);
+  globalThis.__PIXI_APP__ = scene.pixi;
 
   // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
   const data = await Resources.loadResource<{ tileset: string }>(
@@ -32,7 +31,7 @@ async function start() {
 
   const gfx = new PIXI.Graphics();
 
-  scene.addChild(gfx);
+  scene.stage.addChild(gfx);
 
   // separate sprites
   scene.update$?.pipe(takeUntil(scene.destroy$)).subscribe(() => {

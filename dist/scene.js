@@ -17,14 +17,13 @@ const merge_1 = require("rxjs/internal/observable/merge");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
         super();
-        this.options = {};
         this.disableAutoSort$ = new Subject_1.Subject();
         this.options = options;
-        this.visible = options.visible || false;
+        this.stage.visible = options.visible || false;
+        this.pixi.stage.addChild(this.stage);
         if (options.autoSort) {
             this.enableAutoSort();
         }
-        this.pixi.stage.addChild(this);
     }
     async init(options) {
         await this.pixi.init(options);
@@ -41,7 +40,7 @@ class Scene extends scene_base_1.SceneBase {
     }
     destroy() {
         super.destroy();
-        this.pixi.stage.removeChild(this);
+        this.pixi.stage.removeChild(this.stage);
     }
     disableAutoSort() {
         this.disableAutoSort$.next();
@@ -50,7 +49,7 @@ class Scene extends scene_base_1.SceneBase {
         this.update$
             .pipe((0, takeUntil_1.takeUntil)((0, merge_1.merge)(this.destroy$, this.disableAutoSort$)))
             .subscribe(() => {
-            this.children.sort((a, b) => a.y - b.y);
+            this.stage.children.sort((a, b) => a.y - b.y);
         });
     }
 }

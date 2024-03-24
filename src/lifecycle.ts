@@ -7,6 +7,7 @@ import { SceneBase } from './scene-base';
 export interface LifecycleProps {
   label: string;
 
+  scene?: SceneBase | Scene;
   update$?: Subject<void>;
   destroy$?: Subject<void>;
   gameObject?: GameObject;

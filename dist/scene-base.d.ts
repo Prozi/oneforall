@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { System, Body } from 'detect-collisions';
-import { Lifecycle } from './lifecycle';
+import { LifecycleProps } from './lifecycle';
 export interface SceneOptions {
     label?: string;
     visible?: boolean;
@@ -9,21 +9,24 @@ export interface SceneOptions {
     scale?: number;
     nodeMaxEntries?: number;
 }
-export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
+export declare class SceneBase<TBody extends Body = Body> implements LifecycleProps {
     label: string;
-    physics: System<TBody>;
-    children$: Subject<void>;
-    destroy$: Subject<void>;
     animationFrame: number;
+    physics: System<TBody>;
+    stage: PIXI.Container;
+    children: LifecycleProps[];
+    readonly children$: Subject<void>;
+    readonly update$: Subject<void>;
+    readonly destroy$: Subject<void>;
     constructor(options?: SceneOptions);
     init(_options?: Record<string, any>): Promise<void>;
     stop(): void;
     start(): void;
     update(): void;
     destroy(): void;
-    addChild(...children: PIXI.Container[]): PIXI.Container;
-    removeChild(...children: PIXI.Container[]): PIXI.Container;
-    getChildOfType(type: string): PIXI.Container;
-    getChildrenOfType(type: string): PIXI.Container[];
+    addChild(...children: LifecycleProps[]): void;
+    removeChild(...children: LifecycleProps[]): void;
+    getChildOfType(type: string): LifecycleProps;
+    getChildrenOfType(type: string): LifecycleProps[];
 }
 //# sourceMappingURL=scene-base.d.ts.map

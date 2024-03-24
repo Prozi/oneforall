@@ -26,10 +26,6 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
   }
 
   update(): void {
-    if (!this.parent) {
-      this.gameObject.scene?.addChild(this);
-    }
-
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
 

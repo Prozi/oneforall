@@ -12,20 +12,19 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 
-  options: SceneOptions = {};
+  options: SceneOptions;
   disableAutoSort$: Subject<void> = new Subject();
 
   constructor(options: SceneOptions = {}) {
     super();
 
     this.options = options;
-    this.visible = options.visible || false;
+    this.stage.visible = options.visible || false;
+    this.pixi.stage.addChild(this.stage);
 
     if (options.autoSort) {
       this.enableAutoSort();
     }
-
-    this.pixi.stage.addChild(this);
   }
 
   async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
@@ -36,19 +35,17 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
 
   start(): void {
     this.pixi.start();
-
     super.start();
   }
 
   stop(): void {
     this.pixi.stop?.();
-
     super.stop();
   }
 
   destroy(): void {
     super.destroy();
-    this.pixi.stage.removeChild(this);
+    this.pixi.stage.removeChild(this.stage);
   }
 
   disableAutoSort(): void {
@@ -59,7 +56,9 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     this.update$
       .pipe(takeUntil(merge(this.destroy$, this.disableAutoSort$)))
       .subscribe(() => {
-        this.children.sort((a: PIXI.Container, b: PIXI.Container) => a.y - b.y);
+        this.stage.children.sort(
+          (a: PIXI.Container, b: PIXI.Container) => a.y - b.y
+        );
       });
   }
 }

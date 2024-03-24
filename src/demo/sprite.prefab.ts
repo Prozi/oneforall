@@ -43,12 +43,12 @@ export function createSprite({ scene, data, texture }) {
 }
 
 export function updateSprite(gameObject: TGameObject): void {
-  const scene: Scene = gameObject.parent as Scene;
+  const scene = gameObject.scene;
 
   if (Math.random() < 0.05) {
     gameObject.target = {
-      x: innerWidth / 2 / gameObject.scene.scale.x,
-      y: innerHeight / 2 / gameObject.scene.scale.y
+      x: innerWidth / 2 / scene.stage.scale.x,
+      y: innerHeight / 2 / scene.stage.scale.y
     };
   }
 
@@ -57,7 +57,8 @@ export function updateSprite(gameObject: TGameObject): void {
   }
 
   if (Math.random() < 0.05) {
-    const gameObjects = Array.from(scene.children);
+    // tslint:disable-next-line: no-any
+    const gameObjects = scene.children as any[];
 
     gameObject.target =
       gameObjects[Math.floor(Math.random() * gameObjects.length)];
