@@ -17,7 +17,6 @@ export interface LifecycleProps {
 
 export class Lifecycle extends PIXI.Container implements LifecycleProps {
   label = 'Lifecycle';
-
   update$?: Subject<void> = new Subject();
   destroy$?: Subject<void> = new Subject();
   gameObject?: GameObject;

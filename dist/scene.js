@@ -23,6 +23,8 @@ class Scene extends scene_base_1.SceneBase {
             this.enableAutoSort();
         }
         // real stage
+        this.pixi.stage.addChild(this.stage);
+        // the scene
         this.pixi.stage.addChild(this);
     }
     async init(options) {
@@ -30,7 +32,6 @@ class Scene extends scene_base_1.SceneBase {
         document.body.appendChild(this.pixi.canvas);
     }
     start() {
-        this.pixi.stage.scale.set(this.scale.x, this.scale.y);
         this.pixi.start();
         super.start();
     }

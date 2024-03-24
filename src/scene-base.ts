@@ -14,17 +14,18 @@ export interface SceneOptions {
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   label = 'Scene';
-
-  children$: Subject<void> = new Subject();
+  stage: PIXI.Container = new PIXI.Container();
   physics: System<TBody>;
+  children$: Subject<void> = new Subject();
   destroy$: Subject<void> = new Subject();
   animationFrame: number;
 
   constructor(options: SceneOptions = {}) {
     super();
 
-    this.physics = new System<TBody>(options.nodeMaxEntries);
     this.scale = options.scale || 1;
+    this.physics = new System<TBody>(options.nodeMaxEntries);
+    this.stage.label = 'Stage';
   }
 
   // tslint:disable-next-line

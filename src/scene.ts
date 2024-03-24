@@ -26,6 +26,9 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     }
 
     // real stage
+    this.pixi.stage.addChild(this.stage);
+
+    // the scene
     this.pixi.stage.addChild(this);
   }
 
@@ -36,7 +39,6 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   }
 
   start(): void {
-    this.pixi.stage.scale.set(this.scale.x, this.scale.y);
     this.pixi.start();
 
     super.start();
