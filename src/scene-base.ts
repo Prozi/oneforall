@@ -79,16 +79,22 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
 
   addChild(...children: LifecycleProps[]): void {
     children.forEach((child: LifecycleProps & { sprite?: PIXI.Container }) => {
-      if (child.sprite instanceof PIXI.Container) {
+      if (child.sprite instanceof Lifecycle) {
+        this.addChild(child.sprite);
+      } else if (child.sprite instanceof PIXI.Container) {
         this.stage.addChild(child.sprite);
       } else if (child instanceof PIXI.Container) {
         this.stage.addChild(child);
       }
 
       child.scene = this;
+
+      const index = this.children.indexOf(child);
+      if (index === -1) {
+        this.children.push(child);
+      }
     });
 
-    this.children.push(...children);
     this.children$.next();
   }
 
