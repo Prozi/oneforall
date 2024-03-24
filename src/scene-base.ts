@@ -14,7 +14,6 @@ export interface SceneOptions {
 
 export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   label = 'Scene';
-  stage: PIXI.Container = new PIXI.Container();
   physics: System<TBody>;
   children$: Subject<void> = new Subject();
   destroy$: Subject<void> = new Subject();
@@ -23,9 +22,7 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   constructor(options: SceneOptions = {}) {
     super();
 
-    this.scale = options.scale || 1;
     this.physics = new System<TBody>(options.nodeMaxEntries);
-    this.stage.label = 'Stage';
   }
 
   // tslint:disable-next-line
@@ -38,13 +35,14 @@ export class SceneBase<TBody extends Body = Body> extends Lifecycle {
   }
 
   start(): void {
-    const loop = () => {
-      this.update();
+    this.stop();
 
-      this.animationFrame = requestAnimationFrame(loop);
+    const frame = () => {
+      this.update();
+      this.animationFrame = requestAnimationFrame(frame);
     };
 
-    loop();
+    frame();
   }
 
   update(): void {

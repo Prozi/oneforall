@@ -11,7 +11,6 @@ export interface SceneOptions {
 }
 export declare class SceneBase<TBody extends Body = Body> extends Lifecycle {
     label: string;
-    stage: PIXI.Container;
     physics: System<TBody>;
     children$: Subject<void>;
     destroy$: Subject<void>;

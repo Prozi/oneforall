@@ -1,34 +1,30 @@
-import * as PIXI from 'pixi.js';
-import { Body } from 'detect-collisions';
-import { takeUntil } from 'rxjs/operators';
 import { Inject } from '@jacekpietal/dependency-injection';
+import { Body } from 'detect-collisions';
+import * as PIXI from 'pixi.js';
 import { Application } from './application';
 import { Resources } from './resources';
 import { SceneBase, SceneOptions } from './scene-base';
-import { PIXIDisplayObject } from './stage-base';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { merge } from 'rxjs/internal/observable/merge';
 
 export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 
   options: SceneOptions = {};
+  disableAutoSort$: Subject<void> = new Subject();
 
   constructor(options: SceneOptions = {}) {
     super();
 
     this.options = options;
-
-    // 1 additonal layer
     this.visible = options.visible || false;
 
     if (options.autoSort) {
       this.enableAutoSort();
     }
 
-    // real stage
-    this.pixi.stage.addChild(this.stage);
-
-    // the scene
     this.pixi.stage.addChild(this);
   }
 
@@ -55,11 +51,15 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     this.pixi.stage.removeChild(this);
   }
 
+  disableAutoSort(): void {
+    this.disableAutoSort$.next();
+  }
+
   enableAutoSort(): void {
-    this.update$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.children.sort(
-        (a: PIXIDisplayObject, b: PIXIDisplayObject) => a.y - b.y
-      );
-    });
+    this.update$
+      .pipe(takeUntil(merge(this.destroy$, this.disableAutoSort$)))
+      .subscribe(() => {
+        this.children.sort((a: PIXI.Container, b: PIXI.Container) => a.y - b.y);
+      });
   }
 }
