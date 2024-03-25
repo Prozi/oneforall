@@ -1,7 +1,8 @@
 import { Subject } from 'rxjs/internal/Subject';
-import { Scene } from './scene';
+
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
+import { Scene } from './scene';
 import { SceneBase } from './scene-base';
 
 export class GameObject extends Lifecycle {

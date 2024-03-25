@@ -1,9 +1,10 @@
 import 'pixi-shim';
+
 import * as PIXI from 'pixi.js-legacy';
 
-import { Sprite } from './sprite';
 import { GameObject } from './game-object';
 import { Scene } from './scene';
+import { Sprite } from './sprite';
 
 describe('GIVEN Sprite', () => {
   it('THEN update propagates x/y changes', () => {

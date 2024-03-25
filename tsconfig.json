@@ -13,6 +13,6 @@
     "skipLibCheck": true
   },
   "files": ["src/index.ts"],
-  "include": ["src/*.ts", "src/**/*.ts"],
-  "exclude": ["src/*.spec.ts", "*.js"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }

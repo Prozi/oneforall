@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
+
 import { GameObject } from './game-object';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';

@@ -1,4 +1,5 @@
 import 'pixi-shim';
+
 import { GameObject } from './game-object';
 import { PolygonBody } from './polygon-body';
 

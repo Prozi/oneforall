@@ -1,14 +1,15 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
-import * as PIXI from 'pixi.js';
-import { Body } from 'detect-collisions';
 
-import { GameObject } from './game-object';
-import { StateMachine } from './state-machine';
+import { Body } from 'detect-collisions';
+import * as PIXI from 'pixi.js';
+
 import { CircleBody } from './circle-body';
-import { Sprite } from './sprite';
+import { GameObject } from './game-object';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
+import { Sprite } from './sprite';
+import { StateMachine } from './state-machine';
 
 type TGameObject = GameObject & { state: StateMachine; sprite: Sprite };
 

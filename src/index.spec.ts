@@ -1,4 +1,5 @@
 import 'pixi-shim';
+
 import { GameObject } from './game-object';
 
 describe('GIVEN index.ts', () => {

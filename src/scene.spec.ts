@@ -1,8 +1,9 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
+
 import { GameObject } from './game-object';
-import { StateMachine } from './state-machine';
 import { Scene } from './scene';
+import { StateMachine } from './state-machine';
 
 describe('GIVEN Scene', () => {
   it('THEN it works', () => {

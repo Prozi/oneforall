@@ -1,8 +1,9 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
+
+import { CircleBody } from './circle-body';
 import { Component } from './component';
 import { GameObject } from './game-object';
-import { CircleBody } from './circle-body';
 import { Scene } from './scene';
 
 describe('GIVEN GameObject', () => {

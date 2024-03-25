@@ -1,6 +1,6 @@
+import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
-import { System, Body } from 'detect-collisions';
 import { LifecycleProps } from './lifecycle';
 export interface SceneOptions {
     label?: string;

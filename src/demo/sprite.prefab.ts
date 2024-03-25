@@ -1,9 +1,10 @@
+import { Vector } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { takeUntil } from 'rxjs/operators';
-import { GameObject } from '../game-object';
-import { CircleBody } from '../circle-body';
+
 import { Animator } from '../animator';
-import { Vector } from 'detect-collisions';
+import { CircleBody } from '../circle-body';
+import { GameObject } from '../game-object';
 
 export type TGameObject = GameObject & {
   body: CircleBody;
@@ -11,9 +12,9 @@ export type TGameObject = GameObject & {
   target?: Vector;
 };
 
-export function createSprite({ scene, data, texture }) {
+export function createSprite({ scene, data, texture }): TGameObject {
   // a base molecule
-  const gameObject: TGameObject = new GameObject('Sprite') as TGameObject;
+  const gameObject = new GameObject('Sprite') as TGameObject;
 
   // create body
   gameObject.body = new CircleBody(gameObject, 20, 14);
@@ -22,16 +23,15 @@ export function createSprite({ scene, data, texture }) {
     Math.random() * innerHeight
   );
 
+  scene.physics.insert(gameObject.body);
+  scene.addChild(gameObject);
+
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle', true);
   gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
     child.anchor.set(0.5, 0.8)
   );
-
-  // add to scene
-  scene.addChild(gameObject);
-  scene.physics.insert(gameObject.body);
 
   // subscribe to its own update function
   gameObject.update$

@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
+
 import { Component } from './component';
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';

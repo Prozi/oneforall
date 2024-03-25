@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
+const merge_1 = require("rxjs/internal/observable/merge");
+const takeUntil_1 = require("rxjs/internal/operators/takeUntil");
+const Subject_1 = require("rxjs/internal/Subject");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 const application_1 = require("./application");
 const resources_1 = require("./resources");
 const scene_base_1 = require("./scene-base");
-const Subject_1 = require("rxjs/internal/Subject");
-const takeUntil_1 = require("rxjs/internal/operators/takeUntil");
-const merge_1 = require("rxjs/internal/observable/merge");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
         super();
@@ -49,7 +49,7 @@ class Scene extends scene_base_1.SceneBase {
         this.update$
             .pipe((0, takeUntil_1.takeUntil)((0, merge_1.merge)(this.destroy$, this.disableAutoSort$)))
             .subscribe(() => {
-            this.stage.children.sort((a, b) => a.y - b.y);
+            this.stage.children.sort((bodyA, bodyB) => bodyA.y - bodyB.y);
         });
     }
 }

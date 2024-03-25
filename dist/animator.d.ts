@@ -1,9 +1,9 @@
+import { Vector } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Subject } from 'rxjs/internal/Subject';
-import { Vector } from 'detect-collisions';
-import { GameObject } from './game-object';
 import { Container } from './container';
+import { GameObject } from './game-object';
 export interface AnimatorData {
     animations: Record<string, (number | string)[]>;
     cols: number;

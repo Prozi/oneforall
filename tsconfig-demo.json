@@ -12,7 +12,7 @@
       "mini-signals": ["./node_modules/mini-signals/index.js"]
     }
   },
-  "files": ["docs/demo.ts"],
-  "include": ["src/*.ts", "src/**/*.ts"],
-  "exclude": ["src/*.spec.ts", "*.js"]
+  "files": ["src/demo/index.ts"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }

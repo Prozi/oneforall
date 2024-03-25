@@ -31,8 +31,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var Resources_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Resources = void 0;
-const PIXI = __importStar(require("pixi.js"));
 const latermom_1 = require("latermom");
+const PIXI = __importStar(require("pixi.js"));
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
     constructor(path = '', cacheSize = 64) {

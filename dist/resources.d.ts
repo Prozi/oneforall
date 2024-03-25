@@ -1,4 +1,4 @@
-export type PIXIResource = any;
+export type PIXIResource = Record<string, any>;
 export declare class Resources {
     private cache;
     constructor(path?: string, cacheSize?: number);

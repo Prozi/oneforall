@@ -1,5 +1,6 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
+
 import { Application } from './application';
 
 describe('GIVEN Application', () => {

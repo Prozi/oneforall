@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "5.3.3",
+  "version": "5.4.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,13 +10,14 @@
     "lint": "yarn tslint 'src/**/*.ts' --fix",
     "test": "jest --silent --verbose --forceExit",
     "sanity": "yarn build && node ./test-build.js",
-    "demo": "npm run build && webpack && yarn start",
+    "demo": "npm run build && yarn start",
     "dev": "npm run build && webpack-dev-server",
-    "format": "prettier ./src/*.ts --write",
-    "format-docs": "prettier ./docs/*.ts --write",
+    "format": "prettier src --write",
+    "format-docs": "prettier docs --write",
     "prebuild": "rm -rf dist",
     "build": "tsc",
-    "precommit": "yarn format && yarn lint && yarn sanity && yarn format-docs && yarn test && webpack"
+    "postbuild": "webpack",
+    "precommit": "yarn format && yarn lint && yarn sanity && yarn format-docs && yarn test"
   },
   "files": [
     "dist"

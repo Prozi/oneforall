@@ -1,6 +1,7 @@
 import 'pixi-shim';
-import { GameObject } from './game-object';
+
 import { CircleBody } from './circle-body';
+import { GameObject } from './game-object';
 
 describe('GIVEN CircleBody', () => {
   it('THEN it has set property radius', () => {

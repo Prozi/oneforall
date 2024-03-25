@@ -1,12 +1,14 @@
-import { Inject } from '@jacekpietal/dependency-injection';
 import { Body } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
+import { merge } from 'rxjs/internal/observable/merge';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { Subject } from 'rxjs/internal/Subject';
+
+import { Inject } from '@jacekpietal/dependency-injection';
+
 import { Application } from './application';
 import { Resources } from './resources';
 import { SceneBase, SceneOptions } from './scene-base';
-import { Subject } from 'rxjs/internal/Subject';
-import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { merge } from 'rxjs/internal/observable/merge';
 
 export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
@@ -57,7 +59,7 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
       .pipe(takeUntil(merge(this.destroy$, this.disableAutoSort$)))
       .subscribe(() => {
         this.stage.children.sort(
-          (a: PIXI.Container, b: PIXI.Container) => a.y - b.y
+          (bodyA: PIXI.Container, bodyB: PIXI.Container) => bodyA.y - bodyB.y
         );
       });
   }

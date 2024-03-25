@@ -1,7 +1,10 @@
 module.exports = {
-  entry: './docs/demo.ts',
+  entry: `${__dirname}/src/demo/index.ts`,
   mode: 'development',
   target: 'web',
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
   output: {
     path: `${__dirname}/docs/`,
     filename: 'demo.bundle.js'
@@ -9,8 +12,8 @@ module.exports = {
   devServer: {
     port: 4200,
     static: {
-      directory: `${__dirname}/docs`,
-    },
+      directory: `${__dirname}/docs`
+    }
   },
   module: {
     rules: [
@@ -23,4 +26,4 @@ module.exports = {
       }
     ]
   }
-}
+};

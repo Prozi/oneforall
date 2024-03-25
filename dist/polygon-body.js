@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PolygonBody = void 0;
-const Subject_1 = require("rxjs/internal/Subject");
 const detect_collisions_1 = require("detect-collisions");
+const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
 class PolygonBody extends detect_collisions_1.Polygon {
     constructor(gameObject, points, options) {

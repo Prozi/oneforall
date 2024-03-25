@@ -38,121 +38,118 @@ yarn add @jacekpietal/oneforall -D
 
 ## Demo
 
-```typescript
-import { takeUntil } from "rxjs"
-import { Scene, Resources } from "@jacekpietal/oneforall"
-import { createSprite } from "@jacekpietal/oneforall/dist/demo/sprite.prefab"
-
-async function start() {
-  // create Scene
-  const scene: Scene = new Scene({
-    // with few optional params
-    visible: true,
-    autoSort: true,
-  })
-
-  // new since pixi 7/8
-  await scene.pixi.init({
-    autoStart: false,
-    sharedTicker: false,
-    resizeTo: window,
-    autoDensity: true,
-  })
-
-  document.body.appendChild(scene.pixi.canvas)
-
-  // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
-  const { data } = await Resources.loadResource("./cave-boy.json")
-  const { texture } = await Resources.loadResource(data.tileset)
-
-  // create 50 sprites from that
-  Array.from({ length: 50 }, () => createSprite({ scene, data, texture }))
-
-  // separate sprites
-  scene.update$.pipe(takeUntil(scene.destroy$)).subscribe(() => {
-    scene.physics.separate()
-  })
-
-  scene.start()
-}
-
-start()
-```
+`src/demo/sprite.prefab.ts`
 
 ```typescript
-export function createSprite({ scene, data, texture }) {
+export function createSprite({ scene, data, texture }): TGameObject {
   // a base molecule
-  const gameObject: any = new GameObject("Sprite")
+  const gameObject = new GameObject('Sprite') as TGameObject;
 
   // create body
-  gameObject.body = new CircleBody(gameObject, 20)
+  gameObject.body = new CircleBody(gameObject, 20, 14);
   gameObject.body.setPosition(
     Math.random() * innerWidth,
     Math.random() * innerHeight
-  )
+  );
+
+  scene.physics.insert(gameObject.body);
+  scene.addChild(gameObject);
 
   // create animator with few animations from json + texture
-  gameObject.sprite = new Animator(gameObject, data, texture)
-  gameObject.sprite.setState("idle", true)
-
-  // add to scene
-  scene.addChild(gameObject)
-  scene.physics.insert(gameObject.body)
+  gameObject.sprite = new Animator(gameObject, data, texture);
+  gameObject.sprite.setState('idle', true);
+  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
+    child.anchor.set(0.5, 0.8)
+  );
 
   // subscribe to its own update function
   gameObject.update$
     .pipe(takeUntil(scene.destroy$))
-    .subscribe(() => updateSprite(gameObject))
+    .subscribe(() => updateSprite(gameObject));
 
-  return gameObject
+  return gameObject;
 }
-```
 
-```typescript
-export function updateSprite(
-  gameObject: GameObject & { [prop: string]: any }
-): void {
-  const scene: Scene = gameObject.parent // always
+export function updateSprite(gameObject: TGameObject): void {
+  const scene = gameObject.scene;
 
   if (Math.random() < 0.05) {
     gameObject.target = {
-      x: innerWidth / 2 / gameObject.parent.stage.scale.x,
-      y: innerHeight / 2 / gameObject.parent.stage.scale.y,
-    }
+      x: innerWidth / 2 / scene.stage.scale.x,
+      y: innerHeight / 2 / scene.stage.scale.y
+    };
   }
 
   if (Math.random() < 0.05) {
-    gameObject.sprite.setState("roll", false, "idle")
+    gameObject.sprite.setState('roll', false, 'idle');
   }
 
   if (Math.random() < 0.05) {
-    const gameObjects = Array.from(scene.children)
+    // tslint:disable-next-line: no-any
+    const gameObjects = scene.children as any[];
 
     gameObject.target =
-      gameObjects[Math.floor(Math.random() * gameObjects.length)]
+      gameObjects[Math.floor(Math.random() * gameObjects.length)];
 
-    gameObject.sprite.setState("run", true)
+    gameObject.sprite.setState('run', true);
   }
 
   if (gameObject.target) {
     const arc: number = Math.atan2(
       gameObject.target.y - gameObject.y,
       gameObject.target.x - gameObject.x
-    )
-    const overlapX: number = Math.cos(arc)
-    const overlapY: number = Math.sin(arc)
+    );
+    const overlapX: number = Math.cos(arc);
+    const overlapY: number = Math.sin(arc);
 
     if (gameObject.sprite instanceof Animator) {
-      const flip: number = Math.sign(overlapX) || 1
+      const flip: number = Math.sign(overlapX) || 1;
 
-      gameObject.sprite.setScale(flip, 1)
+      gameObject.sprite.setScale(flip, 1);
     }
 
     gameObject.body.setPosition(
       gameObject.body.x + overlapX,
       gameObject.body.y + overlapY
-    )
+    );
   }
+}
+```
+
+`src/demo/index.ts`
+
+```typescript
+async function start(): Promise<void> {
+  // create Scene
+  const scene: Scene = new Scene({
+    visible: true,
+    autoSort: true
+  });
+
+  // new since pixi 7/8
+  await scene.init({
+    resizeTo: window,
+    autoDensity: true,
+    autoStart: false,
+    sharedTicker: false
+  });
+
+  // wait to load cave-boy.json and cave-boy.png, uses PIXI.Loader inside
+  const data = await Resources.loadResource('./cave-boy.json');
+  const texture = await Resources.loadResource(data.tileset);
+
+  // create 50 sprites from template
+  Array.from({ length: 50 }, () => {
+    createSprite({ scene, data, texture });
+  });
+
+  scene.start();
+  scene.update$.pipe(takeUntil(scene.destroy$)).subscribe(() => {
+    scene.physics.separate();
+  });
+
+  // for chrome plugin pixi debug devtools
+  globalThis.__PIXI_APP__ = scene.pixi;
 }
 ```
 

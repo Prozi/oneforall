@@ -1,9 +1,9 @@
+import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
-import { System, Body } from 'detect-collisions';
+
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
-import { Animator } from './animator';
 
 export interface SceneOptions {
   label?: string;

@@ -1,5 +1,6 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
+
 import { Resources } from './resources';
 
 describe('GIVEN Resources', () => {

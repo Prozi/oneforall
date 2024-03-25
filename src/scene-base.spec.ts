@@ -1,7 +1,8 @@
 import 'pixi-shim';
+
 import { GameObject } from './game-object';
-import { StateMachine } from './state-machine';
 import { SceneBase } from './scene-base';
+import { StateMachine } from './state-machine';
 
 describe('GIVEN SceneBase', () => {
   it('THEN it works', () => {

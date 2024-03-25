@@ -1,9 +1,10 @@
-import * as PIXI from 'pixi.js';
 import { Cache } from 'latermom';
+import * as PIXI from 'pixi.js';
+
 import { Injectable } from '@jacekpietal/dependency-injection';
 
 // tslint:disable-next-line: no-any
-export type PIXIResource = any;
+export type PIXIResource = Record<string, any>;
 
 @Injectable
 export class Resources {

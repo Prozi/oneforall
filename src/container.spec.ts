@@ -1,4 +1,5 @@
 import 'pixi-shim';
+
 import { Container } from './container';
 import { GameObject } from './game-object';
 
