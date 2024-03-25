@@ -6,6 +6,6 @@ export declare class Resources {
     static loadResources<T = PIXIResource>(resources: string[]): Promise<{
         [label: string]: T;
     }>;
-    get(url: string): Promise<PIXIResource>;
+    get(url: string): Promise<PIXIResource | undefined>;
 }
 //# sourceMappingURL=resources.d.ts.map

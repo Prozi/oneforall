@@ -8,7 +8,7 @@ export type PIXIResource = Record<string, any>;
 
 @Injectable
 export class Resources {
-  private cache: Cache<Promise<PIXIResource>>;
+  private cache: Cache<Promise<PIXIResource | undefined>>;
 
   constructor(path = '', cacheSize = 64) {
     this.cache = new Cache(async (url: string) => {
@@ -46,7 +46,7 @@ export class Resources {
     });
   }
 
-  async get(url: string): Promise<PIXIResource> {
+  async get(url: string): Promise<PIXIResource | undefined> {
     return this.cache.get(url);
   }
 }
