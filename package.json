@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "set of classes to better organize 2d game development",
-  "version": "5.4.1",
+  "version": "5.5.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,7 +17,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "postbuild": "webpack",
-    "precommit": "yarn format && yarn lint && yarn sanity && yarn format-docs && yarn test"
+    "precommit": "yarn lint && yarn sanity && yarn format && yarn format-docs && yarn test"
   },
   "files": [
     "dist"
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^9.4.4",
+    "detect-collisions": "^9.5.1",
     "latermom": "^2.0.1",
     "pixi-shim": "^2.5.0",
     "pixi.js": "^8",

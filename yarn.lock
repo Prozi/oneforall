@@ -2066,14 +2066,14 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.4.4:
-  version "9.4.4"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.4.4.tgz#eb784b432189e8e33e11bdd6bb0c7421fe2fbdd0"
-  integrity sha512-1TeABhhYOENxHj9WhZc5PpI3k3bvI0IRmJhg609GqiyaG0lESh/YYb2CwCM96LlTShuofdVvKwx/lsqF6t4n7g==
+detect-collisions@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.5.1.tgz#602abea56113c2feadb634af3177f15449915fa6"
+  integrity sha512-Q313GyIqTNtiyetNnZeK63FDLKCFGADQ1I1mI5TNZTCuHwlwSlnK+aC4EOD23alSWtqnIzzfbK+X9yRDqIm85Q==
   dependencies:
     "@types/rbush" "^3.0.3"
     "@types/sat" "^0.0.35"
-    poly-decomp "^0.3.0"
+    poly-decomp-es "^0.4.2"
     rbush "^3.0.1"
     sat "^0.9.0"
 
@@ -3883,10 +3883,10 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-poly-decomp@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/poly-decomp/-/poly-decomp-0.3.0.tgz#aa499289bbc1a4ca2213e966587fa5bffc1ca5f5"
-  integrity sha512-hWeBxGzPYiybmI4548Fca7Up/0k1qS5+79cVHI9+H33dKya5YNb9hxl0ZnDaDgvrZSuYFBhkCK/HOnqN7gefkQ==
+poly-decomp-es@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/poly-decomp-es/-/poly-decomp-es-0.4.2.tgz#2b874984e6f1d0efa3a27d0b13bbf18904a58156"
+  integrity sha512-akjZkaTeyfECMNkMqv0g9gFiU2HjpZ5ubJA/aczw1ILdgWQbv1OPwCi05/9JbY2GnGpjm9k85Jdbd/j/p/lg/g==
 
 prettier@^3.2.5:
   version "3.2.5"

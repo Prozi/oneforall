@@ -21,7 +21,7 @@ export class CircleBody extends Ellipse implements LifecycleProps {
     super(gameObject, radiusX, radiusY, step, options);
 
     if (!radiusX || !radiusY) {
-      throw new Error('CircleBody radius can\'t be 0!');
+      throw new Error("CircleBody radius can't be 0!");
     }
 
     this.gameObject = gameObject;
