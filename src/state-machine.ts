@@ -6,12 +6,29 @@ import { Component } from './component';
 export type TStateValidator = (newState: string) => boolean;
 
 export class StateMachine extends Component {
-  readonly state$: Subject<string> = new Subject();
+  /**
+   * Before his state changes, it emits this subject.
+   */
   readonly change$: Subject<string[]> = new Subject();
 
+  /**
+   * After his state changes, it emits this subject.
+   */
+  readonly state$: Subject<string> = new Subject();
+
+  /**
+   * Each Lifecycle Object has label for pixi debugging.
+   */
   label = 'StateMachine';
+
+  /**
+   * Current state of the State Machine.
+   */
   state = '';
 
+  /**
+   * Validators for state changes.
+   */
   protected validators: Record<string, TStateValidator[]> = {};
 
   constructor(gameObject: GameObject, initialState = '') {

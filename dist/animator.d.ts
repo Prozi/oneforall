@@ -12,13 +12,34 @@ export interface AnimatorData {
     anchor?: Vector;
 }
 export declare class Animator extends Container {
+    /**
+     * When animation completes, it emits this subject.
+     */
     readonly complete$: Subject<string>;
+    /**
+     * Inner State Machine Object.
+     */
     readonly stateMachine: StateMachine;
+    /**
+     * Each Lifecycle Object has label for pixi debugging.
+     */
     label: string;
+    /**
+     * List of possible animations.
+     */
     states: string[];
+    /**
+     * Pointer to currently visible animation.
+     */
     animation?: PIXI.AnimatedSprite;
     constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: AnimatorData, { width, height, source }: PIXI.Texture);
+    /**
+     * Reference to inner State Machine's state.
+     */
     get state(): string;
+    /**
+     * Reference to inner State Machine's state$ Subject.
+     */
     get state$(): Subject<string>;
     setScale(x?: number, y?: number): void;
     getAnimationIndex(state: string): number;

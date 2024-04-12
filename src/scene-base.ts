@@ -14,15 +14,57 @@ export interface SceneOptions {
 }
 
 export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
+  /**
+   * When Scene Object has children amount changed, it emits this subject.
+   */
   readonly children$: Subject<void> = new Subject();
+
+  /**
+   * Parent GameObject is assigned at creation.
+   * Scene Object has no Parent GameObject.
+   */
+  readonly gameObject = null;
+
+  /**
+   * When Lifecycle Object is updated, it emits this subject.
+   * Along with updating his children, which in turn behave the same.
+   */
   readonly update$: Subject<number> = new Subject();
+
+  /**
+   * When Lifecycle Object is destroyed, it emits and closes this subject.
+   * Along with destroying his children, which in turn behave the same.
+   */
   readonly destroy$: Subject<void> = new Subject();
 
+  /**
+   * Each Lifecycle Object has label for pixi debugging.
+   */
   label = 'Scene';
+
+  /**
+   * requestAnimationFrame reference.
+   */
   animationFrame = 0;
+
+  /**
+   * Reference to Collision Detection System.
+   */
   physics: System<TBody>;
+
+  /**
+   * Top Level Container.
+   */
   stage: PIXI.Container;
+
+  /**
+   * Scene has children.
+   */
   children: LifecycleProps[] = [];
+
+  /**
+   * Scene has last update unix time stored.
+   */
   lastUpdate: number;
 
   constructor(options: SceneOptions = {}) {
@@ -76,7 +118,7 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
 
     while (this.children.length) {
       const child = this.children.pop();
-      // will also gameObject.removeComponent(component)
+      // (!) will also this.gameObject.removeComponent(component)
       child.destroy();
     }
 

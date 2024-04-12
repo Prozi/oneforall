@@ -6,13 +6,13 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   output: {
-    path: `${__dirname}/docs/`,
+    path: `${__dirname}/dist/`,
     filename: 'demo.bundle.js'
   },
   devServer: {
-    port: 4200,
+    port: 3000,
     static: {
-      directory: `${__dirname}/docs`
+      directory: `${__dirname}/demo`
     }
   },
   module: {

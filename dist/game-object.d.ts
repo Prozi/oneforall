@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs/internal/Subject';
 import { Vector } from 'detect-collisions';
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
@@ -14,11 +13,18 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends Gam
     target?: Vector;
 }
 export declare class GameObject extends Lifecycle {
-    readonly update$: Subject<number>;
-    readonly destroy$: Subject<void>;
+    /**
+     * Each Lifecycle Object has label for pixi debugging.
+     */
     label: string;
+    /**
+     * Each GameObject has children Lifecycle Objects.
+     */
     components: LifecycleProps[];
-    scene?: Scene | SceneBase;
+    /**
+     * Lifecycle Object may be added to a Scene Object.
+     */
+    scene?: SceneBase | Scene;
     constructor(label?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
     update(deltaTime: number): void;

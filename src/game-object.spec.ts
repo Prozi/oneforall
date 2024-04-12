@@ -22,7 +22,7 @@ describe('GIVEN GameObject', () => {
     jest.spyOn(component1, 'update');
     jest.spyOn(component2, 'update');
 
-    go.update();
+    go.update(20);
 
     expect(component1.update).toHaveBeenCalled();
     expect(component2.update).toHaveBeenCalled();

@@ -17,10 +17,15 @@ const scene_base_1 = require("./scene-base");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
         super();
+        /**
+         * When auto sort is set to false, it emits this subject.
+         */
         this.disableAutoSort$ = new Subject_1.Subject();
         this.options = options;
         this.stage.visible = options.visible || false;
         this.pixi.stage.addChild(this.stage);
+        // for chrome plugin pixi debug devtools
+        globalThis.__PIXI_APP__ = this.pixi;
         if (options.autoSort) {
             this.enableAutoSort();
         }

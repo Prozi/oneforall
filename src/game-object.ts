@@ -18,12 +18,20 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
 }
 
 export class GameObject extends Lifecycle {
-  readonly update$: Subject<number> = new Subject();
-  readonly destroy$: Subject<void> = new Subject();
-
+  /**
+   * Each Lifecycle Object has label for pixi debugging.
+   */
   label: string;
+
+  /**
+   * Each GameObject has children Lifecycle Objects.
+   */
   components: LifecycleProps[] = [];
-  scene?: Scene | SceneBase;
+
+  /**
+   * Lifecycle Object may be added to a Scene Object.
+   */
+  scene?: SceneBase | Scene;
 
   constructor(label = 'GameObject', x = 0, y = 0) {
     super();
@@ -38,7 +46,7 @@ export class GameObject extends Lifecycle {
   }
 
   update(deltaTime: number): void {
-    this.components?.forEach((component: Lifecycle) => {
+    this.components.forEach((component: Lifecycle) => {
       component.update(deltaTime);
     });
 

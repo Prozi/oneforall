@@ -15,11 +15,29 @@ export interface AnimatorData {
 }
 
 export class Animator extends Container {
+  /**
+   * When animation completes, it emits this subject.
+   */
   readonly complete$: Subject<string> = new Subject();
+
+  /**
+   * Inner State Machine Object.
+   */
   readonly stateMachine: StateMachine;
 
+  /**
+   * Each Lifecycle Object has label for pixi debugging.
+   */
   label = 'Animator';
+
+  /**
+   * List of possible animations.
+   */
   states: string[];
+
+  /**
+   * Pointer to currently visible animation.
+   */
   animation?: PIXI.AnimatedSprite;
 
   constructor(
@@ -68,10 +86,16 @@ export class Animator extends Container {
     this.states = Object.keys(animations);
   }
 
+  /**
+   * Reference to inner State Machine's state.
+   */
   get state() {
     return this.stateMachine.state;
   }
 
+  /**
+   * Reference to inner State Machine's state$ Subject.
+   */
   get state$() {
     return this.stateMachine.state$;
   }

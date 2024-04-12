@@ -12,7 +12,7 @@ describe('GIVEN Sprite', () => {
     const sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
     go.x = 50;
-    go.update();
+    go.update(20);
 
     expect(sprite.x).toBe(50);
   });

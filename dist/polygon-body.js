@@ -7,9 +7,20 @@ const lifecycle_1 = require("./lifecycle");
 class PolygonBody extends detect_collisions_1.Polygon {
     constructor(gameObject, points, options) {
         super(gameObject, points, options);
-        this.label = 'PolygonBody';
+        /**
+         * When Lifecycle Object is updated, it emits this subject.
+         * Along with updating his children, which in turn behave the same.
+         */
         this.update$ = new Subject_1.Subject();
+        /**
+         * When Lifecycle Object is destroyed, it emits and closes this subject.
+         * Along with destroying his children, which in turn behave the same.
+         */
         this.destroy$ = new Subject_1.Subject();
+        /**
+         * Each Lifecycle Object has label for pixi debugging.
+         */
+        this.label = 'PolygonBody';
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }

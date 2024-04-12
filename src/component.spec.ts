@@ -6,18 +6,18 @@ describe('GIVEN Component', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.update$?.subscribe(() => {
+    component.update$.subscribe(() => {
       done();
     });
 
-    component.update();
+    component.update(20);
   });
 
   it('THEN destroy publishes destroy$', (done) => {
     const go = new GameObject();
     const component = new Component(go);
 
-    component.destroy$?.subscribe(() => {
+    component.destroy$.subscribe(() => {
       done();
     });
 

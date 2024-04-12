@@ -9,7 +9,7 @@ describe('GIVEN Container', () => {
     const container = new Container(go);
 
     go.x = 50;
-    go.update();
+    go.update(20);
 
     expect(container.x).toBe(50);
   });

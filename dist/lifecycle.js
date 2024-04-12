@@ -29,23 +29,30 @@ const Subject_1 = require("rxjs/internal/Subject");
 class Lifecycle extends PIXI.Container {
     constructor() {
         super(...arguments);
+        /**
+         * When Lifecycle Object is updated, it emits this subject.
+         * Along with updating his children, which in turn behave the same.
+         */
         this.update$ = new Subject_1.Subject();
+        /**
+         * When Lifecycle Object is destroyed, it emits and closes this subject.
+         * Along with destroying his children, which in turn behave the same.
+         */
         this.destroy$ = new Subject_1.Subject();
+        /**
+         * Each Lifecycle Object has label for pixi debugging.
+         */
         this.label = 'Lifecycle';
     }
     static destroy(lifecycle) {
-        var _a, _b, _c, _d;
+        var _a;
         (_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(lifecycle);
-        (_b = lifecycle.update$) === null || _b === void 0 ? void 0 : _b.complete();
-        (_c = lifecycle.destroy$) === null || _c === void 0 ? void 0 : _c.next();
-        (_d = lifecycle.destroy$) === null || _d === void 0 ? void 0 : _d.complete();
-        lifecycle.update$ = undefined;
-        lifecycle.destroy$ = undefined;
-        lifecycle.gameObject = undefined;
+        lifecycle.update$.complete();
+        lifecycle.destroy$.next();
+        lifecycle.destroy$.complete();
     }
     static update(lifecycle, deltaTime) {
-        var _a;
-        (_a = lifecycle.update$) === null || _a === void 0 ? void 0 : _a.next(deltaTime);
+        lifecycle.update$.next(deltaTime);
     }
     destroy() {
         Lifecycle.destroy(this);

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameObject = void 0;
-const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
 class GameObject extends lifecycle_1.Lifecycle {
     constructor(label = 'GameObject', x = 0, y = 0) {
         super();
-        this.update$ = new Subject_1.Subject();
-        this.destroy$ = new Subject_1.Subject();
+        /**
+         * Each GameObject has children Lifecycle Objects.
+         */
         this.components = [];
         this.label = label;
         this.x = x;
@@ -17,8 +17,7 @@ class GameObject extends lifecycle_1.Lifecycle {
         return prefab.instantiate();
     }
     update(deltaTime) {
-        var _a;
-        (_a = this.components) === null || _a === void 0 ? void 0 : _a.forEach((component) => {
+        this.components.forEach((component) => {
             component.update(deltaTime);
         });
         super.update(deltaTime);

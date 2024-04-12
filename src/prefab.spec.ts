@@ -32,7 +32,6 @@ describe('GIVEN Prefab', () => {
     const scene: Scene = new Scene({ visible: true });
     const prefab: Prefab = new Prefab(
       'Soldier',
-      // tslint:disable-next-line: no-any
       async (
         go: GameObject & { state?: StateMachine; sprite?: Sprite; body?: Body }
       ) => {
@@ -43,7 +42,7 @@ describe('GIVEN Prefab', () => {
         go.body.x = Math.random() * innerWidth;
         go.body.y = Math.random() * innerHeight;
 
-        go.update();
+        go.update(20);
         scene.addChild(go);
       }
     );

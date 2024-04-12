@@ -12,7 +12,7 @@ describe('GIVEN PolygonBody', () => {
     ]);
 
     body.x += 50;
-    go.update();
+    go.update(20);
 
     expect(go.x).toBe(50);
   });

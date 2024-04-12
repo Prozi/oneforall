@@ -7,8 +7,14 @@ import { SceneBase, SceneOptions } from './scene-base';
 export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     pixi: Application;
     resouces: Resources;
-    options: SceneOptions;
-    disableAutoSort$: Subject<void>;
+    /**
+     * Options are assigned at creation.
+     */
+    readonly options: SceneOptions;
+    /**
+     * When auto sort is set to false, it emits this subject.
+     */
+    readonly disableAutoSort$: Subject<void>;
     constructor(options?: SceneOptions);
     init(options?: Partial<PIXI.ApplicationOptions>): Promise<void>;
     start(): void;

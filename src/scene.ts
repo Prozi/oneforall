@@ -14,8 +14,15 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resouces: Resources;
 
-  options: SceneOptions;
-  disableAutoSort$: Subject<void> = new Subject();
+  /**
+   * Options are assigned at creation.
+   */
+  readonly options: SceneOptions;
+
+  /**
+   * When auto sort is set to false, it emits this subject.
+   */
+  readonly disableAutoSort$: Subject<void> = new Subject();
 
   constructor(options: SceneOptions = {}) {
     super();
@@ -23,6 +30,9 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     this.options = options;
     this.stage.visible = options.visible || false;
     this.pixi.stage.addChild(this.stage);
+
+    // for chrome plugin pixi debug devtools
+    globalThis.__PIXI_APP__ = this.pixi;
 
     if (options.autoSort) {
       this.enableAutoSort();

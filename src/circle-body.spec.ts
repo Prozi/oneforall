@@ -24,7 +24,7 @@ describe('GIVEN CircleBody', () => {
     const body = new CircleBody(go, 15);
 
     body.x += 50;
-    go.update();
+    go.update(20);
 
     expect(go.x).toBe(50);
   });

@@ -31,11 +31,36 @@ const game_object_1 = require("./game-object");
 const lifecycle_1 = require("./lifecycle");
 class SceneBase {
     constructor(options = {}) {
+        /**
+         * When Scene Object has children amount changed, it emits this subject.
+         */
         this.children$ = new Subject_1.Subject();
+        /**
+         * Parent GameObject is assigned at creation.
+         * Scene Object has no Parent GameObject.
+         */
+        this.gameObject = null;
+        /**
+         * When Lifecycle Object is updated, it emits this subject.
+         * Along with updating his children, which in turn behave the same.
+         */
         this.update$ = new Subject_1.Subject();
+        /**
+         * When Lifecycle Object is destroyed, it emits and closes this subject.
+         * Along with destroying his children, which in turn behave the same.
+         */
         this.destroy$ = new Subject_1.Subject();
+        /**
+         * Each Lifecycle Object has label for pixi debugging.
+         */
         this.label = 'Scene';
+        /**
+         * requestAnimationFrame reference.
+         */
         this.animationFrame = 0;
+        /**
+         * Scene has children.
+         */
         this.children = [];
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
@@ -76,7 +101,7 @@ class SceneBase {
         this.stop();
         while (this.children.length) {
             const child = this.children.pop();
-            // will also gameObject.removeComponent(component)
+            // (!) will also this.gameObject.removeComponent(component)
             child.destroy();
         }
         this.children$.complete();

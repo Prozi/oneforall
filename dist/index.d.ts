@@ -1,3 +1,4 @@
+export * from './lifecycle';
 export * from './animator';
 export * from './application';
 export * from './circle-body';

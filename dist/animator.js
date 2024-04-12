@@ -31,7 +31,13 @@ const state_machine_1 = require("./state-machine");
 class Animator extends container_1.Container {
     constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
         super(gameObject);
+        /**
+         * When animation completes, it emits this subject.
+         */
         this.complete$ = new Subject_1.Subject();
+        /**
+         * Each Lifecycle Object has label for pixi debugging.
+         */
         this.label = 'Animator';
         this.stateMachine = new state_machine_1.StateMachine(gameObject);
         const tileWidth = width / cols;
@@ -52,9 +58,15 @@ class Animator extends container_1.Container {
         });
         this.states = Object.keys(animations);
     }
+    /**
+     * Reference to inner State Machine's state.
+     */
     get state() {
         return this.stateMachine.state;
     }
+    /**
+     * Reference to inner State Machine's state$ Subject.
+     */
     get state$() {
         return this.stateMachine.state$;
     }
