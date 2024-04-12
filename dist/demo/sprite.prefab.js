@@ -28,6 +28,7 @@ exports.createSprite = createSprite;
 function updateSprite(gameObject, deltaTime) {
     const scale = gameObject.scene.stage.scale;
     const gameObjects = gameObject.scene.children;
+    const safeDelta = Math.min(60, deltaTime);
     if (Math.random() < 0.05) {
         // funny animation
         gameObject.sprite.setState('roll', false, 'idle');
@@ -58,7 +59,7 @@ function updateSprite(gameObject, deltaTime) {
                 gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
             }
             // update body which updates parent game object
-            gameObject.body.setPosition(gameObject.body.x + deltaTime * offsetX, gameObject.body.y + deltaTime * offsetY);
+            gameObject.body.setPosition(gameObject.body.x + safeDelta * offsetX, gameObject.body.y + safeDelta * offsetY);
         }
     }
 }

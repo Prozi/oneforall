@@ -97,6 +97,7 @@ export function createSprite({ scene, data, texture }): TGameObject {
 export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
   const scale = gameObject.scene.stage.scale;
   const gameObjects = gameObject.scene.children as TGameObject[];
+  const safeDelta = Math.min(60, deltaTime);
 
   if (Math.random() < 0.05) {
     // funny animation
@@ -139,8 +140,8 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
 
       // update body which updates parent game object
       gameObject.body.setPosition(
-        gameObject.body.x + deltaTime * offsetX,
-        gameObject.body.y + deltaTime * offsetY
+        gameObject.body.x + safeDelta * offsetX,
+        gameObject.body.y + safeDelta * offsetY
       );
     }
   }
