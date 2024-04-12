@@ -5,11 +5,11 @@ import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export class CircleBody extends Ellipse implements LifecycleProps {
-  label = 'CircleBody';
-
   readonly gameObject: GameObject;
   readonly update$: Subject<void> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
+
+  label = 'CircleBody';
 
   constructor(
     gameObject: GameObject,

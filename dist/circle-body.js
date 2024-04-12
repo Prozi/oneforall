@@ -7,9 +7,9 @@ const lifecycle_1 = require("./lifecycle");
 class CircleBody extends detect_collisions_1.Ellipse {
     constructor(gameObject, radiusX, radiusY = radiusX, step = 16, options) {
         super(gameObject, radiusX, radiusY, step, options);
-        this.label = 'CircleBody';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
+        this.label = 'CircleBody';
         if (!radiusX || !radiusY) {
             throw new Error('CircleBody radius can\'t be 0!');
         }

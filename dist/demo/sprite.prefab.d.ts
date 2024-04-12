@@ -1,12 +1,4 @@
-import { Vector } from 'detect-collisions';
-import { Animator } from '../animator';
-import { CircleBody } from '../circle-body';
-import { GameObject } from '../game-object';
-export type TGameObject = GameObject & {
-    body: CircleBody;
-    sprite: Animator;
-    target?: Vector;
-};
+import { TGameObject } from '../game-object';
 export declare function createSprite({ scene, data, texture }: {
     scene: any;
     data: any;

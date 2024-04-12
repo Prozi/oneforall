@@ -25,15 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Animator = void 0;
 const PIXI = __importStar(require("pixi.js"));
-const BehaviorSubject_1 = require("rxjs/internal/BehaviorSubject");
 const Subject_1 = require("rxjs/internal/Subject");
 const container_1 = require("./container");
+const state_machine_1 = require("./state-machine");
 class Animator extends container_1.Container {
-    constructor(gameObject, { animations, cols, rows, animationSpeed = 200, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
+    constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
         super(gameObject);
-        this.label = 'Animator';
         this.complete$ = new Subject_1.Subject();
-        this.state$ = new BehaviorSubject_1.BehaviorSubject('');
+        this.label = 'Animator';
+        this.stateMachine = new state_machine_1.StateMachine(gameObject);
         const tileWidth = width / cols;
         const tileHeight = height / rows;
         Object.values(animations).forEach((animationFrames) => {
@@ -43,10 +43,7 @@ class Animator extends container_1.Container {
                     : parseInt(animationFrameInput, 10);
                 const frameWidth = Math.floor(animationFrame * tileWidth);
                 const frame = new PIXI.Rectangle(frameWidth % width, tileHeight * Math.floor(frameWidth / width), tileWidth, tileHeight);
-                const texture = new PIXI.Texture({
-                    source,
-                    frame
-                });
+                const texture = new PIXI.Texture({ source, frame });
                 texture.source.scaleMode = 'nearest';
                 return { texture, time: animationSpeed };
             }));
@@ -54,6 +51,12 @@ class Animator extends container_1.Container {
             this.addChild(animatedSprite);
         });
         this.states = Object.keys(animations);
+    }
+    get state() {
+        return this.stateMachine.state;
+    }
+    get state$() {
+        return this.stateMachine.state$;
     }
     setScale(x = 1, y = x) {
         this.children.forEach((child) => {
@@ -64,38 +67,36 @@ class Animator extends container_1.Container {
         const exactIndex = this.getExactStateIndex(state);
         return exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state);
     }
-    setAnimation(animation) {
+    setAnimation(animation, loop) {
         const children = this.children.filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation);
         children.forEach((child) => {
             child.visible = false;
             child.stop();
         });
+        animation.gotoAndPlay(0);
+        animation.loop = loop;
+        animation.visible = true;
         this.animation = animation;
     }
     setState(state, loop = true, stateWhenFinished = 'idle') {
         const index = this.getAnimationIndex(state);
-        const animation = this.children[index];
-        if (!animation || animation === this.animation) {
+        if (index === -1) {
             return '';
         }
-        this.setAnimation(animation);
-        animation.loop = loop;
-        animation.gotoAndPlay(0);
-        animation.visible = true;
+        const next = this.states[index];
+        if (!this.stateMachine.setState(next)) {
+            return '';
+        }
+        const animation = this.children[index];
         if (!loop && stateWhenFinished) {
             animation.onComplete = () => {
                 animation.onComplete = null;
-                this.complete$.next(this.state);
-                // exact as target state before
-                if (this.state === this.states[index]) {
-                    this.setState(stateWhenFinished);
-                }
+                this.complete$.next(next);
+                this.setState(stateWhenFinished);
             };
         }
-        this.state = this.states[index];
-        this.state$.next(this.state);
-        // return exactly the state (maybe fuzzy)
-        return this.states[index];
+        this.setAnimation(animation, loop);
+        return next;
     }
     getExactStateIndex(state) {
         return this.states.indexOf(state);

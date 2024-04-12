@@ -5,12 +5,12 @@ const resources_1 = require("../resources");
 const scene_1 = require("../scene");
 const sprite_prefab_1 = require("./sprite.prefab");
 async function start() {
-    // create Scene
+    // create main Scene
     const scene = new scene_1.Scene({
         visible: true,
         autoSort: true
     });
-    // new since pixi 7/8
+    // initialize scene async - new since pixi 7/8
     await scene.init({
         resizeTo: window,
         autoDensity: true,

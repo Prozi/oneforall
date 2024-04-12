@@ -5,6 +5,7 @@
   "realwidth": 50,
   "tileset": "cave-boy.png",
   "count": 37,
+  "animationSpeed": 100,
   "animations": {
     "hit": [26, 27],
     "dying": [28, 29, 30, 31, 32],

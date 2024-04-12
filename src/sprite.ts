@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
-import { Component } from './component';
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { PIXIResource } from './resources';
@@ -30,6 +29,6 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
 
-    Component.update(this);
+    Lifecycle.update(this);
   }
 }

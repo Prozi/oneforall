@@ -1,20 +1,12 @@
 # One For All
 
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td valign="top">
+<img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="456" height="456" style="image-rendering: pixelated; min-width: 456px;" />
+
 <h3 style="margin-top: 0;">TypeScript gamedev library inspired by Unity</h3>
 
 [<img src="https://img.shields.io/npm/v/@jacekpietal/oneforall?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@jacekpietal/oneforall?activeTab=versions)
 [<img src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge" alt="build status" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
 [<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
-
-<td>
-<img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="228" height="228" style="image-rendering: pixelated; min-width: 228px;" />
-</td>
-</td>
-</tr>
-</table>
 
 ## Demo
 
@@ -32,92 +24,16 @@ Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/)
 
 ## Demo Code
 
-`src/demo/sprite.prefab.ts`
-
-```typescript
-export function createSprite({ scene, data, texture }): TGameObject {
-  // a base molecule
-  const gameObject = new GameObject('Player') as TGameObject;
-
-  // create body
-  gameObject.body = new CircleBody(gameObject, 20, 14);
-  gameObject.body.setPosition(
-    Math.random() * innerWidth,
-    Math.random() * innerHeight
-  );
-
-  scene.physics.insert(gameObject.body);
-  scene.addChild(gameObject);
-
-  // create animator with few animations from json + texture
-  gameObject.sprite = new Animator(gameObject, data, texture);
-  gameObject.sprite.setState('idle', true);
-  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
-    child.anchor.set(0.5, 0.8)
-  );
-
-  // subscribe to its own update function
-  gameObject.update$
-    .pipe(takeUntil(scene.destroy$))
-    .subscribe(() => updateSprite(gameObject));
-
-  return gameObject;
-}
-
-export function updateSprite(gameObject: TGameObject): void {
-  if (Math.random() < 0.05) {
-    gameObject.target = {
-      x: innerWidth / 2 / gameObject.scene.stage.scale.x,
-      y: innerHeight / 2 / gameObject.scene.stage.scale.y
-    };
-  }
-
-  if (Math.random() < 0.05) {
-    gameObject.sprite.setState('roll', false, 'idle');
-  }
-
-  if (Math.random() < 0.05) {
-    const gameObjects = gameObject.scene.children as TGameObject[];
-
-    gameObject.target =
-      gameObjects[Math.floor(Math.random() * gameObjects.length)];
-
-    gameObject.sprite.setState('run', true);
-  }
-
-  if (gameObject.target) {
-    const arc: number = Math.atan2(
-      gameObject.target.y - gameObject.y,
-      gameObject.target.x - gameObject.x
-    );
-    const overlapX: number = Math.cos(arc);
-    const overlapY: number = Math.sin(arc);
-
-    if (gameObject.sprite instanceof Animator) {
-      const flip: number = Math.sign(overlapX) || 1;
-
-      gameObject.sprite.setScale(flip, 1);
-    }
-
-    gameObject.body.setPosition(
-      gameObject.body.x + overlapX,
-      gameObject.body.y + overlapY
-    );
-  }
-}
-```
-
 `src/demo/index.ts`
-
 ```typescript
 async function start(): Promise<void> {
-  // create Scene
+  // create main Scene
   const scene: Scene = new Scene({
     visible: true,
     autoSort: true
   });
 
-  // new since pixi 7/8
+  // initialize scene async - new since pixi 7/8
   await scene.init({
     resizeTo: window,
     autoDensity: true,
@@ -141,6 +57,91 @@ async function start(): Promise<void> {
 
   // for chrome plugin pixi debug devtools
   globalThis.__PIXI_APP__ = scene.pixi;
+}
+
+start();
+```
+
+`src/demo/sprite.prefab.ts`
+```typescript
+export function createSprite({ scene, data, texture }): TGameObject {
+  // create game object
+  const gameObject = new GameObject('Player') as TGameObject;
+
+  // create body
+  gameObject.body = new CircleBody(gameObject, 20, 14);
+  gameObject.body.setPosition(
+    Math.random() * innerWidth,
+    Math.random() * innerHeight
+  );
+
+  // insert body to physics and game object to scene
+  scene.physics.insert(gameObject.body);
+  scene.addChild(gameObject);
+
+  // create animator with few animations from json + texture
+  gameObject.sprite = new Animator(gameObject, data, texture);
+  gameObject.sprite.setState('idle', true);
+  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
+    child.anchor.set(0.5, 0.8)
+  );
+
+  // subscribe to its own update function
+  gameObject.update$
+    .pipe(takeUntil(scene.destroy$))
+    .subscribe(() => updateSprite(gameObject));
+
+  return gameObject;
+}
+
+export function updateSprite(gameObject: TGameObject): void {
+  const scale = gameObject.scene.stage.scale;
+  const gameObjects = gameObject.scene.children as TGameObject[];
+
+  if (Math.random() < 0.05) {
+    // funny animation
+    gameObject.sprite.setState('roll', false, 'idle');
+  }
+
+  if (Math.random() < 0.05) {
+    // goto center
+    gameObject.target = {
+      x: innerWidth / 2 / scale.x,
+      y: innerHeight / 2 / scale.y
+    };
+  }
+
+  if (Math.random() < 0.05) {
+    // if possible follow random target
+    if (gameObject.sprite.setState('run', true)) {
+      gameObject.target =
+        gameObjects[Math.floor(Math.random() * gameObjects.length)];
+    }
+  }
+
+  if (gameObject.target) {
+    const arc: number = Math.atan2(
+      gameObject.target.y - gameObject.y,
+      gameObject.target.x - gameObject.x
+    );
+
+    if (arc) {
+      const overlapX: number = Math.cos(arc);
+      const overlapY: number = Math.sin(arc);
+
+      if (gameObject.sprite instanceof Animator) {
+        const flipX: number = Math.sign(overlapX) || gameObject.sprite.scale.x;
+        // flip x so there is no need to duplicate sprites
+        gameObject.sprite.setScale(flipX, 1);
+      }
+
+      // update body which updates parent game object
+      gameObject.body.setPosition(
+        gameObject.body.x + overlapX,
+        gameObject.body.y + overlapY
+      );
+    }
+  }
 }
 ```
 

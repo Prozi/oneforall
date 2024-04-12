@@ -26,7 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sprite = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
-const component_1 = require("./component");
 const lifecycle_1 = require("./lifecycle");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
@@ -45,7 +44,7 @@ class Sprite extends PIXI.Sprite {
     update() {
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        component_1.Component.update(this);
+        lifecycle_1.Lifecycle.update(this);
     }
 }
 exports.Sprite = Sprite;

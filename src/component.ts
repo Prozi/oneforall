@@ -1,15 +1,24 @@
+import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
-import { Lifecycle } from './lifecycle';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 
-export class Component extends Lifecycle {
+export class Component implements LifecycleProps {
+  readonly gameObject: GameObject;
+  readonly update$: Subject<void> = new Subject();
+  readonly destroy$: Subject<void> = new Subject();
+
   label = 'Component';
 
-  readonly gameObject: GameObject;
-
   constructor(gameObject: GameObject) {
-    super();
-
     this.gameObject = gameObject;
     this.gameObject.addComponent(this);
+  }
+
+  update(): void {
+    Lifecycle.update(this);
+  }
+
+  destroy(): void {
+    Lifecycle.destroy(this);
   }
 }

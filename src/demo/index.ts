@@ -4,13 +4,13 @@ import { Scene } from '../scene';
 import { createSprite } from './sprite.prefab';
 
 async function start(): Promise<void> {
-  // create Scene
+  // create main Scene
   const scene: Scene = new Scene({
     visible: true,
     autoSort: true
   });
 
-  // new since pixi 7/8
+  // initialize scene async - new since pixi 7/8
   await scene.init({
     resizeTo: window,
     autoDensity: true,
