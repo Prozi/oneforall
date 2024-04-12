@@ -6,7 +6,7 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   output: {
-    path: `${__dirname}/dist/`,
+    path: `${__dirname}/docs/demo/`,
     filename: 'demo.bundle.js'
   },
   devServer: {
