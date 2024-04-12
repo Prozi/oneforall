@@ -37,7 +37,7 @@ describe('GIVEN SceneBase', () => {
     jest.spyOn(state, 'update');
 
     scene.addChild(go);
-    scene.update();
+    scene.update(20);
 
     expect(go.update).toHaveBeenCalled();
     expect(state.update).toHaveBeenCalled();
