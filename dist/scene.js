@@ -63,5 +63,5 @@ __decorate([
 ], Scene.prototype, "pixi", void 0);
 __decorate([
     (0, dependency_injection_1.Inject)(resources_1.Resources)
-], Scene.prototype, "resouces", void 0);
+], Scene.prototype, "resources", void 0);
 exports.Scene = Scene;

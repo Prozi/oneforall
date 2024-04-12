@@ -3,6 +3,7 @@
 <img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="456" height="456" style="image-rendering: pixelated; max-width: 100%;" />
 
 ### TypeScript gamedev library inspired by Unity
+
 [<img src="https://img.shields.io/npm/v/@jacekpietal/oneforall?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@jacekpietal/oneforall?activeTab=versions)
 [<img src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge" alt="build status" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
 [<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
@@ -26,6 +27,7 @@ Also, here is the [documentation](https://prozi.github.io/oneforall/modules.html
 ## Demo Code
 
 `src/demo/index.ts`
+
 ```typescript
 async function start(): Promise<void> {
   // create main Scene
@@ -61,6 +63,7 @@ start();
 ```
 
 `src/demo/sprite.prefab.ts`
+
 ```typescript
 export function createSprite({ scene, data, texture }): TGameObject {
   // create game object

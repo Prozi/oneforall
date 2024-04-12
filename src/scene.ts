@@ -12,7 +12,7 @@ import { SceneBase, SceneOptions } from './scene-base';
 
 export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Application) pixi: Application;
-  @Inject(Resources) resouces: Resources;
+  @Inject(Resources) resources: Resources;
 
   /**
    * Options are assigned at creation.
