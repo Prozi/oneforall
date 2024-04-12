@@ -1,6 +1,6 @@
 # One For All
 
-<img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="456" height="456" style="image-rendering: pixelated; min-width: 456px;" />
+<img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="456" height="456" style="image-rendering: pixelated; max-width: 100%;" />
 
 <h3 style="margin-top: 0;">TypeScript gamedev library inspired by Unity</h3>
 

@@ -32,6 +32,7 @@ pre,
 pre code {
   padding: 0;
   border: none;
+  max-width: 100%;
 }
 
 code {
