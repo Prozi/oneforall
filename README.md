@@ -56,9 +56,6 @@ async function start(): Promise<void> {
   scene.update$.pipe(takeUntil(scene.destroy$)).subscribe(() => {
     scene.physics.separate();
   });
-
-  // for chrome plugin pixi debug devtools
-  globalThis.__PIXI_APP__ = scene.pixi;
 }
 
 start();

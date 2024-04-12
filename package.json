@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "TypeScript gamedev library inspired by Unity",
-  "version": "5.7.0",
+  "version": "5.7.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -78,6 +78,8 @@
     "webpack-dev-server": "^5.0.4"
   },
   "keywords": [
+    "unity",
+    "gamedev",
     "gameobject",
     "prefab",
     "state",
