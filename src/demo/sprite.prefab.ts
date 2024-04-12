@@ -23,9 +23,6 @@ export function createSprite({ scene, data, texture }): TGameObject {
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle', true);
-  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
-    child.anchor.set(0.5, 0.8)
-  );
 
   // subscribe to its own update function
   gameObject.update$

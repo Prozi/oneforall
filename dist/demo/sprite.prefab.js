@@ -17,7 +17,6 @@ function createSprite({ scene, data, texture }) {
     // create animator with few animations from json + texture
     gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
     gameObject.sprite.setState('idle', true);
-    gameObject.sprite.children.forEach((child) => child.anchor.set(0.5, 0.8));
     // subscribe to its own update function
     gameObject.update$
         .pipe((0, operators_1.takeUntil)(scene.destroy$))

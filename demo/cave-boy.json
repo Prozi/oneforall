@@ -3,6 +3,7 @@
   "rows": 7,
   "realheight": 50,
   "realwidth": 50,
+  "anchor": { "x": 0.5, "y": 0.8 },
   "tileset": "cave-boy.png",
   "count": 37,
   "animationSpeed": 100,

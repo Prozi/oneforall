@@ -27,7 +27,7 @@ export interface LifecycleProps {
      */
     scene?: SceneBase | Scene;
     /**
-     * Updates the Lifecycle Object with actural deltaTime ~60fps
+     * Updates the Lifecycle Object with actual deltaTime ~60fps
      */
     update(deltaTime: number): void;
     /**

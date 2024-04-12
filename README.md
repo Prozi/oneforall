@@ -20,7 +20,9 @@
             └──[1x StateMachine]
 ```
 
-Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/) to see below code in action.
+Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/demo/) to see below code in action.
+
+Also, here is the [documentation](https://prozi.github.io/oneforall/modules.html).
 
 ## Demo Code
 
@@ -82,9 +84,6 @@ export function createSprite({ scene, data, texture }): TGameObject {
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle', true);
-  gameObject.sprite.children.forEach((child: PIXI.AnimatedSprite) =>
-    child.anchor.set(0.5, 0.8)
-  );
 
   // subscribe to its own update function
   gameObject.update$
