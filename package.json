@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "TypeScript gamedev library inspired by Unity",
-  "version": "5.7.2",
+  "version": "5.7.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -95,5 +95,9 @@
     "webgl",
     "pixi.js"
   ],
-  "repository": "git://github.com/Prozi/oneforall.git"
+  "repository": "git://github.com/Prozi/oneforall.git",
+  "bugs": {
+    "url": "https://github.com/Prozi/oneforall/issues"
+  },
+  "homepage": "https://prozi.github.io/oneforall/"
 }
