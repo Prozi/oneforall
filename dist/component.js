@@ -11,8 +11,8 @@ class Component {
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }
-    update() {
-        lifecycle_1.Lifecycle.update(this);
+    update(deltaTime) {
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
         lifecycle_1.Lifecycle.destroy(this);

@@ -16,10 +16,10 @@ class CircleBody extends detect_collisions_1.Ellipse {
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }
-    update() {
+    update(deltaTime) {
         this.gameObject.x = this.x;
         this.gameObject.y = this.y;
-        lifecycle_1.Lifecycle.update(this);
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
         var _a;

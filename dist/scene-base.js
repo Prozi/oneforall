@@ -31,12 +31,12 @@ const game_object_1 = require("./game-object");
 const lifecycle_1 = require("./lifecycle");
 class SceneBase {
     constructor(options = {}) {
-        this.label = 'Scene';
-        this.animationFrame = 0;
-        this.children = [];
         this.children$ = new Subject_1.Subject();
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
+        this.label = 'Scene';
+        this.animationFrame = 0;
+        this.children = [];
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
@@ -49,8 +49,12 @@ class SceneBase {
         }
     }
     start() {
+        this.lastUpdate = Date.now();
         const frame = () => {
-            this.update();
+            const now = Date.now();
+            const deltaTime = (now - (this.lastUpdate || now)) / 16.67;
+            this.update(deltaTime);
+            this.lastUpdate = now;
             if (this.animationFrame) {
                 cancelAnimationFrame(this.animationFrame);
             }
@@ -58,14 +62,14 @@ class SceneBase {
         };
         frame();
     }
-    update() {
+    update(deltaTime) {
         this.physics.update();
         this.children.forEach((child) => {
             if (child instanceof lifecycle_1.Lifecycle) {
-                child.update();
+                child.update(deltaTime);
             }
         });
-        lifecycle_1.Lifecycle.update(this);
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
         this.stop();

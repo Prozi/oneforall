@@ -18,12 +18,12 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
 }
 
 export class GameObject extends Lifecycle {
+  readonly update$: Subject<number> = new Subject();
+  readonly destroy$: Subject<void> = new Subject();
+
   label: string;
   components: LifecycleProps[] = [];
   scene?: Scene | SceneBase;
-
-  readonly update$: Subject<void> = new Subject();
-  readonly destroy$: Subject<void> = new Subject();
 
   constructor(label = 'GameObject', x = 0, y = 0) {
     super();
@@ -37,12 +37,12 @@ export class GameObject extends Lifecycle {
     return prefab.instantiate();
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     this.components?.forEach((component: Lifecycle) => {
-      component.update();
+      component.update(deltaTime);
     });
 
-    super.update();
+    super.update(deltaTime);
   }
 
   destroy(): void {

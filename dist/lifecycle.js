@@ -29,9 +29,9 @@ const Subject_1 = require("rxjs/internal/Subject");
 class Lifecycle extends PIXI.Container {
     constructor() {
         super(...arguments);
-        this.label = 'Lifecycle';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
+        this.label = 'Lifecycle';
     }
     static destroy(lifecycle) {
         var _a, _b, _c, _d;
@@ -43,15 +43,15 @@ class Lifecycle extends PIXI.Container {
         lifecycle.destroy$ = undefined;
         lifecycle.gameObject = undefined;
     }
-    static update(lifecycle) {
+    static update(lifecycle, deltaTime) {
         var _a;
-        (_a = lifecycle.update$) === null || _a === void 0 ? void 0 : _a.next();
+        (_a = lifecycle.update$) === null || _a === void 0 ? void 0 : _a.next(deltaTime);
     }
     destroy() {
         Lifecycle.destroy(this);
     }
-    update() {
-        Lifecycle.update(this);
+    update(deltaTime) {
+        Lifecycle.update(this, deltaTime);
     }
 }
 exports.Lifecycle = Lifecycle;

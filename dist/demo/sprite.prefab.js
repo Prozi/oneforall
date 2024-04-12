@@ -21,11 +21,11 @@ function createSprite({ scene, data, texture }) {
     // subscribe to its own update function
     gameObject.update$
         .pipe((0, operators_1.takeUntil)(scene.destroy$))
-        .subscribe(() => updateSprite(gameObject));
+        .subscribe((deltaTime) => updateSprite(gameObject, deltaTime));
     return gameObject;
 }
 exports.createSprite = createSprite;
-function updateSprite(gameObject) {
+function updateSprite(gameObject, deltaTime) {
     const scale = gameObject.scene.stage.scale;
     const gameObjects = gameObject.scene.children;
     if (Math.random() < 0.05) {
@@ -49,15 +49,16 @@ function updateSprite(gameObject) {
     if (gameObject.target) {
         const arc = Math.atan2(gameObject.target.y - gameObject.y, gameObject.target.x - gameObject.x);
         if (arc) {
-            const overlapX = Math.cos(arc);
-            const overlapY = Math.sin(arc);
+            const offsetX = Math.cos(arc);
+            const offsetY = Math.sin(arc);
             if (gameObject.sprite instanceof animator_1.Animator) {
-                const flipX = Math.sign(overlapX) || gameObject.sprite.scale.x;
+                const flipX = Math.sign(offsetX || gameObject.sprite.scale.x) *
+                    Math.abs(gameObject.sprite.scale.x);
                 // flip x so there is no need to duplicate sprites
-                gameObject.sprite.setScale(flipX, 1);
+                gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
             }
             // update body which updates parent game object
-            gameObject.body.setPosition(gameObject.body.x + overlapX, gameObject.body.y + overlapY);
+            gameObject.body.setPosition(gameObject.body.x + deltaTime * offsetX, gameObject.body.y + deltaTime * offsetY);
         }
     }
 }

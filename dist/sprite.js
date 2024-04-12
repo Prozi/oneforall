@@ -30,9 +30,9 @@ const lifecycle_1 = require("./lifecycle");
 class Sprite extends PIXI.Sprite {
     constructor(gameObject, texture) {
         super(texture);
-        this.label = 'Sprite';
         this.update$ = new Subject_1.Subject();
         this.destroy$ = new Subject_1.Subject();
+        this.label = 'Sprite';
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
         // found no other way to truly override PIXI.Sprite destroy and trigger Lifecycle
@@ -41,10 +41,10 @@ class Sprite extends PIXI.Sprite {
             lifecycle_1.Lifecycle.destroy(this);
         };
     }
-    update() {
+    update(deltaTime) {
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        lifecycle_1.Lifecycle.update(this);
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
 }
 exports.Sprite = Sprite;

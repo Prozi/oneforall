@@ -9,19 +9,20 @@ export interface LifecycleProps {
   label: string;
 
   scene?: SceneBase | Scene;
-  update$?: Subject<void>;
+  update$?: Subject<number>;
   destroy$?: Subject<void>;
   gameObject?: GameObject;
 
-  update(): void;
+  update(deltaTime: number): void;
   destroy(): void;
 }
 
 export class Lifecycle extends PIXI.Container implements LifecycleProps {
+  readonly gameObject?: GameObject;
+  readonly update$?: Subject<number> = new Subject();
+  readonly destroy$?: Subject<void> = new Subject();
+
   label = 'Lifecycle';
-  update$?: Subject<void> = new Subject();
-  destroy$?: Subject<void> = new Subject();
-  gameObject?: GameObject;
   scene?: Scene | SceneBase;
 
   static destroy(lifecycle: LifecycleProps): void {
@@ -36,15 +37,15 @@ export class Lifecycle extends PIXI.Container implements LifecycleProps {
     lifecycle.gameObject = undefined;
   }
 
-  static update(lifecycle: LifecycleProps): void {
-    lifecycle.update$?.next();
+  static update(lifecycle: LifecycleProps, deltaTime: number): void {
+    lifecycle.update$?.next(deltaTime);
   }
 
   destroy(): void {
     Lifecycle.destroy(this);
   }
 
-  update(): void {
-    Lifecycle.update(this);
+  update(deltaTime: number): void {
+    Lifecycle.update(this, deltaTime);
   }
 }

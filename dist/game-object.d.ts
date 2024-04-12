@@ -14,14 +14,14 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends Gam
     target?: Vector;
 }
 export declare class GameObject extends Lifecycle {
+    readonly update$: Subject<number>;
+    readonly destroy$: Subject<void>;
     label: string;
     components: LifecycleProps[];
     scene?: Scene | SceneBase;
-    readonly update$: Subject<void>;
-    readonly destroy$: Subject<void>;
     constructor(label?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
-    update(): void;
+    update(deltaTime: number): void;
     destroy(): void;
     addComponent(component: LifecycleProps): boolean;
     removeComponent(component: LifecycleProps): boolean;

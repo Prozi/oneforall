@@ -6,7 +6,7 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export class CircleBody extends Ellipse implements LifecycleProps {
   readonly gameObject: GameObject;
-  readonly update$: Subject<void> = new Subject();
+  readonly update$: Subject<number> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
   label = 'CircleBody';
@@ -28,11 +28,11 @@ export class CircleBody extends Ellipse implements LifecycleProps {
     this.gameObject.addComponent(this);
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
 
-    Lifecycle.update(this);
+    Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {

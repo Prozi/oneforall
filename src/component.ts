@@ -4,7 +4,7 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export class Component implements LifecycleProps {
   readonly gameObject: GameObject;
-  readonly update$: Subject<void> = new Subject();
+  readonly update$: Subject<number> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
   label = 'Component';
@@ -14,8 +14,8 @@ export class Component implements LifecycleProps {
     this.gameObject.addComponent(this);
   }
 
-  update(): void {
-    Lifecycle.update(this);
+  update(deltaTime: number): void {
+    Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {

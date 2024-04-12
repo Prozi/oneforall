@@ -4,11 +4,11 @@ import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 export declare class CircleBody extends Ellipse implements LifecycleProps {
     readonly gameObject: GameObject;
-    readonly update$: Subject<void>;
+    readonly update$: Subject<number>;
     readonly destroy$: Subject<void>;
     label: string;
     constructor(gameObject: GameObject, radiusX: number, radiusY?: number, step?: number, options?: BodyOptions);
-    update(): void;
+    update(deltaTime: number): void;
     destroy(): void;
 }
 //# sourceMappingURL=circle-body.d.ts.map

@@ -7,7 +7,7 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 export class PolygonBody extends Polygon implements LifecycleProps {
   label = 'PolygonBody';
   readonly gameObject: GameObject;
-  readonly update$: Subject<void> = new Subject();
+  readonly update$: Subject<number> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
 
   constructor(gameObject: GameObject, points: Vector[], options?: BodyOptions) {
@@ -17,11 +17,11 @@ export class PolygonBody extends Polygon implements LifecycleProps {
     this.gameObject.addComponent(this);
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
 
-    Lifecycle.update(this);
+    Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {

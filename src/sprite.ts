@@ -6,10 +6,11 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 import { PIXIResource } from './resources';
 
 export class Sprite extends PIXI.Sprite implements LifecycleProps {
-  label = 'Sprite';
   readonly gameObject: GameObject;
-  readonly update$: Subject<void> = new Subject();
+  readonly update$: Subject<number> = new Subject();
   readonly destroy$: Subject<void> = new Subject();
+
+  label = 'Sprite';
 
   constructor(gameObject: GameObject, texture: PIXIResource) {
     super(texture);
@@ -25,10 +26,10 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
     };
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
 
-    Lifecycle.update(this);
+    Lifecycle.update(this, deltaTime);
   }
 }

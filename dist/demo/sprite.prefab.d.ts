@@ -4,5 +4,5 @@ export declare function createSprite({ scene, data, texture }: {
     data: any;
     texture: any;
 }): TGameObject;
-export declare function updateSprite(gameObject: TGameObject): void;
+export declare function updateSprite(gameObject: TGameObject, deltaTime: number): void;
 //# sourceMappingURL=sprite.prefab.d.ts.map

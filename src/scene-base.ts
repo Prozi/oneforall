@@ -14,14 +14,16 @@ export interface SceneOptions {
 }
 
 export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
+  readonly children$: Subject<void> = new Subject();
+  readonly update$: Subject<number> = new Subject();
+  readonly destroy$: Subject<void> = new Subject();
+
   label = 'Scene';
   animationFrame = 0;
   physics: System<TBody>;
   stage: PIXI.Container;
   children: LifecycleProps[] = [];
-  readonly children$: Subject<void> = new Subject();
-  readonly update$: Subject<void> = new Subject();
-  readonly destroy$: Subject<void> = new Subject();
+  lastUpdate: number;
 
   constructor(options: SceneOptions = {}) {
     this.stage = new PIXI.Container();
@@ -39,28 +41,33 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   }
 
   start(): void {
+    this.lastUpdate = Date.now();
+
     const frame = () => {
-      this.update();
+      const now = Date.now();
+      const deltaTime = (now - (this.lastUpdate || now)) / 16.67;
+
+      this.update(deltaTime);
+      this.lastUpdate = now;
 
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
       }
-
       this.animationFrame = requestAnimationFrame(frame);
     };
 
     frame();
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     this.physics.update();
     this.children.forEach((child) => {
       if (child instanceof Lifecycle) {
-        child.update();
+        child.update(deltaTime);
       }
     });
 
-    Lifecycle.update(this);
+    Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {

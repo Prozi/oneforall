@@ -36,10 +36,10 @@ class Container extends PIXI.Container {
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
     }
-    update() {
+    update(deltaTime) {
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;
-        lifecycle_1.Lifecycle.update(this);
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
         super.destroy();

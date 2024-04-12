@@ -4,11 +4,11 @@ import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 import { PIXIResource } from './resources';
 export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
-    label: string;
     readonly gameObject: GameObject;
-    readonly update$: Subject<void>;
+    readonly update$: Subject<number>;
     readonly destroy$: Subject<void>;
+    label: string;
     constructor(gameObject: GameObject, texture: PIXIResource);
-    update(): void;
+    update(deltaTime: number): void;
 }
 //# sourceMappingURL=sprite.d.ts.map
