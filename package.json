@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "TypeScript gamedev library inspired by Unity",
-  "version": "5.7.1",
+  "version": "5.7.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
