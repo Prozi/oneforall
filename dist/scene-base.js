@@ -52,7 +52,8 @@ class SceneBase {
         this.lastUpdate = Date.now();
         const frame = () => {
             const now = Date.now();
-            const deltaTime = (now - (this.lastUpdate || now)) / 16.67;
+            const deltaTime = (now - this.lastUpdate) * 0.06;
+            // 60 / 1000
             this.update(deltaTime);
             this.lastUpdate = now;
             if (this.animationFrame) {
@@ -60,7 +61,7 @@ class SceneBase {
             }
             this.animationFrame = requestAnimationFrame(frame);
         };
-        frame();
+        this.animationFrame = requestAnimationFrame(frame);
     }
     update(deltaTime) {
         this.physics.update();
