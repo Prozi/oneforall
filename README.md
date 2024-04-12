@@ -1,49 +1,43 @@
-# one for all
+# One For All
 
-set of classes to better organize 2d game development
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top">
+<h3 style="margin-top: 0;">TypeScript gamedev library inspired by Unity</h3>
 
 [<img src="https://img.shields.io/npm/v/@jacekpietal/oneforall?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@jacekpietal/oneforall?activeTab=versions)
-[<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
 [<img src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge" alt="build status" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
+[<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
 
-- [Unity inspired architecture](https://docs.unity3d.com/Manual/CreatingGameplay.html)
-- [state management](https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867)
-- [reactive events](https://www.learnrxjs.io/learn-rxjs/subjects)
-- [lifecycle cleanup management](https://www.html5gamedevs.com/topic/44780-best-way-to-remove-objects-from-the-stage/)
-- [collision detection](https://npmjs.com/package/detect-collisions)
-- [drawing on webgl canvas](https://npmjs.com/package/pixi.js)
-
-```bash
-[Drawing: "pixi.js"]
-   └──[1x Scene: "Scene1"]
-      ├──[1x Physics: "collision-detection"]
-      ├──[1x Prefab: "Level1"]
-      │  ├──[100x Sprite: "TileSprite"]
-      │  └──[30x PolygonBody: "TileCollider"]
-      ├──[1x Prefab: "Player"]
-      │  ├──[CircleBody]
-      │  ├──[Sprite]
-      │  └──[StateMachine]
-      └──[50x Prefab: "Enemy"]
-         ├──[CircleBody]
-         ├──[Sprite]
-         └──[StateMachine]
-```
-
-## Installation
-
-```
-yarn add @jacekpietal/oneforall -D
-```
+<td>
+<img src="https://raw.githubusercontent.com/Prozi/oneforall/main/all-might.png" alt="All Might from Boku No Hero Academia holds One For All in his palm" width="228" height="228" style="image-rendering: pixelated; min-width: 228px;" />
+</td>
+</td>
+</tr>
+</table>
 
 ## Demo
+
+```
+[1x Scene]
+  ├──[1x HTML Canvas]
+  ├──[1x Collision Detection]
+  └──[50x GameObject (Player)]
+       ├──[1x CircleBody]
+       └──[1x Animator]
+            └──[1x StateMachine]
+```
+
+Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/) to see below code in action.
+
+## Demo Code
 
 `src/demo/sprite.prefab.ts`
 
 ```typescript
 export function createSprite({ scene, data, texture }): TGameObject {
   // a base molecule
-  const gameObject = new GameObject('Sprite') as TGameObject;
+  const gameObject = new GameObject('Player') as TGameObject;
 
   // create body
   gameObject.body = new CircleBody(gameObject, 20, 14);
@@ -71,12 +65,10 @@ export function createSprite({ scene, data, texture }): TGameObject {
 }
 
 export function updateSprite(gameObject: TGameObject): void {
-  const scene = gameObject.scene;
-
   if (Math.random() < 0.05) {
     gameObject.target = {
-      x: innerWidth / 2 / scene.stage.scale.x,
-      y: innerHeight / 2 / scene.stage.scale.y
+      x: innerWidth / 2 / gameObject.scene.stage.scale.x,
+      y: innerHeight / 2 / gameObject.scene.stage.scale.y
     };
   }
 
@@ -85,8 +77,7 @@ export function updateSprite(gameObject: TGameObject): void {
   }
 
   if (Math.random() < 0.05) {
-    // tslint:disable-next-line: no-any
-    const gameObjects = scene.children as any[];
+    const gameObjects = gameObject.scene.children as TGameObject[];
 
     gameObject.target =
       gameObjects[Math.floor(Math.random() * gameObjects.length)];
@@ -153,76 +144,41 @@ async function start(): Promise<void> {
 }
 ```
 
-just the above code results in:
-https://prozi.github.io/oneforall/
+## Features
 
-take a look at [sprite.prefab](https://github.com/Prozi/oneforall/blob/main/src/demo/sprite.prefab.ts)
-to see how the Prefab class was used in the demo
+- [Unity-inspired architecture](https://docs.unity3d.com/Manual/CreatingGameplay.html)
+- [State management](https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867)
+- [Reactive events](https://www.learnrxjs.io/learn-rxjs/subjects)
+- [Lifecycle cleanup management](https://www.html5gamedevs.com/topic/44780-best-way-to-remove-objects-from-the-stage/)
+- [Collision detection](https://npmjs.com/package/detect-collisions)
+- [Drawing on WebGL canvas](https://npmjs.com/package/pixi.js)
 
 ## Classes this library exports
 
-- Resources
-- Scene
-- GameObject
-- Prefab
-- Container
-- Sprite
-- Animator
-- CircleBody
-- PolygonBody
-- StateMachine
+- **Resources:** Handles loading game assets like images and JSON files.
+- **Scene:** Sets the stage for gameplay, where all the action takes place.
+- **GameObject:** Represents characters, objects, or items in the game world.
+- **Prefab:** Instantiates ready-made templates for creating game elements.
+- **Sprite:** Displays static 2D graphics in the game.
+- **Container:** Organizes and manages groups of game objects for easier handling.
+- **Animator:** Useful JSON to Container with AnimatedSprite children.
+- **StateMachine:** Controls how game objects transition between actions.
+- **CircleBody:** Adds physics properties and interactions for round-shaped objects.
+- **PolygonBody:** Adds physics properties and interactions for polygonal objects.
 
-## Tests
+## Installation
+
+```bash
+npm i @jacekpietal/oneforall --save
+```
+
+## We also have tests
 
 ```
-{ gameObject: true, component: true }
-
- PASS  src/circle-body.spec.ts
-  GIVEN CircleBody
-    ✓ THEN it has set property radius (4 ms)
-    ✓ THEN it can't have zero radius (9 ms)
-    ✓ THEN update propagates x/y changes (1 ms)
-
- PASS  src/application.spec.ts
-  GIVEN Application
-    ✓ THEN it works (3 ms)
-
- PASS  src/resources.spec.ts
-  GIVEN Resources
-    ✓ THEN it silently fails and proceeds (7 ms)
-
- PASS  src/prefab.spec.ts
-  GIVEN Prefab
-    ✓ THEN can be instantiated (4 ms)
-    ✓ THEN can create 100 instances (9 ms)
-
- PASS  src/sprite.spec.ts
-  GIVEN Sprite
-    ✓ THEN update propagates x/y changes (3 ms)
-    ✓ THEN removeChild works
-    ✓ THEN destroy works (1 ms)
-    ✓ THEN destroy works extended
-
- PASS  src/scene.spec.ts
-  GIVEN Scene
-    ✓ THEN it works (3 ms)
-    ✓ THEN it can have children
-    ✓ THEN scene propagates update to gameobject to component (4 ms)
-
- PASS  src/game-object.spec.ts
-  GIVEN GameObject
-    ✓ THEN you can add component (4 ms)
-    ✓ THEN update propagates to components (1 ms)
-    ✓ THEN you can remove component
-    ✓ THEN destroy removes component
-    ✓ THEN you can get component by label (1 ms)
-    ✓ THEN you can get components by label
-    ✓ THEN you can destroy 1000 bodies without problem (109 ms)
-
  PASS  src/state-machine.spec.ts
   GIVEN StateMachine
-    ✓ THEN you can set validators (1 ms)
-    ✓ THEN you can't change state to invalid state (1 ms)
+    ✓ THEN you can set validators (4 ms)
+    ✓ THEN you can't change state to invalid state
     ✓ THEN you can change state to valid state
 
  PASS  src/component.spec.ts
@@ -230,27 +186,67 @@ to see how the Prefab class was used in the demo
     ✓ THEN update publishes update$ (1 ms)
     ✓ THEN destroy publishes destroy$
 
- PASS  src/container.spec.ts
-  GIVEN Container
-    ✓ THEN update propagates x/y changes (1 ms)
-    ✓ THEN destroy works
-
- PASS  src/polygon-body.spec.ts
-  GIVEN PolygonBody
-    ✓ THEN update propagates x/y changes (1 ms)
+ PASS  src/circle-body.spec.ts
+  GIVEN CircleBody
+    ✓ THEN it has set property radius (5 ms)
+    ✓ THEN it can't have zero radius (9 ms)
+    ✓ THEN update propagates x/y changes
 
  PASS  src/scene-base.spec.ts
   GIVEN SceneBase
-    ✓ THEN it works (1 ms)
+    ✓ THEN it works (3 ms)
+    ✓ THEN it can have children (1 ms)
+    ✓ THEN scene propagates update to gameobject to component (1 ms)
+
+ PASS  src/scene.spec.ts
+  GIVEN Scene
+    ✓ THEN it works (2 ms)
     ✓ THEN it can have children
     ✓ THEN scene propagates update to gameobject to component (1 ms)
+
+ PASS  src/sprite.spec.ts
+  GIVEN Sprite
+    ✓ THEN update propagates x/y changes (3 ms)
+    ✓ THEN removeChild works
+    ✓ THEN destroy works (1 ms)
+    ✓ THEN destroy works extended (1 ms)
+
+ PASS  src/prefab.spec.ts
+  GIVEN Prefab
+    ✓ THEN can be instantiated (3 ms)
+    ✓ THEN can create 100 instances (10 ms)
+
+ PASS  src/game-object.spec.ts
+  GIVEN GameObject
+    ✓ THEN you can add component (5 ms)
+    ✓ THEN update propagates to components (1 ms)
+    ✓ THEN you can remove component
+    ✓ THEN destroy removes component (1 ms)
+    ✓ THEN you can get component by label
+    ✓ THEN you can get components by label
+    ✓ THEN you can destroy 1000 bodies without problem (106 ms)
+
+ PASS  src/polygon-body.spec.ts
+  GIVEN PolygonBody
+    ✓ THEN update propagates x/y changes
+
+ PASS  src/container.spec.ts
+  GIVEN Container
+    ✓ THEN update propagates x/y changes
+    ✓ THEN destroy works (1 ms)
+
+ PASS  src/resources.spec.ts
+  GIVEN Resources
+    ✓ THEN it silently fails and proceeds (5 ms)
 
  PASS  src/index.spec.ts
   GIVEN index.ts
     ✓ THEN basic imports work (1 ms)
 
+ PASS  src/application.spec.ts
+  GIVEN Application
+    ✓ THEN it works
+
 Test Suites: 13 passed, 13 total
 Tests:       33 passed, 33 total
-Snapshots:   0 total
-Time:        2.438 s, estimated 3 s
 ```

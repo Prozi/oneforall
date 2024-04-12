@@ -14,7 +14,7 @@ export type TGameObject = GameObject & {
 
 export function createSprite({ scene, data, texture }): TGameObject {
   // a base molecule
-  const gameObject = new GameObject('Sprite') as TGameObject;
+  const gameObject = new GameObject('Player') as TGameObject;
 
   // create body
   gameObject.body = new CircleBody(gameObject, 20, 14);
@@ -42,12 +42,10 @@ export function createSprite({ scene, data, texture }): TGameObject {
 }
 
 export function updateSprite(gameObject: TGameObject): void {
-  const scene = gameObject.scene;
-
   if (Math.random() < 0.05) {
     gameObject.target = {
-      x: innerWidth / 2 / scene.stage.scale.x,
-      y: innerHeight / 2 / scene.stage.scale.y
+      x: innerWidth / 2 / gameObject.scene.stage.scale.x,
+      y: innerHeight / 2 / gameObject.scene.stage.scale.y
     };
   }
 
@@ -57,7 +55,7 @@ export function updateSprite(gameObject: TGameObject): void {
 
   if (Math.random() < 0.05) {
     // tslint:disable-next-line: no-any
-    const gameObjects = scene.children as any[];
+    const gameObjects = gameObject.scene.children as TGameObject[];
 
     gameObject.target =
       gameObjects[Math.floor(Math.random() * gameObjects.length)];

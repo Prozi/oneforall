@@ -1,23 +1,24 @@
 {
   "name": "@jacekpietal/oneforall",
-  "description": "set of classes to better organize 2d game development",
-  "version": "5.5.0",
+  "description": "TypeScript gamedev library inspired by Unity",
+  "version": "5.5.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "update": "ncu -u && yarn add typescript@^4 -D",
     "start": "chef-express docs",
-    "lint": "yarn tslint 'src/**/*.ts' --fix",
-    "test": "jest --silent --verbose --forceExit",
-    "sanity": "yarn build && node ./test-build.js",
-    "demo": "npm run build && yarn start",
     "dev": "npm run build && webpack-dev-server",
-    "format": "prettier src --write",
-    "format-docs": "prettier docs --write",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "postbuild": "webpack",
-    "precommit": "yarn lint && yarn sanity && yarn format && yarn format-docs && yarn test"
+    "test": "jest --silent --verbose --forceExit",
+    "lint": "yarn tslint 'src/**/*.ts' --fix",
+    "sanity": "yarn build && node ./test-build.js",
+    "demo": "npm run build && yarn start",
+    "format": "prettier src --write",
+    "format-docs": "prettier docs --write",
+    "precommit": "yarn lint && yarn sanity && yarn format && yarn format-docs && yarn test",
+    "update": "ncu -u && yarn add typescript@^4 -D",
+    "amend": "yarn precommit;git commit -a --am --no-edit"
   },
   "files": [
     "dist"
@@ -31,7 +32,7 @@
   },
   "dependencies": {
     "@jacekpietal/dependency-injection": "^1.4.0",
-    "detect-collisions": "^9.5.1",
+    "detect-collisions": "^9.5.3",
     "latermom": "^2.0.1",
     "pixi-shim": "^2.5.0",
     "pixi.js": "^8",
@@ -39,7 +40,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.3",
+    "@babel/core": "^7.24.4",
     "@babel/plugin-proposal-decorators": "^7.24.1",
     "@babel/plugin-transform-class-properties": "^7.24.1",
     "@babel/plugin-transform-modules-commonjs": "^7.24.1",
