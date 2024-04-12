@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "One For All - TypeScript gamedev library inspired by Unity",
-  "version": "5.7.4",
+  "version": "5.7.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -18,7 +18,7 @@
     "prebuild:docs": "rimraf docs",
     "build:docs": "typedoc --customCss typedoc.css",
     "postbuild:docs": "yarn build:demo && prettier docs --write && yarn docs-from-master",
-    "docs-from-master": "find docs -type f -name '*.html' -exec sed -i '' -r 's_/blob/[^/]+/_/blob/master/_g' {} +",
+    "docs-from-master": "find docs -type f -name '*.html' -exec sed -i '' -r 's_/blob/[^/]+/_/blob/main/_g' {} +",
     "lint": "yarn tslint 'src/**/*.ts' --fix",
     "format": "prettier {src,demo} --write",
     "test": "jest --silent --verbose --forceExit",
