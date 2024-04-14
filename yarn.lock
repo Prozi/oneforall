@@ -741,55 +741,55 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@pixi/canvas-display@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-display/-/canvas-display-7.4.0.tgz#29147b431afa27d14fb1ee2d2975f023e15f6064"
-  integrity sha512-XHZ2uJbA8KSOx4b02xp88Ag6zhZfGEtMjK3iQJ4XIRfq+0mGwMYuzXG6gEx4+CpP1299rS9XvysmYdyuKujoTA==
+"@pixi/canvas-display@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-display/-/canvas-display-7.4.2.tgz#fed75251e8b6c592eff0e8c5bbc5b852ef3fe464"
+  integrity sha512-cKplWdhy+ReYRQK9ideLlKoBdTI9cB10382jWkLDiBeguM9cWSIOrmY5Bd84V0/5FOTLc/AFl4LL1wws27MVKg==
 
-"@pixi/canvas-extract@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-extract/-/canvas-extract-7.4.0.tgz#86255964e41c9c6a23fd88040741c9350c280950"
-  integrity sha512-fICAWfsAnzyokdqlqJwGReQRt66X2Z2lYhOMbxJIemXL83KowbnnP38fpAr+gSljI8k6By2s0DK/RlNTcDTUeQ==
+"@pixi/canvas-extract@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-extract/-/canvas-extract-7.4.2.tgz#40c3b3d8c12f36be45cf4d9628ea4f125aea54d1"
+  integrity sha512-4rbH4sLPcPEz+OjehFUluFHN8mup9zwzedJLYc7KtqScg/npYKtVmDSaI/0cZBr9vmael+ZuCg/hjaDYTJhubg==
 
-"@pixi/canvas-graphics@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-graphics/-/canvas-graphics-7.4.0.tgz#1f0430239f63a1416bd33de852188dc3cad6ec64"
-  integrity sha512-lLXNmTGD3txANSNral3o2YTwkqt/oa9fuhc3r+HwPSSKlR6sVyYVsT07Zfg16U6ZdBAc3ye3D61ctp9HE2yIgQ==
+"@pixi/canvas-graphics@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-graphics/-/canvas-graphics-7.4.2.tgz#c457d8a9921bdcf3789dd0df66808cfe4415d475"
+  integrity sha512-1ANBcV5IietfQuABT2PUxTs4TsQP4kmpwUnkRLpZgvM5NL0UBMUZCqBhcBnbfAyV7zvpPm3i+eWhIwn6Xz/2Tg==
 
-"@pixi/canvas-mesh@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-mesh/-/canvas-mesh-7.4.0.tgz#5035bbd67dd35e0fcfe24ce1543e789047ac2ed4"
-  integrity sha512-docOiCZmMogzmiBQ/0nF2jCWKxBu+4SDdNa6QS8BYmvCwmDvYOiPUKjsMCavuN9jN86DLMPJ1GBXeL9941+xTg==
+"@pixi/canvas-mesh@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-mesh/-/canvas-mesh-7.4.2.tgz#6bed7b7e281632bb19f2e82d7b3c4dc117299b0a"
+  integrity sha512-CdxlV6a6H3wULwwFtURIycQT7oCtvFGDMotz3glyAj625EEx+mwSLo1mAVzs8Hl9pmetFmNKj4Z1gy890VSemw==
 
-"@pixi/canvas-particle-container@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-particle-container/-/canvas-particle-container-7.4.0.tgz#770aad570568e58bc4876005d9162d393f067c38"
-  integrity sha512-rA5pnr3mZcBNkvDen9bhNmX1+Bk9PehqH9iS+H8pupIzzWMI6jnzjVajhCF9wX6x2vuvwSfo/NqqiI8Q3acjfw==
+"@pixi/canvas-particle-container@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-particle-container/-/canvas-particle-container-7.4.2.tgz#ed20ed5313c80b6bbdd1642d0c6e263fbac7e201"
+  integrity sha512-775rF/d7atlZTq5oODr6K3qDZ+awWkDe0QQ4BvGqPAXaWXB5doGs3j5KpTEoFD/JnbX7Q7o8ZTVGla6qsBnT6A==
 
-"@pixi/canvas-prepare@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-prepare/-/canvas-prepare-7.4.0.tgz#527d94d0708cce4eddd0b13ec60fee91ddca8241"
-  integrity sha512-P2HTxcUFoSZl2GJQk8qAa/cNsE6mJfkXqJfGKv+MeO9tYn5me4eepSEpJ44abL57dOYkpxpfY8FgVT62MVypMA==
+"@pixi/canvas-prepare@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-prepare/-/canvas-prepare-7.4.2.tgz#fa67953ed9038e45d467604a29233e3a02da31b3"
+  integrity sha512-BB50HZb8ttPMkef+9BXfzeT1HS/AUkXRS0uwhwpq4L75D7XwIlIfwS0lCv2bw2KflavA8wT0qWuwlQTgHSalcA==
 
-"@pixi/canvas-renderer@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-renderer/-/canvas-renderer-7.4.0.tgz#c3bbe99b5d3a51021400572551b8d22350567096"
-  integrity sha512-lN6aB4hScv64jK95z6MfsFwPf2+faWgLr5tainwXFROgRfNqCIeI334wwvQPSeWHJ2Bv6O9K9p10/8zYDqsQAw==
+"@pixi/canvas-renderer@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-renderer/-/canvas-renderer-7.4.2.tgz#8e48cd234f251b5a2e21f24993bad24c4c30d7e2"
+  integrity sha512-5qBrr4hJ3hQYMJwxIkKCnvMxL9m7aL26h4zbacK0KH7SQ0i+RCcZS2NzvPa451FtnhquIUjwuuWQyjPFdM5R7g==
 
-"@pixi/canvas-sprite-tiling@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-sprite-tiling/-/canvas-sprite-tiling-7.4.0.tgz#65795e7d809e7c91211d5613513f5b3682639f93"
-  integrity sha512-HAdpYLoVnzKLsYnZfmtbhgEHmHaUhhB2azsZx6eFO7CDP/9Pen2pgpAUHk3lDqII96pqgYe8KzwRlRb5XP2Eww==
+"@pixi/canvas-sprite-tiling@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-sprite-tiling/-/canvas-sprite-tiling-7.4.2.tgz#2987fc6babf5888b60c5fe1b7a375d22a4a93fa2"
+  integrity sha512-3/YEohGAiiVHnkOkL1wyjGBJlndXsLPG4XFn3Lpc84Cm5kbR/C6RvNvDcRckQod+jWmqQ8n4x4SjhoFBjdP+dQ==
 
-"@pixi/canvas-sprite@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-sprite/-/canvas-sprite-7.4.0.tgz#1b08d006f7c0435213ee60a507841c00e6eb9d75"
-  integrity sha512-ctQDFs1p3k2U4iwfyX7EQHCJO1+UpiG3shdn42zlEBhC3p8JspD1mfGdySmN6ZQLu2PGia+G6c6QkSh31zvHfw==
+"@pixi/canvas-sprite@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-sprite/-/canvas-sprite-7.4.2.tgz#033942506c0c43be2a00c8d54bf2a287422c0de9"
+  integrity sha512-XM6O6liAm2okHlSpUd0+muQAqLzY6EdQtfuqVP628FjHQkLJ/nb6Rg7qqtt3a3T4eyxzMBkqkzqBNBXomgf1SA==
 
-"@pixi/canvas-text@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@pixi/canvas-text/-/canvas-text-7.4.0.tgz#859843843f0c7ade835ff2f9809aaadc1abd173e"
-  integrity sha512-MdL18OnqBcm4216iT2TRv1IOChh3s08rCvuOp9DJEH5JMHdWmmbQ5gZPyRpY0cOLOfC7MSFpCE+nl42yez2gbQ==
+"@pixi/canvas-text@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@pixi/canvas-text/-/canvas-text-7.4.2.tgz#bc08827471a7ed87a3499b5597dd6b1a755696c5"
+  integrity sha512-EOzYNaNcD4QWwL7LQ3v2WM4LQNXeS0aJbNOwJ1+9xiNjY53iF0w5XgSGcfGef4itym6nrwTBft1QwKyTE23zhQ==
 
 "@pixi/color@7.4.2":
   version "7.4.2"
@@ -3895,24 +3895,24 @@ pixi-shim@^2.5.0:
   optionalDependencies:
     canvas "^2"
 
-pixi.js-legacy@^7:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/pixi.js-legacy/-/pixi.js-legacy-7.4.0.tgz#15459b2931f6567b93b1f0e9b62c44b87e254ed8"
-  integrity sha512-3hNNSqEZQ9j1Qm9VxcUKgSdrMVNN9fveZKiUMiDVkraf1iMe8S5GFMuRwSojnnkvoDhGEbozQ9+9wXatnm0xpw==
+pixi.js-legacy@^7.4.2:
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/pixi.js-legacy/-/pixi.js-legacy-7.4.2.tgz#f72bc22b3fbf36433be3efce4198cc1dcb4fe03c"
+  integrity sha512-azGsuJvLHk/VJwt45AjlathtTNdUjLDSoaGt8JBNjzG/05cxVswFLL7GsSe83eNSe0eEuIrxiNIt3vBRNyU3AA==
   dependencies:
-    "@pixi/canvas-display" "7.4.0"
-    "@pixi/canvas-extract" "7.4.0"
-    "@pixi/canvas-graphics" "7.4.0"
-    "@pixi/canvas-mesh" "7.4.0"
-    "@pixi/canvas-particle-container" "7.4.0"
-    "@pixi/canvas-prepare" "7.4.0"
-    "@pixi/canvas-renderer" "7.4.0"
-    "@pixi/canvas-sprite" "7.4.0"
-    "@pixi/canvas-sprite-tiling" "7.4.0"
-    "@pixi/canvas-text" "7.4.0"
-    pixi.js "7.4.0"
+    "@pixi/canvas-display" "7.4.2"
+    "@pixi/canvas-extract" "7.4.2"
+    "@pixi/canvas-graphics" "7.4.2"
+    "@pixi/canvas-mesh" "7.4.2"
+    "@pixi/canvas-particle-container" "7.4.2"
+    "@pixi/canvas-prepare" "7.4.2"
+    "@pixi/canvas-renderer" "7.4.2"
+    "@pixi/canvas-sprite" "7.4.2"
+    "@pixi/canvas-sprite-tiling" "7.4.2"
+    "@pixi/canvas-text" "7.4.2"
+    pixi.js "7.4.2"
 
-pixi.js@7.4.0, pixi.js@^8:
+pixi.js@7.4.2, pixi.js@^8:
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-8.0.2.tgz#3424abab8ffa9ca811ad6abab1e65d4851d633ad"
   integrity sha512-E4oHF+cIkHB1BUHka8jKRih3ywDAKt/uRaTNIm4+7rEWMX5LhZZVryp8bcx516ZyQ8VrpBOs5ohrEViqYhCDAw==
@@ -4488,7 +4488,16 @@ string-length@^4.0.1:
     char-regex "^1.0.2"
     strip-ansi "^6.0.0"
 
-"string-width-cjs@npm:string-width@^4.2.0", "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+"string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -4520,7 +4529,14 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -5052,7 +5068,16 @@ wildcard@^2.0.0:
   resolved "https://registry.yarnpkg.com/wildcard/-/wildcard-2.0.1.tgz#5ab10d02487198954836b6349f74fff961e10f67"
   integrity sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
