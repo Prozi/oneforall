@@ -136,6 +136,10 @@ export class Animator extends Container {
   }
 
   setState(state: string, loop = true, stateWhenFinished = 'idle'): string {
+    if (state === this.state) {
+      return state;
+    }
+
     const index: number = this.getAnimationIndex(state);
     if (index === -1) {
       return '';

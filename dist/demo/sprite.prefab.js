@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSprite = exports.createSprite = void 0;
 const operators_1 = require("rxjs/operators");
+const detect_collisions_1 = require("detect-collisions");
 const animator_1 = require("../animator");
 const circle_body_1 = require("../circle-body");
 const game_object_1 = require("../game-object");
@@ -32,25 +33,21 @@ function updateSprite(gameObject, deltaTime) {
     if (Math.random() < chance) {
         // goto random place
         gameObject.target = {
-            x: Math.random() * innerWidth / scale.x,
-            y: Math.random() * innerHeight / scale.y
+            x: (Math.random() * innerWidth) / scale.x,
+            y: (Math.random() * innerHeight) / scale.y
         };
     }
     else if (Math.random() < chance) {
-        // if possible follow random target
+        // goto random target
         gameObject.target =
             gameObjects[Math.floor(Math.random() * gameObjects.length)];
     }
     else if (Math.random() < chance) {
-        // reset state
+        // stop
         gameObject.target = null;
     }
-    if (gameObject.target) {
-        const distance = Math.abs(gameObject.target.x - gameObject.x) *
-            Math.abs(gameObject.target.y - gameObject.y);
-        if (distance < 9) {
-            gameObject.target = null;
-        }
+    if (gameObject.target && (0, detect_collisions_1.distance)(gameObject.target, gameObject) < 9) {
+        gameObject.target = null;
     }
     if (!gameObject.target) {
         gameObject.sprite.setState('idle');
@@ -58,19 +55,18 @@ function updateSprite(gameObject, deltaTime) {
     else {
         gameObject.sprite.setState('run');
         const angle = Math.atan2(gameObject.target.y - gameObject.y, gameObject.target.x - gameObject.x);
-        if (!angle) {
-            return;
+        if (!isNaN(angle)) {
+            const offsetX = Math.cos(angle);
+            const offsetY = Math.sin(angle);
+            if (gameObject.sprite instanceof animator_1.Animator) {
+                const flipX = Math.sign(offsetX || gameObject.sprite.scale.x) *
+                    Math.abs(gameObject.sprite.scale.x);
+                // flip x so there is no need to duplicate sprites
+                gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
+            }
+            // update body which updates parent game object
+            gameObject.body.setPosition(gameObject.body.x + safeDelta * offsetX, gameObject.body.y + safeDelta * offsetY);
         }
-        const offsetX = Math.cos(angle);
-        const offsetY = Math.sin(angle);
-        if (gameObject.sprite instanceof animator_1.Animator) {
-            const flipX = Math.sign(offsetX || gameObject.sprite.scale.x) *
-                Math.abs(gameObject.sprite.scale.x);
-            // flip x so there is no need to duplicate sprites
-            gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
-        }
-        // update body which updates parent game object
-        gameObject.body.setPosition(gameObject.body.x + safeDelta * offsetX, gameObject.body.y + safeDelta * offsetY);
     }
 }
 exports.updateSprite = updateSprite;

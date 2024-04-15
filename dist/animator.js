@@ -96,6 +96,9 @@ class Animator extends container_1.Container {
         this.animation = animation;
     }
     setState(state, loop = true, stateWhenFinished = 'idle') {
+        if (state === this.state) {
+            return state;
+        }
         const index = this.getAnimationIndex(state);
         if (index === -1) {
             return '';

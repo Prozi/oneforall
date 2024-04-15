@@ -101,26 +101,20 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
   if (Math.random() < chance) {
     // goto random place
     gameObject.target = {
-      x: Math.random() * innerWidth / scale.x,
-      y: Math.random() * innerHeight / scale.y
+      x: (Math.random() * innerWidth) / scale.x,
+      y: (Math.random() * innerHeight) / scale.y
     };
   } else if (Math.random() < chance) {
-    // if possible follow random target
+    // goto random target
     gameObject.target =
       gameObjects[Math.floor(Math.random() * gameObjects.length)];
   } else if (Math.random() < chance) {
-    // reset state
+    // stop
     gameObject.target = null;
   }
 
-  if (gameObject.target) {
-    const distance =
-      Math.abs(gameObject.target.x - gameObject.x) *
-      Math.abs(gameObject.target.y - gameObject.y);
-
-    if (distance < 9) {
-      gameObject.target = null;
-    }
+  if (gameObject.target && distance(gameObject.target, gameObject) < 9) {
+    gameObject.target = null;
   }
 
   if (!gameObject.target) {
@@ -132,27 +126,24 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
       gameObject.target.y - gameObject.y,
       gameObject.target.x - gameObject.x
     );
+    if (!isNaN(angle)) {
+      const offsetX: number = Math.cos(angle);
+      const offsetY: number = Math.sin(angle);
 
-    if (!angle) {
-      return;
+      if (gameObject.sprite instanceof Animator) {
+        const flipX: number =
+          Math.sign(offsetX || gameObject.sprite.scale.x) *
+          Math.abs(gameObject.sprite.scale.x);
+        // flip x so there is no need to duplicate sprites
+        gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
+      }
+
+      // update body which updates parent game object
+      gameObject.body.setPosition(
+        gameObject.body.x + safeDelta * offsetX,
+        gameObject.body.y + safeDelta * offsetY
+      );
     }
-
-    const offsetX: number = Math.cos(angle);
-    const offsetY: number = Math.sin(angle);
-
-    if (gameObject.sprite instanceof Animator) {
-      const flipX: number =
-        Math.sign(offsetX || gameObject.sprite.scale.x) *
-        Math.abs(gameObject.sprite.scale.x);
-      // flip x so there is no need to duplicate sprites
-      gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
-    }
-
-    // update body which updates parent game object
-    gameObject.body.setPosition(
-      gameObject.body.x + safeDelta * offsetX,
-      gameObject.body.y + safeDelta * offsetY
-    );
   }
 }
 ```
