@@ -29,6 +29,11 @@ const Subject_1 = require("rxjs/internal/Subject");
 const container_1 = require("./container");
 const state_machine_1 = require("./state-machine");
 class Animator extends container_1.Container {
+    /**
+     * @param gameObject
+     * @param options
+     * @param texture
+     */
     constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
         super(gameObject);
         /**
@@ -43,10 +48,7 @@ class Animator extends container_1.Container {
         const tileWidth = width / cols;
         const tileHeight = height / rows;
         Object.values(animations).forEach((animationFrames) => {
-            const animatedSprite = new PIXI.AnimatedSprite(animationFrames.map((animationFrameInput) => {
-                const animationFrame = typeof animationFrameInput === 'number'
-                    ? animationFrameInput
-                    : parseInt(animationFrameInput, 10);
+            const animatedSprite = new PIXI.AnimatedSprite(animationFrames.map((animationFrame) => {
                 const frameWidth = Math.floor(animationFrame * tileWidth);
                 const frame = new PIXI.Rectangle(frameWidth % width, tileHeight * Math.floor(frameWidth / width), tileWidth, tileHeight);
                 const texture = new PIXI.Texture({ source, frame });

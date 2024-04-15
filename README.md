@@ -96,21 +96,18 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
   const scale = gameObject.scene.stage.scale;
   const gameObjects = gameObject.scene.children as TGameObject[];
   const safeDelta = Math.min(60, deltaTime);
+  const chance = safeDelta * 0.003;
 
-  if (Math.random() < 0.05) {
+  if (Math.random() < chance) {
     // funny animation
     gameObject.sprite.setState('roll', false, 'idle');
-  }
-
-  if (Math.random() < 0.05) {
+  } else if (Math.random() < chance) {
     // goto center
     gameObject.target = {
       x: innerWidth / 2 / scale.x,
       y: innerHeight / 2 / scale.y
     };
-  }
-
-  if (Math.random() < 0.05) {
+  } else if (Math.random() < chance) {
     // if possible follow random target
     if (gameObject.sprite.setState('run', true)) {
       gameObject.target =

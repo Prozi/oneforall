@@ -1,11 +1,11 @@
-export type PIXIResource = Record<string, any>;
+import { Cache } from 'latermom';
+export type PIXIResource = any;
 export declare class Resources {
-    private cache;
-    constructor(path?: string, cacheSize?: number);
-    static loadResource<T = PIXIResource>(path: string): Promise<T>;
+    static cache: Cache<PIXIResource>;
+    static loadResource<T = PIXIResource>(url: string): Promise<T>;
     static loadResources<T = PIXIResource>(resources: string[]): Promise<{
-        [label: string]: T;
+        [name: string]: T;
     }>;
-    get(url: string): Promise<PIXIResource | undefined>;
+    get<T = PIXIResource>(url: string): Promise<T>;
 }
 //# sourceMappingURL=resources.d.ts.map

@@ -40,6 +40,11 @@ export class Animator extends Container {
    */
   animation?: PIXI.AnimatedSprite;
 
+  /**
+   * @param gameObject
+   * @param options
+   * @param texture
+   */
   constructor(
     gameObject: GameObject,
     {
@@ -58,12 +63,7 @@ export class Animator extends Container {
     const tileHeight = height / rows;
     Object.values(animations).forEach((animationFrames) => {
       const animatedSprite = new PIXI.AnimatedSprite(
-        animationFrames.map((animationFrameInput) => {
-          const animationFrame =
-            typeof animationFrameInput === 'number'
-              ? animationFrameInput
-              : parseInt(animationFrameInput, 10);
-
+        animationFrames.map((animationFrame) => {
           const frameWidth = Math.floor(animationFrame * tileWidth);
           const frame: PIXI.Rectangle = new PIXI.Rectangle(
             frameWidth % width,

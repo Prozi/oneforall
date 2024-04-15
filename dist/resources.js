@@ -35,30 +35,22 @@ const latermom_1 = require("latermom");
 const PIXI = __importStar(require("pixi.js"));
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 let Resources = Resources_1 = class Resources {
-    constructor(path = '', cacheSize = 64) {
-        this.cache = new latermom_1.Cache(async (url) => {
-            try {
-                return await Resources_1.loadResource(`${path}${url}`);
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }, cacheSize);
+    static async loadResource(url) {
+        return (await Resources_1.cache.get(url));
     }
-    static loadResource(path) {
-        const { loader } = PIXI.Assets;
-        return loader.load(path);
-    }
-    static loadResources(resources) {
-        const promises = resources.map((path) => PIXI.Assets.load(path));
-        return new Promise((resolve) => {
-            Promise.all(promises).then((resolved) => resolve(resolved.reduce((result, loaded, index) => (Object.assign(Object.assign({}, result), { [resources[index]]: loaded })), {})));
-        });
+    static async loadResources(resources) {
+        const promises = resources.map(async (url) => Resources_1.loadResource(url));
+        const results = await Promise.all(promises);
+        return results.reduce((resolved, resource, index) => {
+            const name = resources[index];
+            return Object.assign(Object.assign({}, resolved), { [name]: resource });
+        }, {});
     }
     async get(url) {
-        return this.cache.get(url);
+        return Resources_1.loadResource(url);
     }
 };
+Resources.cache = new latermom_1.Cache(async (url) => PIXI.Assets.loader.load(url));
 Resources = Resources_1 = __decorate([
     dependency_injection_1.Injectable
 ], Resources);

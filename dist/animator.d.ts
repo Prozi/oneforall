@@ -32,6 +32,11 @@ export declare class Animator extends Container {
      * Pointer to currently visible animation.
      */
     animation?: PIXI.AnimatedSprite;
+    /**
+     * @param gameObject
+     * @param options
+     * @param texture
+     */
     constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: AnimatorData, { width, height, source }: PIXI.Texture);
     /**
      * Reference to inner State Machine's state.
