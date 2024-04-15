@@ -82,7 +82,7 @@ export function createSprite({ scene, data, texture }): TGameObject {
 
   // create animator with few animations from json + texture
   gameObject.sprite = new Animator(gameObject, data, texture);
-  gameObject.sprite.setState('idle', true);
+  gameObject.sprite.setState('idle');
 
   // subscribe to its own update function
   gameObject.update$
@@ -96,49 +96,63 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
   const scale = gameObject.scene.stage.scale;
   const gameObjects = gameObject.scene.children as TGameObject[];
   const safeDelta = Math.min(60, deltaTime);
-  const chance = safeDelta * 0.003;
+  const chance = safeDelta * 0.01;
 
   if (Math.random() < chance) {
-    // funny animation
-    gameObject.sprite.setState('roll', false, 'idle');
-  } else if (Math.random() < chance) {
-    // goto center
+    // goto random place
     gameObject.target = {
-      x: innerWidth / 2 / scale.x,
-      y: innerHeight / 2 / scale.y
+      x: Math.random() * innerWidth / scale.x,
+      y: Math.random() * innerHeight / scale.y
     };
   } else if (Math.random() < chance) {
     // if possible follow random target
-    if (gameObject.sprite.setState('run', true)) {
-      gameObject.target =
-        gameObjects[Math.floor(Math.random() * gameObjects.length)];
-    }
+    gameObject.target =
+      gameObjects[Math.floor(Math.random() * gameObjects.length)];
+  } else if (Math.random() < chance) {
+    // reset state
+    gameObject.target = null;
   }
 
   if (gameObject.target) {
-    const arc: number = Math.atan2(
+    const distance =
+      Math.abs(gameObject.target.x - gameObject.x) *
+      Math.abs(gameObject.target.y - gameObject.y);
+
+    if (distance < 9) {
+      gameObject.target = null;
+    }
+  }
+
+  if (!gameObject.target) {
+    gameObject.sprite.setState('idle');
+  } else {
+    gameObject.sprite.setState('run');
+
+    const angle: number = Math.atan2(
       gameObject.target.y - gameObject.y,
       gameObject.target.x - gameObject.x
     );
 
-    if (arc) {
-      const offsetX: number = Math.cos(arc);
-      const offsetY: number = Math.sin(arc);
-
-      if (gameObject.sprite instanceof Animator) {
-        const flipX: number =
-          Math.sign(offsetX || gameObject.sprite.scale.x) *
-          Math.abs(gameObject.sprite.scale.x);
-        // flip x so there is no need to duplicate sprites
-        gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
-      }
-
-      // update body which updates parent game object
-      gameObject.body.setPosition(
-        gameObject.body.x + safeDelta * offsetX,
-        gameObject.body.y + safeDelta * offsetY
-      );
+    if (!angle) {
+      return;
     }
+
+    const offsetX: number = Math.cos(angle);
+    const offsetY: number = Math.sin(angle);
+
+    if (gameObject.sprite instanceof Animator) {
+      const flipX: number =
+        Math.sign(offsetX || gameObject.sprite.scale.x) *
+        Math.abs(gameObject.sprite.scale.x);
+      // flip x so there is no need to duplicate sprites
+      gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
+    }
+
+    // update body which updates parent game object
+    gameObject.body.setPosition(
+      gameObject.body.x + safeDelta * offsetX,
+      gameObject.body.y + safeDelta * offsetY
+    );
   }
 }
 ```

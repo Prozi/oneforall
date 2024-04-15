@@ -82,13 +82,16 @@ class Animator extends container_1.Container {
         return exactIndex !== -1 ? exactIndex : this.getFuzzyStateIndex(state);
     }
     setAnimation(animation, loop) {
+        if (animation === this.animation) {
+            return;
+        }
         const children = this.children.filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation);
         children.forEach((child) => {
             child.visible = false;
             child.stop();
         });
-        animation.gotoAndPlay(0);
         animation.loop = loop;
+        animation.gotoAndPlay(0);
         animation.visible = true;
         this.animation = animation;
     }

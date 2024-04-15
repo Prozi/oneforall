@@ -115,6 +115,10 @@ export class Animator extends Container {
   }
 
   setAnimation(animation: PIXI.AnimatedSprite, loop: boolean): void {
+    if (animation === this.animation) {
+      return;
+    }
+
     const children = this.children.filter(
       (child: PIXI.AnimatedSprite) =>
         child instanceof PIXI.AnimatedSprite && child !== animation
@@ -125,8 +129,8 @@ export class Animator extends Container {
       child.stop();
     });
 
-    animation.gotoAndPlay(0);
     animation.loop = loop;
+    animation.gotoAndPlay(0);
     animation.visible = true;
     this.animation = animation;
   }
