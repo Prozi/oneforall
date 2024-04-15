@@ -18,10 +18,12 @@ function createSprite({ scene, data, texture }) {
     // create animator with few animations from json + texture
     gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
     gameObject.sprite.setState('idle');
-    // subscribe to its own update function
+    // subscribe to *own* update function until *own* destroy
     gameObject.update$
-        .pipe((0, operators_1.takeUntil)(scene.destroy$))
-        .subscribe((deltaTime) => updateSprite(gameObject, deltaTime));
+        .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
+        .subscribe((deltaTime) => {
+        updateSprite(gameObject, deltaTime);
+    });
     return gameObject;
 }
 exports.createSprite = createSprite;

@@ -84,10 +84,12 @@ export function createSprite({ scene, data, texture }): TGameObject {
   gameObject.sprite = new Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle');
 
-  // subscribe to its own update function
+  // subscribe to *own* update function until *own* destroy
   gameObject.update$
-    .pipe(takeUntil(scene.destroy$))
-    .subscribe((deltaTime) => updateSprite(gameObject, deltaTime));
+    .pipe(takeUntil(gameObject.destroy$))
+    .subscribe((deltaTime) => {
+      updateSprite(gameObject, deltaTime);
+    });
 
   return gameObject;
 }
