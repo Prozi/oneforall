@@ -7,7 +7,7 @@ import { GameObject } from './game-object';
 import { StateMachine } from './state-machine';
 
 export interface AnimatorData {
-  animations: Record<string, (number | string)[]>;
+  animations: Record<string, number[]>;
   cols: number;
   rows: number;
   animationSpeed?: number;
