@@ -22,7 +22,7 @@ class CircleBody extends detect_collisions_1.Ellipse {
          */
         this.label = 'CircleBody';
         if (!radiusX || !radiusY) {
-            throw new Error("CircleBody radius can't be 0!");
+            throw new Error('CircleBody radius can\'t be 0!');
         }
         this.gameObject = gameObject;
         this.gameObject.addComponent(this);
