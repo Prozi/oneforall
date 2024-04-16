@@ -21,7 +21,7 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   readonly disableAutoSort$: Subject<void> = new Subject();
 
   constructor(options: SceneOptions = {}) {
-    super();
+    super(options);
 
     this.stage.visible = this.options.visible || false;
     this.pixi.stage.addChild(this.stage);

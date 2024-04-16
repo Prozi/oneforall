@@ -89918,7 +89918,7 @@ and limitations under the License.
             this.options = options;
             this.label = this.options.label || 'Scene';
             this.physics = new detect_collisions_1.System(
-              options.nodeMaxEntries
+              this.options.nodeMaxEntries
             );
             this.stage = new PIXI.Container();
             this.stage.label = 'Stage';
@@ -90133,7 +90133,7 @@ and limitations under the License.
         );
         class Scene extends scene_base_1.SceneBase {
           constructor(options = {}) {
-            super();
+            super(options);
             /**
              * When auto sort is set to false, it emits this subject.
              */

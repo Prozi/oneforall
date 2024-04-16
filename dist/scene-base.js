@@ -60,7 +60,7 @@ class SceneBase {
         this.animationFrame = 0;
         this.options = options;
         this.label = this.options.label || 'Scene';
-        this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
+        this.physics = new detect_collisions_1.System(this.options.nodeMaxEntries);
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
     }

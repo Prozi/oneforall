@@ -92,7 +92,7 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   constructor(options: SceneOptions = {}) {
     this.options = options;
     this.label = this.options.label || 'Scene';
-    this.physics = new System<TBody>(options.nodeMaxEntries);
+    this.physics = new System<TBody>(this.options.nodeMaxEntries);
     this.stage = new PIXI.Container();
     this.stage.label = 'Stage';
   }

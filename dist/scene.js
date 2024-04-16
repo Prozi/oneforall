@@ -41,7 +41,7 @@ const resources_1 = require("./resources");
 const scene_base_1 = require("./scene-base");
 class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
-        super();
+        super(options);
         /**
          * When auto sort is set to false, it emits this subject.
          */
