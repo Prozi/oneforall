@@ -42,7 +42,7 @@ export class Animator extends Container {
 
   /**
    * @param gameObject
-   * @param options
+   * @param animatorData
    * @param texture
    */
   constructor(

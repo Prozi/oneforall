@@ -7,7 +7,8 @@ async function start(): Promise<void> {
   // create main Scene
   const scene: Scene = new Scene({
     visible: true,
-    autoSort: true
+    autoSort: true,
+    showFPS: true
   });
 
   // initialize scene async - new since pixi 7/8

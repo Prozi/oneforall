@@ -31,7 +31,7 @@ const state_machine_1 = require("./state-machine");
 class Animator extends container_1.Container {
     /**
      * @param gameObject
-     * @param options
+     * @param animatorData
      * @param texture
      */
     constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {

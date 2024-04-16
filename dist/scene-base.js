@@ -51,20 +51,18 @@ class SceneBase {
          */
         this.destroy$ = new Subject_1.Subject();
         /**
-         * Each Lifecycle Object has label for pixi debugging.
+         * Scene has children.
          */
-        this.label = 'Scene';
+        this.children = [];
         /**
          * requestAnimationFrame reference.
          */
         this.animationFrame = 0;
-        /**
-         * Scene has children.
-         */
-        this.children = [];
+        this.options = options;
+        this.label = this.options.label || 'Scene';
+        this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
-        this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
     }
     // tslint:disable-next-line
     async init(_options) { }

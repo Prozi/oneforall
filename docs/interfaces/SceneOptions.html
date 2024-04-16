@@ -85,9 +85,12 @@
           ><span class="tsd-signature-symbol">?: </span
           ><span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">; </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="SceneOptions.html#scale">scale</a
+          ><a class="tsd-kind-property" href="SceneOptions.html#showFPS"
+            >showFPS</a
           ><span class="tsd-signature-symbol">?: </span
-          ><span class="tsd-signature-type">number</span
+          ><span class="tsd-signature-type">string</span
+          ><span class="tsd-signature-symbol"> | </span
+          ><span class="tsd-signature-type">boolean</span
           ><span class="tsd-signature-symbol">; </span><br /><span>    </span
           ><a class="tsd-kind-property" href="SceneOptions.html#visible"
             >visible</a
@@ -146,10 +149,10 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>node<wbr />Max<wbr />Entries?</span></a
                     >
-                    <a href="SceneOptions.html#scale" class="tsd-index-link"
+                    <a href="SceneOptions.html#showFPS" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>scale?</span></a
+                      ><span>showFPS?</span></a
                     >
                     <a href="SceneOptions.html#visible" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
@@ -182,13 +185,17 @@
               ><span class="tsd-signature-symbol">?:</span>
               <span class="tsd-signature-type">boolean</span>
             </div>
+            <div class="tsd-comment tsd-typography">
+              <p>enables zIndex (per-y) sort of sprites</p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
               <ul>
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L11"
-                    >src/scene-base.ts:11</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L20"
+                    >src/scene-base.ts:20</a
                   >
                 </li>
               </ul>
@@ -209,13 +216,15 @@
               ><span class="tsd-signature-symbol">?:</span>
               <span class="tsd-signature-type">string</span>
             </div>
+            <div class="tsd-comment tsd-typography"><p>set name</p></div>
+            <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
               <ul>
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L9"
-                    >src/scene-base.ts:9</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L12"
+                    >src/scene-base.ts:12</a
                   >
                 </li>
               </ul>
@@ -239,40 +248,53 @@
               ><span class="tsd-signature-symbol">?:</span>
               <span class="tsd-signature-type">number</span>
             </div>
+            <div class="tsd-comment tsd-typography">
+              <p>max size of group in collision tree</p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
               <ul>
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L13"
-                    >src/scene-base.ts:13</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L24"
+                    >src/scene-base.ts:24</a
                   >
                 </li>
               </ul>
             </aside>
           </section>
           <section class="tsd-panel tsd-member">
-            <a id="scale" class="tsd-anchor"></a>
+            <a id="showFPS" class="tsd-anchor"></a>
             <h3 class="tsd-anchor-link">
               <code class="tsd-tag ts-flagOptional">Optional</code>
-              <span>scale</span
-              ><a href="#scale" aria-label="Permalink" class="tsd-anchor-icon"
+              <span>showFPS</span
+              ><a href="#showFPS" aria-label="Permalink" class="tsd-anchor-icon"
                 ><svg viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-anchor"></use></svg
               ></a>
             </h3>
             <div class="tsd-signature">
-              <span class="tsd-kind-property">scale</span
+              <span class="tsd-kind-property">showFPS</span
               ><span class="tsd-signature-symbol">?:</span>
-              <span class="tsd-signature-type">number</span>
+              <span class="tsd-signature-type">string</span
+              ><span class="tsd-signature-symbol"> | </span
+              ><span class="tsd-signature-type">boolean</span>
             </div>
+            <div class="tsd-comment tsd-typography">
+              <p>
+                set to true to show pixi-stats set to string to show and set
+                style set body font to set font of pixi-stats
+              </p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
               <ul>
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L12"
-                    >src/scene-base.ts:12</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L30"
+                    >src/scene-base.ts:30</a
                   >
                 </li>
               </ul>
@@ -293,13 +315,17 @@
               ><span class="tsd-signature-symbol">?:</span>
               <span class="tsd-signature-type">boolean</span>
             </div>
+            <div class="tsd-comment tsd-typography">
+              <p>show scene after creation</p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
               <ul>
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L10"
-                    >src/scene-base.ts:10</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/scene-base.ts#L16"
+                    >src/scene-base.ts:16</a
                   >
                 </li>
               </ul>
@@ -487,10 +513,10 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg
                 ><span>node<wbr />Max<wbr />Entries</span></a
-              ><a href="#scale" class=""
+              ><a href="#showFPS" class=""
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg
-                ><span>scale</span></a
+                ><span>showFPS</span></a
               ><a href="#visible" class=""
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg

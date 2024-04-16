@@ -3,11 +3,28 @@ import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { LifecycleProps } from './lifecycle';
 export interface SceneOptions {
+    /**
+     * set name
+     */
     label?: string;
+    /**
+     * show scene after creation
+     */
     visible?: boolean;
+    /**
+     * enables zIndex (per-y) sort of sprites
+     */
     autoSort?: boolean;
-    scale?: number;
+    /**
+     * max size of group in collision tree
+     */
     nodeMaxEntries?: number;
+    /**
+     * set to true to show pixi-stats
+     * set to string to show and set style
+     * set body font to set font of pixi-stats
+     */
+    showFPS?: boolean | string;
 }
 export declare class SceneBase<TBody extends Body = Body> implements LifecycleProps {
     /**
@@ -30,13 +47,13 @@ export declare class SceneBase<TBody extends Body = Body> implements LifecyclePr
      */
     readonly destroy$: Subject<void>;
     /**
+     * Options are assigned at creation.
+     */
+    readonly options: SceneOptions;
+    /**
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
-    /**
-     * requestAnimationFrame reference.
-     */
-    animationFrame: number;
     /**
      * Reference to Collision Detection System.
      */
@@ -53,6 +70,10 @@ export declare class SceneBase<TBody extends Body = Body> implements LifecyclePr
      * Scene has last update unix time stored.
      */
     lastUpdate: number;
+    /**
+     * requestAnimationFrame reference.
+     */
+    animationFrame: number;
     constructor(options?: SceneOptions);
     init(_options?: Record<string, any>): Promise<void>;
     stop(): void;

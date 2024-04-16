@@ -6,11 +6,28 @@ import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export interface SceneOptions {
+  /**
+   * set name
+   */
   label?: string;
+  /**
+   * show scene after creation
+   */
   visible?: boolean;
+  /**
+   * enables zIndex (per-y) sort of sprites
+   */
   autoSort?: boolean;
-  scale?: number;
+  /**
+   * max size of group in collision tree
+   */
   nodeMaxEntries?: number;
+  /**
+   * set to true to show pixi-stats
+   * set to string to show and set style
+   * set body font to set font of pixi-stats
+   */
+  showFPS?: boolean | string;
 }
 
 export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
@@ -38,14 +55,14 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   readonly destroy$: Subject<void> = new Subject();
 
   /**
-   * Each Lifecycle Object has label for pixi debugging.
+   * Options are assigned at creation.
    */
-  label = 'Scene';
+  readonly options: SceneOptions;
 
   /**
-   * requestAnimationFrame reference.
+   * Each Lifecycle Object has label for pixi debugging.
    */
-  animationFrame = 0;
+  label: string;
 
   /**
    * Reference to Collision Detection System.
@@ -67,10 +84,17 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
    */
   lastUpdate: number;
 
+  /**
+   * requestAnimationFrame reference.
+   */
+  animationFrame = 0;
+
   constructor(options: SceneOptions = {}) {
+    this.options = options;
+    this.label = this.options.label || 'Scene';
+    this.physics = new System<TBody>(options.nodeMaxEntries);
     this.stage = new PIXI.Container();
     this.stage.label = 'Stage';
-    this.physics = new System<TBody>(options.nodeMaxEntries);
   }
 
   // tslint:disable-next-line

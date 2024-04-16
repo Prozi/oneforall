@@ -8,10 +8,6 @@ export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     pixi: Application;
     resources: Resources;
     /**
-     * Options are assigned at creation.
-     */
-    readonly options: SceneOptions;
-    /**
      * When auto sort is set to false, it emits this subject.
      */
     readonly disableAutoSort$: Subject<void>;
@@ -22,5 +18,9 @@ export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     destroy(): void;
     disableAutoSort(): void;
     enableAutoSort(): void;
+    /**
+     * add body font family to set font of pixi-stats
+     */
+    showFPS(style?: string): void;
 }
 //# sourceMappingURL=scene.d.ts.map

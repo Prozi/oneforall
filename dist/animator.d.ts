@@ -34,7 +34,7 @@ export declare class Animator extends Container {
     animation?: PIXI.AnimatedSprite;
     /**
      * @param gameObject
-     * @param options
+     * @param animatorData
      * @param texture
      */
     constructor(gameObject: GameObject, { animations, cols, rows, animationSpeed, anchor }: AnimatorData, { width, height, source }: PIXI.Texture);

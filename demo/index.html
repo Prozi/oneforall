@@ -11,6 +11,20 @@
         margin: 0;
         height: 100%;
         overflow: hidden;
+        font-family: monospace;
+      }
+      #stats {
+        transform-origin: top right;
+      }
+      @media (max-width: 1280px) {
+        #stats {
+          transform: scale(0.75);
+        }
+      }
+      @media (max-width: 640px) {
+        #stats {
+          transform: scale(0.5);
+        }
       }
     </style>
   </head>
