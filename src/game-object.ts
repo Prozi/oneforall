@@ -13,7 +13,6 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   extends GameObject {
   body: TBody;
   sprite: TSprite;
-  state?: StateMachine;
   target?: Vector;
 }
 

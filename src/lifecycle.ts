@@ -74,30 +74,16 @@ export abstract class Lifecycle implements LifecycleProps {
   scene?: SceneBase | Scene;
 
   static destroy(lifecycle: LifecycleProps): void {
-    if (lifecycle.gameObject) {
+    if (!(lifecycle instanceof GameObject)) {
       lifecycle.gameObject.removeChild(lifecycle);
-    } else if (!(lifecycle instanceof GameObject)) {
-      console.log({ gameObject: lifecycle.label });
     }
-    if (lifecycle.update$) {
-      lifecycle.update$.complete();
-    } else {
-      console.log({ update$: lifecycle.label });
-    }
-    if (lifecycle.destroy$) {
-      lifecycle.destroy$.next();
-      lifecycle.destroy$.complete();
-    } else {
-      console.log({ destroy$: lifecycle.label });
-    }
+    lifecycle.update$.complete();
+    lifecycle.destroy$.next();
+    lifecycle.destroy$.complete();
   }
 
   static update(lifecycle: LifecycleProps, deltaTime: number): void {
-    if (lifecycle.update$) {
-      lifecycle.update$.next(deltaTime);
-    } else {
-      console.log({ update$: lifecycle.label });
-    }
+    lifecycle.update$.next(deltaTime);
   }
 
   destroy(): void {

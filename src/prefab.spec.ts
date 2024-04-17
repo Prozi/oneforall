@@ -1,24 +1,25 @@
 import 'pixi-shim';
 import 'pixi.js-legacy';
 
-import { Body } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 
 import { CircleBody } from './circle-body';
-import { GameObject } from './game-object';
+import { GameObject, TGameObject } from './game-object';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { Sprite } from './sprite';
 import { StateMachine } from './state-machine';
 
-type TGameObject = GameObject & { state: StateMachine; sprite: Sprite };
+type ExtendedGO = TGameObject<Sprite> & {
+  stateMachine?: StateMachine;
+};
 
 describe('GIVEN Prefab', () => {
   it('THEN can be instantiated', async () => {
     const prefab = new Prefab('MyPrefab', async (go: GameObject) => {
       go.x = 120;
       go.y = 60;
-      (go as TGameObject).state = new StateMachine(go);
+      (go as ExtendedGO).stateMachine = new StateMachine(go);
     });
     const instance: GameObject = await GameObject.instantiate(prefab);
 
@@ -30,22 +31,18 @@ describe('GIVEN Prefab', () => {
 
   it('THEN can create 100 instances', async () => {
     const scene: Scene = new Scene({ visible: true });
-    const prefab: Prefab = new Prefab(
-      'Soldier',
-      async (
-        go: GameObject & { state?: StateMachine; sprite?: Sprite; body?: Body }
-      ) => {
-        go.state = new StateMachine(go);
-        go.sprite = new Sprite(go, PIXI.Texture.EMPTY);
+    const prefab: Prefab = new Prefab('Soldier', async (gameObject) => {
+      const go = gameObject as ExtendedGO;
+      go.stateMachine = new StateMachine(go);
+      go.sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
-        go.body = new CircleBody(go, 40);
-        go.body.x = Math.random() * innerWidth;
-        go.body.y = Math.random() * innerHeight;
+      go.body = new CircleBody(go, 40);
+      go.body.x = Math.random() * innerWidth;
+      go.body.y = Math.random() * innerHeight;
 
-        go.update(20);
-        scene.addChild(go);
-      }
-    );
+      go.update(20);
+      scene.addChild(go);
+    });
 
     const promises: Promise<GameObject>[] = new Array(100)
       .fill(0)

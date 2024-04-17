@@ -21,33 +21,15 @@ class Lifecycle {
         this.label = 'Lifecycle';
     }
     static destroy(lifecycle) {
-        if (lifecycle.gameObject) {
+        if (!(lifecycle instanceof game_object_1.GameObject)) {
             lifecycle.gameObject.removeChild(lifecycle);
         }
-        else if (!(lifecycle instanceof game_object_1.GameObject)) {
-            console.log({ gameObject: lifecycle.label });
-        }
-        if (lifecycle.update$) {
-            lifecycle.update$.complete();
-        }
-        else {
-            console.log({ update$: lifecycle.label });
-        }
-        if (lifecycle.destroy$) {
-            lifecycle.destroy$.next();
-            lifecycle.destroy$.complete();
-        }
-        else {
-            console.log({ destroy$: lifecycle.label });
-        }
+        lifecycle.update$.complete();
+        lifecycle.destroy$.next();
+        lifecycle.destroy$.complete();
     }
     static update(lifecycle, deltaTime) {
-        if (lifecycle.update$) {
-            lifecycle.update$.next(deltaTime);
-        }
-        else {
-            console.log({ update$: lifecycle.label });
-        }
+        lifecycle.update$.next(deltaTime);
     }
     destroy() {
         Lifecycle.destroy(this);

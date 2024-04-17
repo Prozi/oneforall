@@ -6,11 +6,9 @@ import { LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
-import { StateMachine } from './state-machine';
 export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends GameObject {
     body: TBody;
     sprite: TSprite;
-    state?: StateMachine;
     target?: Vector;
 }
 export declare class GameObject implements LifecycleProps {
