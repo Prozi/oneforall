@@ -58,20 +58,9 @@ export abstract class Lifecycle implements LifecycleProps {
   readonly destroy$: Subject<void> = new Subject();
 
   /**
-   * Parent GameObject is assigned at creation.
-   * BaseScene & Scene don't have parent gameObject
-   */
-  readonly gameObject?: GameObject;
-
-  /**
    * Each Lifecycle Object has label for pixi debugging.
    */
   label = 'Lifecycle';
-
-  /**
-   * Lifecycle Object may be added to a Scene Object.
-   */
-  scene?: SceneBase | Scene;
 
   static destroy(lifecycle: LifecycleProps): void {
     if (!(lifecycle instanceof GameObject)) {

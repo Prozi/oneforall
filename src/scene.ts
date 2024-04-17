@@ -1,9 +1,9 @@
 import { Body } from 'detect-collisions';
+import { addStats, StatsJSAdapter } from 'pixi-stats';
 import * as PIXI from 'pixi.js';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
-import { addStats, StatsJSAdapter } from 'pixi-stats';
 
 import { Inject } from '@jacekpietal/dependency-injection';
 
@@ -16,12 +16,12 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   @Inject(Resources) resources: Resources;
 
   /**
-   * When auto sort is set to false, it emits this subject.
+   * When disableAutoSort is called, it emits this subject.
    */
   readonly disableAutoSort$: Subject<void> = new Subject();
 
   /**
-   * When auto sort is set to false, it emits this subject.
+   * When disableDebug is called, it emits this subject.
    */
   readonly disableDebug$: Subject<void> = new Subject();
 

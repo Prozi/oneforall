@@ -29,7 +29,6 @@ export class PolygonBody extends Polygon implements LifecycleProps {
 
   constructor(gameObject: GameObject, points: Vector[], options?: BodyOptions) {
     super(gameObject, points, options);
-
     this.gameObject = gameObject;
     this.gameObject.addChild(this);
   }
@@ -37,13 +36,11 @@ export class PolygonBody extends Polygon implements LifecycleProps {
   update(deltaTime: number): void {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
-
     Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {
     this.system?.remove(this);
-
     Lifecycle.destroy(this);
   }
 }

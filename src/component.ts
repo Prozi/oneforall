@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs/internal/Subject';
+
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 

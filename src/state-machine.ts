@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs/internal/Subject';
 
-import { GameObject } from './game-object';
 import { Component } from './component';
+import { GameObject } from './game-object';
 
 export type TStateValidator = (newState: string) => boolean;
 

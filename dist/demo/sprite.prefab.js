@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSprite = exports.createSprite = void 0;
-const operators_1 = require("rxjs/operators");
 const detect_collisions_1 = require("detect-collisions");
+const operators_1 = require("rxjs/operators");
 const animator_1 = require("../animator");
 const circle_body_1 = require("../circle-body");
 const game_object_1 = require("../game-object");

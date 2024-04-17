@@ -3,7 +3,6 @@ import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
-import { PIXIResource } from './resources';
 
 export class Sprite extends PIXI.Sprite implements LifecycleProps {
   /**
@@ -28,24 +27,20 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
    */
   label = 'Sprite';
 
-  constructor(gameObject: GameObject, texture: PIXIResource) {
+  constructor(gameObject: GameObject, texture: PIXI.Texture) {
     super(texture);
-
     this.gameObject = gameObject;
     this.gameObject.addChild(this);
-
-    // found no other way to truly override PIXI.Sprite destroy and trigger Lifecycle
-    this.destroy = (): void => {
-      super.destroy({ texture: false, textureSource: false });
-
-      Lifecycle.destroy(this);
-    };
   }
 
   update(deltaTime: number): void {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
-
     Lifecycle.update(this, deltaTime);
+  }
+
+  destroy(): void {
+    super.destroy({ texture: false, textureSource: false, children: true });
+    Lifecycle.destroy(this);
   }
 }

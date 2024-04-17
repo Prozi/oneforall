@@ -1,5 +1,5 @@
-import { takeUntil } from 'rxjs/operators';
 import { distance } from 'detect-collisions';
+import { takeUntil } from 'rxjs/operators';
 
 import { Animator } from '../animator';
 import { CircleBody } from '../circle-body';

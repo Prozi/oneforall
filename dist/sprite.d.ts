@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
-import { PIXIResource } from './resources';
 export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
     /**
      * Parent GameObject is assigned at creation.
@@ -22,7 +21,8 @@ export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
-    constructor(gameObject: GameObject, texture: PIXIResource);
+    constructor(gameObject: GameObject, texture: PIXI.Texture);
     update(deltaTime: number): void;
+    destroy(): void;
 }
 //# sourceMappingURL=sprite.d.ts.map

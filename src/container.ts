@@ -36,13 +36,11 @@ export class Container extends PIXI.Container implements LifecycleProps {
   update(deltaTime: number): void {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;
-
     Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {
-    super.destroy();
-
+    super.destroy({ children: true });
     Lifecycle.destroy(this);
   }
 }

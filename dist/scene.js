@@ -30,11 +30,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
+const pixi_stats_1 = require("pixi-stats");
 const PIXI = __importStar(require("pixi.js"));
 const merge_1 = require("rxjs/internal/observable/merge");
 const takeUntil_1 = require("rxjs/internal/operators/takeUntil");
 const Subject_1 = require("rxjs/internal/Subject");
-const pixi_stats_1 = require("pixi-stats");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 const application_1 = require("./application");
 const resources_1 = require("./resources");
@@ -43,11 +43,11 @@ class Scene extends scene_base_1.SceneBase {
     constructor(options = {}) {
         super(options);
         /**
-         * When auto sort is set to false, it emits this subject.
+         * When disableAutoSort is called, it emits this subject.
          */
         this.disableAutoSort$ = new Subject_1.Subject();
         /**
-         * When auto sort is set to false, it emits this subject.
+         * When disableDebug is called, it emits this subject.
          */
         this.disableDebug$ = new Subject_1.Subject();
         this.stage.visible = this.options.visible || false;

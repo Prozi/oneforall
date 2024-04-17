@@ -47,13 +47,11 @@ export class CircleBody extends Ellipse implements LifecycleProps {
   update(deltaTime: number): void {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;
-
     Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {
     this.system?.remove(this);
-
     Lifecycle.destroy(this);
   }
 }

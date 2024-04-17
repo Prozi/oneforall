@@ -9,7 +9,7 @@ import { Sprite } from './sprite';
 describe('GIVEN Sprite', () => {
   it('THEN update propagates x/y changes', () => {
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.EMPTY);
+    const sprite = new Sprite(go, PIXI.Texture.WHITE);
 
     go.x = 50;
     go.update(20);
@@ -31,7 +31,7 @@ describe('GIVEN Sprite', () => {
 
   it('THEN destroy works', () => {
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.EMPTY);
+    const sprite = new Sprite(go, PIXI.Texture.WHITE);
 
     sprite.destroy();
     expect(go.children.length).toBe(0);
@@ -40,7 +40,7 @@ describe('GIVEN Sprite', () => {
   it('THEN destroy works extended', () => {
     const scene = new Scene();
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.EMPTY);
+    const sprite = new Sprite(go, PIXI.Texture.WHITE);
 
     scene.addChild(go);
     expect(go.children.length).toBe(1);

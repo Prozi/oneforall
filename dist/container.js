@@ -53,7 +53,7 @@ class Container extends PIXI.Container {
         lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
-        super.destroy();
+        super.destroy({ children: true });
         lifecycle_1.Lifecycle.destroy(this);
     }
 }

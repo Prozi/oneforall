@@ -8,11 +8,11 @@ export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     pixi: Application;
     resources: Resources;
     /**
-     * When auto sort is set to false, it emits this subject.
+     * When disableAutoSort is called, it emits this subject.
      */
     readonly disableAutoSort$: Subject<void>;
     /**
-     * When auto sort is set to false, it emits this subject.
+     * When disableDebug is called, it emits this subject.
      */
     readonly disableDebug$: Subject<void>;
     constructor(options?: SceneOptions);

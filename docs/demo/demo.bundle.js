@@ -15561,7 +15561,7 @@ ${e}`);
                 fonts.add(font);
                 fontFaces.push(font);
               }
-              Cache.Cache.set(name, {
+              Cache.Cache.set(`${name}-and-url`, {
                 url,
                 fontFaces
               });
@@ -24232,9 +24232,10 @@ ${e}`);
               filterData.skip = true;
               return;
             }
+            const viewPort = renderer.renderTarget.rootViewPort;
             bounds
               .scale(resolution)
-              .fit(renderer.renderTarget.rootViewPort)
+              .fitBounds(0, viewPort.width, 0, viewPort.height)
               .scale(1 / resolution)
               .pad(padding)
               .ceil();
@@ -26596,7 +26597,7 @@ ${e}`);
         Object.defineProperty(exports, '__esModule', { value: true });
 
         var fragment =
-          '\nin vec2 vTextureCoord;\nin vec4 vColor;\n\nout vec4 finalColor;\n\nuniform float uNoise;\nuniform float uSeed;\nuniform sampler2D uTexture;\n\nfloat rand(vec2 co)\n{\n    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n}\n\nvoid main()\n{\n    vec4 color = texture(uTexture, vTextureCoord);\n    float randomValue = rand(gl_FragCoord.xy * 0.2);\n    float diff = (randomValue - 0.5) *  0.5;\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (color.a > 0.0) {\n        color.rgb /= color.a;\n    }\n\n    color.r += diff;\n    color.g += diff;\n    color.b += diff;\n\n    // Premultiply alpha again.\n    color.rgb *= color.a;\n\n    finalColor = color;\n}\n';
+          '\nin vec2 vTextureCoord;\nin vec4 vColor;\n\nout vec4 finalColor;\n\nuniform float uNoise;\nuniform float uSeed;\nuniform sampler2D uTexture;\n\nfloat rand(vec2 co)\n{\n    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n}\n\nvoid main()\n{\n    vec4 color = texture(uTexture, vTextureCoord);\n    float randomValue = rand(gl_FragCoord.xy * uSeed);\n    float diff = (randomValue - 0.5) *  uNoise;\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (color.a > 0.0) {\n        color.rgb /= color.a;\n    }\n\n    color.r += diff;\n    color.g += diff;\n    color.b += diff;\n\n    // Premultiply alpha again.\n    color.rgb *= color.a;\n\n    finalColor = color;\n}\n';
 
         exports['default'] = fragment;
         //# sourceMappingURL=noise.frag.js.map
@@ -30749,7 +30750,8 @@ ${e}`);
             const halfStrokeWidth = strokeWidth / 2;
             const halfStrokeWidthSqrd = halfStrokeWidth * halfStrokeWidth;
             const { points } = this;
-            for (let i = 0; i < points.length; i += 2) {
+            const iterationLength = points.length - (this.closePath ? 0 : 2);
+            for (let i = 0; i < iterationLength; i += 2) {
               const x1 = points[i];
               const y1 = points[i + 1];
               const x2 = points[(i + 2) % points.length];
@@ -33818,7 +33820,7 @@ ${parts.join('\n')}
               `
             fn roundPixels(position: vec2<f32>, targetSize: vec2<f32>) -> vec2<f32> 
             {
-                return (floor((position * 0.5 + 0.5) * targetSize) / targetSize) * 2.0 - 1.0;
+                return (floor(((position * 0.5 + 0.5) * targetSize) + 0.5) / targetSize) * 2.0 - 1.0;
             }
         `
           }
@@ -33831,7 +33833,7 @@ ${parts.join('\n')}
               `   
             vec2 roundPixels(vec2 position, vec2 targetSize)
             {       
-                return (floor((position * 0.5 + 0.5) * targetSize) / targetSize) * 2.0 - 1.0;
+                return (floor(((position * 0.5 + 0.5) * targetSize) + 0.5) / targetSize) * 2.0 - 1.0;
             }
         `
           }
@@ -35734,7 +35736,7 @@ ${parts.join('\n')}
         );
 
         ('use strict');
-        const renderPriority = ['webgpu', 'webgl', 'canvas'];
+        const renderPriority = ['webgl', 'webgpu', 'canvas'];
         async function autoDetectRenderer(options) {
           let preferredOrder = [];
           if (options.preference) {
@@ -35876,7 +35878,7 @@ ${parts.join('\n')}
                 out vec2 vUv;
 
                 void main() {
-                    gl_Position = gl_Position = vec4(aPosition, 0.0, 1.0);
+                    gl_Position = vec4(aPosition, 0.0, 1.0);
 
                     vUv = (aPosition + 1.0) / 2.0;
 
@@ -36158,6 +36160,9 @@ ${parts.join('\n')}
               'increment-wrap': gl.INCR_WRAP,
               'decrement-wrap': gl.DECR_WRAP
             };
+            this._stencilCache.enabled = false;
+            this._stencilCache.stencilMode = _const.STENCIL_MODES.NONE;
+            this._stencilCache.stencilReference = 0;
           }
           onRenderTargetChange(renderTarget) {
             if (this._activeRenderTarget === renderTarget) return;
@@ -36650,6 +36655,9 @@ ${parts.join('\n')}
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        var adapter = __webpack_require__(
+          /*! ../../../../environment/adapter.js */ './node_modules/pixi.js/lib/environment/adapter.js'
+        );
         var Extensions = __webpack_require__(
           /*! ../../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
@@ -36728,7 +36736,10 @@ ${parts.join('\n')}
            */
           initFromContext(gl) {
             this.gl = gl;
-            this.webGLVersion = gl instanceof WebGL2RenderingContext ? 2 : 1;
+            this.webGLVersion =
+              gl instanceof adapter.DOMAdapter.get().getWebGLRenderingContext()
+                ? 1
+                : 2;
             this.getExtensions();
             this.validateContext(gl);
             this._renderer.runners.contextChange.emit(gl);
@@ -36817,6 +36828,12 @@ ${parts.join('\n')}
                 ...common,
                 colorBufferFloat: gl.getExtension('EXT_color_buffer_float')
               };
+              const provokeExt = gl.getExtension('WEBGL_provoking_vertex');
+              if (provokeExt) {
+                provokeExt.provokingVertexWEBGL(
+                  provokeExt.FIRST_VERTEX_CONVENTION_WEBGL
+                );
+              }
             }
           }
           /**
@@ -37200,7 +37217,8 @@ ${parts.join('\n')}
               const attribute = attributes[j];
               const buffer = attribute.buffer;
               const glBuffer = bufferSystem.getGlBuffer(buffer);
-              if (program._attributeData[j]) {
+              const programAttrib = program._attributeData[j];
+              if (programAttrib) {
                 if (lastBuffer !== glBuffer) {
                   bufferSystem.bind(buffer);
                   lastBuffer = glBuffer;
@@ -37211,14 +37229,27 @@ ${parts.join('\n')}
                   getAttributeInfoFromFormat.getAttributeInfoFromFormat(
                     attribute.format
                   );
-                gl.vertexAttribPointer(
-                  location,
-                  attributeInfo.size,
-                  getGlTypeFromFormat.getGlTypeFromFormat(attribute.format),
-                  attributeInfo.normalised,
-                  attribute.stride,
-                  attribute.offset
+                const type = getGlTypeFromFormat.getGlTypeFromFormat(
+                  attribute.format
                 );
+                if (programAttrib.format?.substring(1, 4) === 'int') {
+                  gl.vertexAttribIPointer(
+                    location,
+                    attributeInfo.size,
+                    type,
+                    attribute.stride,
+                    attribute.offset
+                  );
+                } else {
+                  gl.vertexAttribPointer(
+                    location,
+                    attributeInfo.size,
+                    type,
+                    attributeInfo.normalised,
+                    attribute.stride,
+                    attribute.offset
+                  );
+                }
                 if (attribute.instance) {
                   if (this.hasInstance) {
                     gl.vertexAttribDivisor(location, 1);
@@ -40029,10 +40060,13 @@ ${src}`;
               this.managedTextures.push(source);
             }
             this.onSourceUpdate(source);
-            this.onStyleChange(source);
+            this.updateStyle(source, false);
             return glTexture;
           }
           onStyleChange(source) {
+            this.updateStyle(source, false);
+          }
+          updateStyle(source, firstCreation) {
             const gl = this._gl;
             const glTexture = this.getGlSource(source);
             gl.bindTexture(gl.TEXTURE_2D, glTexture.texture);
@@ -40046,7 +40080,8 @@ ${src}`;
               gl.TEXTURE_2D,
               // will force a clamp to edge if the texture is not a power of two
               !this._renderer.context.supports.nonPowOf2wrapping &&
-                !source.isPowerOfTwo
+                !source.isPowerOfTwo,
+              firstCreation
             );
           }
           onSourceUnload(source) {
@@ -40115,7 +40150,8 @@ ${src}`;
               this._renderer.context.extensions.anisotropicFiltering,
               'samplerParameteri',
               glSampler,
-              false
+              false,
+              true
             );
             return this._glSamplers[style._resourceId];
           }
@@ -40624,36 +40660,52 @@ ${src}`;
           anisotropicExt,
           glFunctionName,
           firstParam,
-          forceClamp
+          forceClamp,
+          firstCreation
         ) {
           const castParam = firstParam;
-          const wrapModeS =
-            pixiToGlMaps.wrapModeToGlAddress[
-              forceClamp ? 'clamp-to-edge' : style.addressModeU
-            ];
-          const wrapModeT =
-            pixiToGlMaps.wrapModeToGlAddress[
-              forceClamp ? 'clamp-to-edge' : style.addressModeV
-            ];
-          const wrapModeR =
-            pixiToGlMaps.wrapModeToGlAddress[
-              forceClamp ? 'clamp-to-edge' : style.addressModeW
-            ];
-          gl[glFunctionName](castParam, gl.TEXTURE_WRAP_S, wrapModeS);
-          gl[glFunctionName](castParam, gl.TEXTURE_WRAP_T, wrapModeT);
-          if (gl.TEXTURE_WRAP_R)
-            gl[glFunctionName](castParam, gl.TEXTURE_WRAP_R, wrapModeR);
-          gl[glFunctionName](
-            castParam,
-            gl.TEXTURE_MAG_FILTER,
-            pixiToGlMaps.scaleModeToGlFilter[style.magFilter]
-          );
-          if (mipmaps) {
-            const glFilterMode =
-              pixiToGlMaps.mipmapScaleModeToGlFilter[style.minFilter][
-                style.mipmapFilter
+          if (
+            !firstCreation ||
+            style.addressModeU !== 'repeat' ||
+            style.addressModeV !== 'repeat' ||
+            style.addressModeW !== 'repeat'
+          ) {
+            const wrapModeS =
+              pixiToGlMaps.wrapModeToGlAddress[
+                forceClamp ? 'clamp-to-edge' : style.addressModeU
               ];
-            gl[glFunctionName](castParam, gl.TEXTURE_MIN_FILTER, glFilterMode);
+            const wrapModeT =
+              pixiToGlMaps.wrapModeToGlAddress[
+                forceClamp ? 'clamp-to-edge' : style.addressModeV
+              ];
+            const wrapModeR =
+              pixiToGlMaps.wrapModeToGlAddress[
+                forceClamp ? 'clamp-to-edge' : style.addressModeW
+              ];
+            gl[glFunctionName](castParam, gl.TEXTURE_WRAP_S, wrapModeS);
+            gl[glFunctionName](castParam, gl.TEXTURE_WRAP_T, wrapModeT);
+            if (gl.TEXTURE_WRAP_R)
+              gl[glFunctionName](castParam, gl.TEXTURE_WRAP_R, wrapModeR);
+          }
+          if (!firstCreation || style.magFilter !== 'linear') {
+            gl[glFunctionName](
+              castParam,
+              gl.TEXTURE_MAG_FILTER,
+              pixiToGlMaps.scaleModeToGlFilter[style.magFilter]
+            );
+          }
+          if (mipmaps) {
+            if (!firstCreation || style.mipmapFilter !== 'linear') {
+              const glFilterMode =
+                pixiToGlMaps.mipmapScaleModeToGlFilter[style.minFilter][
+                  style.mipmapFilter
+                ];
+              gl[glFunctionName](
+                castParam,
+                gl.TEXTURE_MIN_FILTER,
+                glFilterMode
+              );
+            }
           } else {
             gl[glFunctionName](
               castParam,
@@ -40873,14 +40925,20 @@ ${src}`;
       /*!******************************************************************************************************!*\
   !*** ./node_modules/pixi.js/lib/rendering/renderers/gl/texture/utils/mapFormatToGlInternalFormat.js ***!
   \******************************************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        'use strict';
+        var adapter = __webpack_require__(
+          /*! ../../../../../environment/adapter.js */ './node_modules/pixi.js/lib/environment/adapter.js'
+        );
+
+        ('use strict');
         function mapFormatToGlInternalFormat(gl, extensions) {
           let srgb = {};
           let bgra8unorm = gl.RGBA;
-          if (gl instanceof WebGL2RenderingContext) {
+          if (
+            !(gl instanceof adapter.DOMAdapter.get().getWebGLRenderingContext())
+          ) {
             srgb = {
               'rgba8unorm-srgb': gl.SRGB8_ALPHA8,
               'bgra8unorm-srgb': gl.SRGB8_ALPHA8
@@ -42166,23 +42224,26 @@ ${src}`;
            * @param buffer - buffer with data
            */
           onBufferDestroy(buffer) {
-            const gpuBuffer = this._gpuBuffers[buffer.uid];
-            gpuBuffer.destroy();
             this._managedBuffers.splice(
               this._managedBuffers.indexOf(buffer),
               1
             );
+            this._destroyBuffer(buffer);
+          }
+          destroy() {
+            this._managedBuffers.forEach((buffer) =>
+              this._destroyBuffer(buffer)
+            );
+            this._managedBuffers = null;
+            this._gpuBuffers = null;
+          }
+          _destroyBuffer(buffer) {
+            const gpuBuffer = this._gpuBuffers[buffer.uid];
+            gpuBuffer.destroy();
             buffer.off('update', this.updateBuffer, this);
             buffer.off('change', this.onBufferChange, this);
             buffer.off('destroy', this.onBufferDestroy, this);
             this._gpuBuffers[buffer.uid] = null;
-          }
-          destroy() {
-            this._managedBuffers
-              .slice()
-              .forEach((buffer) => this.onBufferDestroy(buffer));
-            this._managedBuffers = null;
-            this._gpuBuffers = null;
           }
         }
         /** @ignore */
@@ -43002,9 +43063,18 @@ ${src}`;
             }
             this.resources = null;
           }
-          onResourceChange() {
+          onResourceChange(resource) {
             this._dirty = true;
-            this._updateKey();
+            if (resource.destroyed) {
+              const resources = this.resources;
+              for (const i in resources) {
+                if (resources[i] === resource) {
+                  resources[i] = null;
+                }
+              }
+            } else {
+              this._updateKey();
+            }
           }
         }
 
@@ -44945,6 +45015,11 @@ ${src}`;
              * @default true
              */
             this.shrinkToFit = true;
+            /**
+             * Has the buffer been destroyed?
+             * @readonly
+             */
+            this.destroyed = false;
             if (data instanceof Array) {
               data = new Float32Array(data);
             }
@@ -45018,7 +45093,9 @@ ${src}`;
           }
           /** Destroys the buffer */
           destroy() {
+            this.destroyed = true;
             this.emit('destroy', this);
+            this.emit('change', this);
             this._data = null;
             this.descriptor = null;
             this.removeAllListeners();
@@ -45093,6 +45170,11 @@ ${src}`;
              * @ignore
              */
             this._bufferResource = true;
+            /**
+             * Has the Buffer resource been destroyed?
+             * @readonly
+             */
+            this.destroyed = false;
             this.buffer = buffer;
             this.offset = offset | 0;
             this.size = size;
@@ -45108,9 +45190,11 @@ ${src}`;
            * @param destroyBuffer - Should the underlying buffer be destroyed as well?
            */
           destroy(destroyBuffer = false) {
+            this.destroyed = true;
             if (destroyBuffer) {
               this.buffer.destroy();
             }
+            this.emit('change', this);
             this.buffer = null;
           }
         }
@@ -45211,6 +45295,11 @@ ${src}`;
         );
 
         ('use strict');
+        const imageTypes = {
+          png: 'image/png',
+          jpg: 'image/jpeg',
+          webp: 'image/webp'
+        };
         const _ExtractSystem = class _ExtractSystem {
           /** @param renderer - The renderer this System works for. */
           constructor(renderer) {
@@ -45266,17 +45355,17 @@ ${src}`;
                     reader.onerror = reject;
                     reader.readAsDataURL(blob);
                   },
-                  format,
+                  imageTypes[format],
                   quality
                 );
               });
             }
             if (canvas.toDataURL !== void 0) {
-              return canvas.toDataURL(format, quality);
+              return canvas.toDataURL(imageTypes[format], quality);
             }
             if (canvas.convertToBlob !== void 0) {
               const blob = await canvas.convertToBlob({
-                type: format,
+                type: imageTypes[format],
                 quality
               });
               return new Promise((resolve, reject) => {
@@ -47095,6 +47184,8 @@ ${src}`;
              * @ignore
              */
             this._dirtyId = 0;
+            // implementing the interface - UniformGroup are not destroyed
+            this.destroyed = false;
             options = { ..._UniformGroup.defaultOptions, ...options };
             this.uniformStructures = uniformStructures;
             const uniforms = {};
@@ -48528,7 +48619,8 @@ ${src}`;
             trim,
             defaultAnchor,
             defaultBorders,
-            rotate
+            rotate,
+            dynamic
           } = {}) {
             super();
             /** unique id for this texture */
@@ -48562,6 +48654,12 @@ ${src}`;
              * texture.on('update', () => {});
              */
             this.noFrame = false;
+            /**
+             * Set to true if you plan on modifying the uvs of this texture.
+             * When this is the case, sprites and other objects using the texture will
+             * make sure to listen for changes to the uvs and update their vertices accordingly.
+             */
+            this.dynamic = false;
             /** is it a texture? yes! used for type checking */
             this.isTexture = true;
             this.label = label;
@@ -48580,6 +48678,7 @@ ${src}`;
             this.defaultAnchor = defaultAnchor;
             this.defaultBorders = defaultBorders;
             this.destroyed = false;
+            this.dynamic = dynamic || false;
             this.updateUvs();
           }
           set source(value) {
@@ -49107,6 +49206,11 @@ ${src}`;
              * @ignore
              */
             this._maxAnisotropy = 1;
+            /**
+             * Has the style been destroyed?
+             * @readonly
+             */
+            this.destroyed = false;
             options = { ..._TextureStyle.defaultOptions, ...options };
             this.addressMode = options.addressMode;
             this.addressModeU = options.addressModeU ?? this.addressModeU;
@@ -49174,7 +49278,9 @@ ${src}`;
           }
           /** Destroys the style */
           destroy() {
+            this.destroyed = true;
             this.emit('destroy', this);
+            this.emit('change', this);
             this.removeAllListeners();
           }
         };
@@ -49801,6 +49907,7 @@ ${src}`;
           destroy() {
             this.destroyed = true;
             this.emit('destroy', this);
+            this.emit('change', this);
             if (this._style) {
               this._style.destroy();
               this._style = null;
@@ -50027,7 +50134,7 @@ ${src}`;
               this._videoFrameRequestCallbackHandle = null;
             } else {
               this._videoFrameRequestCallbackHandle =
-                this.source.requestVideoFrameCallback(
+                this.resource.requestVideoFrameCallback(
                   this._videoFrameRequestCallback
                 );
             }
@@ -50231,7 +50338,7 @@ ${src}`;
            */
           _configureAutoUpdate() {
             if (this._autoUpdate && this._isSourcePlaying()) {
-              if (!this._updateFPS && this.source.requestVideoFrameCallback) {
+              if (!this._updateFPS && this.resource.requestVideoFrameCallback) {
                 if (this._isConnectedToTicker) {
                   Ticker.Ticker.shared.remove(this.updateFrame, this);
                   this._isConnectedToTicker = false;
@@ -50239,13 +50346,13 @@ ${src}`;
                 }
                 if (this._videoFrameRequestCallbackHandle === null) {
                   this._videoFrameRequestCallbackHandle =
-                    this.source.requestVideoFrameCallback(
+                    this.resource.requestVideoFrameCallback(
                       this._videoFrameRequestCallback
                     );
                 }
               } else {
                 if (this._videoFrameRequestCallbackHandle !== null) {
-                  this.source.cancelVideoFrameCallback(
+                  this.resource.cancelVideoFrameCallback(
                     this._videoFrameRequestCallbackHandle
                   );
                   this._videoFrameRequestCallbackHandle = null;
@@ -50258,7 +50365,7 @@ ${src}`;
               }
             } else {
               if (this._videoFrameRequestCallbackHandle !== null) {
-                this.source.cancelVideoFrameCallback(
+                this.resource.cancelVideoFrameCallback(
                   this._videoFrameRequestCallbackHandle
                 );
                 this._videoFrameRequestCallbackHandle = null;
@@ -52355,6 +52462,20 @@ ${src}`;
             return this;
           }
           /**
+           * Resizes the bounds object to include the given bounds.
+           * @param left - The left value of the bounds.
+           * @param right - The right value of the bounds.
+           * @param top - The top value of the bounds.
+           * @param bottom - The bottom value of the bounds.
+           */
+          fitBounds(left, right, top, bottom) {
+            if (this.minX < left) this.minX = left;
+            if (this.maxX > right) this.maxX = right;
+            if (this.minY < top) this.minY = top;
+            if (this.maxY > bottom) this.maxY = bottom;
+            return this;
+          }
+          /**
            * Pads bounds object, making it grow in all directions.
            * If paddingY is omitted, both paddingX and paddingY will be set to paddingX.
            * @param paddingX - The horizontal padding amount.
@@ -53910,21 +54031,12 @@ ${src}`;
         );
 
         ('use strict');
-        const WHITE_WHITE = 16777215 + (16777215 << 32);
+        const WHITE_BGR = 16777215;
         function mixColors(localBGRColor, parentBGRColor) {
-          if (localBGRColor + (parentBGRColor << 32) !== WHITE_WHITE) {
-            if (localBGRColor === 16777215) {
-              return parentBGRColor;
-            } else if (parentBGRColor === 16777215) {
-              return localBGRColor;
-            }
-            return mixHexColors.mixHexColors(
-              localBGRColor,
-              parentBGRColor,
-              0.5
-            );
+          if (localBGRColor === WHITE_BGR || parentBGRColor === WHITE_BGR) {
+            return localBGRColor + parentBGRColor - WHITE_BGR;
           }
-          return 16777215;
+          return mixHexColors.mixHexColors(localBGRColor, parentBGRColor, 0.5);
         }
         function mixStandardAnd32BitColors(
           localColorRGB,
@@ -53938,19 +54050,15 @@ ${src}`;
             (localColorRGB & 65280) +
             ((localColorRGB >> 16) & 255);
           const parentBGRColor = parentColor & 16777215;
-          let sharedBGRColor = 16777215;
-          if (localBGRColor + (parentBGRColor << 32) !== WHITE_WHITE) {
-            if (localBGRColor === 16777215) {
-              sharedBGRColor = parentBGRColor;
-            } else if (parentBGRColor === 16777215) {
-              sharedBGRColor = localBGRColor;
-            } else {
-              sharedBGRColor = mixHexColors.mixHexColors(
-                localBGRColor,
-                parentBGRColor,
-                0.5
-              );
-            }
+          let sharedBGRColor;
+          if (localBGRColor === WHITE_BGR || parentBGRColor === WHITE_BGR) {
+            sharedBGRColor = localBGRColor + parentBGRColor - WHITE_BGR;
+          } else {
+            sharedBGRColor = mixHexColors.mixHexColors(
+              localBGRColor,
+              parentBGRColor,
+              0.5
+            );
           }
           return sharedBGRColor + (globalAlpha << 24);
         }
@@ -55297,7 +55405,7 @@ ${src}`;
               path = this._activePath.clone();
             }
             if (!path) return this;
-            if (style) {
+            if (style != null) {
               if (alpha !== void 0 && typeof style === 'number') {
                 deprecation.deprecation(
                   deprecation.v8_0_0,
@@ -55346,7 +55454,7 @@ ${src}`;
               path = this._activePath.clone();
             }
             if (!path) return this;
-            if (style) {
+            if (style != null) {
               this._strokeStyle =
                 convertFillInputToFillStyle.convertFillInputToFillStyle(
                   style,
@@ -61098,7 +61206,7 @@ ${src}`;
            * Note: The wrap mode of the texture is set to REPEAT if `textureScale` is positive.
            * @param options
            * @param options.texture - The texture to use on the rope.
-           * @param options.points - An array of {@link PIXI.Point} objects to construct this rope.
+           * @param options.points - An array of {@link math.Point} objects to construct this rope.
            * @param {number} options.textureScale - Optional. Positive values scale rope texture
            * keeping its aspect ratio. You can reduce alpha channel artifacts by providing a larger texture
            * and downsampling here. If set to zero, texture will be stretched instead.
@@ -61617,20 +61725,17 @@ ${src}`;
       /*!*********************************************************************!*\
   !*** ./node_modules/pixi.js/lib/scene/mesh/shared/BatchableMesh.js ***!
   \*********************************************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+      /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
-        var Matrix = __webpack_require__(
-          /*! ../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
-        );
-
-        ('use strict');
+        'use strict';
         class BatchableMesh {
           constructor() {
             this.batcher = null;
             this.batch = null;
             this.roundPixels = 0;
-            this._uvMatrix = new Matrix.Matrix();
+            this._uvUpdateId = -1;
+            this._textureMatrixUpdateId = -1;
           }
           get blendMode() {
             return this.mesh.groupBlendMode;
@@ -61660,18 +61765,23 @@ ${src}`;
             const tx = wt.tx;
             const ty = wt.ty;
             const positions = geometry.positions;
-            const uvs = geometry.uvs;
+            const uvBuffer = geometry.getBuffer('aUV');
+            const uvs = uvBuffer.data;
             let transformedUvs = uvs;
             const textureMatrix = this.texture.textureMatrix;
             if (!textureMatrix.isSimple) {
               transformedUvs = this._transformedUvs;
-              if (!transformedUvs || transformedUvs.length < uvs.length) {
-                transformedUvs = this._transformedUvs = new Float32Array(
-                  uvs.length
-                );
-              }
-              if (!textureMatrix.mapCoord.equals(this._uvMatrix)) {
-                this._uvMatrix.copyFrom(textureMatrix.mapCoord);
+              if (
+                this._textureMatrixUpdateId !== textureMatrix._updateID ||
+                this._uvUpdateId !== uvBuffer._updateID
+              ) {
+                if (!transformedUvs || transformedUvs.length < uvs.length) {
+                  transformedUvs = this._transformedUvs = new Float32Array(
+                    uvs.length
+                  );
+                }
+                this._textureMatrixUpdateId = textureMatrix._updateID;
+                this._uvUpdateId = uvBuffer._updateID;
                 textureMatrix.multiplyUvs(uvs, transformedUvs);
               }
             }
@@ -61817,7 +61927,12 @@ ${src}`;
           }
           /** The texture that the Mesh uses. Null for non-MeshMaterial shaders */
           set texture(value) {
-            if (this._texture === value) return;
+            value || (value = Texture.Texture.EMPTY);
+            const currentTexture = this._texture;
+            if (currentTexture === value) return;
+            if (currentTexture && currentTexture.dynamic)
+              currentTexture.off('update', this.onViewUpdate, this);
+            if (value.dynamic) value.on('update', this.onViewUpdate, this);
             if (this.shader) {
               this.shader.texture = value;
             }
@@ -62141,8 +62256,10 @@ ${src}`;
           destroyRenderable(mesh) {
             this._meshDataHash[mesh.uid] = null;
             const gpuMesh = this._gpuBatchableMeshHash[mesh.uid];
-            PoolGroup.BigPool.return(gpuMesh);
-            this._gpuBatchableMeshHash[mesh.uid] = null;
+            if (gpuMesh) {
+              PoolGroup.BigPool.return(gpuMesh);
+              this._gpuBatchableMeshHash[mesh.uid] = null;
+            }
           }
           execute({ mesh }) {
             if (!mesh.isRenderable) return;
@@ -62524,9 +62641,6 @@ ${src}`;
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        var Matrix = __webpack_require__(
-          /*! ../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
-        );
         var PlaneGeometry = __webpack_require__(
           /*! ../mesh-plane/PlaneGeometry.js */ './node_modules/pixi.js/lib/scene/mesh-plane/PlaneGeometry.js'
         );
@@ -62541,7 +62655,6 @@ ${src}`;
               verticesX: 4,
               verticesY: 4
             });
-            this._textureMatrix = new Matrix.Matrix();
             this.update(options);
           }
           /**
@@ -62558,9 +62671,6 @@ ${src}`;
             this._rightWidth = options.rightWidth ?? this._rightWidth;
             this._topHeight = options.topHeight ?? this._topHeight;
             this._bottomHeight = options.bottomHeight ?? this._bottomHeight;
-            if (options.textureMatrix) {
-              this._textureMatrix.copyFrom(options.textureMatrix);
-            }
             this.updateUvs();
             this.updatePositions();
           }
@@ -62606,7 +62716,6 @@ ${src}`;
           }
           /** Updates the UVs of the vertices. */
           updateUvs() {
-            const textureMatrix = this._textureMatrix;
             const uvs = this.uvs;
             uvs[0] = uvs[8] = uvs[16] = uvs[24] = 0;
             uvs[1] = uvs[3] = uvs[5] = uvs[7] = 0;
@@ -62622,7 +62731,6 @@ ${src}`;
               uvs[21] =
               uvs[23] =
                 1 - _uvh * this._bottomHeight;
-            multiplyUvs(textureMatrix, uvs);
             this.getBuffer('aUV').update();
           }
         };
@@ -62646,22 +62754,6 @@ ${src}`;
           originalHeight: 100
         };
         let NineSliceGeometry = _NineSliceGeometry;
-        function multiplyUvs(matrix, uvs, out) {
-          out ?? (out = uvs);
-          const a = matrix.a;
-          const b = matrix.b;
-          const c = matrix.c;
-          const d = matrix.d;
-          const tx = matrix.tx;
-          const ty = matrix.ty;
-          for (let i = 0; i < uvs.length; i += 2) {
-            const x = uvs[i];
-            const y = uvs[i + 1];
-            out[i] = x * a + y * c + tx;
-            out[i + 1] = x * b + y * d + ty;
-          }
-          return out;
-        }
 
         exports.NineSliceGeometry = NineSliceGeometry;
         //# sourceMappingURL=NineSliceGeometry.js.map
@@ -62685,9 +62777,12 @@ ${src}`;
         var Container = __webpack_require__(
           /*! ../container/Container.js */ './node_modules/pixi.js/lib/scene/container/Container.js'
         );
+        var NineSliceGeometry = __webpack_require__(
+          /*! ./NineSliceGeometry.js */ './node_modules/pixi.js/lib/scene/sprite-nine-slice/NineSliceGeometry.js'
+        );
 
         ('use strict');
-        class NineSliceSprite extends Container.Container {
+        const _NineSliceSprite = class _NineSliceSprite extends Container.Container {
           /**
            * @param {scene.NineSliceSpriteOptions|Texture} options - Options to use
            * @param options.texture - The texture to use on the NineSliceSprite.
@@ -62724,14 +62819,32 @@ ${src}`;
             this.batched = true;
             this._didSpriteUpdate = true;
             this.bounds = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
-            this._leftWidth = leftWidth;
-            this._topHeight = topHeight;
-            this._rightWidth = rightWidth;
-            this._bottomHeight = bottomHeight;
-            this.bounds.maxX = this._width = width ?? texture.width;
-            this.bounds.maxY = this._height = height ?? texture.height;
+            this._leftWidth =
+              leftWidth ??
+              texture?.defaultBorders?.left ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.leftWidth;
+            this._topHeight =
+              topHeight ??
+              texture?.defaultBorders?.top ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.topHeight;
+            this._rightWidth =
+              rightWidth ??
+              texture?.defaultBorders?.right ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.rightWidth;
+            this._bottomHeight =
+              bottomHeight ??
+              texture?.defaultBorders?.bottom ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.bottomHeight;
+            this.bounds.maxX = this._width =
+              width ??
+              texture.width ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.width;
+            this.bounds.maxY = this._height =
+              height ??
+              texture.height ??
+              NineSliceGeometry.NineSliceGeometry.defaultOptions.height;
             this.allowChildren = false;
-            this._texture = texture;
+            this.texture = texture ?? _NineSliceSprite.defaultOptions.texture;
             this.roundPixels = roundPixels ?? false;
           }
           /** The width of the NineSliceSprite, setting this will actually modify the vertices and UV's of this plane. */
@@ -62787,7 +62900,12 @@ ${src}`;
             return this._texture;
           }
           set texture(value) {
-            if (value === this._texture) return;
+            value || (value = Texture.Texture.EMPTY);
+            const currentTexture = this._texture;
+            if (currentTexture === value) return;
+            if (currentTexture && currentTexture.dynamic)
+              currentTexture.off('update', this.onViewUpdate, this);
+            if (value.dynamic) value.on('update', this.onViewUpdate, this);
             this._texture = value;
             this.onViewUpdate();
           }
@@ -62800,10 +62918,6 @@ ${src}`;
           }
           set roundPixels(value) {
             this._roundPixels = value ? 1 : 0;
-          }
-          /** The texture matrix of the NineSliceSprite. */
-          get textureMatrix() {
-            return this._texture.textureMatrix.mapCoord;
           }
           /** The original width of the texture */
           get originalWidth() {
@@ -62867,20 +62981,13 @@ ${src}`;
             this._texture = null;
             this.bounds = null;
           }
-        }
-        /** The default options, used to override the initial values of any options passed in the constructor. */
-        NineSliceSprite.defaultOptions = {
-          /** @default Texture.EMPTY */
-          texture: Texture.Texture.EMPTY,
-          /** @default 10 */
-          leftWidth: 10,
-          /** @default 10 */
-          topHeight: 10,
-          /** @default 10 */
-          rightWidth: 10,
-          /** @default 10 */
-          bottomHeight: 10
         };
+        /** The default options, used to override the initial values of any options passed in the constructor. */
+        _NineSliceSprite.defaultOptions = {
+          /** @default Texture.EMPTY */
+          texture: Texture.Texture.EMPTY
+        };
+        let NineSliceSprite = _NineSliceSprite;
         class NineSlicePlane extends NineSliceSprite {
           constructor(...args) {
             let options = args[0];
@@ -63111,7 +63218,7 @@ ${src}`;
             this._height = height ?? texture.height;
             this._tileTransform = new Transform.Transform({
               observer: {
-                _onUpdate: () => this._onTilingSpriteUpdate()
+                _onUpdate: () => this.onViewUpdate()
               }
             });
             if (anchor) this.anchor = anchor;
@@ -63224,9 +63331,14 @@ ${src}`;
             return this._bounds;
           }
           set texture(value) {
-            if (this._texture === value) return;
+            value || (value = Texture.Texture.EMPTY);
+            const currentTexture = this._texture;
+            if (currentTexture === value) return;
+            if (currentTexture && currentTexture.dynamic)
+              currentTexture.off('update', this.onViewUpdate, this);
+            if (value.dynamic) value.on('update', this.onViewUpdate, this);
             this._texture = value;
-            this._onTilingSpriteUpdate();
+            this.onViewUpdate();
           }
           /** The texture that the sprite is using. */
           get texture() {
@@ -63235,14 +63347,14 @@ ${src}`;
           /** The width of the tiling area. */
           set width(value) {
             this._width = value;
-            this._onTilingSpriteUpdate();
+            this.onViewUpdate();
           }
           get width() {
             return this._width;
           }
           set height(value) {
             this._height = value;
-            this._onTilingSpriteUpdate();
+            this.onViewUpdate();
           }
           /** The height of the tiling area. */
           get height() {
@@ -63286,7 +63398,7 @@ ${src}`;
             }
             return false;
           }
-          _onTilingSpriteUpdate() {
+          onViewUpdate() {
             this._boundsDirty = true;
             this._didTilingSpriteUpdate = true;
             this._didChangeId += 1 << 12;
@@ -64098,7 +64210,11 @@ ${src}`;
                 this.onViewUpdate();
               }
             });
-            if (anchor) this.anchor = anchor;
+            if (anchor) {
+              this.anchor = anchor;
+            } else if (texture.defaultAnchor) {
+              this.anchor = texture.defaultAnchor;
+            }
             this.texture = texture;
             this.allowChildren = false;
             this.roundPixels = roundPixels ?? false;
@@ -64120,7 +64236,11 @@ ${src}`;
           }
           set texture(value) {
             value || (value = Texture.Texture.EMPTY);
-            if (this._texture === value) return;
+            const currentTexture = this._texture;
+            if (currentTexture === value) return;
+            if (currentTexture && currentTexture.dynamic)
+              currentTexture.off('update', this.onViewUpdate, this);
+            if (value.dynamic) value.on('update', this.onViewUpdate, this);
             this._texture = value;
             this.onViewUpdate();
           }
@@ -66715,10 +66835,10 @@ ${src}`;
         const FontStylePromiseCache = /* @__PURE__ */ new Map();
         async function getFontCss(fontFamilies, style, defaultOptions) {
           const fontPromises = fontFamilies
-            .filter((fontFamily) => Cache.Cache.has(fontFamily))
+            .filter((fontFamily) => Cache.Cache.has(`${fontFamily}-and-url`))
             .map((fontFamily, i) => {
               if (!FontStylePromiseCache.has(fontFamily)) {
-                const { url } = Cache.Cache.get(fontFamily);
+                const { url } = Cache.Cache.get(`${fontFamily}-and-url`);
                 if (i === 0) {
                   FontStylePromiseCache.set(
                     fontFamily,
@@ -67303,13 +67423,16 @@ ${src}`;
            *  have been set to that value
            * @param {boolean} [options.texture=false] - Should it destroy the texture of the text style
            * @param {boolean} [options.textureSource=false] - Should it destroy the textureSource of the text style
+           * @param {boolean} [options.style=false] - Should it destroy the style of the text
            */
           destroy(options = false) {
             super.destroy(options);
             this.owner = null;
             this._bounds = null;
             this._anchor = null;
-            this._style.destroy(options);
+            if (typeof options === 'boolean' ? options : options?.style) {
+              this._style.destroy(options);
+            }
             this._style = null;
             this._text = null;
           }
@@ -71489,7 +71612,7 @@ Deprecated since v${version}`
           set rotation(value) {
             if (this._rotation !== value) {
               this._rotation = value;
-              this.updateSkew();
+              this._onUpdate(this.skew);
             }
           }
         }
@@ -72214,7 +72337,7 @@ Deprecated since v${version}`
 
         ('use strict');
         let saidHello = false;
-        const VERSION = '8.0.2';
+        const VERSION = '8.1.0';
         function sayHello(type) {
           if (saidHello) {
             return;
@@ -89368,7 +89491,7 @@ and limitations under the License.
             lifecycle_1.Lifecycle.update(this, deltaTime);
           }
           destroy() {
-            super.destroy();
+            super.destroy({ children: true });
             lifecycle_1.Lifecycle.destroy(this);
           }
         }
@@ -89386,11 +89509,11 @@ and limitations under the License.
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.updateSprite = exports.createSprite = void 0;
-        const operators_1 = __webpack_require__(
-          /*! rxjs/operators */ './node_modules/rxjs/dist/cjs/operators/index.js'
-        );
         const detect_collisions_1 = __webpack_require__(
           /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
+        );
+        const operators_1 = __webpack_require__(
+          /*! rxjs/operators */ './node_modules/rxjs/dist/cjs/operators/index.js'
         );
         const animator_1 = __webpack_require__(
           /*! ../animator */ './src/animator.ts'
@@ -90028,6 +90151,9 @@ and limitations under the License.
           };
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.Scene = void 0;
+        const pixi_stats_1 = __webpack_require__(
+          /*! pixi-stats */ './node_modules/pixi-stats/dist/index.js'
+        );
         const PIXI = __importStar(
           __webpack_require__(
             /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
@@ -90041,9 +90167,6 @@ and limitations under the License.
         );
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
-        );
-        const pixi_stats_1 = __webpack_require__(
-          /*! pixi-stats */ './node_modules/pixi-stats/dist/index.js'
         );
         const dependency_injection_1 = __webpack_require__(
           /*! @jacekpietal/dependency-injection */ './node_modules/@jacekpietal/dependency-injection/build/index.js'
@@ -90061,11 +90184,11 @@ and limitations under the License.
           constructor(options = {}) {
             super(options);
             /**
-             * When auto sort is set to false, it emits this subject.
+             * When disableAutoSort is called, it emits this subject.
              */
             this.disableAutoSort$ = new Subject_1.Subject();
             /**
-             * When auto sort is set to false, it emits this subject.
+             * When disableDebug is called, it emits this subject.
              */
             this.disableDebug$ = new Subject_1.Subject();
             this.stage.visible = this.options.visible || false;

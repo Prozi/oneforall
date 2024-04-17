@@ -1,4 +1,5 @@
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+
 import { Resources } from '../resources';
 import { Scene } from '../scene';
 import { createSprite } from './sprite.prefab';

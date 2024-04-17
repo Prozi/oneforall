@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs/internal/Subject';
 import { Vector } from 'detect-collisions';
+import { Subject } from 'rxjs/internal/Subject';
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
 import { LifecycleProps } from './lifecycle';
