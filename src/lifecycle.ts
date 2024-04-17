@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject } from './game-object';
@@ -20,8 +19,9 @@ export interface LifecycleProps {
 
   /**
    * Parent GameObject is assigned at creation.
+   * BaseScene & Scene don't have parent gameObject
    */
-  readonly gameObject: GameObject;
+  readonly gameObject?: GameObject;
 
   /**
    * Each Lifecycle Object has label for pixi debugging.
@@ -44,12 +44,7 @@ export interface LifecycleProps {
   destroy(): void;
 }
 
-export class Lifecycle extends PIXI.Container implements LifecycleProps {
-  /**
-   * Parent GameObject is assigned at creation.
-   */
-  readonly gameObject: GameObject;
-
+export abstract class Lifecycle implements LifecycleProps {
   /**
    * When Lifecycle Object is updated, it emits this subject.
    * Along with updating his children, which in turn behave the same.
@@ -63,6 +58,12 @@ export class Lifecycle extends PIXI.Container implements LifecycleProps {
   readonly destroy$: Subject<void> = new Subject();
 
   /**
+   * Parent GameObject is assigned at creation.
+   * BaseScene & Scene don't have parent gameObject
+   */
+  readonly gameObject?: GameObject;
+
+  /**
    * Each Lifecycle Object has label for pixi debugging.
    */
   label = 'Lifecycle';
@@ -73,14 +74,30 @@ export class Lifecycle extends PIXI.Container implements LifecycleProps {
   scene?: SceneBase | Scene;
 
   static destroy(lifecycle: LifecycleProps): void {
-    lifecycle.gameObject?.removeComponent(lifecycle);
-    lifecycle.update$.complete();
-    lifecycle.destroy$.next();
-    lifecycle.destroy$.complete();
+    if (lifecycle.gameObject) {
+      lifecycle.gameObject.removeChild(lifecycle);
+    } else if (!(lifecycle instanceof GameObject)) {
+      console.log({ gameObject: lifecycle.label });
+    }
+    if (lifecycle.update$) {
+      lifecycle.update$.complete();
+    } else {
+      console.log({ update$: lifecycle.label });
+    }
+    if (lifecycle.destroy$) {
+      lifecycle.destroy$.next();
+      lifecycle.destroy$.complete();
+    } else {
+      console.log({ destroy$: lifecycle.label });
+    }
   }
 
   static update(lifecycle: LifecycleProps, deltaTime: number): void {
-    lifecycle.update$.next(deltaTime);
+    if (lifecycle.update$) {
+      lifecycle.update$.next(deltaTime);
+    } else {
+      console.log({ update$: lifecycle.label });
+    }
   }
 
   destroy(): void {

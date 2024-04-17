@@ -31,7 +31,7 @@ export class PolygonBody extends Polygon implements LifecycleProps {
     super(gameObject, points, options);
 
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    this.gameObject.addChild(this);
   }
 
   update(deltaTime: number): void {

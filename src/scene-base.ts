@@ -30,39 +30,16 @@ export interface SceneOptions {
   showFPS?: boolean | string;
 }
 
-export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
+export class SceneBase<TBody extends Body = Body> extends GameObject {
   /**
    * When Scene Object has children amount changed, it emits this subject.
    */
   readonly children$: Subject<void> = new Subject();
 
   /**
-   * Parent GameObject is assigned at creation.
-   * Scene Object has no Parent GameObject.
-   */
-  readonly gameObject = null;
-
-  /**
-   * When Lifecycle Object is updated, it emits this subject.
-   * Along with updating his children, which in turn behave the same.
-   */
-  readonly update$: Subject<number> = new Subject();
-
-  /**
-   * When Lifecycle Object is destroyed, it emits and closes this subject.
-   * Along with destroying his children, which in turn behave the same.
-   */
-  readonly destroy$: Subject<void> = new Subject();
-
-  /**
    * Options are assigned at creation.
    */
   readonly options: SceneOptions;
-
-  /**
-   * Each Lifecycle Object has label for pixi debugging.
-   */
-  label: string;
 
   /**
    * Reference to Collision Detection System.
@@ -75,11 +52,6 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   stage: PIXI.Container;
 
   /**
-   * Scene has children.
-   */
-  children: LifecycleProps[] = [];
-
-  /**
    * Scene has last update unix time stored.
    */
   lastUpdate: number;
@@ -90,9 +62,10 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
   animationFrame = 0;
 
   constructor(options: SceneOptions = {}) {
+    super(options.label || 'Scene');
+
     this.options = options;
-    this.label = this.options.label || 'Scene';
-    this.physics = new System<TBody>(this.options.nodeMaxEntries);
+    this.physics = new System<TBody>(options.nodeMaxEntries);
     this.stage = new PIXI.Container();
     this.stage.label = 'Stage';
   }
@@ -128,27 +101,13 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
 
   update(deltaTime: number): void {
     this.physics.update();
-    this.children.forEach((child) => {
-      if (child instanceof Lifecycle) {
-        child.update(deltaTime);
-      }
-    });
-
-    Lifecycle.update(this, deltaTime);
+    super.update(deltaTime);
   }
 
   destroy(): void {
     this.stop();
-
-    while (this.children.length) {
-      const child = this.children.pop();
-      // (!) will also this.gameObject.removeComponent(component)
-      child.destroy();
-    }
-
+    super.destroy();
     this.children$.complete();
-
-    Lifecycle.destroy(this);
   }
 
   addChild(...children: LifecycleProps[]): void {
@@ -156,7 +115,7 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
       child.scene = this;
 
       if (child instanceof GameObject) {
-        child.components.forEach((component) => {
+        child.children.forEach((component) => {
           if (component instanceof PIXI.Container) {
             this.stage.addChild(component);
           }
@@ -179,7 +138,7 @@ export class SceneBase<TBody extends Body = Body> implements LifecycleProps {
       child.scene = null;
 
       if (child instanceof GameObject) {
-        child.components.forEach((component) => {
+        child.children.forEach((component) => {
           if (component instanceof PIXI.Container) {
             this.stage.removeChild(component);
           }

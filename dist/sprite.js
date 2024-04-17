@@ -45,7 +45,7 @@ class Sprite extends PIXI.Sprite {
          */
         this.label = 'Sprite';
         this.gameObject = gameObject;
-        this.gameObject.addComponent(this);
+        this.gameObject.addChild(this);
         // found no other way to truly override PIXI.Sprite destroy and trigger Lifecycle
         this.destroy = () => {
             super.destroy({ texture: false, textureSource: false });

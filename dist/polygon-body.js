@@ -22,7 +22,7 @@ class PolygonBody extends detect_collisions_1.Polygon {
          */
         this.label = 'PolygonBody';
         this.gameObject = gameObject;
-        this.gameObject.addComponent(this);
+        this.gameObject.addChild(this);
     }
     update(deltaTime) {
         this.gameObject.x = this.x;

@@ -1,14 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameObject = void 0;
+const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
-class GameObject extends lifecycle_1.Lifecycle {
+class GameObject {
     constructor(label = 'GameObject', x = 0, y = 0) {
-        super();
+        /**
+         * When Lifecycle Object is updated, it emits this subject.
+         * Along with updating his children, which in turn behave the same.
+         */
+        this.update$ = new Subject_1.Subject();
+        /**
+         * When Lifecycle Object is destroyed, it emits and closes this subject.
+         * Along with destroying his children, which in turn behave the same.
+         */
+        this.destroy$ = new Subject_1.Subject();
         /**
          * Each GameObject has children Lifecycle Objects.
          */
-        this.components = [];
+        this.children = [];
         this.label = label;
         this.x = x;
         this.y = y;
@@ -17,46 +27,48 @@ class GameObject extends lifecycle_1.Lifecycle {
         return prefab.instantiate();
     }
     update(deltaTime) {
-        this.components.forEach((component) => {
+        this.children.forEach((component) => {
             component.update(deltaTime);
         });
-        super.update(deltaTime);
+        lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
         var _a;
-        while (this.components.length) {
-            const component = this.components.pop();
-            // will also gameObject.removeComponent(component)
-            component.destroy();
+        while (this.children.length) {
+            const child = this.children.pop();
+            // (!) does also child.gameObject.removeChild(child)
+            child.destroy();
         }
         (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(this);
-        super.destroy();
+        lifecycle_1.Lifecycle.destroy(this);
     }
-    addComponent(component) {
-        var _a;
-        const index = this.components.indexOf(component);
-        if (index !== -1) {
-            return false;
-        }
-        this.components.push(component);
-        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.addChild(component);
-        return true;
+    addChild(...children) {
+        children.forEach((child) => {
+            var _a;
+            const index = this.children.indexOf(child);
+            if (index !== -1) {
+                return;
+            }
+            this.children.push(child);
+            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.addChild(child);
+        });
     }
-    removeComponent(component) {
-        var _a;
-        const index = this.components.indexOf(component);
-        if (index === -1) {
-            return false;
-        }
-        this.components.splice(index, 1);
-        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(component);
-        return true;
+    removeChild(...children) {
+        children.forEach((child) => {
+            var _a;
+            const index = this.children.indexOf(child);
+            if (index === -1) {
+                return;
+            }
+            this.children.splice(index, 1);
+            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(child);
+        });
     }
-    getComponentOfType(type) {
-        return this.components.find(({ label }) => label === type);
+    getChildOfType(type) {
+        return this.children.find(({ label }) => label === type);
     }
-    getComponentsOfType(type) {
-        return this.components.filter(({ label }) => label === type);
+    getChildrenOfType(type) {
+        return this.children.filter(({ label }) => label === type);
     }
 }
 exports.GameObject = GameObject;

@@ -17,7 +17,19 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   target?: Vector;
 }
 
-export class GameObject extends Lifecycle {
+export class GameObject implements LifecycleProps {
+  /**
+   * When Lifecycle Object is updated, it emits this subject.
+   * Along with updating his children, which in turn behave the same.
+   */
+  readonly update$: Subject<number> = new Subject();
+
+  /**
+   * When Lifecycle Object is destroyed, it emits and closes this subject.
+   * Along with destroying his children, which in turn behave the same.
+   */
+  readonly destroy$: Subject<void> = new Subject();
+
   /**
    * Each Lifecycle Object has label for pixi debugging.
    */
@@ -26,7 +38,17 @@ export class GameObject extends Lifecycle {
   /**
    * Each GameObject has children Lifecycle Objects.
    */
-  components: LifecycleProps[] = [];
+  children: LifecycleProps[] = [];
+
+  /**
+   * position x
+   */
+  x: number;
+
+  /**
+   * position y
+   */
+  y: number;
 
   /**
    * Lifecycle Object may be added to a Scene Object.
@@ -34,8 +56,6 @@ export class GameObject extends Lifecycle {
   scene?: SceneBase | Scene;
 
   constructor(label = 'GameObject', x = 0, y = 0) {
-    super();
-
     this.label = label;
     this.x = x;
     this.y = y;
@@ -46,54 +66,54 @@ export class GameObject extends Lifecycle {
   }
 
   update(deltaTime: number): void {
-    this.components.forEach((component: Lifecycle) => {
+    this.children.forEach((component: Lifecycle) => {
       component.update(deltaTime);
     });
 
-    super.update(deltaTime);
+    Lifecycle.update(this, deltaTime);
   }
 
   destroy(): void {
-    while (this.components.length) {
-      const component = this.components.pop() as Lifecycle;
-      // will also gameObject.removeComponent(component)
-      component.destroy();
+    while (this.children.length) {
+      const child = this.children.pop() as Lifecycle;
+      // (!) does also child.gameObject.removeChild(child)
+      child.destroy();
     }
 
     this.scene?.removeChild(this);
 
-    super.destroy();
+    Lifecycle.destroy(this);
   }
 
-  addComponent(component: LifecycleProps): boolean {
-    const index = this.components.indexOf(component);
-    if (index !== -1) {
-      return false;
-    }
+  addChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      const index = this.children.indexOf(child);
+      if (index !== -1) {
+        return;
+      }
 
-    this.components.push(component);
-    this.scene?.addChild(component);
-
-    return true;
+      this.children.push(child);
+      this.scene?.addChild(child);
+    });
   }
 
-  removeComponent(component: LifecycleProps): boolean {
-    const index = this.components.indexOf(component);
-    if (index === -1) {
-      return false;
-    }
+  removeChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      const index = this.children.indexOf(child);
+      if (index === -1) {
+        return;
+      }
 
-    this.components.splice(index, 1);
-    this.scene?.removeChild(component);
-
-    return true;
+      this.children.splice(index, 1);
+      this.scene?.removeChild(child);
+    });
   }
 
-  getComponentOfType(type: string): LifecycleProps {
-    return this.components.find(({ label }) => label === type);
+  getChildOfType(type: string): LifecycleProps {
+    return this.children.find(({ label }) => label === type);
   }
 
-  getComponentsOfType(type: string): LifecycleProps[] {
-    return this.components.filter(({ label }) => label === type);
+  getChildrenOfType(type: string): LifecycleProps[] {
+    return this.children.filter(({ label }) => label === type);
   }
 }

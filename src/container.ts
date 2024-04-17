@@ -30,7 +30,7 @@ export class Container extends PIXI.Container implements LifecycleProps {
   constructor(gameObject: GameObject) {
     super();
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    this.gameObject.addChild(this);
   }
 
   update(deltaTime: number): void {

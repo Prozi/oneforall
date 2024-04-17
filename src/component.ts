@@ -27,7 +27,7 @@ export class Component implements LifecycleProps {
 
   constructor(gameObject: GameObject) {
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    this.gameObject.addChild(this);
   }
 
   update(deltaTime: number): void {

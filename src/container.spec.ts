@@ -19,6 +19,6 @@ describe('GIVEN Container', () => {
     const container = new Container(go);
 
     container.destroy();
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
   });
 });

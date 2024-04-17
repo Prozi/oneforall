@@ -89204,7 +89204,7 @@ and limitations under the License.
               throw new Error("CircleBody radius can't be 0!");
             }
             this.gameObject = gameObject;
-            this.gameObject.addComponent(this);
+            this.gameObject.addChild(this);
           }
           update(deltaTime) {
             this.gameObject.x = this.x;
@@ -89256,7 +89256,7 @@ and limitations under the License.
              */
             this.label = 'Component';
             this.gameObject = gameObject;
-            this.gameObject.addComponent(this);
+            this.gameObject.addChild(this);
           }
           update(deltaTime) {
             lifecycle_1.Lifecycle.update(this, deltaTime);
@@ -89360,7 +89360,7 @@ and limitations under the License.
              */
             this.label = 'Container';
             this.gameObject = gameObject;
-            this.gameObject.addComponent(this);
+            this.gameObject.addChild(this);
           }
           update(deltaTime) {
             this.x = this.gameObject.x;
@@ -89494,16 +89494,28 @@ and limitations under the License.
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.GameObject = void 0;
+        const Subject_1 = __webpack_require__(
+          /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
+        );
         const lifecycle_1 = __webpack_require__(
           /*! ./lifecycle */ './src/lifecycle.ts'
         );
-        class GameObject extends lifecycle_1.Lifecycle {
+        class GameObject {
           constructor(label = 'GameObject', x = 0, y = 0) {
-            super();
+            /**
+             * When Lifecycle Object is updated, it emits this subject.
+             * Along with updating his children, which in turn behave the same.
+             */
+            this.update$ = new Subject_1.Subject();
+            /**
+             * When Lifecycle Object is destroyed, it emits and closes this subject.
+             * Along with destroying his children, which in turn behave the same.
+             */
+            this.destroy$ = new Subject_1.Subject();
             /**
              * Each GameObject has children Lifecycle Objects.
              */
-            this.components = [];
+            this.children = [];
             this.label = label;
             this.x = x;
             this.y = y;
@@ -89512,52 +89524,54 @@ and limitations under the License.
             return prefab.instantiate();
           }
           update(deltaTime) {
-            this.components.forEach((component) => {
+            this.children.forEach((component) => {
               component.update(deltaTime);
             });
-            super.update(deltaTime);
+            lifecycle_1.Lifecycle.update(this, deltaTime);
           }
           destroy() {
             var _a;
-            while (this.components.length) {
-              const component = this.components.pop();
-              // will also gameObject.removeComponent(component)
-              component.destroy();
+            while (this.children.length) {
+              const child = this.children.pop();
+              // (!) does also child.gameObject.removeChild(child)
+              child.destroy();
             }
             (_a = this.scene) === null || _a === void 0
               ? void 0
               : _a.removeChild(this);
-            super.destroy();
+            lifecycle_1.Lifecycle.destroy(this);
           }
-          addComponent(component) {
-            var _a;
-            const index = this.components.indexOf(component);
-            if (index !== -1) {
-              return false;
-            }
-            this.components.push(component);
-            (_a = this.scene) === null || _a === void 0
-              ? void 0
-              : _a.addChild(component);
-            return true;
+          addChild(...children) {
+            children.forEach((child) => {
+              var _a;
+              const index = this.children.indexOf(child);
+              if (index !== -1) {
+                return;
+              }
+              this.children.push(child);
+              (_a = this.scene) === null || _a === void 0
+                ? void 0
+                : _a.addChild(child);
+            });
           }
-          removeComponent(component) {
-            var _a;
-            const index = this.components.indexOf(component);
-            if (index === -1) {
-              return false;
-            }
-            this.components.splice(index, 1);
-            (_a = this.scene) === null || _a === void 0
-              ? void 0
-              : _a.removeChild(component);
-            return true;
+          removeChild(...children) {
+            children.forEach((child) => {
+              var _a;
+              const index = this.children.indexOf(child);
+              if (index === -1) {
+                return;
+              }
+              this.children.splice(index, 1);
+              (_a = this.scene) === null || _a === void 0
+                ? void 0
+                : _a.removeChild(child);
+            });
           }
-          getComponentOfType(type) {
-            return this.components.find(({ label }) => label === type);
+          getChildOfType(type) {
+            return this.children.find(({ label }) => label === type);
           }
-          getComponentsOfType(type) {
-            return this.components.filter(({ label }) => label === type);
+          getChildrenOfType(type) {
+            return this.children.filter(({ label }) => label === type);
           }
         }
         exports.GameObject = GameObject;
@@ -89569,74 +89583,19 @@ and limitations under the License.
       /*!**************************!*\
   !*** ./src/lifecycle.ts ***!
   \**************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __setModuleDefault =
-          (this && this.__setModuleDefault) ||
-          (Object.create
-            ? function (o, v) {
-                Object.defineProperty(o, 'default', {
-                  enumerable: true,
-                  value: v
-                });
-              }
-            : function (o, v) {
-                o['default'] = v;
-              });
-        var __importStar =
-          (this && this.__importStar) ||
-          function (mod) {
-            if (mod && mod.__esModule) return mod;
-            var result = {};
-            if (mod != null)
-              for (var k in mod)
-                if (
-                  k !== 'default' &&
-                  Object.prototype.hasOwnProperty.call(mod, k)
-                )
-                  __createBinding(result, mod, k);
-            __setModuleDefault(result, mod);
-            return result;
-          };
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.Lifecycle = void 0;
-        const PIXI = __importStar(
-          __webpack_require__(
-            /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
-          )
-        );
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
-        class Lifecycle extends PIXI.Container {
+        const game_object_1 = __webpack_require__(
+          /*! ./game-object */ './src/game-object.ts'
+        );
+        class Lifecycle {
           constructor() {
-            super(...arguments);
             /**
              * When Lifecycle Object is updated, it emits this subject.
              * Along with updating his children, which in turn behave the same.
@@ -89653,16 +89612,29 @@ and limitations under the License.
             this.label = 'Lifecycle';
           }
           static destroy(lifecycle) {
-            var _a;
-            (_a = lifecycle.gameObject) === null || _a === void 0
-              ? void 0
-              : _a.removeComponent(lifecycle);
-            lifecycle.update$.complete();
-            lifecycle.destroy$.next();
-            lifecycle.destroy$.complete();
+            if (lifecycle.gameObject) {
+              lifecycle.gameObject.removeChild(lifecycle);
+            } else if (!(lifecycle instanceof game_object_1.GameObject)) {
+              console.log({ gameObject: lifecycle.label });
+            }
+            if (lifecycle.update$) {
+              lifecycle.update$.complete();
+            } else {
+              console.log({ update$: lifecycle.label });
+            }
+            if (lifecycle.destroy$) {
+              lifecycle.destroy$.next();
+              lifecycle.destroy$.complete();
+            } else {
+              console.log({ destroy$: lifecycle.label });
+            }
           }
           static update(lifecycle, deltaTime) {
-            lifecycle.update$.next(deltaTime);
+            if (lifecycle.update$) {
+              lifecycle.update$.next(deltaTime);
+            } else {
+              console.log({ update$: lifecycle.label });
+            }
           }
           destroy() {
             Lifecycle.destroy(this);
@@ -89883,42 +89855,20 @@ and limitations under the License.
         const game_object_1 = __webpack_require__(
           /*! ./game-object */ './src/game-object.ts'
         );
-        const lifecycle_1 = __webpack_require__(
-          /*! ./lifecycle */ './src/lifecycle.ts'
-        );
-        class SceneBase {
+        class SceneBase extends game_object_1.GameObject {
           constructor(options = {}) {
+            super(options.label || 'Scene');
             /**
              * When Scene Object has children amount changed, it emits this subject.
              */
             this.children$ = new Subject_1.Subject();
             /**
-             * Parent GameObject is assigned at creation.
-             * Scene Object has no Parent GameObject.
-             */
-            this.gameObject = null;
-            /**
-             * When Lifecycle Object is updated, it emits this subject.
-             * Along with updating his children, which in turn behave the same.
-             */
-            this.update$ = new Subject_1.Subject();
-            /**
-             * When Lifecycle Object is destroyed, it emits and closes this subject.
-             * Along with destroying his children, which in turn behave the same.
-             */
-            this.destroy$ = new Subject_1.Subject();
-            /**
-             * Scene has children.
-             */
-            this.children = [];
-            /**
              * requestAnimationFrame reference.
              */
             this.animationFrame = 0;
             this.options = options;
-            this.label = this.options.label || 'Scene';
             this.physics = new detect_collisions_1.System(
-              this.options.nodeMaxEntries
+              options.nodeMaxEntries
             );
             this.stage = new PIXI.Container();
             this.stage.label = 'Stage';
@@ -89947,28 +89897,18 @@ and limitations under the License.
           }
           update(deltaTime) {
             this.physics.update();
-            this.children.forEach((child) => {
-              if (child instanceof lifecycle_1.Lifecycle) {
-                child.update(deltaTime);
-              }
-            });
-            lifecycle_1.Lifecycle.update(this, deltaTime);
+            super.update(deltaTime);
           }
           destroy() {
             this.stop();
-            while (this.children.length) {
-              const child = this.children.pop();
-              // (!) will also this.gameObject.removeComponent(component)
-              child.destroy();
-            }
+            super.destroy();
             this.children$.complete();
-            lifecycle_1.Lifecycle.destroy(this);
           }
           addChild(...children) {
             children.forEach((child) => {
               child.scene = this;
               if (child instanceof game_object_1.GameObject) {
-                child.components.forEach((component) => {
+                child.children.forEach((component) => {
                   if (component instanceof PIXI.Container) {
                     this.stage.addChild(component);
                   }
@@ -89987,7 +89927,7 @@ and limitations under the License.
             children.forEach((child) => {
               child.scene = null;
               if (child instanceof game_object_1.GameObject) {
-                child.components.forEach((component) => {
+                child.children.forEach((component) => {
                   if (component instanceof PIXI.Container) {
                     this.stage.removeChild(component);
                   }

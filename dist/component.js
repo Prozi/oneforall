@@ -20,7 +20,7 @@ class Component {
          */
         this.label = 'Component';
         this.gameObject = gameObject;
-        this.gameObject.addComponent(this);
+        this.gameObject.addChild(this);
     }
     update(deltaTime) {
         lifecycle_1.Lifecycle.update(this, deltaTime);

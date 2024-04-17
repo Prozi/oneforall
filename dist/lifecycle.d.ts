@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { Scene } from './scene';
@@ -16,8 +15,9 @@ export interface LifecycleProps {
     readonly destroy$: Subject<void>;
     /**
      * Parent GameObject is assigned at creation.
+     * BaseScene & Scene don't have parent gameObject
      */
-    readonly gameObject: GameObject;
+    readonly gameObject?: GameObject;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */
@@ -35,11 +35,7 @@ export interface LifecycleProps {
      */
     destroy(): void;
 }
-export declare class Lifecycle extends PIXI.Container implements LifecycleProps {
-    /**
-     * Parent GameObject is assigned at creation.
-     */
-    readonly gameObject: GameObject;
+export declare abstract class Lifecycle implements LifecycleProps {
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.
@@ -50,6 +46,11 @@ export declare class Lifecycle extends PIXI.Container implements LifecycleProps 
      * Along with destroying his children, which in turn behave the same.
      */
     readonly destroy$: Subject<void>;
+    /**
+     * Parent GameObject is assigned at creation.
+     * BaseScene & Scene don't have parent gameObject
+     */
+    readonly gameObject?: GameObject;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */

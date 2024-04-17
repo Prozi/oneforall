@@ -1,7 +1,8 @@
+import { Subject } from 'rxjs/internal/Subject';
 import { Vector } from 'detect-collisions';
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
-import { Lifecycle, LifecycleProps } from './lifecycle';
+import { LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
@@ -12,7 +13,17 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends Gam
     state?: StateMachine;
     target?: Vector;
 }
-export declare class GameObject extends Lifecycle {
+export declare class GameObject implements LifecycleProps {
+    /**
+     * When Lifecycle Object is updated, it emits this subject.
+     * Along with updating his children, which in turn behave the same.
+     */
+    readonly update$: Subject<number>;
+    /**
+     * When Lifecycle Object is destroyed, it emits and closes this subject.
+     * Along with destroying his children, which in turn behave the same.
+     */
+    readonly destroy$: Subject<void>;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */
@@ -20,7 +31,15 @@ export declare class GameObject extends Lifecycle {
     /**
      * Each GameObject has children Lifecycle Objects.
      */
-    components: LifecycleProps[];
+    children: LifecycleProps[];
+    /**
+     * position x
+     */
+    x: number;
+    /**
+     * position y
+     */
+    y: number;
     /**
      * Lifecycle Object may be added to a Scene Object.
      */
@@ -29,9 +48,9 @@ export declare class GameObject extends Lifecycle {
     static instantiate(prefab: Prefab): Promise<GameObject>;
     update(deltaTime: number): void;
     destroy(): void;
-    addComponent(component: LifecycleProps): boolean;
-    removeComponent(component: LifecycleProps): boolean;
-    getComponentOfType(type: string): LifecycleProps;
-    getComponentsOfType(type: string): LifecycleProps[];
+    addChild(...children: LifecycleProps[]): void;
+    removeChild(...children: LifecycleProps[]): void;
+    getChildOfType(type: string): LifecycleProps;
+    getChildrenOfType(type: string): LifecycleProps[];
 }
 //# sourceMappingURL=game-object.d.ts.map

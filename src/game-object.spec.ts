@@ -11,7 +11,7 @@ describe('GIVEN GameObject', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    expect(go.components.length).toBe(1);
+    expect(go.children.length).toBe(1);
   });
 
   it('THEN update propagates to components', () => {
@@ -32,8 +32,8 @@ describe('GIVEN GameObject', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    go.removeComponent(component);
-    expect(go.components.length).toBe(0);
+    go.removeChild(component);
+    expect(go.children.length).toBe(0);
   });
 
   it('THEN destroy removes component', () => {
@@ -41,21 +41,21 @@ describe('GIVEN GameObject', () => {
     const component = new Component(go);
 
     component.destroy();
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
   });
 
   it('THEN you can get component by label', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    expect(go.getComponentOfType('Component')).toBeTruthy();
+    expect(go.getChildrenOfType('Component')).toBeTruthy();
   });
 
   it('THEN you can get components by label', () => {
     const go = new GameObject();
     const component = new Component(go);
 
-    expect(go.getComponentsOfType('Component').length).toBe(1);
+    expect(go.getChildrenOfType('Component').length).toBe(1);
   });
 
   it('THEN you can destroy 1000 bodies without problem', () => {
@@ -69,7 +69,7 @@ describe('GIVEN GameObject', () => {
       const body = new CircleBody(go, 100);
 
       scene.addChild(go);
-      expect(go.components.length).toBe(1);
+      expect(go.children.length).toBe(1);
     }
 
     expect(scene.addChild).toHaveBeenCalledTimes(1000);

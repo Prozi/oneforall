@@ -26,7 +26,7 @@ describe('GIVEN Sprite', () => {
 
     scene.removeChild(go);
     expect(scene.children.length).toBe(0);
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
   });
 
   it('THEN destroy works', () => {
@@ -34,7 +34,7 @@ describe('GIVEN Sprite', () => {
     const sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
     sprite.destroy();
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
   });
 
   it('THEN destroy works extended', () => {
@@ -43,15 +43,15 @@ describe('GIVEN Sprite', () => {
     const sprite = new Sprite(go, PIXI.Texture.EMPTY);
 
     scene.addChild(go);
-    expect(go.components.length).toBe(1);
+    expect(go.children.length).toBe(1);
     expect(scene.children.length).toBe(1);
 
     sprite.destroy();
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
     expect(scene.children.length).toBe(1);
 
     go.destroy();
-    expect(go.components.length).toBe(0);
+    expect(go.children.length).toBe(0);
     expect(scene.children.length).toBe(0);
   });
 });

@@ -28,39 +28,19 @@ const detect_collisions_1 = require("detect-collisions");
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const game_object_1 = require("./game-object");
-const lifecycle_1 = require("./lifecycle");
-class SceneBase {
+class SceneBase extends game_object_1.GameObject {
     constructor(options = {}) {
+        super(options.label || 'Scene');
         /**
          * When Scene Object has children amount changed, it emits this subject.
          */
         this.children$ = new Subject_1.Subject();
         /**
-         * Parent GameObject is assigned at creation.
-         * Scene Object has no Parent GameObject.
-         */
-        this.gameObject = null;
-        /**
-         * When Lifecycle Object is updated, it emits this subject.
-         * Along with updating his children, which in turn behave the same.
-         */
-        this.update$ = new Subject_1.Subject();
-        /**
-         * When Lifecycle Object is destroyed, it emits and closes this subject.
-         * Along with destroying his children, which in turn behave the same.
-         */
-        this.destroy$ = new Subject_1.Subject();
-        /**
-         * Scene has children.
-         */
-        this.children = [];
-        /**
          * requestAnimationFrame reference.
          */
         this.animationFrame = 0;
         this.options = options;
-        this.label = this.options.label || 'Scene';
-        this.physics = new detect_collisions_1.System(this.options.nodeMaxEntries);
+        this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
     }
@@ -88,28 +68,18 @@ class SceneBase {
     }
     update(deltaTime) {
         this.physics.update();
-        this.children.forEach((child) => {
-            if (child instanceof lifecycle_1.Lifecycle) {
-                child.update(deltaTime);
-            }
-        });
-        lifecycle_1.Lifecycle.update(this, deltaTime);
+        super.update(deltaTime);
     }
     destroy() {
         this.stop();
-        while (this.children.length) {
-            const child = this.children.pop();
-            // (!) will also this.gameObject.removeComponent(component)
-            child.destroy();
-        }
+        super.destroy();
         this.children$.complete();
-        lifecycle_1.Lifecycle.destroy(this);
     }
     addChild(...children) {
         children.forEach((child) => {
             child.scene = this;
             if (child instanceof game_object_1.GameObject) {
-                child.components.forEach((component) => {
+                child.children.forEach((component) => {
                     if (component instanceof PIXI.Container) {
                         this.stage.addChild(component);
                     }
@@ -129,7 +99,7 @@ class SceneBase {
         children.forEach((child) => {
             child.scene = null;
             if (child instanceof game_object_1.GameObject) {
-                child.components.forEach((component) => {
+                child.children.forEach((component) => {
                     if (component instanceof PIXI.Container) {
                         this.stage.removeChild(component);
                     }

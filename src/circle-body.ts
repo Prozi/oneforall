@@ -41,7 +41,7 @@ export class CircleBody extends Ellipse implements LifecycleProps {
     }
 
     this.gameObject = gameObject;
-    this.gameObject.addComponent(this);
+    this.gameObject.addChild(this);
   }
 
   update(deltaTime: number): void {

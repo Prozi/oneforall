@@ -45,7 +45,7 @@ class Container extends PIXI.Container {
          */
         this.label = 'Container';
         this.gameObject = gameObject;
-        this.gameObject.addComponent(this);
+        this.gameObject.addChild(this);
     }
     update(deltaTime) {
         this.x = this.gameObject.x;

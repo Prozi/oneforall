@@ -1,6 +1,7 @@
 import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
+import { GameObject } from './game-object';
 import { LifecycleProps } from './lifecycle';
 export interface SceneOptions {
     /**
@@ -26,34 +27,15 @@ export interface SceneOptions {
      */
     showFPS?: boolean | string;
 }
-export declare class SceneBase<TBody extends Body = Body> implements LifecycleProps {
+export declare class SceneBase<TBody extends Body = Body> extends GameObject {
     /**
      * When Scene Object has children amount changed, it emits this subject.
      */
     readonly children$: Subject<void>;
     /**
-     * Parent GameObject is assigned at creation.
-     * Scene Object has no Parent GameObject.
-     */
-    readonly gameObject: any;
-    /**
-     * When Lifecycle Object is updated, it emits this subject.
-     * Along with updating his children, which in turn behave the same.
-     */
-    readonly update$: Subject<number>;
-    /**
-     * When Lifecycle Object is destroyed, it emits and closes this subject.
-     * Along with destroying his children, which in turn behave the same.
-     */
-    readonly destroy$: Subject<void>;
-    /**
      * Options are assigned at creation.
      */
     readonly options: SceneOptions;
-    /**
-     * Each Lifecycle Object has label for pixi debugging.
-     */
-    label: string;
     /**
      * Reference to Collision Detection System.
      */
@@ -62,10 +44,6 @@ export declare class SceneBase<TBody extends Body = Body> implements LifecyclePr
      * Top Level Container.
      */
     stage: PIXI.Container;
-    /**
-     * Scene has children.
-     */
-    children: LifecycleProps[];
     /**
      * Scene has last update unix time stored.
      */

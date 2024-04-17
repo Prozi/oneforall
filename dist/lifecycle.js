@@ -1,34 +1,10 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lifecycle = void 0;
-const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
-class Lifecycle extends PIXI.Container {
+const game_object_1 = require("./game-object");
+class Lifecycle {
     constructor() {
-        super(...arguments);
         /**
          * When Lifecycle Object is updated, it emits this subject.
          * Along with updating his children, which in turn behave the same.
@@ -45,14 +21,33 @@ class Lifecycle extends PIXI.Container {
         this.label = 'Lifecycle';
     }
     static destroy(lifecycle) {
-        var _a;
-        (_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeComponent(lifecycle);
-        lifecycle.update$.complete();
-        lifecycle.destroy$.next();
-        lifecycle.destroy$.complete();
+        if (lifecycle.gameObject) {
+            lifecycle.gameObject.removeChild(lifecycle);
+        }
+        else if (!(lifecycle instanceof game_object_1.GameObject)) {
+            console.log({ gameObject: lifecycle.label });
+        }
+        if (lifecycle.update$) {
+            lifecycle.update$.complete();
+        }
+        else {
+            console.log({ update$: lifecycle.label });
+        }
+        if (lifecycle.destroy$) {
+            lifecycle.destroy$.next();
+            lifecycle.destroy$.complete();
+        }
+        else {
+            console.log({ destroy$: lifecycle.label });
+        }
     }
     static update(lifecycle, deltaTime) {
-        lifecycle.update$.next(deltaTime);
+        if (lifecycle.update$) {
+            lifecycle.update$.next(deltaTime);
+        }
+        else {
+            console.log({ update$: lifecycle.label });
+        }
     }
     destroy() {
         Lifecycle.destroy(this);
