@@ -90064,13 +90064,33 @@ and limitations under the License.
              * When auto sort is set to false, it emits this subject.
              */
             this.disableAutoSort$ = new Subject_1.Subject();
+            /**
+             * When auto sort is set to false, it emits this subject.
+             */
+            this.disableDebug$ = new Subject_1.Subject();
             this.stage.visible = this.options.visible || false;
             this.pixi.stage.addChild(this.stage);
-            // for chrome plugin pixi debug devtools
-            globalThis.__PIXI_APP__ = this.pixi;
-            if (options.autoSort) {
+            if (this.options.autoSort) {
               this.enableAutoSort();
             }
+            if (this.options.debug) {
+              this.enableDebug();
+            }
+            // for chrome plugin pixi debug devtools
+            globalThis.__PIXI_APP__ = this.pixi;
+          }
+          static getQueryParams() {
+            const matches = location.search.matchAll(
+              /[?&]([^=?&]+)=?([^?&]*)/g
+            );
+            const queryParams = {};
+            [...matches].forEach((next) => {
+              if (next) {
+                const [_wholeMatch, paramName, paramValue] = next;
+                queryParams[paramName] = paramValue;
+              }
+            });
+            return queryParams;
           }
           async init(options) {
             await this.pixi.init(options);
@@ -90095,9 +90115,6 @@ and limitations under the License.
             super.destroy();
             this.pixi.stage.removeChild(this.stage);
           }
-          disableAutoSort() {
-            this.disableAutoSort$.next();
-          }
           enableAutoSort() {
             this.update$
               .pipe(
@@ -90108,6 +90125,35 @@ and limitations under the License.
               .subscribe(() => {
                 this.stage.children.sort((bodyA, bodyB) => bodyA.y - bodyB.y);
               });
+          }
+          disableAutoSort() {
+            this.disableAutoSort$.next();
+          }
+          enableDebug() {
+            const debug = new PIXI.Graphics();
+            const canvas = debug;
+            this.pixi.stage.addChild(debug);
+            this.update$
+              .pipe(
+                (0, takeUntil_1.takeUntil)(
+                  (0, merge_1.merge)(this.destroy$, this.disableDebug$)
+                )
+              )
+              .subscribe(() => {
+                debug.clear();
+                this.physics.drawBVH(canvas);
+                this.physics.draw(canvas);
+                debug.stroke();
+              });
+          }
+          disableDebug() {
+            this.disableDebug$.next();
+            this.pixi.stage.children.forEach((child) => {
+              if (child instanceof PIXI.Graphics) {
+                this.pixi.stage.removeChild(child);
+                child.destroy();
+              }
+            });
           }
           /**
            * add body font family to set font of pixi-stats
@@ -90332,11 +90378,13 @@ and limitations under the License.
       /*! ./sprite.prefab */ './src/demo/sprite.prefab.ts'
     );
     async function start() {
+      const queryParams = scene_1.Scene.getQueryParams();
       // create main Scene
       const scene = new scene_1.Scene({
         visible: true,
         autoSort: true,
-        showFPS: true
+        showFPS: 'fps' in queryParams,
+        debug: 'debug' in queryParams
       });
       // initialize scene async - new since pixi 7/8
       await scene.init({
@@ -90349,7 +90397,7 @@ and limitations under the License.
       const data = await resources_1.Resources.loadResource('./cave-boy.json');
       const texture = await resources_1.Resources.loadResource(data.tileset);
       // create 50 sprites from template
-      Array.from({ length: 50 }, () => {
+      Array.from({ length: Number(queryParams.limit || 50) }, () => {
         (0, sprite_prefab_1.createSprite)({ scene, data, texture });
       });
       scene.start();

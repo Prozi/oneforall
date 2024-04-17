@@ -28,6 +28,10 @@ export interface SceneOptions {
    * set body font to set font of pixi-stats
    */
   showFPS?: boolean | string;
+  /**
+   * set to true to enable debug bounding boxes
+   */
+  debug?: boolean;
 }
 
 export class SceneBase<TBody extends Body = Body> extends GameObject {

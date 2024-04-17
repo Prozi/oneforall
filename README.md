@@ -20,7 +20,7 @@
             └──[1x StateMachine]
 ```
 
-Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/demo/) to see below code in action.
+Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/demo/?fps) to see below code in action.
 
 Also, here is the [documentation](https://prozi.github.io/oneforall/modules.html).
 
@@ -30,11 +30,13 @@ Also, here is the [documentation](https://prozi.github.io/oneforall/modules.html
 
 ```typescript
 async function start(): Promise<void> {
+  const queryParams = Scene.getQueryParams();
   // create main Scene
   const scene: Scene = new Scene({
     visible: true,
     autoSort: true,
-    showFPS: true
+    showFPS: 'fps' in queryParams,
+    debug: 'debug' in queryParams
   });
 
   // initialize scene async - new since pixi 7/8
@@ -50,7 +52,7 @@ async function start(): Promise<void> {
   const texture = await Resources.loadResource(data.tileset);
 
   // create 50 sprites from template
-  Array.from({ length: 50 }, () => {
+  Array.from({ length: Number(queryParams.limit || 50) }, () => {
     createSprite({ scene, data, texture });
   });
 

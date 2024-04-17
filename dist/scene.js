@@ -46,13 +46,31 @@ class Scene extends scene_base_1.SceneBase {
          * When auto sort is set to false, it emits this subject.
          */
         this.disableAutoSort$ = new Subject_1.Subject();
+        /**
+         * When auto sort is set to false, it emits this subject.
+         */
+        this.disableDebug$ = new Subject_1.Subject();
         this.stage.visible = this.options.visible || false;
         this.pixi.stage.addChild(this.stage);
-        // for chrome plugin pixi debug devtools
-        globalThis.__PIXI_APP__ = this.pixi;
-        if (options.autoSort) {
+        if (this.options.autoSort) {
             this.enableAutoSort();
         }
+        if (this.options.debug) {
+            this.enableDebug();
+        }
+        // for chrome plugin pixi debug devtools
+        globalThis.__PIXI_APP__ = this.pixi;
+    }
+    static getQueryParams() {
+        const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
+        const queryParams = {};
+        [...matches].forEach((next) => {
+            if (next) {
+                const [_wholeMatch, paramName, paramValue] = next;
+                queryParams[paramName] = paramValue;
+            }
+        });
+        return queryParams;
     }
     async init(options) {
         await this.pixi.init(options);
@@ -75,14 +93,36 @@ class Scene extends scene_base_1.SceneBase {
         super.destroy();
         this.pixi.stage.removeChild(this.stage);
     }
-    disableAutoSort() {
-        this.disableAutoSort$.next();
-    }
     enableAutoSort() {
         this.update$
             .pipe((0, takeUntil_1.takeUntil)((0, merge_1.merge)(this.destroy$, this.disableAutoSort$)))
             .subscribe(() => {
             this.stage.children.sort((bodyA, bodyB) => bodyA.y - bodyB.y);
+        });
+    }
+    disableAutoSort() {
+        this.disableAutoSort$.next();
+    }
+    enableDebug() {
+        const debug = new PIXI.Graphics();
+        const canvas = debug;
+        this.pixi.stage.addChild(debug);
+        this.update$
+            .pipe((0, takeUntil_1.takeUntil)((0, merge_1.merge)(this.destroy$, this.disableDebug$)))
+            .subscribe(() => {
+            debug.clear();
+            this.physics.drawBVH(canvas);
+            this.physics.draw(canvas);
+            debug.stroke();
+        });
+    }
+    disableDebug() {
+        this.disableDebug$.next();
+        this.pixi.stage.children.forEach((child) => {
+            if (child instanceof PIXI.Graphics) {
+                this.pixi.stage.removeChild(child);
+                child.destroy();
+            }
         });
     }
     /**

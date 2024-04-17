@@ -4,11 +4,13 @@ import { Scene } from '../scene';
 import { createSprite } from './sprite.prefab';
 
 async function start(): Promise<void> {
+  const queryParams = Scene.getQueryParams();
   // create main Scene
   const scene: Scene = new Scene({
     visible: true,
     autoSort: true,
-    showFPS: true
+    showFPS: 'fps' in queryParams,
+    debug: 'debug' in queryParams
   });
 
   // initialize scene async - new since pixi 7/8
@@ -24,7 +26,7 @@ async function start(): Promise<void> {
   const texture = await Resources.loadResource(data.tileset);
 
   // create 50 sprites from template
-  Array.from({ length: 50 }, () => {
+  Array.from({ length: Number(queryParams.limit || 50) }, () => {
     createSprite({ scene, data, texture });
   });
 
