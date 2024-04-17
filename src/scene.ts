@@ -45,16 +45,14 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
 
   static getQueryParams(): Record<string, string> {
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
-    const queryParams = {};
 
-    [...matches].forEach((next) => {
-      if (next) {
-        const [_wholeMatch, paramName, paramValue] = next;
-        queryParams[paramName] = paramValue;
-      }
-    });
-
-    return queryParams;
+    return [...matches].reduce(
+      (queryParams, [_wholeMatch, paramName, paramValue]) => ({
+        ...queryParams,
+        [paramName]: paramValue
+      }),
+      {}
+    );
   }
 
   async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {

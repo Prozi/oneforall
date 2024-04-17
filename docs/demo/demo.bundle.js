@@ -90083,14 +90083,13 @@ and limitations under the License.
             const matches = location.search.matchAll(
               /[?&]([^=?&]+)=?([^?&]*)/g
             );
-            const queryParams = {};
-            [...matches].forEach((next) => {
-              if (next) {
-                const [_wholeMatch, paramName, paramValue] = next;
-                queryParams[paramName] = paramValue;
-              }
-            });
-            return queryParams;
+            return [...matches].reduce(
+              (queryParams, [_wholeMatch, paramName, paramValue]) =>
+                Object.assign(Object.assign({}, queryParams), {
+                  [paramName]: paramValue
+                }),
+              {}
+            );
           }
           async init(options) {
             await this.pixi.init(options);
