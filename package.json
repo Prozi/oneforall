@@ -1,12 +1,12 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "One For All - TypeScript gamedev library inspired by Unity",
-  "version": "6.1.3",
+  "version": "6.2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "chef-express docs/demo --port 3000",
-    "start:docs": "chef-express docs --port 3000",
+    "start": "chef-express docs --port 3000",
+    "start:demo": "chef-express docs/demo --port 3000",
     "demo": "yarn build && yarn start",
     "dev": "webpack serve",
     "docs": "yarn build && yarn start:docs",
