@@ -90,7 +90,7 @@ export class TextureAtlas {
   }
 
   /**
-   * get slice on index
+   * get lazy cached slice on index
    */
   get(frame: number): PIXI.Texture {
     if (typeof headless !== 'undefined') {
@@ -98,16 +98,16 @@ export class TextureAtlas {
     }
 
     if (!this.slices[frame]) {
-      this.getSlice(frame);
+      this.loadSlice(frame);
     }
 
     return this.slices[frame];
   }
 
   /**
-   * used internally to get slice
+   * used internally in get(frame) to load the slice first time
    */
-  protected getSlice(frame: number): PIXI.Texture {
+  protected loadSlice(frame: number): PIXI.Texture {
     if (typeof headless !== 'undefined') {
       return PIXI.Texture.WHITE;
     }
@@ -139,7 +139,7 @@ export class TextureAtlas {
     }
 
     Array.from({ length: count }, (_, frame) => {
-      const texture = this.getSlice(frame);
+      const texture = this.loadSlice(frame);
       this.slices.push(texture);
     });
   }

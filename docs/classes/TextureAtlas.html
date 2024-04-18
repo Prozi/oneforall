@@ -168,11 +168,11 @@
                       ><span>get</span></a
                     >
                     <a
-                      href="TextureAtlas.html#getSlice"
+                      href="TextureAtlas.html#loadSlice"
                       class="tsd-index-link tsd-is-protected"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-2048"></use></svg
-                      ><span>get<wbr />Slice</span></a
+                      ><span>load<wbr />Slice</span></a
                     >
                     <a
                       href="TextureAtlas.html#preload"
@@ -576,7 +576,7 @@
               </li>
               <li class="tsd-description">
                 <div class="tsd-comment tsd-typography">
-                  <p>get slice on index</p>
+                  <p>get lazy cached slice on index</p>
                 </div>
                 <div class="tsd-parameters">
                   <h4 class="tsd-parameters-title">Parameters</h4>
@@ -608,12 +608,12 @@
             </ul>
           </section>
           <section class="tsd-panel tsd-member tsd-is-protected">
-            <a id="getSlice" class="tsd-anchor"></a>
+            <a id="loadSlice" class="tsd-anchor"></a>
             <h3 class="tsd-anchor-link">
               <code class="tsd-tag ts-flagProtected">Protected</code>
-              <span>get<wbr />Slice</span
+              <span>load<wbr />Slice</span
               ><a
-                href="#getSlice"
+                href="#loadSlice"
                 aria-label="Permalink"
                 class="tsd-anchor-icon"
                 ><svg viewBox="0 0 24 24">
@@ -622,15 +622,15 @@
             </h3>
             <ul class="tsd-signatures tsd-is-protected">
               <li class="tsd-signature tsd-anchor-link">
-                <a id="getSlice.getSlice-1" class="tsd-anchor"></a
-                ><span class="tsd-kind-call-signature">get<wbr />Slice</span
+                <a id="loadSlice.loadSlice-1" class="tsd-anchor"></a
+                ><span class="tsd-kind-call-signature">load<wbr />Slice</span
                 ><span class="tsd-signature-symbol">(</span
                 ><span class="tsd-kind-parameter">frame</span
                 ><span class="tsd-signature-symbol">)</span
                 ><span class="tsd-signature-symbol">: </span
                 ><span class="tsd-signature-type">Texture</span
                 ><a
-                  href="#getSlice.getSlice-1"
+                  href="#loadSlice.loadSlice-1"
                   aria-label="Permalink"
                   class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
@@ -639,7 +639,9 @@
               </li>
               <li class="tsd-description">
                 <div class="tsd-comment tsd-typography">
-                  <p>used internally to get slice</p>
+                  <p>
+                    used internally in get(frame) to load the slice first time
+                  </p>
                 </div>
                 <div class="tsd-parameters">
                   <h4 class="tsd-parameters-title">Parameters</h4>
@@ -942,10 +944,10 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
                 ><span>get</span></a
-              ><a href="#getSlice" class="tsd-is-protected"
+              ><a href="#loadSlice" class="tsd-is-protected"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
-                ><span>get<wbr />Slice</span></a
+                ><span>load<wbr />Slice</span></a
               ><a href="#preload" class="tsd-is-protected"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg

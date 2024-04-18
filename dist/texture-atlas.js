@@ -64,21 +64,21 @@ class TextureAtlas {
         return this.texture.height;
     }
     /**
-     * get slice on index
+     * get lazy cached slice on index
      */
     get(frame) {
         if (typeof headless !== 'undefined') {
             return PIXI.Texture.WHITE;
         }
         if (!this.slices[frame]) {
-            this.getSlice(frame);
+            this.loadSlice(frame);
         }
         return this.slices[frame];
     }
     /**
-     * used internally to get slice
+     * used internally in get(frame) to load the slice first time
      */
-    getSlice(frame) {
+    loadSlice(frame) {
         if (typeof headless !== 'undefined') {
             return PIXI.Texture.WHITE;
         }
@@ -101,7 +101,7 @@ class TextureAtlas {
             throw new Error('Don\'t call prepare() twice.');
         }
         Array.from({ length: count }, (_, frame) => {
-            const texture = this.getSlice(frame);
+            const texture = this.loadSlice(frame);
             this.slices.push(texture);
         });
     }

@@ -49,13 +49,13 @@ export declare class TextureAtlas {
      */
     get height(): number;
     /**
-     * get slice on index
+     * get lazy cached slice on index
      */
     get(frame: number): PIXI.Texture;
     /**
-     * used internally to get slice
+     * used internally in get(frame) to load the slice first time
      */
-    protected getSlice(frame: number): PIXI.Texture;
+    protected loadSlice(frame: number): PIXI.Texture;
     /**
      * used internally to preload cached slices
      */

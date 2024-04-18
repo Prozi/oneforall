@@ -174,6 +174,7 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
 - **StateMachine:** Controls how game objects transition between actions.
 - **CircleBody:** Adds physics properties and interactions for round-shaped objects.
 - **PolygonBody:** Adds physics properties and interactions for polygonal objects.
+- **TextureAtlas:** Allows easy slicing of texture into smaller cached slices.
 
 ## Installation
 
