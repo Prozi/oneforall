@@ -437,10 +437,10 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
   integrity sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==
 
-"@jacekpietal/dependency-injection@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@jacekpietal/dependency-injection/-/dependency-injection-1.4.1.tgz#c4649e37e9871d48ea83f8c9eee031b83d5b7a0c"
-  integrity sha512-rTMq6D/LKwvT5f7a3Fc6anvS+ekamLTpNcyBSMb7jT3redMkxgejc1gqVqYFUTpQTeFRyih8fNK8Q0ibQbbtrg==
+"@jacekpietal/dependency-injection@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@jacekpietal/dependency-injection/-/dependency-injection-1.4.2.tgz#e75ca51ad57a76787ac0a1518c80c4d496fdc2e5"
+  integrity sha512-2isWvvc1Y9M9ky0rhqr4/YLRkqShuei/SgqGQSoscQH1zOlSci8fcdxkOWUHbso398I9gPdZ6VGST+ZKKJUp0Q==
   dependencies:
     reflect-metadata "^0.2.2"
 

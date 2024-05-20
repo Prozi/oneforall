@@ -1,7 +1,7 @@
 {
   "name": "@jacekpietal/oneforall",
   "description": "One For All - TypeScript gamedev library inspired by Unity",
-  "version": "6.2.2",
+  "version": "6.2.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -38,7 +38,7 @@
     "pixi.js": "^8"
   },
   "dependencies": {
-    "@jacekpietal/dependency-injection": "^1.4.1",
+    "@jacekpietal/dependency-injection": "^1.4.2",
     "detect-collisions": "^9.5.5",
     "latermom": "^2.0.1",
     "pixi-shim": "^2.5.1",
