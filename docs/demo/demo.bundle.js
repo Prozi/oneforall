@@ -88001,6 +88001,7 @@ Deprecated since v${version}`
         const lifecycle_1 = __webpack_require__(
           /*! ./lifecycle */ './src/lifecycle.ts'
         );
+        const scene_1 = __webpack_require__(/*! ./scene */ './src/scene.ts');
         const state_machine_1 = __webpack_require__(
           /*! ./state-machine */ './src/state-machine.ts'
         );
@@ -88065,7 +88066,7 @@ Deprecated since v${version}`
             });
             this.states = Object.keys(animations);
             const scene = gameObject.root;
-            if ('pixi' in scene) {
+            if (scene instanceof scene_1.Scene) {
               scene.pixi.stage.addChild(this.sprite);
             }
           }

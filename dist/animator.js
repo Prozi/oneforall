@@ -27,6 +27,7 @@ exports.Animator = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
+const scene_1 = require("./scene");
 const state_machine_1 = require("./state-machine");
 class Animator extends PIXI.Container {
     /**
@@ -72,7 +73,7 @@ class Animator extends PIXI.Container {
         });
         this.states = Object.keys(animations);
         const scene = gameObject.root;
-        if ('pixi' in scene) {
+        if (scene instanceof scene_1.Scene) {
             scene.pixi.stage.addChild(this.sprite);
         }
     }

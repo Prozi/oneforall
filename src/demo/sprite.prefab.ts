@@ -4,7 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Animator } from '../animator';
 import { CircleBody } from '../circle-body';
 import { GameObject, TGameObject } from '../game-object';
-import { Scene } from '../scene';
 
 export function createSprite({ scene, data, texture }): TGameObject {
   // create game object

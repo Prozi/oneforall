@@ -112,7 +112,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
 
     this.states = Object.keys(animations);
     const scene = gameObject.root;
-    if ('pixi' in scene) {
+    if (scene instanceof Scene) {
       scene.pixi.stage.addChild(this.sprite);
     }
   }
