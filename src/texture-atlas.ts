@@ -135,7 +135,7 @@ export class TextureAtlas {
     )
   ): void {
     if (this.slices.length) {
-      throw new Error("Don't call prepare() twice.");
+      throw new Error('Don\'t call prepare() twice.');
     }
 
     Array.from({ length: count }, (_, frame) => {

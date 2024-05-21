@@ -1,12 +1,8 @@
 import { BodyOptions, Polygon, Vector } from 'detect-collisions';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
-import { LifecycleProps } from './lifecycle';
+import { LifecycleParent, LifecycleProps } from './lifecycle';
 export declare class PolygonBody extends Polygon implements LifecycleProps {
-    /**
-     * Parent GameObject is assigned at creation.
-     */
-    readonly gameObject: GameObject;
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.
@@ -17,6 +13,10 @@ export declare class PolygonBody extends Polygon implements LifecycleProps {
      * Along with destroying his children, which in turn behave the same.
      */
     readonly destroy$: Subject<void>;
+    /**
+     * Parent GameObject is assigned at creation.
+     */
+    gameObject: LifecycleParent;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */

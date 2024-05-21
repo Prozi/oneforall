@@ -1,13 +1,13 @@
 import { Vector } from 'detect-collisions';
+import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
-import { Lifecycle, LifecycleProps } from './lifecycle';
+import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
-import { StateMachine } from './state-machine';
 
 export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   extends GameObject {
@@ -30,6 +30,11 @@ export class GameObject implements LifecycleProps {
   readonly destroy$: Subject<void> = new Subject();
 
   /**
+   * Lifecycle Object may be added to a Scene Object.
+   */
+  gameObject?: SceneBase | Scene | GameObject;
+
+  /**
    * Each Lifecycle Object has label for pixi debugging.
    */
   label: string;
@@ -49,11 +54,6 @@ export class GameObject implements LifecycleProps {
    */
   y: number;
 
-  /**
-   * Lifecycle Object may be added to a Scene Object.
-   */
-  scene?: SceneBase | Scene;
-
   constructor(label = 'GameObject', x = 0, y = 0) {
     this.label = label;
     this.x = x;
@@ -64,11 +64,22 @@ export class GameObject implements LifecycleProps {
     return prefab.instantiate();
   }
 
-  update(deltaTime: number): void {
-    this.children.forEach((component: Lifecycle) => {
-      component.update(deltaTime);
-    });
+  /**
+   * get root scene
+   */
+  get root(): SceneBase | Scene | undefined {
+    let cursor = this.gameObject;
+    while (cursor?.gameObject) {
+      cursor = cursor.gameObject;
+    }
 
+    return cursor as SceneBase | Scene | undefined;
+  }
+
+  update(deltaTime: number): void {
+    this.children.forEach((child: Lifecycle) => {
+      child.update(deltaTime);
+    });
     Lifecycle.update(this, deltaTime);
   }
 
@@ -78,33 +89,32 @@ export class GameObject implements LifecycleProps {
       // (!) does also child.gameObject.removeChild(child)
       child.destroy();
     }
-
-    this.scene?.removeChild(this);
-
     Lifecycle.destroy(this);
   }
 
   addChild(...children: LifecycleProps[]): void {
+    const root = this.root;
     children.forEach((child) => {
       const index = this.children.indexOf(child);
-      if (index !== -1) {
-        return;
+      if (index === -1) {
+        // add to root scene if exists
+        root?.addChild(child);
+        this.children.push(child);
+        child.gameObject = this;
       }
-
-      this.children.push(child);
-      this.scene?.addChild(child);
     });
   }
 
   removeChild(...children: LifecycleProps[]): void {
+    const root = this.root;
     children.forEach((child) => {
       const index = this.children.indexOf(child);
-      if (index === -1) {
-        return;
+      if (index !== -1) {
+        // remove from root scene if exists
+        root?.removeChild(child);
+        this.children.splice(index, 1);
+        child.gameObject = null;
       }
-
-      this.children.splice(index, 1);
-      this.scene?.removeChild(child);
     });
   }
 

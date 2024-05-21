@@ -44,8 +44,7 @@ class Sprite extends PIXI.Sprite {
          * Each Lifecycle Object has label for pixi debugging.
          */
         this.label = 'Sprite';
-        this.gameObject = gameObject;
-        this.gameObject.addChild(this);
+        gameObject.addChild(this);
     }
     update(deltaTime) {
         this.x = this.gameObject.x;

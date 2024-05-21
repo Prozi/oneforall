@@ -9,7 +9,7 @@ describe('GIVEN StateMachine', () => {
     state.setValidators('', []);
   });
 
-  it("THEN you can't change state to invalid state", () => {
+  it('THEN you can\'t change state to invalid state', () => {
     const go = new GameObject();
     const state = new StateMachine(go);
 

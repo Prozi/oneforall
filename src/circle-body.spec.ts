@@ -12,7 +12,7 @@ describe('GIVEN CircleBody', () => {
     expect(body.radiusY).toBe(15);
   });
 
-  it("THEN it can't have zero radius", () => {
+  it('THEN it can\'t have zero radius', () => {
     const go = new GameObject();
     const createBody = () => new CircleBody(go, 0);
 

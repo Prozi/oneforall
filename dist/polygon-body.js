@@ -21,8 +21,7 @@ class PolygonBody extends detect_collisions_1.Polygon {
          * Each Lifecycle Object has label for pixi debugging.
          */
         this.label = 'PolygonBody';
-        this.gameObject = gameObject;
-        this.gameObject.addChild(this);
+        gameObject.addChild(this);
     }
     update(deltaTime) {
         this.gameObject.x = this.x;

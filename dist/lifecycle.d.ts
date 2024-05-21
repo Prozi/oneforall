@@ -1,7 +1,9 @@
+import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
+export type LifecycleParent = GameObject | SceneBase | Scene | PIXI.Container;
 export interface LifecycleProps {
     /**
      * When Lifecycle Object is updated, it emits this subject.
@@ -15,17 +17,13 @@ export interface LifecycleProps {
     readonly destroy$: Subject<void>;
     /**
      * Parent GameObject is assigned at creation.
-     * BaseScene & Scene don't have parent gameObject
+     * BaseScene/Scene has no gameObject
      */
-    readonly gameObject?: GameObject;
+    gameObject?: LifecycleParent;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
-    /**
-     * Lifecycle Object may be added to a Scene Object.
-     */
-    scene?: SceneBase | Scene;
     /**
      * Updates the Lifecycle Object with actual deltaTime ~60fps
      */

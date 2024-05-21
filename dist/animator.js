@@ -26,16 +26,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Animator = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
-const container_1 = require("./container");
+const lifecycle_1 = require("./lifecycle");
 const state_machine_1 = require("./state-machine");
-class Animator extends container_1.Container {
+class Animator extends PIXI.Container {
     /**
      * @param gameObject
      * @param animatorData
      * @param texture
      */
     constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
-        super(gameObject);
+        super();
+        /**
+         * When Lifecycle Object is updated, it emits this subject.
+         * Along with updating his children, which in turn behave the same.
+         */
+        this.update$ = new Subject_1.Subject();
+        /**
+         * When Lifecycle Object is destroyed, it emits and closes this subject.
+         * Along with destroying his children, which in turn behave the same.
+         */
+        this.destroy$ = new Subject_1.Subject();
         /**
          * When animation completes, it emits this subject.
          */
@@ -45,6 +55,7 @@ class Animator extends container_1.Container {
          */
         this.label = 'Animator';
         this.stateMachine = new state_machine_1.StateMachine(gameObject);
+        this.sprite = new PIXI.Container();
         const tileWidth = width / cols;
         const tileHeight = height / rows;
         Object.values(animations).forEach((animationFrames) => {
@@ -56,7 +67,7 @@ class Animator extends container_1.Container {
                 return { texture, time: animationSpeed };
             }));
             animatedSprite.anchor.set(anchor.x, anchor.y);
-            this.addChild(animatedSprite);
+            this.sprite.addChild(animatedSprite);
         });
         this.states = Object.keys(animations);
     }
@@ -72,8 +83,19 @@ class Animator extends container_1.Container {
     get state$() {
         return this.stateMachine.state$;
     }
+    /**
+     * Reference to inner animation scale.
+     */
+    get scale() {
+        return this.animation.scale;
+    }
+    update(deltaTime) {
+        this.sprite.x = this.gameObject.x;
+        this.sprite.y = this.gameObject.y;
+        lifecycle_1.Lifecycle.update(this, deltaTime);
+    }
     setScale(x = 1, y = x) {
-        this.children.forEach((child) => {
+        this.sprite.children.forEach((child) => {
             child.scale.set(x, y);
         });
     }
@@ -85,7 +107,7 @@ class Animator extends container_1.Container {
         if (animation === this.animation) {
             return;
         }
-        const children = this.children.filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation);
+        const children = this.sprite.children.filter((child) => child instanceof PIXI.AnimatedSprite && child !== animation);
         children.forEach((child) => {
             child.visible = false;
             child.stop();
@@ -107,7 +129,7 @@ class Animator extends container_1.Container {
         if (!this.stateMachine.setState(next)) {
             return '';
         }
-        const animation = this.children[index];
+        const animation = this.sprite.children[index];
         if (!loop && stateWhenFinished) {
             animation.onComplete = () => {
                 animation.onComplete = null;

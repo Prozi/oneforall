@@ -31,5 +31,6 @@ async function start() {
     scene.update$.pipe((0, takeUntil_1.takeUntil)(scene.destroy$)).subscribe(() => {
         scene.physics.separate();
     });
+    globalThis.scene = scene;
 }
 start();

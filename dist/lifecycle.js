@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lifecycle = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
-const game_object_1 = require("./game-object");
 class Lifecycle {
     constructor() {
         /**
@@ -21,9 +20,9 @@ class Lifecycle {
         this.label = 'Lifecycle';
     }
     static destroy(lifecycle) {
-        if (!(lifecycle instanceof game_object_1.GameObject)) {
-            lifecycle.gameObject.removeChild(lifecycle);
-        }
+        var _a, _b;
+        // tslint:disable-next-line: no-any
+        (_b = (_a = lifecycle.gameObject) === null || _a === void 0 ? void 0 : _a.removeChild) === null || _b === void 0 ? void 0 : _b.call(_a, lifecycle);
         lifecycle.update$.complete();
         lifecycle.destroy$.next();
         lifecycle.destroy$.complete();

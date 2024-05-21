@@ -4,7 +4,7 @@ import { Injectable } from '@jacekpietal/dependency-injection';
 
 @Injectable
 export class Application extends PIXI.Application {
-  private isInitialized = false;
+  isInitialized = false;
 
   async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
     if (!this.isInitialized) {

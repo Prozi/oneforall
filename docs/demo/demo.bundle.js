@@ -21044,7 +21044,13 @@ ${e}`);
             return int === 'static' || int === 'dynamic';
           }
           _interactivePrune(container) {
-            if (!container || !container.visible || !container.renderable) {
+            if (
+              !container ||
+              !container.visible ||
+              !container.renderable ||
+              !container.includeInBuild ||
+              !container.measurable
+            ) {
               return true;
             }
             if (container.eventMode === 'none') {
@@ -27567,9 +27573,6 @@ ${e}`);
         var BatchTextureArray = __webpack_require__(
           /*! ./rendering/batcher/shared/BatchTextureArray.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchTextureArray.js'
         );
-        var _const$4 = __webpack_require__(
-          /*! ./rendering/batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ./rendering/high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -27648,7 +27651,7 @@ ${e}`);
         var autoDetectRenderer = __webpack_require__(
           /*! ./rendering/renderers/autoDetectRenderer.js */ './node_modules/pixi.js/lib/rendering/renderers/autoDetectRenderer.js'
         );
-        var _const$5 = __webpack_require__(
+        var _const$4 = __webpack_require__(
           /*! ./rendering/renderers/gl/buffer/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/buffer/const.js'
         );
         var GlBuffer = __webpack_require__(
@@ -27657,7 +27660,7 @@ ${e}`);
         var GlBufferSystem = __webpack_require__(
           /*! ./rendering/renderers/gl/buffer/GlBufferSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/buffer/GlBufferSystem.js'
         );
-        var _const$6 = __webpack_require__(
+        var _const$5 = __webpack_require__(
           /*! ./rendering/renderers/gl/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/const.js'
         );
         var GlContextSystem = __webpack_require__(
@@ -27693,11 +27696,11 @@ ${e}`);
         var GlRenderTargetSystem = __webpack_require__(
           /*! ./rendering/renderers/gl/renderTarget/GlRenderTargetSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/renderTarget/GlRenderTargetSystem.js'
         );
-        var batchSamplersUniformGroup = __webpack_require__(
-          /*! ./rendering/renderers/gl/shader/batchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js'
-        );
         var GenerateShaderSyncCode = __webpack_require__(
           /*! ./rendering/renderers/gl/shader/GenerateShaderSyncCode.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GenerateShaderSyncCode.js'
+        );
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ./rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
         );
         var GlProgram = __webpack_require__(
           /*! ./rendering/renderers/gl/shader/GlProgram.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GlProgram.js'
@@ -27786,7 +27789,7 @@ ${e}`);
         var mapWebGLBlendModesToPixi = __webpack_require__(
           /*! ./rendering/renderers/gl/state/mapWebGLBlendModesToPixi.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/state/mapWebGLBlendModesToPixi.js'
         );
-        var _const$7 = __webpack_require__(
+        var _const$6 = __webpack_require__(
           /*! ./rendering/renderers/gl/texture/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/texture/const.js'
         );
         var GlTexture = __webpack_require__(
@@ -27954,7 +27957,7 @@ ${e}`);
         var BufferResource = __webpack_require__(
           /*! ./rendering/renderers/shared/buffer/BufferResource.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/BufferResource.js'
         );
-        var _const$8 = __webpack_require__(
+        var _const$7 = __webpack_require__(
           /*! ./rendering/renderers/shared/buffer/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/const.js'
         );
         var fastCopy = __webpack_require__(
@@ -27966,7 +27969,7 @@ ${e}`);
         var GenerateTextureSystem = __webpack_require__(
           /*! ./rendering/renderers/shared/extract/GenerateTextureSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/extract/GenerateTextureSystem.js'
         );
-        var _const$9 = __webpack_require__(
+        var _const$8 = __webpack_require__(
           /*! ./rendering/renderers/shared/geometry/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/geometry/const.js'
         );
         var Geometry = __webpack_require__(
@@ -28005,11 +28008,14 @@ ${e}`);
         var viewportFromFrame = __webpack_require__(
           /*! ./rendering/renderers/shared/renderTarget/viewportFromFrame.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/renderTarget/viewportFromFrame.js'
         );
-        var _const$a = __webpack_require__(
+        var _const$9 = __webpack_require__(
           /*! ./rendering/renderers/shared/shader/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/const.js'
         );
         var Shader = __webpack_require__(
           /*! ./rendering/renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
+        );
+        var types = __webpack_require__(
+          /*! ./rendering/renderers/shared/shader/types.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/types.js'
         );
         var UboSystem = __webpack_require__(
           /*! ./rendering/renderers/shared/shader/UboSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UboSystem.js'
@@ -28032,7 +28038,7 @@ ${e}`);
         var HelloSystem = __webpack_require__(
           /*! ./rendering/renderers/shared/startup/HelloSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/startup/HelloSystem.js'
         );
-        var _const$b = __webpack_require__(
+        var _const$a = __webpack_require__(
           /*! ./rendering/renderers/shared/state/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/const.js'
         );
         var getAdjustedBlendModeBlend = __webpack_require__(
@@ -28053,7 +28059,7 @@ ${e}`);
         var CanvasPool = __webpack_require__(
           /*! ./rendering/renderers/shared/texture/CanvasPool.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/CanvasPool.js'
         );
-        var _const$c = __webpack_require__(
+        var _const$b = __webpack_require__(
           /*! ./rendering/renderers/shared/texture/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/const.js'
         );
         var RenderTexture = __webpack_require__(
@@ -28122,7 +28128,7 @@ ${e}`);
         var ViewSystem = __webpack_require__(
           /*! ./rendering/renderers/shared/view/ViewSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/view/ViewSystem.js'
         );
-        var types = __webpack_require__(
+        var types$1 = __webpack_require__(
           /*! ./rendering/renderers/types.js */ './node_modules/pixi.js/lib/rendering/renderers/types.js'
         );
         var Bounds = __webpack_require__(
@@ -28263,7 +28269,7 @@ ${e}`);
         var buildTriangle = __webpack_require__(
           /*! ./scene/graphics/shared/buildCommands/buildTriangle.js */ './node_modules/pixi.js/lib/scene/graphics/shared/buildCommands/buildTriangle.js'
         );
-        var _const$d = __webpack_require__(
+        var _const$c = __webpack_require__(
           /*! ./scene/graphics/shared/const.js */ './node_modules/pixi.js/lib/scene/graphics/shared/const.js'
         );
         var FillGradient = __webpack_require__(
@@ -28521,7 +28527,7 @@ ${e}`);
         var spritesheetAsset = __webpack_require__(
           /*! ./spritesheet/spritesheetAsset.js */ './node_modules/pixi.js/lib/spritesheet/spritesheetAsset.js'
         );
-        var _const$e = __webpack_require__(
+        var _const$d = __webpack_require__(
           /*! ./ticker/const.js */ './node_modules/pixi.js/lib/ticker/const.js'
         );
         var Ticker = __webpack_require__(
@@ -28551,7 +28557,7 @@ ${e}`);
         var getCanvasBoundingBox = __webpack_require__(
           /*! ./utils/canvas/getCanvasBoundingBox.js */ './node_modules/pixi.js/lib/utils/canvas/getCanvasBoundingBox.js'
         );
-        var _const$f = __webpack_require__(
+        var _const$e = __webpack_require__(
           /*! ./utils/const.js */ './node_modules/pixi.js/lib/utils/const.js'
         );
         var EventEmitter = __webpack_require__(
@@ -28814,7 +28820,6 @@ ${e}`);
         exports.Batcher = Batcher.Batcher;
         exports.BatcherPipe = BatcherPipe.BatcherPipe;
         exports.BatchTextureArray = BatchTextureArray.BatchTextureArray;
-        exports.MAX_TEXTURES = _const$4.MAX_TEXTURES;
         exports.compileHighShaderGlProgram =
           compileHighShaderToProgram.compileHighShaderGlProgram;
         exports.compileHighShaderGpuProgram =
@@ -28865,10 +28870,10 @@ ${e}`);
         exports.getMatrixRelativeToParent =
           addMaskLocalBounds.getMatrixRelativeToParent;
         exports.autoDetectRenderer = autoDetectRenderer.autoDetectRenderer;
-        exports.BUFFER_TYPE = _const$5.BUFFER_TYPE;
+        exports.BUFFER_TYPE = _const$4.BUFFER_TYPE;
         exports.GlBuffer = GlBuffer.GlBuffer;
         exports.GlBufferSystem = GlBufferSystem.GlBufferSystem;
-        exports.CLEAR = _const$6.CLEAR;
+        exports.CLEAR = _const$5.CLEAR;
         exports.GlContextSystem = GlContextSystem.GlContextSystem;
         exports.GlGeometrySystem = GlGeometrySystem.GlGeometrySystem;
         exports.getGlTypeFromFormat = getGlTypeFromFormat.getGlTypeFromFormat;
@@ -28882,10 +28887,10 @@ ${e}`);
           GlRenderTargetAdaptor.GlRenderTargetAdaptor;
         exports.GlRenderTargetSystem =
           GlRenderTargetSystem.GlRenderTargetSystem;
-        exports.batchSamplersUniformGroup =
-          batchSamplersUniformGroup.batchSamplersUniformGroup;
         exports.generateShaderSyncCode =
           GenerateShaderSyncCode.generateShaderSyncCode;
+        exports.getBatchSamplersUniformGroup =
+          getBatchSamplersUniformGroup.getBatchSamplersUniformGroup;
         exports.GlProgram = GlProgram.GlProgram;
         exports.GlProgramData = GlProgramData.GlProgramData;
         exports.IGLUniformData = GlProgramData.IGLUniformData;
@@ -28930,10 +28935,10 @@ ${e}`);
         exports.GlStateSystem = GlStateSystem.GlStateSystem;
         exports.mapWebGLBlendModesToPixi =
           mapWebGLBlendModesToPixi.mapWebGLBlendModesToPixi;
-        exports.GL_FORMATS = _const$7.GL_FORMATS;
-        exports.GL_TARGETS = _const$7.GL_TARGETS;
-        exports.GL_TYPES = _const$7.GL_TYPES;
-        exports.GL_WRAP_MODES = _const$7.GL_WRAP_MODES;
+        exports.GL_FORMATS = _const$6.GL_FORMATS;
+        exports.GL_TARGETS = _const$6.GL_TARGETS;
+        exports.GL_TYPES = _const$6.GL_TYPES;
+        exports.GL_WRAP_MODES = _const$6.GL_WRAP_MODES;
         exports.GlTexture = GlTexture.GlTexture;
         exports.GlTextureSystem = GlTextureSystem.GlTextureSystem;
         exports.glUploadBufferImageResource =
@@ -29017,12 +29022,12 @@ ${e}`);
         exports.BlendModePipe = BlendModePipe.BlendModePipe;
         exports.Buffer = Buffer.Buffer;
         exports.BufferResource = BufferResource.BufferResource;
-        exports.BufferUsage = _const$8.BufferUsage;
+        exports.BufferUsage = _const$7.BufferUsage;
         exports.fastCopy = fastCopy.fastCopy;
         exports.ExtractSystem = ExtractSystem.ExtractSystem;
         exports.GenerateTextureSystem =
           GenerateTextureSystem.GenerateTextureSystem;
-        exports.DRAW_MODES = _const$9.DRAW_MODES;
+        exports.DRAW_MODES = _const$8.DRAW_MODES;
         exports.Geometry = Geometry.Geometry;
         exports.buildSimpleUvs = buildUvs.buildSimpleUvs;
         exports.buildUvs = buildUvs.buildUvs;
@@ -29037,8 +29042,10 @@ ${e}`);
         exports.RenderTarget = RenderTarget.RenderTarget;
         exports.RenderTargetSystem = RenderTargetSystem.RenderTargetSystem;
         exports.viewportFromFrame = viewportFromFrame.viewportFromFrame;
-        exports.ShaderStage = _const$a.ShaderStage;
+        exports.ShaderStage = _const$9.ShaderStage;
         exports.Shader = Shader.Shader;
+        exports.UNIFORM_TYPES_MAP = types.UNIFORM_TYPES_MAP;
+        exports.UNIFORM_TYPES_VALUES = types.UNIFORM_TYPES_VALUES;
         exports.UboSystem = UboSystem.UboSystem;
         exports.UniformGroup = UniformGroup.UniformGroup;
         exports.createUboSyncFunction =
@@ -29049,8 +29056,8 @@ ${e}`);
         exports.uboSyncFunctionsWGSL = uboSyncFunctions.uboSyncFunctionsWGSL;
         exports.uniformParsers = uniformParsers.uniformParsers;
         exports.HelloSystem = HelloSystem.HelloSystem;
-        exports.BLEND_TO_NPM = _const$b.BLEND_TO_NPM;
-        exports.STENCIL_MODES = _const$b.STENCIL_MODES;
+        exports.BLEND_TO_NPM = _const$a.BLEND_TO_NPM;
+        exports.STENCIL_MODES = _const$a.STENCIL_MODES;
         exports.getAdjustedBlendModeBlend =
           getAdjustedBlendModeBlend.getAdjustedBlendModeBlend;
         exports.State = State.State;
@@ -29060,11 +29067,11 @@ ${e}`);
         exports.SystemRunner = SystemRunner.SystemRunner;
         exports.CanvasPool = CanvasPool.CanvasPool;
         exports.CanvasPoolClass = CanvasPool.CanvasPoolClass;
-        exports.DEPRECATED_SCALE_MODES = _const$c.DEPRECATED_SCALE_MODES;
-        exports.DEPRECATED_WRAP_MODES = _const$c.DEPRECATED_WRAP_MODES;
-        exports.MSAA_QUALITY = _const$c.MSAA_QUALITY;
-        exports.SCALE_MODES = _const$c.SCALE_MODES;
-        exports.WRAP_MODES = _const$c.WRAP_MODES;
+        exports.DEPRECATED_SCALE_MODES = _const$b.DEPRECATED_SCALE_MODES;
+        exports.DEPRECATED_WRAP_MODES = _const$b.DEPRECATED_WRAP_MODES;
+        exports.MSAA_QUALITY = _const$b.MSAA_QUALITY;
+        exports.SCALE_MODES = _const$b.SCALE_MODES;
+        exports.WRAP_MODES = _const$b.WRAP_MODES;
         exports.RenderTexture = RenderTexture.RenderTexture;
         exports.BufferImageSource = BufferImageSource.BufferImageSource;
         exports.CanvasSource = CanvasSource.CanvasSource;
@@ -29097,7 +29104,7 @@ ${e}`);
         exports.createIdFromString = createIdFromString.createIdFromString;
         exports.parseFunctionBody = parseFunctionBody.parseFunctionBody;
         exports.ViewSystem = ViewSystem.ViewSystem;
-        exports.RendererType = types.RendererType;
+        exports.RendererType = types$1.RendererType;
         exports.Bounds = Bounds.Bounds;
         exports._getGlobalBoundsRecursive =
           getFastGlobalBounds._getGlobalBoundsRecursive;
@@ -29168,8 +29175,8 @@ ${e}`);
         exports.buildPolygon = buildPolygon.buildPolygon;
         exports.buildRectangle = buildRectangle.buildRectangle;
         exports.buildTriangle = buildTriangle.buildTriangle;
-        exports.closePointEps = _const$d.closePointEps;
-        exports.curveEps = _const$d.curveEps;
+        exports.closePointEps = _const$c.closePointEps;
+        exports.curveEps = _const$c.curveEps;
         exports.FillGradient = FillGradient.FillGradient;
         exports.FillPattern = FillPattern.FillPattern;
         exports.Graphics = Graphics.Graphics;
@@ -29282,7 +29289,7 @@ ${e}`);
           getPo2TextureFromSource.getPo2TextureFromSource;
         exports.Spritesheet = Spritesheet.Spritesheet;
         exports.spritesheetAsset = spritesheetAsset.spritesheetAsset;
-        exports.UPDATE_PRIORITY = _const$e.UPDATE_PRIORITY;
+        exports.UPDATE_PRIORITY = _const$d.UPDATE_PRIORITY;
         exports.Ticker = Ticker.Ticker;
         exports.TickerListener = TickerListener.TickerListener;
         exports.detectVideoAlphaMode =
@@ -29294,7 +29301,7 @@ ${e}`);
         exports.unsafeEvalSupported = unsafeEvalSupported.unsafeEvalSupported;
         exports.getCanvasBoundingBox =
           getCanvasBoundingBox.getCanvasBoundingBox;
-        exports.DATA_URI = _const$f.DATA_URI;
+        exports.DATA_URI = _const$e.DATA_URI;
         exports.EventEmitter = EventEmitter;
         exports.removeItems = removeItems.removeItems;
         exports.resetUids = uid.resetUids;
@@ -32094,8 +32101,8 @@ ${e}`);
         var roundPixelsBit = __webpack_require__(
           /*! ../../high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
         );
-        var batchSamplersUniformGroup = __webpack_require__(
-          /*! ../../renderers/gl/shader/batchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js'
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ../../renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
         );
         var Shader = __webpack_require__(
           /*! ../../renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
@@ -32103,8 +32110,8 @@ ${e}`);
         var State = __webpack_require__(
           /*! ../../renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
         );
-        var _const = __webpack_require__(
-          /*! ../shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -32114,13 +32121,14 @@ ${e}`);
             this._tempState = State.State.for2d();
           }
           init(batcherPipe) {
+            const maxTextures = maxRecommendedTextures.maxRecommendedTextures();
             const glProgram =
               compileHighShaderToProgram.compileHighShaderGlProgram({
                 name: 'batch',
                 bits: [
                   colorBit.colorBitGl,
                   generateTextureBatchBit.generateTextureBatchBitGl(
-                    _const.MAX_TEXTURES
+                    maxTextures
                   ),
                   roundPixelsBit.roundPixelsBitGl
                 ]
@@ -32129,7 +32137,9 @@ ${e}`);
               glProgram,
               resources: {
                 batchSamplers:
-                  batchSamplersUniformGroup.batchSamplersUniformGroup
+                  getBatchSamplersUniformGroup.getBatchSamplersUniformGroup(
+                    maxTextures
+                  )
               }
             });
             batcherPipe.renderer.runners.contextChange.add(this);
@@ -32280,8 +32290,8 @@ ${e}`);
         var State = __webpack_require__(
           /*! ../../renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
         );
-        var _const = __webpack_require__(
-          /*! ../shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
         var getTextureBatchBindGroup = __webpack_require__(
           /*! ./getTextureBatchBindGroup.js */ './node_modules/pixi.js/lib/rendering/batcher/gpu/getTextureBatchBindGroup.js'
@@ -32297,7 +32307,7 @@ ${e}`);
                 bits: [
                   colorBit.colorBit,
                   generateTextureBatchBit.generateTextureBatchBit(
-                    _const.MAX_TEXTURES
+                    maxRecommendedTextures.maxRecommendedTextures()
                   ),
                   roundPixelsBit.roundPixelsBit
                 ]
@@ -32443,8 +32453,8 @@ ${e}`);
         var Texture = __webpack_require__(
           /*! ../../renderers/shared/texture/Texture.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/Texture.js'
         );
-        var _const = __webpack_require__(
-          /*! ../shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -32458,10 +32468,13 @@ ${e}`);
             cachedGroups[uid] || generateTextureBatchBindGroup(textures, uid)
           );
         }
+        let maxTextures = 0;
         function generateTextureBatchBindGroup(textures, key) {
           const bindGroupResources = {};
           let bindIndex = 0;
-          for (let i = 0; i < _const.MAX_TEXTURES; i++) {
+          if (!maxTextures)
+            maxTextures = maxRecommendedTextures.maxRecommendedTextures();
+          for (let i = 0; i < maxTextures; i++) {
             const texture =
               i < textures.length ? textures[i] : Texture.Texture.EMPTY.source;
             bindGroupResources[bindIndex++] = texture.source;
@@ -32529,11 +32542,11 @@ ${e}`);
         var getAdjustedBlendModeBlend = __webpack_require__(
           /*! ../../renderers/shared/state/getAdjustedBlendModeBlend.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/getAdjustedBlendModeBlend.js'
         );
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
+        );
         var BatchTextureArray = __webpack_require__(
           /*! ./BatchTextureArray.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchTextureArray.js'
-        );
-        var _const = __webpack_require__(
-          /*! ./const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
         );
 
         ('use strict');
@@ -32577,6 +32590,7 @@ ${e}`);
               vertexSize * this._vertexSize * 4
             );
             this.indexBuffer = new Uint16Array(indexSize);
+            this._maxTextures = maxRecommendedTextures.maxRecommendedTextures();
           }
           begin() {
             this.batchIndex = 0;
@@ -32645,6 +32659,7 @@ ${e}`);
             let start = this._batchIndexStart;
             let action = 'startBatch';
             let batch = this._batchPool[this._batchPoolIndex++] || new Batch();
+            const maxTextures = this._maxTextures;
             for (let i = this.elementStart; i < this.elementSize; ++i) {
               const element = elements[i];
               elements[i] = null;
@@ -32674,10 +32689,7 @@ ${e}`);
                 continue;
               }
               source._batchTick = BATCH_TICK;
-              if (
-                textureBatch.count >= _const.MAX_TEXTURES ||
-                blendModeChange
-              ) {
+              if (textureBatch.count >= maxTextures || blendModeChange) {
                 this._finishBatch(
                   batch,
                   start,
@@ -32929,26 +32941,6 @@ ${e}`);
 
         exports.BatcherPipe = BatcherPipe;
         //# sourceMappingURL=BatcherPipe.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js':
-      /*!********************************************************************!*\
-  !*** ./node_modules/pixi.js/lib/rendering/batcher/shared/const.js ***!
-  \********************************************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        var maxRecommendedTextures = __webpack_require__(
-          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
-        );
-
-        ('use strict');
-        const MAX_TEXTURES = maxRecommendedTextures.maxRecommendedTextures();
-
-        exports.MAX_TEXTURES = MAX_TEXTURES;
-        //# sourceMappingURL=const.js.map
 
         /***/
       },
@@ -33598,8 +33590,8 @@ ${parts.join('\n')}
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        var _const = __webpack_require__(
-          /*! ../../batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -33670,13 +33662,13 @@ ${parts.join('\n')}
                 header: `
                 @in @interpolate(flat) vTextureId: u32;
     
-                ${generateBindingSrc(_const.MAX_TEXTURES)}
+                ${generateBindingSrc(maxRecommendedTextures.maxRecommendedTextures())}
             `,
                 main: `
                 var uvDx = dpdx(vUV);
                 var uvDy = dpdy(vUV);
     
-                ${generateSampleSrc(_const.MAX_TEXTURES)}
+                ${generateSampleSrc(maxRecommendedTextures.maxRecommendedTextures())}
             `
               }
             };
@@ -33728,7 +33720,7 @@ ${parts.join('\n')}
             `,
                 main: `
     
-                ${generateSampleGlSrc(_const.MAX_TEXTURES)}
+                ${generateSampleGlSrc(maxRecommendedTextures.maxRecommendedTextures())}
             `
               }
             };
@@ -34047,9 +34039,6 @@ ${parts.join('\n')}
         var BatchTextureArray = __webpack_require__(
           /*! ./batcher/shared/BatchTextureArray.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchTextureArray.js'
         );
-        var _const = __webpack_require__(
-          /*! ./batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ./high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -34131,7 +34120,7 @@ ${parts.join('\n')}
         var autoDetectRenderer = __webpack_require__(
           /*! ./renderers/autoDetectRenderer.js */ './node_modules/pixi.js/lib/rendering/renderers/autoDetectRenderer.js'
         );
-        var _const$1 = __webpack_require__(
+        var _const = __webpack_require__(
           /*! ./renderers/gl/buffer/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/buffer/const.js'
         );
         var GlBuffer = __webpack_require__(
@@ -34140,7 +34129,7 @@ ${parts.join('\n')}
         var GlBufferSystem = __webpack_require__(
           /*! ./renderers/gl/buffer/GlBufferSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/buffer/GlBufferSystem.js'
         );
-        var _const$2 = __webpack_require__(
+        var _const$1 = __webpack_require__(
           /*! ./renderers/gl/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/const.js'
         );
         var GlContextSystem = __webpack_require__(
@@ -34182,14 +34171,14 @@ ${parts.join('\n')}
         var GlRenderTargetSystem = __webpack_require__(
           /*! ./renderers/gl/renderTarget/GlRenderTargetSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/renderTarget/GlRenderTargetSystem.js'
         );
-        var batchSamplersUniformGroup = __webpack_require__(
-          /*! ./renderers/gl/shader/batchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js'
-        );
         __webpack_require__(
           /*! ./renderers/gl/shader/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/const.js'
         );
         var GenerateShaderSyncCode = __webpack_require__(
           /*! ./renderers/gl/shader/GenerateShaderSyncCode.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GenerateShaderSyncCode.js'
+        );
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ./renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
         );
         var GlProgram = __webpack_require__(
           /*! ./renderers/gl/shader/GlProgram.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GlProgram.js'
@@ -34278,7 +34267,7 @@ ${parts.join('\n')}
         var mapWebGLBlendModesToPixi = __webpack_require__(
           /*! ./renderers/gl/state/mapWebGLBlendModesToPixi.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/state/mapWebGLBlendModesToPixi.js'
         );
-        var _const$3 = __webpack_require__(
+        var _const$2 = __webpack_require__(
           /*! ./renderers/gl/texture/const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/texture/const.js'
         );
         var GlTexture = __webpack_require__(
@@ -34455,7 +34444,7 @@ ${parts.join('\n')}
         var BufferResource = __webpack_require__(
           /*! ./renderers/shared/buffer/BufferResource.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/BufferResource.js'
         );
-        var _const$4 = __webpack_require__(
+        var _const$3 = __webpack_require__(
           /*! ./renderers/shared/buffer/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/const.js'
         );
         var fastCopy = __webpack_require__(
@@ -34467,7 +34456,7 @@ ${parts.join('\n')}
         var GenerateTextureSystem = __webpack_require__(
           /*! ./renderers/shared/extract/GenerateTextureSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/extract/GenerateTextureSystem.js'
         );
-        var _const$5 = __webpack_require__(
+        var _const$4 = __webpack_require__(
           /*! ./renderers/shared/geometry/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/geometry/const.js'
         );
         var Geometry = __webpack_require__(
@@ -34515,13 +34504,13 @@ ${parts.join('\n')}
         var viewportFromFrame = __webpack_require__(
           /*! ./renderers/shared/renderTarget/viewportFromFrame.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/renderTarget/viewportFromFrame.js'
         );
-        var _const$6 = __webpack_require__(
+        var _const$5 = __webpack_require__(
           /*! ./renderers/shared/shader/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/const.js'
         );
         var Shader = __webpack_require__(
           /*! ./renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
         );
-        __webpack_require__(
+        var types = __webpack_require__(
           /*! ./renderers/shared/shader/types.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/types.js'
         );
         var UboSystem = __webpack_require__(
@@ -34545,7 +34534,7 @@ ${parts.join('\n')}
         var HelloSystem = __webpack_require__(
           /*! ./renderers/shared/startup/HelloSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/startup/HelloSystem.js'
         );
-        var _const$7 = __webpack_require__(
+        var _const$6 = __webpack_require__(
           /*! ./renderers/shared/state/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/const.js'
         );
         var getAdjustedBlendModeBlend = __webpack_require__(
@@ -34572,7 +34561,7 @@ ${parts.join('\n')}
         var CanvasPool = __webpack_require__(
           /*! ./renderers/shared/texture/CanvasPool.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/CanvasPool.js'
         );
-        var _const$8 = __webpack_require__(
+        var _const$7 = __webpack_require__(
           /*! ./renderers/shared/texture/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/const.js'
         );
         __webpack_require__(
@@ -34647,7 +34636,7 @@ ${parts.join('\n')}
         var ViewSystem = __webpack_require__(
           /*! ./renderers/shared/view/ViewSystem.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/view/ViewSystem.js'
         );
-        var types = __webpack_require__(
+        var types$1 = __webpack_require__(
           /*! ./renderers/types.js */ './node_modules/pixi.js/lib/rendering/renderers/types.js'
         );
 
@@ -34664,7 +34653,6 @@ ${parts.join('\n')}
         exports.Batcher = Batcher.Batcher;
         exports.BatcherPipe = BatcherPipe.BatcherPipe;
         exports.BatchTextureArray = BatchTextureArray.BatchTextureArray;
-        exports.MAX_TEXTURES = _const.MAX_TEXTURES;
         exports.compileHighShaderGlProgram =
           compileHighShaderToProgram.compileHighShaderGlProgram;
         exports.compileHighShaderGpuProgram =
@@ -34715,10 +34703,10 @@ ${parts.join('\n')}
         exports.getMatrixRelativeToParent =
           addMaskLocalBounds.getMatrixRelativeToParent;
         exports.autoDetectRenderer = autoDetectRenderer.autoDetectRenderer;
-        exports.BUFFER_TYPE = _const$1.BUFFER_TYPE;
+        exports.BUFFER_TYPE = _const.BUFFER_TYPE;
         exports.GlBuffer = GlBuffer.GlBuffer;
         exports.GlBufferSystem = GlBufferSystem.GlBufferSystem;
-        exports.CLEAR = _const$2.CLEAR;
+        exports.CLEAR = _const$1.CLEAR;
         exports.GlContextSystem = GlContextSystem.GlContextSystem;
         exports.GlGeometrySystem = GlGeometrySystem.GlGeometrySystem;
         exports.getGlTypeFromFormat = getGlTypeFromFormat.getGlTypeFromFormat;
@@ -34732,10 +34720,10 @@ ${parts.join('\n')}
           GlRenderTargetAdaptor.GlRenderTargetAdaptor;
         exports.GlRenderTargetSystem =
           GlRenderTargetSystem.GlRenderTargetSystem;
-        exports.batchSamplersUniformGroup =
-          batchSamplersUniformGroup.batchSamplersUniformGroup;
         exports.generateShaderSyncCode =
           GenerateShaderSyncCode.generateShaderSyncCode;
+        exports.getBatchSamplersUniformGroup =
+          getBatchSamplersUniformGroup.getBatchSamplersUniformGroup;
         exports.GlProgram = GlProgram.GlProgram;
         exports.GlProgramData = GlProgramData.GlProgramData;
         exports.IGLUniformData = GlProgramData.IGLUniformData;
@@ -34780,10 +34768,10 @@ ${parts.join('\n')}
         exports.GlStateSystem = GlStateSystem.GlStateSystem;
         exports.mapWebGLBlendModesToPixi =
           mapWebGLBlendModesToPixi.mapWebGLBlendModesToPixi;
-        exports.GL_FORMATS = _const$3.GL_FORMATS;
-        exports.GL_TARGETS = _const$3.GL_TARGETS;
-        exports.GL_TYPES = _const$3.GL_TYPES;
-        exports.GL_WRAP_MODES = _const$3.GL_WRAP_MODES;
+        exports.GL_FORMATS = _const$2.GL_FORMATS;
+        exports.GL_TARGETS = _const$2.GL_TARGETS;
+        exports.GL_TYPES = _const$2.GL_TYPES;
+        exports.GL_WRAP_MODES = _const$2.GL_WRAP_MODES;
         exports.GlTexture = GlTexture.GlTexture;
         exports.GlTextureSystem = GlTextureSystem.GlTextureSystem;
         exports.glUploadBufferImageResource =
@@ -34867,12 +34855,12 @@ ${parts.join('\n')}
         exports.BlendModePipe = BlendModePipe.BlendModePipe;
         exports.Buffer = Buffer.Buffer;
         exports.BufferResource = BufferResource.BufferResource;
-        exports.BufferUsage = _const$4.BufferUsage;
+        exports.BufferUsage = _const$3.BufferUsage;
         exports.fastCopy = fastCopy.fastCopy;
         exports.ExtractSystem = ExtractSystem.ExtractSystem;
         exports.GenerateTextureSystem =
           GenerateTextureSystem.GenerateTextureSystem;
-        exports.DRAW_MODES = _const$5.DRAW_MODES;
+        exports.DRAW_MODES = _const$4.DRAW_MODES;
         exports.Geometry = Geometry.Geometry;
         exports.buildSimpleUvs = buildUvs.buildSimpleUvs;
         exports.buildUvs = buildUvs.buildUvs;
@@ -34887,8 +34875,10 @@ ${parts.join('\n')}
         exports.RenderTarget = RenderTarget.RenderTarget;
         exports.RenderTargetSystem = RenderTargetSystem.RenderTargetSystem;
         exports.viewportFromFrame = viewportFromFrame.viewportFromFrame;
-        exports.ShaderStage = _const$6.ShaderStage;
+        exports.ShaderStage = _const$5.ShaderStage;
         exports.Shader = Shader.Shader;
+        exports.UNIFORM_TYPES_MAP = types.UNIFORM_TYPES_MAP;
+        exports.UNIFORM_TYPES_VALUES = types.UNIFORM_TYPES_VALUES;
         exports.UboSystem = UboSystem.UboSystem;
         exports.UniformGroup = UniformGroup.UniformGroup;
         exports.createUboSyncFunction =
@@ -34899,8 +34889,8 @@ ${parts.join('\n')}
         exports.uboSyncFunctionsWGSL = uboSyncFunctions.uboSyncFunctionsWGSL;
         exports.uniformParsers = uniformParsers.uniformParsers;
         exports.HelloSystem = HelloSystem.HelloSystem;
-        exports.BLEND_TO_NPM = _const$7.BLEND_TO_NPM;
-        exports.STENCIL_MODES = _const$7.STENCIL_MODES;
+        exports.BLEND_TO_NPM = _const$6.BLEND_TO_NPM;
+        exports.STENCIL_MODES = _const$6.STENCIL_MODES;
         exports.getAdjustedBlendModeBlend =
           getAdjustedBlendModeBlend.getAdjustedBlendModeBlend;
         exports.State = State.State;
@@ -34910,11 +34900,11 @@ ${parts.join('\n')}
         exports.SystemRunner = SystemRunner.SystemRunner;
         exports.CanvasPool = CanvasPool.CanvasPool;
         exports.CanvasPoolClass = CanvasPool.CanvasPoolClass;
-        exports.DEPRECATED_SCALE_MODES = _const$8.DEPRECATED_SCALE_MODES;
-        exports.DEPRECATED_WRAP_MODES = _const$8.DEPRECATED_WRAP_MODES;
-        exports.MSAA_QUALITY = _const$8.MSAA_QUALITY;
-        exports.SCALE_MODES = _const$8.SCALE_MODES;
-        exports.WRAP_MODES = _const$8.WRAP_MODES;
+        exports.DEPRECATED_SCALE_MODES = _const$7.DEPRECATED_SCALE_MODES;
+        exports.DEPRECATED_WRAP_MODES = _const$7.DEPRECATED_WRAP_MODES;
+        exports.MSAA_QUALITY = _const$7.MSAA_QUALITY;
+        exports.SCALE_MODES = _const$7.SCALE_MODES;
+        exports.WRAP_MODES = _const$7.WRAP_MODES;
         exports.RenderTexture = RenderTexture.RenderTexture;
         exports.BufferImageSource = BufferImageSource.BufferImageSource;
         exports.CanvasSource = CanvasSource.CanvasSource;
@@ -34947,7 +34937,7 @@ ${parts.join('\n')}
         exports.createIdFromString = createIdFromString.createIdFromString;
         exports.parseFunctionBody = parseFunctionBody.parseFunctionBody;
         exports.ViewSystem = ViewSystem.ViewSystem;
-        exports.RendererType = types.RendererType;
+        exports.RendererType = types$1.RendererType;
         //# sourceMappingURL=index.js.map
 
         /***/
@@ -38416,42 +38406,6 @@ ${parts.join('\n')}
         /***/
       },
 
-    /***/ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js':
-      /*!*********************************************************************************************!*\
-  !*** ./node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js ***!
-  \*********************************************************************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        var _const = __webpack_require__(
-          /*! ../../../batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
-        var UniformGroup = __webpack_require__(
-          /*! ../../shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
-        );
-
-        ('use strict');
-        const sampleValues = new Int32Array(_const.MAX_TEXTURES);
-        for (let i = 0; i < _const.MAX_TEXTURES; i++) {
-          sampleValues[i] = i;
-        }
-        const batchSamplersUniformGroup = new UniformGroup.UniformGroup(
-          {
-            uTextures: {
-              value: sampleValues,
-              type: `i32`,
-              size: _const.MAX_TEXTURES
-            }
-          },
-          { isStatic: true }
-        );
-
-        exports.batchSamplersUniformGroup = batchSamplersUniformGroup;
-        //# sourceMappingURL=batchSamplersUniformGroup.js.map
-
-        /***/
-      },
-
     /***/ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/const.js':
       /*!*************************************************************************!*\
   !*** ./node_modules/pixi.js/lib/rendering/renderers/gl/shader/const.js ***!
@@ -38461,6 +38415,44 @@ ${parts.join('\n')}
 
         'use strict';
         //# sourceMappingURL=const.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js':
+      /*!************************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js ***!
+  \************************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var UniformGroup = __webpack_require__(
+          /*! ../../shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
+        );
+
+        ('use strict');
+        const batchSamplersUniformGroupHash = {};
+        function getBatchSamplersUniformGroup(maxTextures) {
+          let batchSamplersUniformGroup =
+            batchSamplersUniformGroupHash[maxTextures];
+          if (batchSamplersUniformGroup) return batchSamplersUniformGroup;
+          const sampleValues = new Int32Array(maxTextures);
+          for (let i = 0; i < maxTextures; i++) {
+            sampleValues[i] = i;
+          }
+          batchSamplersUniformGroup = batchSamplersUniformGroupHash[
+            maxTextures
+          ] = new UniformGroup.UniformGroup(
+            {
+              uTextures: { value: sampleValues, type: `i32`, size: maxTextures }
+            },
+            { isStatic: true }
+          );
+          return batchSamplersUniformGroup;
+        }
+
+        exports.getBatchSamplersUniformGroup = getBatchSamplersUniformGroup;
+        //# sourceMappingURL=getBatchSamplersUniformGroup.js.map
 
         /***/
       },
@@ -40657,7 +40649,7 @@ ${src}`;
                 );
               } else {
                 gl.texSubImage2D(
-                  glTexture.target,
+                  gl.TEXTURE_2D,
                   0,
                   0,
                   0,
@@ -40666,41 +40658,37 @@ ${src}`;
                   source.resource
                 );
               }
-            } else if (glWidth === textureWidth && glHeight === textureHeight) {
+            } else if (glWidth === textureWidth || glHeight === textureHeight) {
               gl.texSubImage2D(
                 gl.TEXTURE_2D,
                 0,
                 0,
                 0,
-                source.width,
-                source.height,
+                glTexture.format,
+                glTexture.type,
+                source.resource
+              );
+            } else if (webGLVersion === 2) {
+              gl.texImage2D(
+                glTexture.target,
+                0,
+                glTexture.internalFormat,
+                textureWidth,
+                textureHeight,
+                0,
                 glTexture.format,
                 glTexture.type,
                 source.resource
               );
             } else {
-              if (webGLVersion === 2) {
-                gl.texImage2D(
-                  glTexture.target,
-                  0,
-                  glTexture.internalFormat,
-                  textureWidth,
-                  textureHeight,
-                  0,
-                  glTexture.format,
-                  glTexture.type,
-                  source.resource
-                );
-              } else {
-                gl.texImage2D(
-                  glTexture.target,
-                  0,
-                  glTexture.internalFormat,
-                  glTexture.format,
-                  glTexture.type,
-                  source.resource
-                );
-              }
+              gl.texImage2D(
+                glTexture.target,
+                0,
+                glTexture.internalFormat,
+                glTexture.format,
+                glTexture.type,
+                source.resource
+              );
             }
             glTexture.width = textureWidth;
             glTexture.height = textureHeight;
@@ -47298,6 +47286,9 @@ ${src}`;
         var createIdFromString = __webpack_require__(
           /*! ../utils/createIdFromString.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/utils/createIdFromString.js'
         );
+        var types = __webpack_require__(
+          /*! ./types.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/types.js'
+        );
         var getDefaultUniformValue = __webpack_require__(
           /*! ./utils/getDefaultUniformValue.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/utils/getDefaultUniformValue.js'
         );
@@ -47335,6 +47326,11 @@ ${src}`;
               const uniformData = uniformStructures[i];
               uniformData.name = i;
               uniformData.size = uniformData.size ?? 1;
+              if (!types.UNIFORM_TYPES_MAP[uniformData.type]) {
+                throw new Error(
+                  `Uniform type ${uniformData.type} is not supported. Supported uniform types are: ${types.UNIFORM_TYPES_VALUES.join(', ')}`
+                );
+              }
               uniformData.value ??
                 (uniformData.value =
                   getDefaultUniformValue.getDefaultUniformValue(
@@ -47399,10 +47395,33 @@ ${src}`;
       /*!*****************************************************************************!*\
   !*** ./node_modules/pixi.js/lib/rendering/renderers/shared/shader/types.js ***!
   \*****************************************************************************/
-      /***/ () => {
+      /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
         'use strict';
+        const UNIFORM_TYPES_VALUES = [
+          'f32',
+          'i32',
+          'vec2<f32>',
+          'vec3<f32>',
+          'vec4<f32>',
+          'mat2x2<f32>',
+          'mat3x3<f32>',
+          'mat4x4<f32>',
+          'mat3x2<f32>',
+          'mat4x2<f32>',
+          'mat2x3<f32>',
+          'mat4x3<f32>',
+          'mat2x4<f32>',
+          'mat3x4<f32>'
+        ];
+        const UNIFORM_TYPES_MAP = UNIFORM_TYPES_VALUES.reduce((acc, type) => {
+          acc[type] = true;
+          return acc;
+        }, {});
+
+        exports.UNIFORM_TYPES_MAP = UNIFORM_TYPES_MAP;
+        exports.UNIFORM_TYPES_VALUES = UNIFORM_TYPES_VALUES;
         //# sourceMappingURL=types.js.map
 
         /***/
@@ -50780,9 +50799,14 @@ ${src}`;
         );
 
         ('use strict');
+        let maxRecommendedTexturesCache = null;
         function maxRecommendedTextures() {
+          if (maxRecommendedTexturesCache) return maxRecommendedTexturesCache;
           const gl = getTestContext.getTestContext();
-          return gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+          maxRecommendedTexturesCache = gl.getParameter(
+            gl.MAX_TEXTURE_IMAGE_UNITS
+          );
+          return maxRecommendedTexturesCache;
         }
 
         exports.maxRecommendedTextures = maxRecommendedTextures;
@@ -54497,9 +54521,6 @@ ${src}`;
         var Matrix = __webpack_require__(
           /*! ../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
         );
-        var _const = __webpack_require__(
-          /*! ../../../rendering/batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ../../../rendering/high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -54515,14 +54536,17 @@ ${src}`;
         var roundPixelsBit = __webpack_require__(
           /*! ../../../rendering/high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
         );
-        var batchSamplersUniformGroup = __webpack_require__(
-          /*! ../../../rendering/renderers/gl/shader/batchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js'
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ../../../rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
         );
         var Shader = __webpack_require__(
           /*! ../../../rendering/renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
         );
         var UniformGroup = __webpack_require__(
           /*! ../../../rendering/renderers/shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
+        );
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -54539,13 +54563,14 @@ ${src}`;
               },
               uRound: { value: 0, type: 'f32' }
             });
+            const maxTextures = maxRecommendedTextures.maxRecommendedTextures();
             const glProgram =
               compileHighShaderToProgram.compileHighShaderGlProgram({
                 name: 'graphics',
                 bits: [
                   colorBit.colorBitGl,
                   generateTextureBatchBit.generateTextureBatchBitGl(
-                    _const.MAX_TEXTURES
+                    maxTextures
                   ),
                   localUniformBit.localUniformBitGl,
                   roundPixelsBit.roundPixelsBitGl
@@ -54556,7 +54581,9 @@ ${src}`;
               resources: {
                 localUniforms: uniforms,
                 batchSamplers:
-                  batchSamplersUniformGroup.batchSamplersUniformGroup
+                  getBatchSamplersUniformGroup.getBatchSamplersUniformGroup(
+                    maxTextures
+                  )
               }
             });
           }
@@ -54619,9 +54646,6 @@ ${src}`;
         var getTextureBatchBindGroup = __webpack_require__(
           /*! ../../../rendering/batcher/gpu/getTextureBatchBindGroup.js */ './node_modules/pixi.js/lib/rendering/batcher/gpu/getTextureBatchBindGroup.js'
         );
-        var _const = __webpack_require__(
-          /*! ../../../rendering/batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ../../../rendering/high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -54642,6 +54666,9 @@ ${src}`;
         );
         var UniformGroup = __webpack_require__(
           /*! ../../../rendering/renderers/shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
+        );
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -54664,7 +54691,7 @@ ${src}`;
                 bits: [
                   colorBit.colorBit,
                   generateTextureBatchBit.generateTextureBatchBit(
-                    _const.MAX_TEXTURES
+                    maxRecommendedTextures.maxRecommendedTextures()
                   ),
                   localUniformBit.localUniformBitGroup2,
                   roundPixelsBit.roundPixelsBit
@@ -56113,6 +56140,7 @@ ${src}`;
            * @returns The instance of the current GraphicsContext for method chaining.
            */
           clear() {
+            this._activePath.clear();
             this.instructions.length = 0;
             this.resetTransform();
             this.onUpdate();
@@ -56352,7 +56380,6 @@ ${src}`;
             this._gpuContextHash = {};
             // used for non-batchable graphics
             this._graphicsDataContextHash = /* @__PURE__ */ Object.create(null);
-            this._needsContextNeedsRebuild = [];
           }
           /**
            * Runner init called, update the default options
@@ -56450,17 +56477,13 @@ ${src}`;
           }
           _initContext(context) {
             const gpuContext = new GpuGraphicsContext();
+            gpuContext.context = context;
             this._gpuContextHash[context.uid] = gpuContext;
-            context.on('update', this.onGraphicsContextUpdate, this);
             context.on('destroy', this.onGraphicsContextDestroy, this);
             return this._gpuContextHash[context.uid];
           }
-          onGraphicsContextUpdate(context) {
-            this._needsContextNeedsRebuild.push(context);
-          }
           onGraphicsContextDestroy(context) {
             this._cleanGraphicsContextData(context);
-            context.off('update', this.onGraphicsContextUpdate, this);
             context.off('destroy', this.onGraphicsContextDestroy, this);
             this._gpuContextHash[context.uid] = null;
           }
@@ -56479,12 +56502,11 @@ ${src}`;
             }
           }
           destroy() {
-            for (const context of this._needsContextNeedsRebuild) {
-              if (this._gpuContextHash[context.uid]) {
-                this.onGraphicsContextDestroy(context);
+            for (const i in this._gpuContextHash) {
+              if (this._gpuContextHash[i]) {
+                this.onGraphicsContextDestroy(this._gpuContextHash[i].context);
               }
             }
-            this._needsContextNeedsRebuild.length = 0;
           }
         };
         /** @ignore */
@@ -56652,10 +56674,12 @@ ${src}`;
               batchClone.roundPixels = roundPixels;
               return batchClone;
             });
+            if (this._graphicsBatchesHash[graphics.uid] === void 0) {
+              graphics.on('destroyed', () => {
+                this.destroyRenderable(graphics);
+              });
+            }
             this._graphicsBatchesHash[graphics.uid] = batches;
-            graphics.on('destroyed', () => {
-              this.destroyRenderable(graphics);
-            });
             return batches;
           }
           _removeBatchForRenderable(graphicsUid) {
@@ -69451,9 +69475,6 @@ ${src}`;
         var Matrix = __webpack_require__(
           /*! ../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
         );
-        var _const = __webpack_require__(
-          /*! ../../../rendering/batcher/shared/const.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/const.js'
-        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ../../../rendering/high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -69466,14 +69487,17 @@ ${src}`;
         var roundPixelsBit = __webpack_require__(
           /*! ../../../rendering/high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
         );
-        var batchSamplersUniformGroup = __webpack_require__(
-          /*! ../../../rendering/renderers/gl/shader/batchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/batchSamplersUniformGroup.js'
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ../../../rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
         );
         var Shader = __webpack_require__(
           /*! ../../../rendering/renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
         );
         var UniformGroup = __webpack_require__(
           /*! ../../../rendering/renderers/shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
+        );
+        var maxRecommendedTextures = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/texture/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/utils/maxRecommendedTextures.js'
         );
         var localUniformMSDFBit = __webpack_require__(
           /*! ./shader-bits/localUniformMSDFBit.js */ './node_modules/pixi.js/lib/scene/text/sdfShader/shader-bits/localUniformMSDFBit.js'
@@ -69497,14 +69521,13 @@ ${src}`;
               uDistance: { value: 4, type: 'f32' },
               uRound: { value: 0, type: 'f32' }
             });
+            const maxTextures = maxRecommendedTextures.maxRecommendedTextures();
             const gpuProgram =
               compileHighShaderToProgram.compileHighShaderGpuProgram({
                 name: 'sdf-shader',
                 bits: [
                   colorBit.colorBit,
-                  generateTextureBatchBit.generateTextureBatchBit(
-                    _const.MAX_TEXTURES
-                  ),
+                  generateTextureBatchBit.generateTextureBatchBit(maxTextures),
                   localUniformMSDFBit.localUniformMSDFBit,
                   mSDFBit.mSDFBit,
                   roundPixelsBit.roundPixelsBit
@@ -69516,7 +69539,7 @@ ${src}`;
                 bits: [
                   colorBit.colorBitGl,
                   generateTextureBatchBit.generateTextureBatchBitGl(
-                    _const.MAX_TEXTURES
+                    maxTextures
                   ),
                   localUniformMSDFBit.localUniformMSDFBitGl,
                   mSDFBit.mSDFBitGl,
@@ -69529,7 +69552,9 @@ ${src}`;
               resources: {
                 localUniforms: uniforms,
                 batchSamplers:
-                  batchSamplersUniformGroup.batchSamplersUniformGroup
+                  getBatchSamplersUniformGroup.getBatchSamplersUniformGroup(
+                    maxTextures
+                  )
               }
             });
           }
@@ -72544,7 +72569,7 @@ Deprecated since v${version}`
 
         ('use strict');
         let saidHello = false;
-        const VERSION = '8.1.4';
+        const VERSION = '8.1.5';
         function sayHello(type) {
           if (saidHello) {
             return;
@@ -87973,13 +87998,13 @@ Deprecated since v${version}`
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
-        const container_1 = __webpack_require__(
-          /*! ./container */ './src/container.ts'
+        const lifecycle_1 = __webpack_require__(
+          /*! ./lifecycle */ './src/lifecycle.ts'
         );
         const state_machine_1 = __webpack_require__(
           /*! ./state-machine */ './src/state-machine.ts'
         );
-        class Animator extends container_1.Container {
+        class Animator extends PIXI.Container {
           /**
            * @param gameObject
            * @param animatorData
@@ -87996,7 +88021,17 @@ Deprecated since v${version}`
             },
             { width, height, source }
           ) {
-            super(gameObject);
+            super();
+            /**
+             * When Lifecycle Object is updated, it emits this subject.
+             * Along with updating his children, which in turn behave the same.
+             */
+            this.update$ = new Subject_1.Subject();
+            /**
+             * When Lifecycle Object is destroyed, it emits and closes this subject.
+             * Along with destroying his children, which in turn behave the same.
+             */
+            this.destroy$ = new Subject_1.Subject();
             /**
              * When animation completes, it emits this subject.
              */
@@ -88006,6 +88041,7 @@ Deprecated since v${version}`
              */
             this.label = 'Animator';
             this.stateMachine = new state_machine_1.StateMachine(gameObject);
+            this.sprite = new PIXI.Container();
             const tileWidth = width / cols;
             const tileHeight = height / rows;
             Object.values(animations).forEach((animationFrames) => {
@@ -88024,7 +88060,7 @@ Deprecated since v${version}`
                 })
               );
               animatedSprite.anchor.set(anchor.x, anchor.y);
-              this.addChild(animatedSprite);
+              this.sprite.addChild(animatedSprite);
             });
             this.states = Object.keys(animations);
           }
@@ -88040,8 +88076,19 @@ Deprecated since v${version}`
           get state$() {
             return this.stateMachine.state$;
           }
+          /**
+           * Reference to inner animation scale.
+           */
+          get scale() {
+            return this.animation.scale;
+          }
+          update(deltaTime) {
+            this.sprite.x = this.gameObject.x;
+            this.sprite.y = this.gameObject.y;
+            lifecycle_1.Lifecycle.update(this, deltaTime);
+          }
           setScale(x = 1, y = x) {
-            this.children.forEach((child) => {
+            this.sprite.children.forEach((child) => {
               child.scale.set(x, y);
             });
           }
@@ -88055,7 +88102,7 @@ Deprecated since v${version}`
             if (animation === this.animation) {
               return;
             }
-            const children = this.children.filter(
+            const children = this.sprite.children.filter(
               (child) =>
                 child instanceof PIXI.AnimatedSprite && child !== animation
             );
@@ -88080,7 +88127,7 @@ Deprecated since v${version}`
             if (!this.stateMachine.setState(next)) {
               return '';
             }
-            const animation = this.children[index];
+            const animation = this.sprite.children[index];
             if (!loop && stateWhenFinished) {
               animation.onComplete = () => {
                 animation.onComplete = null;
@@ -88276,8 +88323,7 @@ Deprecated since v${version}`
             if (!radiusX || !radiusY) {
               throw new Error("CircleBody radius can't be 0!");
             }
-            this.gameObject = gameObject;
-            this.gameObject.addChild(this);
+            gameObject.addChild(this);
           }
           update(deltaTime) {
             this.gameObject.x = this.x;
@@ -88328,8 +88374,7 @@ Deprecated since v${version}`
              * Each Lifecycle Object has label for pixi debugging.
              */
             this.label = 'Component';
-            this.gameObject = gameObject;
-            this.gameObject.addChild(this);
+            gameObject.addChild(this);
           }
           update(deltaTime) {
             lifecycle_1.Lifecycle.update(this, deltaTime);
@@ -88339,113 +88384,6 @@ Deprecated since v${version}`
           }
         }
         exports.Component = Component;
-
-        /***/
-      },
-
-    /***/ './src/container.ts':
-      /*!**************************!*\
-  !*** ./src/container.ts ***!
-  \**************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __setModuleDefault =
-          (this && this.__setModuleDefault) ||
-          (Object.create
-            ? function (o, v) {
-                Object.defineProperty(o, 'default', {
-                  enumerable: true,
-                  value: v
-                });
-              }
-            : function (o, v) {
-                o['default'] = v;
-              });
-        var __importStar =
-          (this && this.__importStar) ||
-          function (mod) {
-            if (mod && mod.__esModule) return mod;
-            var result = {};
-            if (mod != null)
-              for (var k in mod)
-                if (
-                  k !== 'default' &&
-                  Object.prototype.hasOwnProperty.call(mod, k)
-                )
-                  __createBinding(result, mod, k);
-            __setModuleDefault(result, mod);
-            return result;
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Container = void 0;
-        const PIXI = __importStar(
-          __webpack_require__(
-            /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
-          )
-        );
-        const Subject_1 = __webpack_require__(
-          /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
-        );
-        const lifecycle_1 = __webpack_require__(
-          /*! ./lifecycle */ './src/lifecycle.ts'
-        );
-        class Container extends PIXI.Container {
-          constructor(gameObject) {
-            super();
-            /**
-             * When Lifecycle Object is updated, it emits this subject.
-             * Along with updating his children, which in turn behave the same.
-             */
-            this.update$ = new Subject_1.Subject();
-            /**
-             * When Lifecycle Object is destroyed, it emits and closes this subject.
-             * Along with destroying his children, which in turn behave the same.
-             */
-            this.destroy$ = new Subject_1.Subject();
-            /**
-             * Each Lifecycle Object has label for pixi debugging.
-             */
-            this.label = 'Container';
-            this.gameObject = gameObject;
-            this.gameObject.addChild(this);
-          }
-          update(deltaTime) {
-            this.x = this.gameObject.x;
-            this.y = this.gameObject.y;
-            lifecycle_1.Lifecycle.update(this, deltaTime);
-          }
-          destroy() {
-            super.destroy({ children: true });
-            lifecycle_1.Lifecycle.destroy(this);
-          }
-        }
-        exports.Container = Container;
 
         /***/
       },
@@ -88493,6 +88431,7 @@ Deprecated since v${version}`
             texture
           );
           gameObject.sprite.setState('idle');
+          scene.pixi.stage.addChild(gameObject.sprite.sprite);
           // subscribe to *own* update function until *own* destroy
           gameObject.update$
             .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
@@ -88503,8 +88442,9 @@ Deprecated since v${version}`
         }
         exports.createSprite = createSprite;
         function updateSprite(gameObject, deltaTime) {
-          const scale = gameObject.scene.stage.scale;
-          const gameObjects = gameObject.scene.children;
+          const scene = gameObject.root;
+          const scale = scene.stage.scale;
+          const gameObjects = scene.children;
           const safeDelta = Math.min(60, deltaTime);
           const chance = safeDelta * 0.01;
           if (Math.random() < chance) {
@@ -88545,7 +88485,7 @@ Deprecated since v${version}`
                 // flip x so there is no need to duplicate sprites
                 gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
               }
-              // update body which updates parent game object
+              // update body which updates gameObject game object
               gameObject.body.setPosition(
                 gameObject.body.x + safeDelta * offsetX,
                 gameObject.body.y + safeDelta * offsetY
@@ -88596,48 +88536,58 @@ Deprecated since v${version}`
           static async instantiate(prefab) {
             return prefab.instantiate();
           }
+          /**
+           * get root scene
+           */
+          get root() {
+            let cursor = this.gameObject;
+            while (
+              cursor === null || cursor === void 0 ? void 0 : cursor.gameObject
+            ) {
+              cursor = cursor.gameObject;
+            }
+            return cursor;
+          }
           update(deltaTime) {
-            this.children.forEach((component) => {
-              component.update(deltaTime);
+            this.children.forEach((child) => {
+              child.update(deltaTime);
             });
             lifecycle_1.Lifecycle.update(this, deltaTime);
           }
           destroy() {
-            var _a;
             while (this.children.length) {
               const child = this.children.pop();
               // (!) does also child.gameObject.removeChild(child)
               child.destroy();
             }
-            (_a = this.scene) === null || _a === void 0
-              ? void 0
-              : _a.removeChild(this);
             lifecycle_1.Lifecycle.destroy(this);
           }
           addChild(...children) {
+            const root = this.root;
             children.forEach((child) => {
-              var _a;
               const index = this.children.indexOf(child);
-              if (index !== -1) {
-                return;
+              if (index === -1) {
+                // add to root scene if exists
+                root === null || root === void 0
+                  ? void 0
+                  : root.addChild(child);
+                this.children.push(child);
+                child.gameObject = this;
               }
-              this.children.push(child);
-              (_a = this.scene) === null || _a === void 0
-                ? void 0
-                : _a.addChild(child);
             });
           }
           removeChild(...children) {
+            const root = this.root;
             children.forEach((child) => {
-              var _a;
               const index = this.children.indexOf(child);
-              if (index === -1) {
-                return;
+              if (index !== -1) {
+                // remove from root scene if exists
+                root === null || root === void 0
+                  ? void 0
+                  : root.removeChild(child);
+                this.children.splice(index, 1);
+                child.gameObject = null;
               }
-              this.children.splice(index, 1);
-              (_a = this.scene) === null || _a === void 0
-                ? void 0
-                : _a.removeChild(child);
             });
           }
           getChildOfType(type) {
@@ -88664,9 +88614,6 @@ Deprecated since v${version}`
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
-        const game_object_1 = __webpack_require__(
-          /*! ./game-object */ './src/game-object.ts'
-        );
         class Lifecycle {
           constructor() {
             /**
@@ -88685,9 +88632,14 @@ Deprecated since v${version}`
             this.label = 'Lifecycle';
           }
           static destroy(lifecycle) {
-            if (!(lifecycle instanceof game_object_1.GameObject)) {
-              lifecycle.gameObject.removeChild(lifecycle);
-            }
+            var _a, _b;
+            // tslint:disable-next-line: no-any
+            (_b =
+              (_a = lifecycle.gameObject) === null || _a === void 0
+                ? void 0
+                : _a.removeChild) === null || _b === void 0
+              ? void 0
+              : _b.call(_a, lifecycle);
             lifecycle.update$.complete();
             lifecycle.destroy$.next();
             lifecycle.destroy$.complete();
@@ -88955,8 +88907,8 @@ Deprecated since v${version}`
             this.animationFrame = requestAnimationFrame(frame);
           }
           update(deltaTime) {
-            this.physics.update();
             super.update(deltaTime);
+            this.physics.update();
           }
           destroy() {
             this.stop();
@@ -88965,38 +88917,28 @@ Deprecated since v${version}`
           }
           addChild(...children) {
             children.forEach((child) => {
-              child.scene = this;
-              if (child instanceof game_object_1.GameObject) {
-                child.children.forEach((component) => {
-                  if (component instanceof PIXI.Container) {
-                    this.stage.addChild(component);
-                  }
-                });
-              } else if (child instanceof PIXI.Container) {
-                this.stage.addChild(child);
-              }
               const index = this.children.indexOf(child);
               if (index === -1) {
+                // add to root scene
+                if (child instanceof PIXI.Container) {
+                  this.stage.addChild(child);
+                }
                 this.children.push(child);
+                child.gameObject = this;
               }
             });
             this.children$.next();
           }
           removeChild(...children) {
             children.forEach((child) => {
-              child.scene = null;
-              if (child instanceof game_object_1.GameObject) {
-                child.children.forEach((component) => {
-                  if (component instanceof PIXI.Container) {
-                    this.stage.removeChild(component);
-                  }
-                });
-              } else if (child instanceof PIXI.Container) {
-                this.stage.removeChild(child);
-              }
               const index = this.children.indexOf(child);
               if (index !== -1) {
+                // remove from root scene
+                if (child instanceof PIXI.Container) {
+                  child.gameObject.removeChild(child);
+                }
                 this.children.splice(index, 1);
+                child.gameObject = null;
               }
             });
             this.children$.next();
@@ -89166,11 +89108,21 @@ Deprecated since v${version}`
           }
           async init(options) {
             await this.pixi.init(options);
-            document.body.appendChild(this.pixi.canvas);
+            if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
+              document.body.appendChild(this.pixi.canvas);
+            }
             const showFPS = this.options.showFPS;
             if (showFPS) {
               this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
             }
+          }
+          addChild(...children) {
+            children.forEach((child) => {
+              super.addChild(child);
+              if (child instanceof PIXI.Container) {
+                this.stage.addChild(child);
+              }
+            });
           }
           start() {
             this.pixi.start();
@@ -91058,6 +91010,7 @@ and limitations under the License.
         .subscribe(() => {
           scene.physics.separate();
         });
+      globalThis.scene = scene;
     }
     start();
   })();

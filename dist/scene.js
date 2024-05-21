@@ -67,11 +67,21 @@ class Scene extends scene_base_1.SceneBase {
     }
     async init(options) {
         await this.pixi.init(options);
-        document.body.appendChild(this.pixi.canvas);
+        if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
+            document.body.appendChild(this.pixi.canvas);
+        }
         const showFPS = this.options.showFPS;
         if (showFPS) {
             this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
         }
+    }
+    addChild(...children) {
+        children.forEach((child) => {
+            super.addChild(child);
+            if (child instanceof PIXI.Container) {
+                this.stage.addChild(child);
+            }
+        });
     }
     start() {
         this.pixi.start();

@@ -19,8 +19,7 @@ class Component {
          * Each Lifecycle Object has label for pixi debugging.
          */
         this.label = 'Component';
-        this.gameObject = gameObject;
-        this.gameObject.addChild(this);
+        gameObject.addChild(this);
     }
     update(deltaTime) {
         lifecycle_1.Lifecycle.update(this, deltaTime);

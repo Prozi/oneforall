@@ -26,42 +26,52 @@ class GameObject {
     static async instantiate(prefab) {
         return prefab.instantiate();
     }
+    /**
+     * get root scene
+     */
+    get root() {
+        let cursor = this.gameObject;
+        while (cursor === null || cursor === void 0 ? void 0 : cursor.gameObject) {
+            cursor = cursor.gameObject;
+        }
+        return cursor;
+    }
     update(deltaTime) {
-        this.children.forEach((component) => {
-            component.update(deltaTime);
+        this.children.forEach((child) => {
+            child.update(deltaTime);
         });
         lifecycle_1.Lifecycle.update(this, deltaTime);
     }
     destroy() {
-        var _a;
         while (this.children.length) {
             const child = this.children.pop();
             // (!) does also child.gameObject.removeChild(child)
             child.destroy();
         }
-        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(this);
         lifecycle_1.Lifecycle.destroy(this);
     }
     addChild(...children) {
+        const root = this.root;
         children.forEach((child) => {
-            var _a;
             const index = this.children.indexOf(child);
-            if (index !== -1) {
-                return;
+            if (index === -1) {
+                // add to root scene if exists
+                root === null || root === void 0 ? void 0 : root.addChild(child);
+                this.children.push(child);
+                child.gameObject = this;
             }
-            this.children.push(child);
-            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.addChild(child);
         });
     }
     removeChild(...children) {
+        const root = this.root;
         children.forEach((child) => {
-            var _a;
             const index = this.children.indexOf(child);
-            if (index === -1) {
-                return;
+            if (index !== -1) {
+                // remove from root scene if exists
+                root === null || root === void 0 ? void 0 : root.removeChild(child);
+                this.children.splice(index, 1);
+                child.gameObject = null;
             }
-            this.children.splice(index, 1);
-            (_a = this.scene) === null || _a === void 0 ? void 0 : _a.removeChild(child);
         });
     }
     getChildOfType(type) {

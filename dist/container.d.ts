@@ -1,12 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
-import { LifecycleProps } from './lifecycle';
+import { LifecycleParent, LifecycleProps } from './lifecycle';
 export declare class Container extends PIXI.Container implements LifecycleProps {
-    /**
-     * Parent GameObject is assigned at creation.
-     */
-    readonly gameObject: GameObject;
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.
@@ -18,10 +13,14 @@ export declare class Container extends PIXI.Container implements LifecycleProps 
      */
     readonly destroy$: Subject<void>;
     /**
+     * Parent GameObject is assigned at creation.
+     */
+    gameObject: LifecycleParent;
+    /**
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
-    constructor(gameObject: GameObject);
+    constructor(gameObject: LifecycleParent);
     update(deltaTime: number): void;
     destroy(): void;
 }

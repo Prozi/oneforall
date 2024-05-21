@@ -23,6 +23,10 @@ export declare class GameObject implements LifecycleProps {
      */
     readonly destroy$: Subject<void>;
     /**
+     * Lifecycle Object may be added to a Scene Object.
+     */
+    gameObject?: SceneBase | Scene | GameObject;
+    /**
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
@@ -38,12 +42,12 @@ export declare class GameObject implements LifecycleProps {
      * position y
      */
     y: number;
-    /**
-     * Lifecycle Object may be added to a Scene Object.
-     */
-    scene?: SceneBase | Scene;
     constructor(label?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
+    /**
+     * get root scene
+     */
+    get root(): SceneBase | Scene | undefined;
     update(deltaTime: number): void;
     destroy(): void;
     addChild(...children: LifecycleProps[]): void;

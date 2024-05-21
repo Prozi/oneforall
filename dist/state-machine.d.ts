@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/internal/Subject';
 import { Component } from './component';
 import { GameObject } from './game-object';
+import { LifecycleParent } from './lifecycle';
 export type TStateValidator = (newState: string) => boolean;
 export declare class StateMachine extends Component {
     /**
@@ -19,6 +20,10 @@ export declare class StateMachine extends Component {
      * Current state of the State Machine.
      */
     state: string;
+    /**
+     * Parent GameObject is assigned at creation.
+     */
+    gameObject: LifecycleParent;
     /**
      * Validators for state changes.
      */

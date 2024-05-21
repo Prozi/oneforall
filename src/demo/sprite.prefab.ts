@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Animator } from '../animator';
 import { CircleBody } from '../circle-body';
 import { GameObject, TGameObject } from '../game-object';
+import { Scene } from '../scene';
 
 export function createSprite({ scene, data, texture }): TGameObject {
   // create game object
@@ -24,6 +25,8 @@ export function createSprite({ scene, data, texture }): TGameObject {
   gameObject.sprite = new Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle');
 
+  scene.pixi.stage.addChild(gameObject.sprite.sprite);
+
   // subscribe to *own* update function until *own* destroy
   gameObject.update$
     .pipe(takeUntil(gameObject.destroy$))
@@ -35,8 +38,9 @@ export function createSprite({ scene, data, texture }): TGameObject {
 }
 
 export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
-  const scale = gameObject.scene.stage.scale;
-  const gameObjects = gameObject.scene.children as TGameObject[];
+  const scene = gameObject.root;
+  const scale = scene.stage.scale;
+  const gameObjects = scene.children as TGameObject[];
   const safeDelta = Math.min(60, deltaTime);
   const chance = safeDelta * 0.01;
 
@@ -80,7 +84,7 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
         gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
       }
 
-      // update body which updates parent game object
+      // update body which updates gameObject game object
       gameObject.body.setPosition(
         gameObject.body.x + safeDelta * offsetX,
         gameObject.body.y + safeDelta * offsetY

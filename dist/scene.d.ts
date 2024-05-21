@@ -2,6 +2,7 @@ import { Body } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { Application } from './application';
+import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { SceneBase, SceneOptions } from './scene-base';
 export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
@@ -18,6 +19,7 @@ export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
     constructor(options?: SceneOptions);
     static getQueryParams(): Record<string, string>;
     init(options?: Partial<PIXI.ApplicationOptions>): Promise<void>;
+    addChild(...children: LifecycleProps[]): void;
     start(): void;
     stop(): void;
     destroy(): void;

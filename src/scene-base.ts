@@ -104,8 +104,8 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
   }
 
   update(deltaTime: number): void {
-    this.physics.update();
     super.update(deltaTime);
+    this.physics.update();
   }
 
   destroy(): void {
@@ -116,21 +116,14 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
 
   addChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
-      child.scene = this;
-
-      if (child instanceof GameObject) {
-        child.children.forEach((component) => {
-          if (component instanceof PIXI.Container) {
-            this.stage.addChild(component);
-          }
-        });
-      } else if (child instanceof PIXI.Container) {
-        this.stage.addChild(child);
-      }
-
       const index = this.children.indexOf(child);
       if (index === -1) {
+        // add to root scene
+        if (child instanceof PIXI.Container) {
+          this.stage.addChild(child);
+        }
         this.children.push(child);
+        child.gameObject = this;
       }
     });
 
@@ -139,21 +132,14 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
 
   removeChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
-      child.scene = null;
-
-      if (child instanceof GameObject) {
-        child.children.forEach((component) => {
-          if (component instanceof PIXI.Container) {
-            this.stage.removeChild(component);
-          }
-        });
-      } else if (child instanceof PIXI.Container) {
-        this.stage.removeChild(child);
-      }
-
       const index = this.children.indexOf(child);
       if (index !== -1) {
+        // remove from root scene
+        if (child instanceof PIXI.Container) {
+          child.gameObject.removeChild(child);
+        }
         this.children.splice(index, 1);
+        child.gameObject = null;
       }
     });
 

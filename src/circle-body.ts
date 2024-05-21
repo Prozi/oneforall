@@ -2,14 +2,9 @@ import { BodyOptions, Ellipse } from 'detect-collisions';
 import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject } from './game-object';
-import { Lifecycle, LifecycleProps } from './lifecycle';
+import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 
 export class CircleBody extends Ellipse implements LifecycleProps {
-  /**
-   * Parent GameObject is assigned at creation.
-   */
-  readonly gameObject: GameObject;
-
   /**
    * When Lifecycle Object is updated, it emits this subject.
    * Along with updating his children, which in turn behave the same.
@@ -21,6 +16,11 @@ export class CircleBody extends Ellipse implements LifecycleProps {
    * Along with destroying his children, which in turn behave the same.
    */
   readonly destroy$: Subject<void> = new Subject();
+
+  /**
+   * Parent GameObject is assigned at creation.
+   */
+  gameObject: LifecycleParent;
 
   /**
    * Each Lifecycle Object has label for pixi debugging.
@@ -37,11 +37,10 @@ export class CircleBody extends Ellipse implements LifecycleProps {
     super(gameObject, radiusX, radiusY, step, options);
 
     if (!radiusX || !radiusY) {
-      throw new Error("CircleBody radius can't be 0!");
+      throw new Error('CircleBody radius can\'t be 0!');
     }
 
-    this.gameObject = gameObject;
-    this.gameObject.addChild(this);
+    gameObject.addChild(this);
   }
 
   update(deltaTime: number): void {

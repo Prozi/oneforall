@@ -67,8 +67,8 @@ class SceneBase extends game_object_1.GameObject {
         this.animationFrame = requestAnimationFrame(frame);
     }
     update(deltaTime) {
-        this.physics.update();
         super.update(deltaTime);
+        this.physics.update();
     }
     destroy() {
         this.stop();
@@ -77,40 +77,28 @@ class SceneBase extends game_object_1.GameObject {
     }
     addChild(...children) {
         children.forEach((child) => {
-            child.scene = this;
-            if (child instanceof game_object_1.GameObject) {
-                child.children.forEach((component) => {
-                    if (component instanceof PIXI.Container) {
-                        this.stage.addChild(component);
-                    }
-                });
-            }
-            else if (child instanceof PIXI.Container) {
-                this.stage.addChild(child);
-            }
             const index = this.children.indexOf(child);
             if (index === -1) {
+                // add to root scene
+                if (child instanceof PIXI.Container) {
+                    this.stage.addChild(child);
+                }
                 this.children.push(child);
+                child.gameObject = this;
             }
         });
         this.children$.next();
     }
     removeChild(...children) {
         children.forEach((child) => {
-            child.scene = null;
-            if (child instanceof game_object_1.GameObject) {
-                child.children.forEach((component) => {
-                    if (component instanceof PIXI.Container) {
-                        this.stage.removeChild(component);
-                    }
-                });
-            }
-            else if (child instanceof PIXI.Container) {
-                this.stage.removeChild(child);
-            }
             const index = this.children.indexOf(child);
             if (index !== -1) {
+                // remove from root scene
+                if (child instanceof PIXI.Container) {
+                    child.gameObject.removeChild(child);
+                }
                 this.children.splice(index, 1);
+                child.gameObject = null;
             }
         });
         this.children$.next();

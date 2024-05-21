@@ -14,7 +14,6 @@ describe('GIVEN SceneBase', () => {
   it('THEN it can have children', () => {
     const scene = new SceneBase({
       label: 'MySceneBase1',
-      scale: 2,
       visible: true
     });
     scene.addChild(new GameObject());
@@ -27,7 +26,6 @@ describe('GIVEN SceneBase', () => {
   it('THEN scene propagates update to gameobject to component', () => {
     const scene = new SceneBase({
       label: 'MySceneBase1',
-      scale: 2,
       visible: true
     });
     const go = new GameObject();

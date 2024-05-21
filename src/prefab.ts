@@ -1,7 +1,7 @@
 import { GameObject } from './game-object';
 
 export class Prefab extends GameObject {
-  private createFunction: (prefab: GameObject) => Promise<void>;
+  protected createFunction: (prefab: GameObject) => Promise<void>;
 
   constructor(
     label = 'GameObject',

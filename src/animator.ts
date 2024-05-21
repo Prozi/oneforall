@@ -2,8 +2,10 @@ import { Vector } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
-import { Container } from './container';
 import { GameObject } from './game-object';
+import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
+import { Scene } from './scene';
+import { SceneBase } from './scene-base';
 import { StateMachine } from './state-machine';
 
 export interface AnimatorData {
@@ -14,7 +16,19 @@ export interface AnimatorData {
   anchor?: Vector;
 }
 
-export class Animator extends Container {
+export class Animator extends PIXI.Container implements LifecycleProps {
+  /**
+   * When Lifecycle Object is updated, it emits this subject.
+   * Along with updating his children, which in turn behave the same.
+   */
+  readonly update$: Subject<number> = new Subject();
+
+  /**
+   * When Lifecycle Object is destroyed, it emits and closes this subject.
+   * Along with destroying his children, which in turn behave the same.
+   */
+  readonly destroy$: Subject<void> = new Subject();
+
   /**
    * When animation completes, it emits this subject.
    */
@@ -24,6 +38,16 @@ export class Animator extends Container {
    * Inner State Machine Object.
    */
   readonly stateMachine: StateMachine;
+
+  /**
+   * Animator has sprite container for animations.
+   */
+  readonly sprite: PIXI.Container;
+
+  /**
+   * Parent GameObject is assigned at creation.
+   */
+  gameObject: LifecycleParent;
 
   /**
    * Each Lifecycle Object has label for pixi debugging.
@@ -56,8 +80,11 @@ export class Animator extends Container {
     }: AnimatorData,
     { width, height, source }: PIXI.Texture
   ) {
-    super(gameObject);
+    super();
+    gameObject.addChild(this);
+
     this.stateMachine = new StateMachine(gameObject);
+    this.sprite = new PIXI.Container();
 
     const tileWidth = width / cols;
     const tileHeight = height / rows;
@@ -80,7 +107,7 @@ export class Animator extends Container {
       );
 
       animatedSprite.anchor.set(anchor.x, anchor.y);
-      this.addChild(animatedSprite);
+      this.sprite.addChild(animatedSprite);
     });
 
     this.states = Object.keys(animations);
@@ -100,8 +127,21 @@ export class Animator extends Container {
     return this.stateMachine.state$;
   }
 
+  /**
+   * Reference to inner animation scale.
+   */
+  get scale() {
+    return this.animation.scale;
+  }
+
+  update(deltaTime: number) {
+    this.sprite.x = this.gameObject.x;
+    this.sprite.y = this.gameObject.y;
+    Lifecycle.update(this, deltaTime);
+  }
+
   setScale(x = 1, y: number = x): void {
-    (this.children as PIXI.AnimatedSprite[]).forEach(
+    (this.sprite.children as PIXI.AnimatedSprite[]).forEach(
       (child: PIXI.AnimatedSprite) => {
         child.scale.set(x, y);
       }
@@ -119,7 +159,7 @@ export class Animator extends Container {
       return;
     }
 
-    const children = this.children.filter(
+    const children = this.sprite.children.filter(
       (child: PIXI.AnimatedSprite) =>
         child instanceof PIXI.AnimatedSprite && child !== animation
     );
@@ -150,7 +190,7 @@ export class Animator extends Container {
       return '';
     }
 
-    const animation = this.children[index] as PIXI.AnimatedSprite;
+    const animation = this.sprite.children[index] as PIXI.AnimatedSprite;
     if (!loop && stateWhenFinished) {
       animation.onComplete = () => {
         animation.onComplete = null;
@@ -164,11 +204,11 @@ export class Animator extends Container {
     return next;
   }
 
-  private getExactStateIndex(state: string): number {
+  protected getExactStateIndex(state: string): number {
     return this.states.indexOf(state);
   }
 
-  private getFuzzyStateIndex(state: string): number {
+  protected getFuzzyStateIndex(state: string): number {
     const indexes: number[] = this.states
       .map((direction: string, index: number) => ({
         direction,

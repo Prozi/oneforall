@@ -8,6 +8,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { Inject } from '@jacekpietal/dependency-injection';
 
 import { Application } from './application';
+import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { SceneBase, SceneOptions } from './scene-base';
 
@@ -58,12 +59,23 @@ export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
   async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
     await this.pixi.init(options);
 
-    document.body.appendChild(this.pixi.canvas);
+    if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
+      document.body.appendChild(this.pixi.canvas);
+    }
 
     const showFPS = this.options.showFPS;
     if (showFPS) {
       this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
     }
+  }
+
+  addChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      super.addChild(child);
+      if (child instanceof PIXI.Container) {
+        this.stage.addChild(child);
+      }
+    });
   }
 
   start(): void {

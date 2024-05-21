@@ -1,8 +1,11 @@
+import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject } from './game-object';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
+
+export type LifecycleParent = GameObject | SceneBase | Scene | PIXI.Container;
 
 export interface LifecycleProps {
   /**
@@ -19,19 +22,14 @@ export interface LifecycleProps {
 
   /**
    * Parent GameObject is assigned at creation.
-   * BaseScene & Scene don't have parent gameObject
+   * BaseScene/Scene has no gameObject
    */
-  readonly gameObject?: GameObject;
+  gameObject?: LifecycleParent;
 
   /**
    * Each Lifecycle Object has label for pixi debugging.
    */
   label: string;
-
-  /**
-   * Lifecycle Object may be added to a Scene Object.
-   */
-  scene?: SceneBase | Scene;
 
   /**
    * Updates the Lifecycle Object with actual deltaTime ~60fps
@@ -63,9 +61,8 @@ export abstract class Lifecycle implements LifecycleProps {
   label = 'Lifecycle';
 
   static destroy(lifecycle: LifecycleProps): void {
-    if (!(lifecycle instanceof GameObject)) {
-      lifecycle.gameObject.removeChild(lifecycle);
-    }
+    // tslint:disable-next-line: no-any
+    lifecycle.gameObject?.removeChild?.(lifecycle as any);
     lifecycle.update$.complete();
     lifecycle.destroy$.next();
     lifecycle.destroy$.complete();

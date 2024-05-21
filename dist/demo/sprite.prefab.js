@@ -18,6 +18,7 @@ function createSprite({ scene, data, texture }) {
     // create animator with few animations from json + texture
     gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
     gameObject.sprite.setState('idle');
+    scene.pixi.stage.addChild(gameObject.sprite.sprite);
     // subscribe to *own* update function until *own* destroy
     gameObject.update$
         .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
@@ -28,8 +29,9 @@ function createSprite({ scene, data, texture }) {
 }
 exports.createSprite = createSprite;
 function updateSprite(gameObject, deltaTime) {
-    const scale = gameObject.scene.stage.scale;
-    const gameObjects = gameObject.scene.children;
+    const scene = gameObject.root;
+    const scale = scene.stage.scale;
+    const gameObjects = scene.children;
     const safeDelta = Math.min(60, deltaTime);
     const chance = safeDelta * 0.01;
     if (Math.random() < chance) {
@@ -66,7 +68,7 @@ function updateSprite(gameObject, deltaTime) {
                 // flip x so there is no need to duplicate sprites
                 gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
             }
-            // update body which updates parent game object
+            // update body which updates gameObject game object
             gameObject.body.setPosition(gameObject.body.x + safeDelta * offsetX, gameObject.body.y + safeDelta * offsetY);
         }
     }

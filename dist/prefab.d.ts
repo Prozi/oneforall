@@ -1,6 +1,6 @@
 import { GameObject } from './game-object';
 export declare class Prefab extends GameObject {
-    private createFunction;
+    protected createFunction: (prefab: GameObject) => Promise<void>;
     constructor(label: string, createFunction: (prefab: GameObject) => Promise<void>);
     instantiate(): Promise<GameObject>;
 }
