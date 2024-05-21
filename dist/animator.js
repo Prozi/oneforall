@@ -71,6 +71,10 @@ class Animator extends PIXI.Container {
             this.sprite.addChild(animatedSprite);
         });
         this.states = Object.keys(animations);
+        const scene = gameObject.root;
+        if ('pixi' in scene) {
+            scene.pixi.stage.addChild(this.sprite);
+        }
     }
     /**
      * Reference to inner State Machine's state.

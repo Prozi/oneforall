@@ -88064,6 +88064,10 @@ Deprecated since v${version}`
               this.sprite.addChild(animatedSprite);
             });
             this.states = Object.keys(animations);
+            const scene = gameObject.root;
+            if ('pixi' in scene) {
+              scene.pixi.stage.addChild(this.sprite);
+            }
           }
           /**
            * Reference to inner State Machine's state.
@@ -88432,7 +88436,6 @@ Deprecated since v${version}`
             texture
           );
           gameObject.sprite.setState('idle');
-          scene.pixi.stage.addChild(gameObject.sprite.sprite);
           // subscribe to *own* update function until *own* destroy
           gameObject.update$
             .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
