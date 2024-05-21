@@ -54,6 +54,7 @@ class Animator extends PIXI.Container {
          * Each Lifecycle Object has label for pixi debugging.
          */
         this.label = 'Animator';
+        gameObject.addChild(this);
         this.stateMachine = new state_machine_1.StateMachine(gameObject);
         this.sprite = new PIXI.Container();
         const tileWidth = width / cols;
