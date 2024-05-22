@@ -88021,7 +88021,6 @@ Deprecated since v${version}`
             },
             { width, height, source }
           ) {
-            var _a;
             super();
             /**
              * When Lifecycle Object is updated, it emits this subject.
@@ -88043,7 +88042,6 @@ Deprecated since v${version}`
             this.label = 'Animator';
             gameObject.addChild(this);
             this.stateMachine = new state_machine_1.StateMachine(gameObject);
-            this.sprite = new PIXI.Container();
             const tileWidth = width / cols;
             const tileHeight = height / rows;
             Object.values(animations).forEach((animationFrames) => {
@@ -88062,12 +88060,9 @@ Deprecated since v${version}`
                 })
               );
               animatedSprite.anchor.set(anchor.x, anchor.y);
-              this.sprite.addChild(animatedSprite);
+              this.addChild(animatedSprite);
             });
             this.states = Object.keys(animations);
-            (_a = gameObject.scene) === null || _a === void 0
-              ? void 0
-              : _a.stage.addChild(this.sprite);
           }
           /**
            * Reference to inner State Machine's state.
@@ -88088,12 +88083,12 @@ Deprecated since v${version}`
             return this.animation.scale;
           }
           update(deltaTime) {
-            this.sprite.x = this.gameObject.x;
-            this.sprite.y = this.gameObject.y;
+            this.x = this.gameObject.x;
+            this.y = this.gameObject.y;
             lifecycle_1.Lifecycle.update(this, deltaTime);
           }
           setScale(x = 1, y = x) {
-            this.sprite.children.forEach((child) => {
+            this.children.forEach((child) => {
               child.scale.set(x, y);
             });
           }
@@ -88107,7 +88102,7 @@ Deprecated since v${version}`
             if (animation === this.animation) {
               return;
             }
-            const children = this.sprite.children.filter(
+            const children = this.children.filter(
               (child) =>
                 child instanceof PIXI.AnimatedSprite && child !== animation
             );
@@ -88132,7 +88127,7 @@ Deprecated since v${version}`
             if (!this.stateMachine.setState(next)) {
               return '';
             }
-            const animation = this.sprite.children[index];
+            const animation = this.children[index];
             if (!loop && stateWhenFinished) {
               animation.onComplete = () => {
                 animation.onComplete = null;

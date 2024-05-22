@@ -5,7 +5,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 import { StateMachine } from './state-machine';
-import { Scene } from './scene';
 
 export interface AnimatorData {
   animations: Record<string, number[]>;
@@ -81,9 +80,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
   ) {
     super();
     gameObject.addChild(this);
-
     this.stateMachine = new StateMachine(gameObject);
-    this.sprite = new PIXI.Container();
 
     const tileWidth = width / cols;
     const tileHeight = height / rows;
@@ -106,12 +103,10 @@ export class Animator extends PIXI.Container implements LifecycleProps {
       );
 
       animatedSprite.anchor.set(anchor.x, anchor.y);
-      this.sprite.addChild(animatedSprite);
+      this.addChild(animatedSprite);
     });
 
     this.states = Object.keys(animations);
-
-    gameObject.scene?.stage.addChild(this.sprite);
   }
 
   /**
@@ -136,13 +131,13 @@ export class Animator extends PIXI.Container implements LifecycleProps {
   }
 
   update(deltaTime: number) {
-    this.sprite.x = this.gameObject.x;
-    this.sprite.y = this.gameObject.y;
+    this.x = this.gameObject.x;
+    this.y = this.gameObject.y;
     Lifecycle.update(this, deltaTime);
   }
 
   setScale(x = 1, y: number = x): void {
-    (this.sprite.children as PIXI.AnimatedSprite[]).forEach(
+    (this.children as PIXI.AnimatedSprite[]).forEach(
       (child: PIXI.AnimatedSprite) => {
         child.scale.set(x, y);
       }
@@ -160,7 +155,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
       return;
     }
 
-    const children = this.sprite.children.filter(
+    const children = this.children.filter(
       (child: PIXI.AnimatedSprite) =>
         child instanceof PIXI.AnimatedSprite && child !== animation
     );
@@ -191,7 +186,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
       return '';
     }
 
-    const animation = this.sprite.children[index] as PIXI.AnimatedSprite;
+    const animation = this.children[index] as PIXI.AnimatedSprite;
     if (!loop && stateWhenFinished) {
       animation.onComplete = () => {
         animation.onComplete = null;
