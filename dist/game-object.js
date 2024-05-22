@@ -69,7 +69,7 @@ class GameObject extends lifecycle_1.Lifecycle {
             }
         });
         // add pixi components
-        (_a = (0, exports.getRoot)(this)) === null || _a === void 0 ? void 0 : _a.stageAddChild(...children);
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.stageAddChild(...children);
     }
     removeChild(...children) {
         var _a;
@@ -81,7 +81,7 @@ class GameObject extends lifecycle_1.Lifecycle {
             }
         });
         // remove pixi components
-        (_a = (0, exports.getRoot)(this)) === null || _a === void 0 ? void 0 : _a.stageRemoveChild(...children);
+        (_a = this.scene) === null || _a === void 0 ? void 0 : _a.stageRemoveChild(...children);
     }
     getChildOfType(type) {
         return this.children.find(({ label }) => label === type);

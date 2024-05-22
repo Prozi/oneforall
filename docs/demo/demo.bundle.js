@@ -88578,7 +88578,7 @@ Deprecated since v${version}`
               }
             });
             // add pixi components
-            (_a = (0, exports.getRoot)(this)) === null || _a === void 0
+            (_a = this.scene) === null || _a === void 0
               ? void 0
               : _a.stageAddChild(...children);
           }
@@ -88592,7 +88592,7 @@ Deprecated since v${version}`
               }
             });
             // remove pixi components
-            (_a = (0, exports.getRoot)(this)) === null || _a === void 0
+            (_a = this.scene) === null || _a === void 0
               ? void 0
               : _a.stageRemoveChild(...children);
           }

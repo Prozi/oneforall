@@ -113,7 +113,7 @@ export class GameObject extends Lifecycle {
       }
     });
     // add pixi components
-    getRoot(this)?.stageAddChild(...children);
+    this.scene?.stageAddChild(...children);
   }
 
   removeChild(...children: LifecycleProps[]): void {
@@ -125,7 +125,7 @@ export class GameObject extends Lifecycle {
       }
     });
     // remove pixi components
-    getRoot(this)?.stageRemoveChild(...children);
+    this.scene?.stageRemoveChild(...children);
   }
 
   getChildOfType(type: string): LifecycleProps {
