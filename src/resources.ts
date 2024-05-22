@@ -1,7 +1,7 @@
-import { Cache } from 'latermom';
 import * as PIXI from 'pixi.js';
 
-import { Injectable } from '@jacekpietal/dependency-injection';
+import { Injectable } from '@pietal.dev/dependency-injection';
+import { Cache } from '@pietal.dev/cache';
 
 // tslint:disable-next-line: no-any
 export type PIXIResource = any;

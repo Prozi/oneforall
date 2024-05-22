@@ -31,9 +31,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var Resources_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Resources = void 0;
-const latermom_1 = require("latermom");
 const PIXI = __importStar(require("pixi.js"));
-const dependency_injection_1 = require("@jacekpietal/dependency-injection");
+const dependency_injection_1 = require("@pietal.dev/dependency-injection");
+const cache_1 = require("@pietal.dev/cache");
 let Resources = Resources_1 = class Resources {
     static async loadResource(url) {
         return (await Resources_1.cache.get(url));
@@ -50,7 +50,7 @@ let Resources = Resources_1 = class Resources {
         return Resources_1.loadResource(url);
     }
 };
-Resources.cache = new latermom_1.Cache(async (url) => PIXI.Assets.loader.load(url));
+Resources.cache = new cache_1.Cache(async (url) => PIXI.Assets.loader.load(url));
 Resources = Resources_1 = __decorate([
     dependency_injection_1.Injectable
 ], Resources);

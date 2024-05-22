@@ -437,13 +437,6 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
   integrity sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==
 
-"@jacekpietal/dependency-injection@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@jacekpietal/dependency-injection/-/dependency-injection-1.4.2.tgz#e75ca51ad57a76787ac0a1518c80c4d496fdc2e5"
-  integrity sha512-2isWvvc1Y9M9ky0rhqr4/YLRkqShuei/SgqGQSoscQH1zOlSci8fcdxkOWUHbso398I9gPdZ6VGST+ZKKJUp0Q==
-  dependencies:
-    reflect-metadata "^0.2.2"
-
 "@jacekpietal/gstats@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@jacekpietal/gstats/-/gstats-0.1.2.tgz#4523cb9b016849b3b3afe5ad734aa2f90c83b3a8"
@@ -720,6 +713,18 @@
     rimraf "^3.0.2"
     semver "^7.3.5"
     tar "^6.1.11"
+
+"@pietal.dev/cache@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/cache/-/cache-2.0.1.tgz#eafbc423d0576858f3a42885860a28142e7812b9"
+  integrity sha512-dCUlPDApUO6mNOUIoCtlo9CNeYTFUjiRhwHcbbMMX87SYuTjSSJZoY+sNxrSJK+EI0vhlz3JY+k28AKYGmsdcQ==
+
+"@pietal.dev/dependency-injection@^1.4.3":
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.3.tgz#c61762ed10bedce298bc90a73da07b99eb58e8f9"
+  integrity sha512-TxBPqYU5sgJyArHfAQ3M3KBgZVbV93HwdDI1/YWDa0tVvNM62K1Bei3PjkTwITSPS9Nh6jt1nC5yUKegpmQgIQ==
+  dependencies:
+    reflect-metadata "^0.2.2"
 
 "@pixi/canvas-display@7.4.2":
   version "7.4.2"
@@ -4742,7 +4747,7 @@ typedoc@^0.25.13:
     minimatch "^9.0.3"
     shiki "^0.14.7"
 
-typescript@~4.9.5:
+typescript@^4:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==

@@ -1,4 +1,4 @@
-import { Cache } from 'latermom';
+import { Cache } from '@pietal.dev/cache';
 export type PIXIResource = any;
 export declare class Resources {
     static cache: Cache<PIXIResource>;

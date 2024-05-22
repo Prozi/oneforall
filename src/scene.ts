@@ -5,7 +5,7 @@ import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
 
-import { Inject } from '@jacekpietal/dependency-injection';
+import { Inject } from '@pietal.dev/dependency-injection';
 
 import { Application } from './application';
 import { Resources } from './resources';

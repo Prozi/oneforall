@@ -31,7 +31,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Application = void 0;
 const PIXI = __importStar(require("pixi.js"));
-const dependency_injection_1 = require("@jacekpietal/dependency-injection");
+const dependency_injection_1 = require("@pietal.dev/dependency-injection");
 let Application = class Application extends PIXI.Application {
     constructor() {
         super(...arguments);

@@ -1,854 +1,6 @@
 /******/ (() => {
   // webpackBootstrap
   /******/ var __webpack_modules__ = {
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/index.js':
-      /*!***********************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/index.js ***!
-  \***********************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-        /*!
-         * @jacekpietal/dependency-injection
-         * MIT Licensed
-         */
-
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __exportStar =
-          (this && this.__exportStar) ||
-          function (m, exports) {
-            for (var p in m)
-              if (
-                p !== 'default' &&
-                !Object.prototype.hasOwnProperty.call(exports, p)
-              )
-                __createBinding(exports, m, p);
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        __exportStar(
-          __webpack_require__(
-            /*! ./lib/DI */ './node_modules/@jacekpietal/dependency-injection/build/lib/DI.js'
-          ),
-          exports
-        );
-        //# sourceMappingURL=index.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/BaseInjectionRequest.js':
-      /*!******************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/BaseInjectionRequest.js ***!
-  \******************************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        /**
-         * This class represents an injection request based on the prototype.
-         * This means that any provided instance that is using the prototype in the request
-         * will be matched.
-         */
-        class BaseInjectionRequest {
-          constructor(propertyKey, targetPrototype) {
-            if (typeof targetPrototype === 'function') {
-              throw new Error(
-                `Should pass the prototype for the target '${targetPrototype.name}', not its constructor!`
-              );
-            }
-            this.targetPrototype = targetPrototype;
-            this.propertyKey = propertyKey;
-            this.loadingCallback = function (value) {
-              this[propertyKey] = value;
-            };
-          }
-          matches(value) {
-            throw 'Not overriden';
-          }
-          load(target, value) {
-            this.loadingCallback.apply(target.getInstance(), [
-              value.getInstance()
-            ]);
-          }
-          toString() {
-            const requestClassName = this.constructor.name;
-            const targetClassName = this.targetPrototype.constructor.name;
-            return (
-              requestClassName + '@' + targetClassName + '.' + this.propertyKey
-            );
-          }
-        }
-        exports['default'] = BaseInjectionRequest;
-        //# sourceMappingURL=BaseInjectionRequest.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/Config.js':
-      /*!****************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/Config.js ***!
-  \****************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Config = void 0;
-        exports.Config = {
-          useGetters: true
-        };
-        exports['default'] = exports.Config;
-        //# sourceMappingURL=Config.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/Context.js':
-      /*!*****************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/Context.js ***!
-  \*****************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const Injector_1 = __importDefault(
-          __webpack_require__(
-            /*! ./Injector */ './node_modules/@jacekpietal/dependency-injection/build/lib/Injector.js'
-          )
-        );
-        const PrototypeProvidedDependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./PrototypeProvidedDependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeProvidedDependency.js'
-          )
-        );
-        const NamedProvidedDependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./NamedProvidedDependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/NamedProvidedDependency.js'
-          )
-        );
-        /**
-         * Data class to hold the link between request and instance
-         */
-        class InjectionRequestInstance {
-          constructor(request, instance) {
-            this.request = request;
-            this.instance = instance;
-          }
-        }
-        class DependencyInjectionContext {
-          constructor() {
-            this.providedDependencies = [];
-            this.injector = new Injector_1.default();
-          }
-          loadRequests(dep) {
-            const self = this;
-            Injector_1.default.getRequests(dep).map(function (r) {
-              self.requests.push(new InjectionRequestInstance(r, dep));
-            });
-          }
-          addValue(instance, name) {
-            if (name) {
-              // logger.debug("Adding named dep: {}", name);
-              this.addNamedValue(instance, name);
-              //this.providedDependencies.push(new NamedProvidedDependency(instance, name));
-            } else {
-              this.providedDependencies.push(
-                new PrototypeProvidedDependency_1.default(instance)
-              );
-            }
-          }
-          addNamedValue(instance, name) {
-            // Store the dependency
-            this.providedDependencies.push(
-              new NamedProvidedDependency_1.default(instance, name)
-            );
-          }
-          resolve(strict = false) {
-            // Build the request list
-            this.requests = [];
-            for (const i in this.providedDependencies) {
-              if (!this.providedDependencies.hasOwnProperty(i)) continue;
-              const dep = this.providedDependencies[i];
-              this.loadRequests(dep);
-            }
-            // Resolve the requests
-            for (const i in this.requests) {
-              if (!this.requests.hasOwnProperty(i)) continue;
-              const r = this.requests[i];
-              this.injector.resolveRequest(
-                r.request,
-                r.instance,
-                this.providedDependencies,
-                strict
-              );
-            }
-          }
-          resolveStrict() {
-            this.resolve(true);
-          }
-        }
-        exports['default'] = DependencyInjectionContext;
-        //# sourceMappingURL=Context.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/DI.js':
-      /*!************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/DI.js ***!
-  \************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        /**
-         * Created by Tom on 02/07/2015.
-         */
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __exportStar =
-          (this && this.__exportStar) ||
-          function (m, exports) {
-            for (var p in m)
-              if (
-                p !== 'default' &&
-                !Object.prototype.hasOwnProperty.call(exports, p)
-              )
-                __createBinding(exports, m, p);
-          };
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Config =
-          exports.Injectable =
-          exports.Dependency =
-          exports.Context =
-            void 0;
-        __exportStar(
-          __webpack_require__(
-            /*! ./annotations/Inject */ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Inject.js'
-          ),
-          exports
-        );
-        const Context_1 = __importDefault(
-          __webpack_require__(
-            /*! ./Context */ './node_modules/@jacekpietal/dependency-injection/build/lib/Context.js'
-          )
-        );
-        exports.Context = Context_1.default;
-        const Dependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./annotations/Dependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Dependency.js'
-          )
-        );
-        exports.Dependency = Dependency_1.default;
-        const InjectableAnnotation_1 = __importDefault(
-          __webpack_require__(
-            /*! ./annotations/InjectableAnnotation */ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/InjectableAnnotation.js'
-          )
-        );
-        exports.Injectable = InjectableAnnotation_1.default;
-        const Config_1 = __importDefault(
-          __webpack_require__(
-            /*! ./Config */ './node_modules/@jacekpietal/dependency-injection/build/lib/Config.js'
-          )
-        );
-        exports.Config = Config_1.default;
-        //# sourceMappingURL=DI.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/Injectable.js':
-      /*!********************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/Injectable.js ***!
-  \********************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class Injectable {
-          constructor(classConstructor) {
-            this.factory = classConstructor;
-          }
-          get() {
-            if (!this.instance) {
-              this.instance = new this.factory();
-            }
-            return this.instance;
-          }
-          static addInjectable(factory) {
-            if (Injectable.classes.indexOf(factory) === -1) {
-              Injectable.classes.push(new Injectable(factory));
-            }
-          }
-          static getInjectable(factory) {
-            const matching = Injectable.classes.filter(
-              (currentInjectable) => currentInjectable.factory === factory
-            );
-            if (matching.length === 0) {
-              throw new Error('No such singleton');
-            }
-            if (matching.length > 1) {
-              throw new Error('Same singleton was declared twice');
-            }
-            return matching[0];
-          }
-        }
-        Injectable.classes = [];
-        exports['default'] = Injectable;
-        //# sourceMappingURL=Injectable.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/Injector.js':
-      /*!******************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/Injector.js ***!
-  \******************************************************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        __webpack_require__(
-          /*! reflect-metadata */ './node_modules/reflect-metadata/Reflect.js'
-        );
-        class DependencyInjector {
-          static getRequests(target) {
-            const instance = target.getInstance();
-            if (typeof instance !== 'object') return [];
-            const prototype = Object.getPrototypeOf(instance);
-            const requests = Reflect.getMetadata(
-              DependencyInjector.DEP_INJ_REQUESTS_KEY,
-              prototype
-            );
-            return requests || [];
-          }
-          resolveRequest(request, providedInstance, deps, strict) {
-            const matchingDI = [];
-            for (const prop in deps) {
-              if (!deps.hasOwnProperty(prop)) continue;
-              const dep = deps[prop];
-              // Skip self-injection
-              if (dep.getInstance() === providedInstance.getInstance())
-                continue;
-              // Check if the dependency matches the request
-              if (request.matches(dep)) {
-                matchingDI.push(dep);
-              }
-            }
-            // Throw an error if more than one dependency matches the request, as the context is ambiguous.
-            if (matchingDI.length > 1) {
-              throw new Error(
-                `Ambiguous context with ${matchingDI.length} matching dependencies.`
-              );
-            }
-            // Throw an error or warn if no provided dependency fulfills the request
-            if (matchingDI.length === 0) {
-              const message = `${request.toString()} was not resolved.`;
-              if (strict) {
-                throw new Error(message);
-              }
-            }
-            const injectedDep = matchingDI[0];
-            request.load(providedInstance, injectedDep);
-          }
-        }
-        DependencyInjector.DEP_INJ_REQUESTS_KEY =
-          'dependencyInjection.requests';
-        exports['default'] = DependencyInjector;
-        //# sourceMappingURL=Injector.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/NamedInjectionRequest.js':
-      /*!*******************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/NamedInjectionRequest.js ***!
-  \*******************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const NamedProvidedDependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./NamedProvidedDependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/NamedProvidedDependency.js'
-          )
-        );
-        const BaseInjectionRequest_1 = __importDefault(
-          __webpack_require__(
-            /*! ./BaseInjectionRequest */ './node_modules/@jacekpietal/dependency-injection/build/lib/BaseInjectionRequest.js'
-          )
-        );
-        /**
-         * This class represents an injection request based on the prototype.
-         * This means that any provided instance that is using the prototype in the request
-         * will be matched.
-         */
-        class NamedInjectionRequest extends BaseInjectionRequest_1.default {
-          constructor(propertyKey, targetPrototype, name, valuePrototype) {
-            if (valuePrototype && typeof valuePrototype === 'function') {
-              throw new Error(
-                "Should pass the prototype for the value '" +
-                  valuePrototype.name +
-                  "', not its constructor!"
-              );
-            }
-            super(propertyKey, targetPrototype);
-            this.valueName = name;
-            this.valuePrototype = valuePrototype;
-          }
-          matches(value) {
-            if (!(value instanceof NamedProvidedDependency_1.default)) {
-              return false;
-            }
-            const namedDep = value;
-            const nameMatch = this.valueName === namedDep.getName();
-            const prototypeMatch = this.valuePrototype
-              ? this.valuePrototype.isPrototypeOf(value.getInstance())
-              : true;
-            return nameMatch && prototypeMatch;
-          }
-          toString() {
-            let suffix = '';
-            if (this.valuePrototype) {
-              suffix += this.valuePrototype.constructor.name + '@';
-            }
-            suffix += this.valueName;
-            return super.toString() + '=' + suffix;
-          }
-        }
-        exports['default'] = NamedInjectionRequest;
-        //# sourceMappingURL=NamedInjectionRequest.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/NamedProvidedDependency.js':
-      /*!*********************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/NamedProvidedDependency.js ***!
-  \*********************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const ProvidedDependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./ProvidedDependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/ProvidedDependency.js'
-          )
-        );
-        class NamedProvidedDependency extends ProvidedDependency_1.default {
-          constructor(instance, name) {
-            super(instance);
-            this.name = name;
-          }
-          getName() {
-            return this.name;
-          }
-        }
-        exports['default'] = NamedProvidedDependency;
-        //# sourceMappingURL=NamedProvidedDependency.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeInjectionRequest.js':
-      /*!***********************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeInjectionRequest.js ***!
-  \***********************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const BaseInjectionRequest_1 = __importDefault(
-          __webpack_require__(
-            /*! ./BaseInjectionRequest */ './node_modules/@jacekpietal/dependency-injection/build/lib/BaseInjectionRequest.js'
-          )
-        );
-        /**
-         * This class represents an injection request based on the prototype.
-         * This means that any provided instance that is using the prototype in the request
-         * will be matched.
-         */
-        class PrototypeInjectionRequest extends BaseInjectionRequest_1.default {
-          constructor(propertyKey, targetPrototype, valuePrototype) {
-            if (typeof valuePrototype === 'function') {
-              throw new Error(
-                "Should pass the prototype for the value '" +
-                  valuePrototype.name +
-                  "', not its constructor!"
-              );
-            }
-            super(propertyKey, targetPrototype);
-            this.valuePrototype = valuePrototype;
-          }
-          matches(value) {
-            return this.valuePrototype.isPrototypeOf(value.getInstance());
-          }
-        }
-        exports['default'] = PrototypeInjectionRequest;
-        //# sourceMappingURL=PrototypeInjectionRequest.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeProvidedDependency.js':
-      /*!*************************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeProvidedDependency.js ***!
-  \*************************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const ProvidedDependency_1 = __importDefault(
-          __webpack_require__(
-            /*! ./ProvidedDependency */ './node_modules/@jacekpietal/dependency-injection/build/lib/ProvidedDependency.js'
-          )
-        );
-        class PrototypeProvidedDependency extends ProvidedDependency_1.default {}
-        exports['default'] = PrototypeProvidedDependency;
-        //# sourceMappingURL=PrototypeProvidedDependency.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/ProvidedDependency.js':
-      /*!****************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/ProvidedDependency.js ***!
-  \****************************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class ProvidedDependency {
-          constructor(instance) {
-            this.instance = instance;
-          }
-          getInstance() {
-            return this.instance;
-          }
-        }
-        exports['default'] = ProvidedDependency;
-        //# sourceMappingURL=ProvidedDependency.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Dependency.js':
-      /*!********************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Dependency.js ***!
-  \********************************************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        function Dependency(constructor) {
-          throw new Error('Deprecated');
-        }
-        exports['default'] = Dependency;
-        //# sourceMappingURL=Dependency.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Inject.js':
-      /*!****************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/annotations/Inject.js ***!
-  \****************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.DirectLoad =
-          exports.Inject =
-          exports.NamedInjection =
-          exports.Injection =
-            void 0;
-        __webpack_require__(
-          /*! reflect-metadata */ './node_modules/reflect-metadata/Reflect.js'
-        );
-        const PrototypeInjectionRequest_1 = __importDefault(
-          __webpack_require__(
-            /*! ../PrototypeInjectionRequest */ './node_modules/@jacekpietal/dependency-injection/build/lib/PrototypeInjectionRequest.js'
-          )
-        );
-        const NamedInjectionRequest_1 = __importDefault(
-          __webpack_require__(
-            /*! ../NamedInjectionRequest */ './node_modules/@jacekpietal/dependency-injection/build/lib/NamedInjectionRequest.js'
-          )
-        );
-        const Injectable_1 = __importDefault(
-          __webpack_require__(
-            /*! ../Injectable */ './node_modules/@jacekpietal/dependency-injection/build/lib/Injectable.js'
-          )
-        );
-        const Config_1 = __importDefault(
-          __webpack_require__(
-            /*! ../Config */ './node_modules/@jacekpietal/dependency-injection/build/lib/Config.js'
-          )
-        );
-        function Injection(typeToInject) {
-          return function (target, propertyKey) {
-            addPrototypeInjectionRequest(
-              target,
-              typeToInject.prototype,
-              propertyKey
-            );
-          };
-        }
-        exports.Injection = Injection;
-        function NamedInjection(name, typeToInject) {
-          const proto = typeToInject ? typeToInject.prototype : null;
-          return function (target, propertyKey) {
-            addNamedInjectionRequest(target, name, propertyKey, proto);
-          };
-        }
-        exports.NamedInjection = NamedInjection;
-        function Inject(dependencyClass) {
-          if (!dependencyClass) throw new Error('Missing parameter!');
-          return function (prototype, propertyKey) {
-            // We define this as a safeguard if the user doesn't call @DirectLoad
-            Object.defineProperty(prototype, propertyKey, {
-              get: function () {
-                // If we don't have to use getters, we'll use the first call to inject
-                // all the values
-                if (!Config_1.default.useGetters) {
-                  const isInjected = Reflect.getOwnMetadata(
-                    'isInjected',
-                    prototype
-                  )
-                    ? true
-                    : false;
-                  if (!isInjected) {
-                    removeGettersFromPrototype(prototype);
-                    autoLoadInjectors(this, prototype);
-                  }
-                }
-                return Injectable_1.default
-                  .getInjectable(dependencyClass)
-                  .get();
-              },
-              enumerable: true,
-              configurable: true // to be able to remove it from the prototype later
-            });
-            // We define this if the user wants to use the @DirectLoad annotation
-            const singletons =
-              Reflect.getOwnMetadata('singletonInjectors', prototype) || {};
-            singletons[propertyKey] = function () {
-              this[propertyKey] = Injectable_1.default
-                .getInjectable(dependencyClass)
-                .get();
-            };
-            Reflect.defineMetadata('singletonInjectors', singletons, prototype);
-            return prototype;
-          };
-        }
-        exports.Inject = Inject;
-        function autoLoadInjectors(target, proto) {
-          Reflect.defineMetadata('isInjected', true, proto);
-          const singletonInjectors =
-            Reflect.getOwnMetadata('singletonInjectors', proto) || [];
-          loadInjectableInjectors(singletonInjectors, target);
-        }
-        function loadInjectableInjectors(singletonInjectors, target) {
-          for (const propertyKey in singletonInjectors) {
-            if (!singletonInjectors.hasOwnProperty(propertyKey)) continue;
-            const s = singletonInjectors[propertyKey];
-            s.apply(target);
-          }
-        }
-        function removeGettersFromPrototype(proto) {
-          const singletonInjectors =
-            Reflect.getOwnMetadata('singletonInjectors', proto) || {};
-          for (const propertyKey in singletonInjectors) {
-            if (!singletonInjectors.hasOwnProperty(propertyKey)) continue;
-            if (!delete proto[propertyKey]) {
-              throw new Error('Failed to delete property getter!');
-            }
-          }
-        }
-        function DirectLoad(constructor) {
-          const proto = constructor.prototype;
-          // Remove the getter override
-          removeGettersFromPrototype(proto);
-          const wrapper = function () {
-            autoLoadInjectors(this, proto);
-            constructor.apply(this, arguments);
-          };
-          wrapper.prototype = proto;
-          return wrapper;
-        }
-        exports.DirectLoad = DirectLoad;
-        function addInjectionRequest(
-          targetPrototype,
-          injectionPrototype,
-          request
-        ) {
-          const protoName = targetPrototype.constructor.name;
-          const injectionName = injectionPrototype
-            ? injectionPrototype.constructor.name
-            : null;
-          // Check that the names are valid
-          if (!protoName)
-            throw new Error('Incorrect prototype! No name found!');
-          // Throw error if the 'injectionPrototype' is provided but the name is a false-value
-          if (injectionPrototype && !injectionName)
-            throw new Error('Incorrect prototype! No name found!');
-          // Register the injection request
-          let protoInjectionRequests;
-          const DEP_INJ_REQUESTS_KEY = 'dependencyInjection.requests';
-          if (!Reflect.hasMetadata(DEP_INJ_REQUESTS_KEY, targetPrototype)) {
-            protoInjectionRequests = [];
-            Reflect.defineMetadata(DEP_INJ_REQUESTS_KEY, [], targetPrototype);
-          } else {
-            protoInjectionRequests = Reflect.getMetadata(
-              DEP_INJ_REQUESTS_KEY,
-              targetPrototype
-            );
-          }
-          protoInjectionRequests.push(request);
-          Reflect.defineMetadata(
-            DEP_INJ_REQUESTS_KEY,
-            protoInjectionRequests,
-            targetPrototype
-          );
-        }
-        function addPrototypeInjectionRequest(
-          targetPrototype,
-          injectionPrototype,
-          propertyKey
-        ) {
-          const request = new PrototypeInjectionRequest_1.default(
-            propertyKey,
-            targetPrototype,
-            injectionPrototype
-          );
-          addInjectionRequest(targetPrototype, injectionPrototype, request);
-        }
-        function addNamedInjectionRequest(
-          targetPrototype,
-          name,
-          propertyKey,
-          injectionPrototype
-        ) {
-          const request = new NamedInjectionRequest_1.default(
-            propertyKey,
-            targetPrototype,
-            name,
-            injectionPrototype
-          );
-          addInjectionRequest(targetPrototype, injectionPrototype, request);
-        }
-        //# sourceMappingURL=Inject.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@jacekpietal/dependency-injection/build/lib/annotations/InjectableAnnotation.js':
-      /*!******************************************************************************************************!*\
-  !*** ./node_modules/@jacekpietal/dependency-injection/build/lib/annotations/InjectableAnnotation.js ***!
-  \******************************************************************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const Injectable_1 = __importDefault(
-          __webpack_require__(
-            /*! ../Injectable */ './node_modules/@jacekpietal/dependency-injection/build/lib/Injectable.js'
-          )
-        );
-        function Injectable(constructor) {
-          // Register it in the singleton registry
-          Injectable_1.default.addInjectable(constructor);
-        }
-        exports['default'] = Injectable;
-        //# sourceMappingURL=InjectableAnnotation.js.map
-
-        /***/
-      },
-
     /***/ './node_modules/@jacekpietal/gstats/dist/BaseHooks.js':
       /*!************************************************************!*\
   !*** ./node_modules/@jacekpietal/gstats/dist/BaseHooks.js ***!
@@ -1044,6 +196,919 @@
         }
         exports['default'] = TextureHook;
         //# sourceMappingURL=TextureHook.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/cache/index.js':
+      /*!*************************************************!*\
+  !*** ./node_modules/@pietal.dev/cache/index.js ***!
+  \*************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Cache = void 0;
+        // Lazy Cache based on Map
+        class Cache {
+          // factory for creating entries
+          constructor(factoryFunction, maxSize = Infinity) {
+            this.data = new Map();
+            this.factoryFunction = factoryFunction;
+            this.maxSize = maxSize;
+          }
+          // get data size
+          get size() {
+            return this.data.size;
+          }
+          // creates a string from args
+          createKey(...args) {
+            return args.length > 1 ? args.join(',') : args[0];
+          }
+          // wrapped factory function
+          create(...args) {
+            return this.factoryFunction.apply(this, args);
+          }
+          // has entry at [args]
+          hasKey(...args) {
+            return this.has(this.createKey.apply(this, args));
+          }
+          // has entry at [args]
+          has(key) {
+            return this.data.has(key);
+          }
+          // get with key
+          get(...args) {
+            const key = this.createKey.apply(this, args);
+            if (this.hasKey(key)) {
+              return this.data.get(key);
+            }
+            while (this.data.size >= this.maxSize) {
+              const [keyToRemove] = this.data.entries().next().value;
+              this.deleteKey(keyToRemove);
+            }
+            const value = this.create.apply(this, args);
+            this.data.set(key, value);
+            return value;
+          }
+          // delete entry at [args]
+          deleteKey(...args) {
+            return this.delete(this.createKey.apply(this, args));
+          }
+          // delete entry at [args]
+          delete(key) {
+            return this.data.delete(key);
+          }
+        }
+        exports.Cache = Cache;
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/index.js':
+      /*!*********************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/index.js ***!
+  \*********************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+        /*!
+         * @pietal.dev/dependency-injection
+         * MIT Licensed
+         */
+
+        var __createBinding =
+          (this && this.__createBinding) ||
+          (Object.create
+            ? function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (
+                  !desc ||
+                  ('get' in desc
+                    ? !m.__esModule
+                    : desc.writable || desc.configurable)
+                ) {
+                  desc = {
+                    enumerable: true,
+                    get: function () {
+                      return m[k];
+                    }
+                  };
+                }
+                Object.defineProperty(o, k2, desc);
+              }
+            : function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                o[k2] = m[k];
+              });
+        var __exportStar =
+          (this && this.__exportStar) ||
+          function (m, exports) {
+            for (var p in m)
+              if (
+                p !== 'default' &&
+                !Object.prototype.hasOwnProperty.call(exports, p)
+              )
+                __createBinding(exports, m, p);
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        __exportStar(
+          __webpack_require__(
+            /*! ./src/DI */ './node_modules/@pietal.dev/dependency-injection/dist/src/DI.js'
+          ),
+          exports
+        );
+        //# sourceMappingURL=index.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/BaseInjectionRequest.js':
+      /*!****************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/BaseInjectionRequest.js ***!
+  \****************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        /**
+         * This class represents an injection request based on the prototype.
+         * This means that any provided instance that is using the prototype in the request
+         * will be matched.
+         */
+        class BaseInjectionRequest {
+          constructor(propertyKey, targetPrototype) {
+            if (typeof targetPrototype === 'function') {
+              throw new Error(
+                `Should pass the prototype for the target '${targetPrototype.name}', not its constructor!`
+              );
+            }
+            this.targetPrototype = targetPrototype;
+            this.propertyKey = propertyKey;
+            this.loadingCallback = function (value) {
+              this[propertyKey] = value;
+            };
+          }
+          matches(value) {
+            throw 'Not overriden';
+          }
+          load(target, value) {
+            this.loadingCallback.apply(target.getInstance(), [
+              value.getInstance()
+            ]);
+          }
+          toString() {
+            const requestClassName = this.constructor.name;
+            const targetClassName = this.targetPrototype.constructor.name;
+            return (
+              requestClassName + '@' + targetClassName + '.' + this.propertyKey
+            );
+          }
+        }
+        exports['default'] = BaseInjectionRequest;
+        //# sourceMappingURL=BaseInjectionRequest.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/Config.js':
+      /*!**************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/Config.js ***!
+  \**************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Config = void 0;
+        exports.Config = {
+          useGetters: true
+        };
+        exports['default'] = exports.Config;
+        //# sourceMappingURL=Config.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/Context.js':
+      /*!***************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/Context.js ***!
+  \***************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const Injector_1 = __importDefault(
+          __webpack_require__(
+            /*! ./Injector */ './node_modules/@pietal.dev/dependency-injection/dist/src/Injector.js'
+          )
+        );
+        const NamedProvidedDependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./NamedProvidedDependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/NamedProvidedDependency.js'
+          )
+        );
+        const PrototypeProvidedDependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./PrototypeProvidedDependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeProvidedDependency.js'
+          )
+        );
+        /**
+         * Data class to hold the link between request and instance
+         */
+        class InjectionRequestInstance {
+          constructor(request, instance) {
+            this.request = request;
+            this.instance = instance;
+          }
+        }
+        class DependencyInjectionContext {
+          constructor() {
+            this.providedDependencies = [];
+            this.injector = new Injector_1.default();
+          }
+          loadRequests(dep) {
+            const self = this;
+            Injector_1.default.getRequests(dep).map(function (r) {
+              self.requests.push(new InjectionRequestInstance(r, dep));
+            });
+          }
+          addValue(instance, name) {
+            if (name) {
+              // logger.debug("Adding named dep: {}", name);
+              this.addNamedValue(instance, name);
+              //this.providedDependencies.push(new NamedProvidedDependency(instance, name));
+            } else {
+              this.providedDependencies.push(
+                new PrototypeProvidedDependency_1.default(instance)
+              );
+            }
+          }
+          addNamedValue(instance, name) {
+            // Store the dependency
+            this.providedDependencies.push(
+              new NamedProvidedDependency_1.default(instance, name)
+            );
+          }
+          resolve(strict = false) {
+            // Build the request list
+            this.requests = [];
+            for (const i in this.providedDependencies) {
+              if (!this.providedDependencies.hasOwnProperty(i)) continue;
+              const dep = this.providedDependencies[i];
+              this.loadRequests(dep);
+            }
+            // Resolve the requests
+            for (const i in this.requests) {
+              if (!this.requests.hasOwnProperty(i)) continue;
+              const r = this.requests[i];
+              this.injector.resolveRequest(
+                r.request,
+                r.instance,
+                this.providedDependencies,
+                strict
+              );
+            }
+          }
+          resolveStrict() {
+            this.resolve(true);
+          }
+        }
+        exports['default'] = DependencyInjectionContext;
+        //# sourceMappingURL=Context.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/DI.js':
+      /*!**********************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/DI.js ***!
+  \**********************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        /**
+         * Created by Tom on 02/07/2015.
+         */
+        var __createBinding =
+          (this && this.__createBinding) ||
+          (Object.create
+            ? function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (
+                  !desc ||
+                  ('get' in desc
+                    ? !m.__esModule
+                    : desc.writable || desc.configurable)
+                ) {
+                  desc = {
+                    enumerable: true,
+                    get: function () {
+                      return m[k];
+                    }
+                  };
+                }
+                Object.defineProperty(o, k2, desc);
+              }
+            : function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                o[k2] = m[k];
+              });
+        var __exportStar =
+          (this && this.__exportStar) ||
+          function (m, exports) {
+            for (var p in m)
+              if (
+                p !== 'default' &&
+                !Object.prototype.hasOwnProperty.call(exports, p)
+              )
+                __createBinding(exports, m, p);
+          };
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Config =
+          exports.Injectable =
+          exports.Dependency =
+          exports.Context =
+            void 0;
+        __exportStar(
+          __webpack_require__(
+            /*! ./annotations/Inject */ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Inject.js'
+          ),
+          exports
+        );
+        const Dependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./annotations/Dependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Dependency.js'
+          )
+        );
+        exports.Dependency = Dependency_1.default;
+        const InjectableAnnotation_1 = __importDefault(
+          __webpack_require__(
+            /*! ./annotations/InjectableAnnotation */ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/InjectableAnnotation.js'
+          )
+        );
+        exports.Injectable = InjectableAnnotation_1.default;
+        const Config_1 = __importDefault(
+          __webpack_require__(
+            /*! ./Config */ './node_modules/@pietal.dev/dependency-injection/dist/src/Config.js'
+          )
+        );
+        exports.Config = Config_1.default;
+        const Context_1 = __importDefault(
+          __webpack_require__(
+            /*! ./Context */ './node_modules/@pietal.dev/dependency-injection/dist/src/Context.js'
+          )
+        );
+        exports.Context = Context_1.default;
+        //# sourceMappingURL=DI.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/Injectable.js':
+      /*!******************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/Injectable.js ***!
+  \******************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class Injectable {
+          constructor(classConstructor) {
+            this.factory = classConstructor;
+          }
+          get() {
+            if (!this.instance) {
+              this.instance = new this.factory();
+            }
+            return this.instance;
+          }
+          static addInjectable(factory) {
+            if (Injectable.classes.indexOf(factory) === -1) {
+              Injectable.classes.push(new Injectable(factory));
+            }
+          }
+          static getInjectable(factory) {
+            const matching = Injectable.classes.filter(
+              (currentInjectable) => currentInjectable.factory === factory
+            );
+            if (matching.length === 0) {
+              throw new Error('No such singleton');
+            }
+            if (matching.length > 1) {
+              throw new Error('Same singleton was declared twice');
+            }
+            return matching[0];
+          }
+        }
+        Injectable.classes = [];
+        exports['default'] = Injectable;
+        //# sourceMappingURL=Injectable.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/Injector.js':
+      /*!****************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/Injector.js ***!
+  \****************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        __webpack_require__(
+          /*! reflect-metadata */ './node_modules/reflect-metadata/Reflect.js'
+        );
+        class DependencyInjector {
+          static getRequests(target) {
+            const instance = target.getInstance();
+            if (typeof instance !== 'object') return [];
+            const prototype = Object.getPrototypeOf(instance);
+            const requests = Reflect.getMetadata(
+              DependencyInjector.DEP_INJ_REQUESTS_KEY,
+              prototype
+            );
+            return requests || [];
+          }
+          resolveRequest(request, providedInstance, deps, strict) {
+            const matchingDI = [];
+            for (const prop in deps) {
+              if (!deps.hasOwnProperty(prop)) continue;
+              const dep = deps[prop];
+              // Skip self-injection
+              if (dep.getInstance() === providedInstance.getInstance())
+                continue;
+              // Check if the dependency matches the request
+              if (request.matches(dep)) {
+                matchingDI.push(dep);
+              }
+            }
+            // Throw an error if more than one dependency matches the request, as the context is ambiguous.
+            if (matchingDI.length > 1) {
+              throw new Error(
+                `Ambiguous context with ${matchingDI.length} matching dependencies.`
+              );
+            }
+            // Throw an error or warn if no provided dependency fulfills the request
+            if (matchingDI.length === 0) {
+              const message = `${request.toString()} was not resolved.`;
+              if (strict) {
+                throw new Error(message);
+              }
+            }
+            const injectedDep = matchingDI[0];
+            request.load(providedInstance, injectedDep);
+          }
+        }
+        DependencyInjector.DEP_INJ_REQUESTS_KEY =
+          'dependencyInjection.requests';
+        exports['default'] = DependencyInjector;
+        //# sourceMappingURL=Injector.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/NamedInjectionRequest.js':
+      /*!*****************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/NamedInjectionRequest.js ***!
+  \*****************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const BaseInjectionRequest_1 = __importDefault(
+          __webpack_require__(
+            /*! ./BaseInjectionRequest */ './node_modules/@pietal.dev/dependency-injection/dist/src/BaseInjectionRequest.js'
+          )
+        );
+        const NamedProvidedDependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./NamedProvidedDependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/NamedProvidedDependency.js'
+          )
+        );
+        /**
+         * This class represents an injection request based on the prototype.
+         * This means that any provided instance that is using the prototype in the request
+         * will be matched.
+         */
+        class NamedInjectionRequest extends BaseInjectionRequest_1.default {
+          constructor(propertyKey, targetPrototype, name, valuePrototype) {
+            if (valuePrototype && typeof valuePrototype === 'function') {
+              throw new Error(
+                "Should pass the prototype for the value '" +
+                  valuePrototype.name +
+                  "', not its constructor!"
+              );
+            }
+            super(propertyKey, targetPrototype);
+            this.valueName = name;
+            this.valuePrototype = valuePrototype;
+          }
+          matches(value) {
+            if (!(value instanceof NamedProvidedDependency_1.default)) {
+              return false;
+            }
+            const namedDep = value;
+            const nameMatch = this.valueName === namedDep.getName();
+            const prototypeMatch = this.valuePrototype
+              ? this.valuePrototype.isPrototypeOf(value.getInstance())
+              : true;
+            return nameMatch && prototypeMatch;
+          }
+          toString() {
+            let suffix = '';
+            if (this.valuePrototype) {
+              suffix += this.valuePrototype.constructor.name + '@';
+            }
+            suffix += this.valueName;
+            return super.toString() + '=' + suffix;
+          }
+        }
+        exports['default'] = NamedInjectionRequest;
+        //# sourceMappingURL=NamedInjectionRequest.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/NamedProvidedDependency.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/NamedProvidedDependency.js ***!
+  \*******************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const ProvidedDependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./ProvidedDependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/ProvidedDependency.js'
+          )
+        );
+        class NamedProvidedDependency extends ProvidedDependency_1.default {
+          constructor(instance, name) {
+            super(instance);
+            this.name = name;
+          }
+          getName() {
+            return this.name;
+          }
+        }
+        exports['default'] = NamedProvidedDependency;
+        //# sourceMappingURL=NamedProvidedDependency.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeInjectionRequest.js':
+      /*!*********************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeInjectionRequest.js ***!
+  \*********************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const BaseInjectionRequest_1 = __importDefault(
+          __webpack_require__(
+            /*! ./BaseInjectionRequest */ './node_modules/@pietal.dev/dependency-injection/dist/src/BaseInjectionRequest.js'
+          )
+        );
+        /**
+         * This class represents an injection request based on the prototype.
+         * This means that any provided instance that is using the prototype in the request
+         * will be matched.
+         */
+        class PrototypeInjectionRequest extends BaseInjectionRequest_1.default {
+          constructor(propertyKey, targetPrototype, valuePrototype) {
+            if (typeof valuePrototype === 'function') {
+              throw new Error(
+                "Should pass the prototype for the value '" +
+                  valuePrototype.name +
+                  "', not its constructor!"
+              );
+            }
+            super(propertyKey, targetPrototype);
+            this.valuePrototype = valuePrototype;
+          }
+          matches(value) {
+            return this.valuePrototype.isPrototypeOf(value.getInstance());
+          }
+        }
+        exports['default'] = PrototypeInjectionRequest;
+        //# sourceMappingURL=PrototypeInjectionRequest.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeProvidedDependency.js':
+      /*!***********************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeProvidedDependency.js ***!
+  \***********************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const ProvidedDependency_1 = __importDefault(
+          __webpack_require__(
+            /*! ./ProvidedDependency */ './node_modules/@pietal.dev/dependency-injection/dist/src/ProvidedDependency.js'
+          )
+        );
+        class PrototypeProvidedDependency extends ProvidedDependency_1.default {}
+        exports['default'] = PrototypeProvidedDependency;
+        //# sourceMappingURL=PrototypeProvidedDependency.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/ProvidedDependency.js':
+      /*!**************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/ProvidedDependency.js ***!
+  \**************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class ProvidedDependency {
+          constructor(instance) {
+            this.instance = instance;
+          }
+          getInstance() {
+            return this.instance;
+          }
+        }
+        exports['default'] = ProvidedDependency;
+        //# sourceMappingURL=ProvidedDependency.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Dependency.js':
+      /*!******************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Dependency.js ***!
+  \******************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        function Dependency(constructor) {
+          throw new Error('Deprecated');
+        }
+        exports['default'] = Dependency;
+        //# sourceMappingURL=Dependency.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Inject.js':
+      /*!**************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/annotations/Inject.js ***!
+  \**************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.DirectLoad =
+          exports.Inject =
+          exports.NamedInjection =
+          exports.Injection =
+            void 0;
+        __webpack_require__(
+          /*! reflect-metadata */ './node_modules/reflect-metadata/Reflect.js'
+        );
+        const Config_1 = __importDefault(
+          __webpack_require__(
+            /*! ../Config */ './node_modules/@pietal.dev/dependency-injection/dist/src/Config.js'
+          )
+        );
+        const Injectable_1 = __importDefault(
+          __webpack_require__(
+            /*! ../Injectable */ './node_modules/@pietal.dev/dependency-injection/dist/src/Injectable.js'
+          )
+        );
+        const NamedInjectionRequest_1 = __importDefault(
+          __webpack_require__(
+            /*! ../NamedInjectionRequest */ './node_modules/@pietal.dev/dependency-injection/dist/src/NamedInjectionRequest.js'
+          )
+        );
+        const PrototypeInjectionRequest_1 = __importDefault(
+          __webpack_require__(
+            /*! ../PrototypeInjectionRequest */ './node_modules/@pietal.dev/dependency-injection/dist/src/PrototypeInjectionRequest.js'
+          )
+        );
+        function Injection(typeToInject) {
+          return function (target, propertyKey) {
+            addPrototypeInjectionRequest(
+              target,
+              typeToInject.prototype,
+              propertyKey
+            );
+          };
+        }
+        exports.Injection = Injection;
+        function NamedInjection(name, typeToInject) {
+          const proto = typeToInject ? typeToInject.prototype : null;
+          return function (target, propertyKey) {
+            addNamedInjectionRequest(target, name, propertyKey, proto);
+          };
+        }
+        exports.NamedInjection = NamedInjection;
+        function Inject(dependencyClass) {
+          if (!dependencyClass) throw new Error('Missing parameter!');
+          return function (prototype, propertyKey) {
+            // We define this as a safeguard if the user doesn't call @DirectLoad
+            Object.defineProperty(prototype, propertyKey, {
+              get: function () {
+                // If we don't have to use getters, we'll use the first call to inject
+                // all the values
+                if (!Config_1.default.useGetters) {
+                  const isInjected = Reflect.getOwnMetadata(
+                    'isInjected',
+                    prototype
+                  )
+                    ? true
+                    : false;
+                  if (!isInjected) {
+                    removeGettersFromPrototype(prototype);
+                    autoLoadInjectors(this, prototype);
+                  }
+                }
+                return Injectable_1.default
+                  .getInjectable(dependencyClass)
+                  .get();
+              },
+              enumerable: true,
+              configurable: true // to be able to remove it from the prototype later
+            });
+            // We define this if the user wants to use the @DirectLoad annotation
+            const singletons =
+              Reflect.getOwnMetadata('singletonInjectors', prototype) || {};
+            singletons[propertyKey] = function () {
+              this[propertyKey] = Injectable_1.default
+                .getInjectable(dependencyClass)
+                .get();
+            };
+            Reflect.defineMetadata('singletonInjectors', singletons, prototype);
+            return prototype;
+          };
+        }
+        exports.Inject = Inject;
+        function autoLoadInjectors(target, proto) {
+          Reflect.defineMetadata('isInjected', true, proto);
+          const singletonInjectors =
+            Reflect.getOwnMetadata('singletonInjectors', proto) || [];
+          loadInjectableInjectors(singletonInjectors, target);
+        }
+        function loadInjectableInjectors(singletonInjectors, target) {
+          for (const propertyKey in singletonInjectors) {
+            if (!singletonInjectors.hasOwnProperty(propertyKey)) continue;
+            const s = singletonInjectors[propertyKey];
+            s.apply(target);
+          }
+        }
+        function removeGettersFromPrototype(proto) {
+          const singletonInjectors =
+            Reflect.getOwnMetadata('singletonInjectors', proto) || {};
+          for (const propertyKey in singletonInjectors) {
+            if (!singletonInjectors.hasOwnProperty(propertyKey)) continue;
+            if (!delete proto[propertyKey]) {
+              throw new Error('Failed to delete property getter!');
+            }
+          }
+        }
+        function DirectLoad(constructor) {
+          const proto = constructor.prototype;
+          // Remove the getter override
+          removeGettersFromPrototype(proto);
+          const wrapper = function () {
+            autoLoadInjectors(this, proto);
+            constructor.apply(this, arguments);
+          };
+          wrapper.prototype = proto;
+          return wrapper;
+        }
+        exports.DirectLoad = DirectLoad;
+        function addInjectionRequest(
+          targetPrototype,
+          injectionPrototype,
+          request
+        ) {
+          const protoName = targetPrototype.constructor.name;
+          const injectionName = injectionPrototype
+            ? injectionPrototype.constructor.name
+            : null;
+          // Check that the names are valid
+          if (!protoName)
+            throw new Error('Incorrect prototype! No name found!');
+          // Throw error if the 'injectionPrototype' is provided but the name is a false-value
+          if (injectionPrototype && !injectionName)
+            throw new Error('Incorrect prototype! No name found!');
+          // Register the injection request
+          let protoInjectionRequests;
+          const DEP_INJ_REQUESTS_KEY = 'dependencyInjection.requests';
+          if (!Reflect.hasMetadata(DEP_INJ_REQUESTS_KEY, targetPrototype)) {
+            protoInjectionRequests = [];
+            Reflect.defineMetadata(DEP_INJ_REQUESTS_KEY, [], targetPrototype);
+          } else {
+            protoInjectionRequests = Reflect.getMetadata(
+              DEP_INJ_REQUESTS_KEY,
+              targetPrototype
+            );
+          }
+          protoInjectionRequests.push(request);
+          Reflect.defineMetadata(
+            DEP_INJ_REQUESTS_KEY,
+            protoInjectionRequests,
+            targetPrototype
+          );
+        }
+        function addPrototypeInjectionRequest(
+          targetPrototype,
+          injectionPrototype,
+          propertyKey
+        ) {
+          const request = new PrototypeInjectionRequest_1.default(
+            propertyKey,
+            targetPrototype,
+            injectionPrototype
+          );
+          addInjectionRequest(targetPrototype, injectionPrototype, request);
+        }
+        function addNamedInjectionRequest(
+          targetPrototype,
+          name,
+          propertyKey,
+          injectionPrototype
+        ) {
+          const request = new NamedInjectionRequest_1.default(
+            propertyKey,
+            targetPrototype,
+            name,
+            injectionPrototype
+          );
+          addInjectionRequest(targetPrototype, injectionPrototype, request);
+        }
+        //# sourceMappingURL=Inject.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/@pietal.dev/dependency-injection/dist/src/annotations/InjectableAnnotation.js':
+      /*!****************************************************************************************************!*\
+  !*** ./node_modules/@pietal.dev/dependency-injection/dist/src/annotations/InjectableAnnotation.js ***!
+  \****************************************************************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const Injectable_1 = __importDefault(
+          __webpack_require__(
+            /*! ../Injectable */ './node_modules/@pietal.dev/dependency-injection/dist/src/Injectable.js'
+          )
+        );
+        function Injectable(constructor) {
+          // Register it in the singleton registry
+          Injectable_1.default.addInjectable(constructor);
+        }
+        exports['default'] = Injectable;
+        //# sourceMappingURL=InjectableAnnotation.js.map
 
         /***/
       },
@@ -10517,71 +10582,6 @@
           return result;
         }
         //# sourceMappingURL=isMobile.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/latermom/index.js':
-      /*!****************************************!*\
-  !*** ./node_modules/latermom/index.js ***!
-  \****************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Cache = void 0;
-        // Lazy Cache based on Map
-        class Cache {
-          // factory for creating entries
-          constructor(factoryFunction, maxSize = Infinity) {
-            this.data = new Map();
-            this.factoryFunction = factoryFunction;
-            this.maxSize = maxSize;
-          }
-          // get data size
-          get size() {
-            return this.data.size;
-          }
-          // creates a string from args
-          createKey(...args) {
-            return args.length > 1 ? args.join(',') : args[0];
-          }
-          // wrapped factory function
-          create(...args) {
-            return this.factoryFunction.apply(this, args);
-          }
-          // has entry at [args]
-          hasKey(...args) {
-            return this.has(this.createKey.apply(this, args));
-          }
-          // has entry at [args]
-          has(key) {
-            return this.data.has(key);
-          }
-          // get with key
-          get(...args) {
-            const key = this.createKey.apply(this, args);
-            if (this.hasKey(key)) {
-              return this.data.get(key);
-            }
-            while (this.data.size >= this.maxSize) {
-              const [keyToRemove] = this.data.entries().next().value;
-              this.deleteKey(keyToRemove);
-            }
-            const value = this.create.apply(this, args);
-            this.data.set(key, value);
-            return value;
-          }
-          // delete entry at [args]
-          deleteKey(...args) {
-            return this.delete(this.createKey.apply(this, args));
-          }
-          // delete entry at [args]
-          delete(key) {
-            return this.data.delete(key);
-          }
-        }
-        exports.Cache = Cache;
 
         /***/
       },
@@ -88260,7 +88260,7 @@ Deprecated since v${version}`
           )
         );
         const dependency_injection_1 = __webpack_require__(
-          /*! @jacekpietal/dependency-injection */ './node_modules/@jacekpietal/dependency-injection/build/index.js'
+          /*! @pietal.dev/dependency-injection */ './node_modules/@pietal.dev/dependency-injection/dist/index.js'
         );
         let Application = class Application extends PIXI.Application {
           constructor() {
@@ -88774,16 +88774,16 @@ Deprecated since v${version}`
         var Resources_1;
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.Resources = void 0;
-        const latermom_1 = __webpack_require__(
-          /*! latermom */ './node_modules/latermom/index.js'
-        );
         const PIXI = __importStar(
           __webpack_require__(
             /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
           )
         );
         const dependency_injection_1 = __webpack_require__(
-          /*! @jacekpietal/dependency-injection */ './node_modules/@jacekpietal/dependency-injection/build/index.js'
+          /*! @pietal.dev/dependency-injection */ './node_modules/@pietal.dev/dependency-injection/dist/index.js'
+        );
+        const cache_1 = __webpack_require__(
+          /*! @pietal.dev/cache */ './node_modules/@pietal.dev/cache/index.js'
         );
         let Resources = (Resources_1 = class Resources {
           static async loadResource(url) {
@@ -88805,7 +88805,7 @@ Deprecated since v${version}`
             return Resources_1.loadResource(url);
           }
         });
-        Resources.cache = new latermom_1.Cache(async (url) =>
+        Resources.cache = new cache_1.Cache(async (url) =>
           PIXI.Assets.loader.load(url)
         );
         Resources = Resources_1 = __decorate(
@@ -89098,7 +89098,7 @@ Deprecated since v${version}`
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
         const dependency_injection_1 = __webpack_require__(
-          /*! @jacekpietal/dependency-injection */ './node_modules/@jacekpietal/dependency-injection/build/index.js'
+          /*! @pietal.dev/dependency-injection */ './node_modules/@pietal.dev/dependency-injection/dist/index.js'
         );
         const application_1 = __webpack_require__(
           /*! ./application */ './src/application.ts'

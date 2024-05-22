@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-import { Injectable } from '@jacekpietal/dependency-injection';
+import { Injectable } from '@pietal.dev/dependency-injection';
 
 @Injectable
 export class Application extends PIXI.Application {
