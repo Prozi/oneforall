@@ -1,10 +1,9 @@
 import { Vector } from 'detect-collisions';
-import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
-import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
@@ -16,7 +15,20 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   target?: Vector;
 }
 
-export class GameObject implements LifecycleProps {
+export type SceneType = SceneBase | Scene;
+
+export type GameObjectParent = SceneType | GameObject;
+
+export const getRoot = (gameObject: GameObject): SceneType | undefined => {
+  let root: GameObjectParent | undefined = gameObject;
+  do {
+    root = root.gameObject as SceneType | undefined;
+  } while (root?.gameObject);
+
+  return root as SceneType | undefined;
+};
+
+export class GameObject extends Lifecycle {
   /**
    * When Lifecycle Object is updated, it emits this subject.
    * Along with updating his children, which in turn behave the same.
@@ -32,17 +44,12 @@ export class GameObject implements LifecycleProps {
   /**
    * Lifecycle Object may be added to a Scene Object.
    */
-  gameObject?: SceneBase | Scene | GameObject;
+  gameObject?: GameObjectParent;
 
   /**
    * Each Lifecycle Object has label for pixi debugging.
    */
   label: string;
-
-  /**
-   * Each GameObject has children Lifecycle Objects.
-   */
-  children: LifecycleProps[] = [];
 
   /**
    * position x
@@ -55,6 +62,7 @@ export class GameObject implements LifecycleProps {
   y: number;
 
   constructor(label = 'GameObject', x = 0, y = 0) {
+    super();
     this.label = label;
     this.x = x;
     this.y = y;
@@ -65,15 +73,10 @@ export class GameObject implements LifecycleProps {
   }
 
   /**
-   * get root scene
+   * get parent scene if exists
    */
-  get root(): SceneBase | Scene | undefined {
-    let cursor = this.gameObject;
-    while (cursor?.gameObject) {
-      cursor = cursor.gameObject;
-    }
-
-    return cursor as SceneBase | Scene | undefined;
+  get scene(): SceneType | undefined {
+    return getRoot(this);
   }
 
   update(deltaTime: number): void {
@@ -92,30 +95,37 @@ export class GameObject implements LifecycleProps {
     Lifecycle.destroy(this);
   }
 
+  recursive(child: LifecycleProps, callback: (deep: LifecycleProps) => void) {
+    callback(child);
+    if (child instanceof Lifecycle) {
+      child.children.forEach((deep) => {
+        this.recursive(deep, callback);
+      });
+    }
+  }
+
   addChild(...children: LifecycleProps[]): void {
-    const root = this.root;
     children.forEach((child) => {
+      child.gameObject = this;
       const index = this.children.indexOf(child);
       if (index === -1) {
-        // add to root scene if exists
-        root?.addChild(child);
         this.children.push(child);
-        child.gameObject = this;
       }
     });
+    // add pixi components
+    getRoot(this)?.stageAddChild(...children);
   }
 
   removeChild(...children: LifecycleProps[]): void {
-    const root = this.root;
     children.forEach((child) => {
+      child.gameObject = null;
       const index = this.children.indexOf(child);
       if (index !== -1) {
-        // remove from root scene if exists
-        root?.removeChild(child);
         this.children.splice(index, 1);
-        child.gameObject = null;
       }
     });
+    // remove pixi components
+    getRoot(this)?.stageRemoveChild(...children);
   }
 
   getChildOfType(type: string): LifecycleProps {

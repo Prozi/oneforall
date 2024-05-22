@@ -2,7 +2,7 @@ import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { GameObject } from './game-object';
-import { LifecycleProps } from './lifecycle';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 export interface SceneOptions {
     /**
      * set name
@@ -35,7 +35,7 @@ export declare class SceneBase<TBody extends Body = Body> extends GameObject {
     /**
      * When Scene Object has children amount changed, it emits this subject.
      */
-    readonly children$: Subject<void>;
+    readonly children$: Subject<Lifecycle>;
     /**
      * Options are assigned at creation.
      */
@@ -62,7 +62,9 @@ export declare class SceneBase<TBody extends Body = Body> extends GameObject {
     start(): void;
     update(deltaTime: number): void;
     destroy(): void;
+    stageAddChild(...children: LifecycleProps[]): void;
     addChild(...children: LifecycleProps[]): void;
+    stageRemoveChild(...children: LifecycleProps[]): void;
     removeChild(...children: LifecycleProps[]): void;
     getChildOfType(type: string): LifecycleProps;
     getChildrenOfType(type: string): LifecycleProps[];

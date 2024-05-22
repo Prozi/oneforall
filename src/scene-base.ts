@@ -38,7 +38,7 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
   /**
    * When Scene Object has children amount changed, it emits this subject.
    */
-  readonly children$: Subject<void> = new Subject();
+  readonly children$: Subject<Lifecycle> = new Subject();
 
   /**
    * Options are assigned at creation.
@@ -114,36 +114,34 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
     this.children$.complete();
   }
 
-  addChild(...children: LifecycleProps[]): void {
+  stageAddChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
-      const index = this.children.indexOf(child);
-      if (index === -1) {
-        // add to root scene
-        if (child instanceof PIXI.Container) {
-          this.stage.addChild(child);
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.addChild(deep);
         }
-        this.children.push(child);
-        child.gameObject = this;
-      }
+      });
     });
+  }
 
-    this.children$.next();
+  addChild(...children: LifecycleProps[]): void {
+    super.addChild(...children);
+    this.stageAddChild(...children);
+  }
+
+  stageRemoveChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.removeChild(deep);
+        }
+      });
+    });
   }
 
   removeChild(...children: LifecycleProps[]): void {
-    children.forEach((child) => {
-      const index = this.children.indexOf(child);
-      if (index !== -1) {
-        // remove from root scene
-        if (child instanceof PIXI.Container) {
-          child.gameObject.removeChild(child);
-        }
-        this.children.splice(index, 1);
-        child.gameObject = null;
-      }
-    });
-
-    this.children$.next();
+    super.removeChild(...children);
+    this.stageRemoveChild(...children);
   }
 
   getChildOfType(type: string): LifecycleProps {

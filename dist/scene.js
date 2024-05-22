@@ -75,14 +75,6 @@ class Scene extends scene_base_1.SceneBase {
             this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
         }
     }
-    addChild(...children) {
-        children.forEach((child) => {
-            super.addChild(child);
-            if (child instanceof PIXI.Container) {
-                this.stage.addChild(child);
-            }
-        });
-    }
     start() {
         this.pixi.start();
         super.start();

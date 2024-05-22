@@ -69,6 +69,27 @@
             Class Lifecycle<code class="tsd-tag ts-flagAbstract">Abstract</code>
           </h1>
         </div>
+        <section class="tsd-panel tsd-hierarchy">
+          <h4>
+            Hierarchy (<a class="link" href="../hierarchy.html#Lifecycle"
+              >view full</a
+            >)
+          </h4>
+          <ul class="tsd-hierarchy">
+            <li>
+              <span class="target">Lifecycle</span>
+              <ul class="tsd-hierarchy">
+                <li>
+                  <a
+                    href="GameObject.html"
+                    class="tsd-signature-type tsd-kind-class"
+                    >GameObject</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </section>
         <section class="tsd-panel">
           <h4>Implements</h4>
           <ul class="tsd-hierarchy">
@@ -86,8 +107,8 @@
             <li>
               Defined in
               <a
-                href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L45"
-                >src/lifecycle.ts:45</a
+                href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L47"
+                >src/lifecycle.ts:47</a
               >
             </li>
           </ul>
@@ -122,10 +143,20 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Properties</h3>
                   <div class="tsd-index-list">
+                    <a href="Lifecycle.html#children" class="tsd-index-link"
+                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                        <use href="../assets/icons.svg#icon-1024"></use></svg
+                      ><span>children</span></a
+                    >
                     <a href="Lifecycle.html#destroy_" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>destroy$</span></a
+                    >
+                    <a href="Lifecycle.html#gameObject" class="tsd-index-link"
+                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                        <use href="../assets/icons.svg#icon-1024"></use></svg
+                      ><span>game<wbr />Object?</span></a
                     >
                     <a href="Lifecycle.html#label" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
@@ -218,6 +249,44 @@
         <section class="tsd-panel-group tsd-member-group">
           <h2>Properties</h2>
           <section class="tsd-panel tsd-member">
+            <a id="children" class="tsd-anchor"></a>
+            <h3 class="tsd-anchor-link">
+              <span>children</span
+              ><a
+                href="#children"
+                aria-label="Permalink"
+                class="tsd-anchor-icon"
+                ><svg viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-anchor"></use></svg
+              ></a>
+            </h3>
+            <div class="tsd-signature">
+              <span class="tsd-kind-property">children</span
+              ><span class="tsd-signature-symbol">:</span>
+              <a
+                href="../interfaces/LifecycleProps.html"
+                class="tsd-signature-type tsd-kind-interface"
+                >LifecycleProps</a
+              ><span class="tsd-signature-symbol">[]</span
+              ><span class="tsd-signature-symbol"> = []</span>
+            </div>
+            <div class="tsd-comment tsd-typography">
+              <p>Lifecycles can have children Lifecycles</p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
+            <aside class="tsd-sources">
+              <ul>
+                <li>
+                  Defined in
+                  <a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L68"
+                    >src/lifecycle.ts:68</a
+                  >
+                </li>
+              </ul>
+            </aside>
+          </section>
+          <section class="tsd-panel tsd-member">
             <a id="destroy_" class="tsd-anchor"></a>
             <h3 class="tsd-anchor-link">
               <code class="tsd-tag ts-flagReadonly">Readonly</code>
@@ -259,8 +328,53 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L56"
-                    >src/lifecycle.ts:56</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L58"
+                    >src/lifecycle.ts:58</a
+                  >
+                </li>
+              </ul>
+            </aside>
+          </section>
+          <section class="tsd-panel tsd-member">
+            <a id="gameObject" class="tsd-anchor"></a>
+            <h3 class="tsd-anchor-link">
+              <code class="tsd-tag ts-flagOptional">Optional</code>
+              <span>game<wbr />Object</span
+              ><a
+                href="#gameObject"
+                aria-label="Permalink"
+                class="tsd-anchor-icon"
+                ><svg viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-anchor"></use></svg
+              ></a>
+            </h3>
+            <div class="tsd-signature">
+              <span class="tsd-kind-property">game<wbr />Object</span
+              ><span class="tsd-signature-symbol">?:</span>
+              <a
+                href="../types/GameObjectParent.html"
+                class="tsd-signature-type tsd-kind-type-alias"
+                >GameObjectParent</a
+              >
+            </div>
+            <div class="tsd-comment tsd-typography">
+              <p>Parent GameObject is assigned at creation.</p>
+            </div>
+            <div class="tsd-comment tsd-typography"></div>
+            <aside class="tsd-sources">
+              <p>
+                Implementation of
+                <a href="../interfaces/LifecycleProps.html">LifecycleProps</a
+                >.<a href="../interfaces/LifecycleProps.html#gameObject"
+                  >gameObject</a
+                >
+              </p>
+              <ul>
+                <li>
+                  Defined in
+                  <a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L63"
+                    >src/lifecycle.ts:63</a
                   >
                 </li>
               </ul>
@@ -295,8 +409,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L61"
-                    >src/lifecycle.ts:61</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L73"
+                    >src/lifecycle.ts:73</a
                   >
                 </li>
               </ul>
@@ -340,8 +454,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L50"
-                    >src/lifecycle.ts:50</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L52"
+                    >src/lifecycle.ts:52</a
                   >
                 </li>
               </ul>
@@ -396,8 +510,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L75"
-                        >src/lifecycle.ts:75</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L87"
+                        >src/lifecycle.ts:87</a
                       >
                     </li>
                   </ul>
@@ -465,8 +579,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L79"
-                        >src/lifecycle.ts:79</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L91"
+                        >src/lifecycle.ts:91</a
                       >
                     </li>
                   </ul>
@@ -528,8 +642,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L63"
-                        >src/lifecycle.ts:63</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L75"
+                        >src/lifecycle.ts:75</a
                       >
                     </li>
                   </ul>
@@ -598,8 +712,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L71"
-                        >src/lifecycle.ts:71</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L83"
+                        >src/lifecycle.ts:83</a
                       >
                     </li>
                   </ul>
@@ -781,10 +895,18 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-512"></use></svg
                 ><span>constructor</span></a
+              ><a href="#children" class=""
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-1024"></use></svg
+                ><span>children</span></a
               ><a href="#destroy_" class=""
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg
                 ><span>destroy$</span></a
+              ><a href="#gameObject" class=""
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-1024"></use></svg
+                ><span>game<wbr />Object</span></a
               ><a href="#label" class=""
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg

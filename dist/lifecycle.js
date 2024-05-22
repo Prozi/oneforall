@@ -15,6 +15,10 @@ class Lifecycle {
          */
         this.destroy$ = new Subject_1.Subject();
         /**
+         * Lifecycles can have children Lifecycles
+         */
+        this.children = [];
+        /**
          * Each Lifecycle Object has label for pixi debugging.
          */
         this.label = 'Lifecycle';

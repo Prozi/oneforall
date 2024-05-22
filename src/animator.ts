@@ -4,9 +4,8 @@ import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject } from './game-object';
 import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
-import { Scene } from './scene';
-import { SceneBase } from './scene-base';
 import { StateMachine } from './state-machine';
+import { Scene } from './scene';
 
 export interface AnimatorData {
   animations: Record<string, number[]>;
@@ -111,10 +110,8 @@ export class Animator extends PIXI.Container implements LifecycleProps {
     });
 
     this.states = Object.keys(animations);
-    const scene = gameObject.root;
-    if (scene instanceof Scene) {
-      scene.pixi.stage.addChild(this.sprite);
-    }
+
+    gameObject.scene?.stage.addChild(this.sprite);
   }
 
   /**

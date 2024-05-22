@@ -2,7 +2,7 @@ import { Vector } from 'detect-collisions';
 import { Subject } from 'rxjs/internal/Subject';
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
-import { LifecycleProps } from './lifecycle';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneBase } from './scene-base';
@@ -11,7 +11,10 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends Gam
     sprite: TSprite;
     target?: Vector;
 }
-export declare class GameObject implements LifecycleProps {
+export type SceneType = SceneBase | Scene;
+export type GameObjectParent = SceneType | GameObject;
+export declare const getRoot: (gameObject: GameObject) => SceneType | undefined;
+export declare class GameObject extends Lifecycle {
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.
@@ -25,15 +28,11 @@ export declare class GameObject implements LifecycleProps {
     /**
      * Lifecycle Object may be added to a Scene Object.
      */
-    gameObject?: SceneBase | Scene | GameObject;
+    gameObject?: GameObjectParent;
     /**
      * Each Lifecycle Object has label for pixi debugging.
      */
     label: string;
-    /**
-     * Each GameObject has children Lifecycle Objects.
-     */
-    children: LifecycleProps[];
     /**
      * position x
      */
@@ -45,11 +44,12 @@ export declare class GameObject implements LifecycleProps {
     constructor(label?: string, x?: number, y?: number);
     static instantiate(prefab: Prefab): Promise<GameObject>;
     /**
-     * get root scene
+     * get parent scene if exists
      */
-    get root(): SceneBase | Scene | undefined;
+    get scene(): SceneType | undefined;
     update(deltaTime: number): void;
     destroy(): void;
+    recursive(child: LifecycleProps, callback: (deep: LifecycleProps) => void): void;
     addChild(...children: LifecycleProps[]): void;
     removeChild(...children: LifecycleProps[]): void;
     getChildOfType(type: string): LifecycleProps;

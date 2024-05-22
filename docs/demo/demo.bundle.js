@@ -88001,7 +88001,6 @@ Deprecated since v${version}`
         const lifecycle_1 = __webpack_require__(
           /*! ./lifecycle */ './src/lifecycle.ts'
         );
-        const scene_1 = __webpack_require__(/*! ./scene */ './src/scene.ts');
         const state_machine_1 = __webpack_require__(
           /*! ./state-machine */ './src/state-machine.ts'
         );
@@ -88022,6 +88021,7 @@ Deprecated since v${version}`
             },
             { width, height, source }
           ) {
+            var _a;
             super();
             /**
              * When Lifecycle Object is updated, it emits this subject.
@@ -88065,10 +88065,9 @@ Deprecated since v${version}`
               this.sprite.addChild(animatedSprite);
             });
             this.states = Object.keys(animations);
-            const scene = gameObject.root;
-            if (scene instanceof scene_1.Scene) {
-              scene.pixi.stage.addChild(this.sprite);
-            }
+            (_a = gameObject.scene) === null || _a === void 0
+              ? void 0
+              : _a.stage.addChild(this.sprite);
           }
           /**
            * Reference to inner State Machine's state.
@@ -88447,7 +88446,7 @@ Deprecated since v${version}`
         }
         exports.createSprite = createSprite;
         function updateSprite(gameObject, deltaTime) {
-          const scene = gameObject.root;
+          const scene = gameObject.scene;
           const scale = scene.stage.scale;
           const gameObjects = scene.children;
           const safeDelta = Math.min(60, deltaTime);
@@ -88511,15 +88510,24 @@ Deprecated since v${version}`
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.GameObject = void 0;
+        exports.GameObject = exports.getRoot = void 0;
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
         const lifecycle_1 = __webpack_require__(
           /*! ./lifecycle */ './src/lifecycle.ts'
         );
-        class GameObject {
+        const getRoot = (gameObject) => {
+          let root = gameObject;
+          do {
+            root = root.gameObject;
+          } while (root === null || root === void 0 ? void 0 : root.gameObject);
+          return root;
+        };
+        exports.getRoot = getRoot;
+        class GameObject extends lifecycle_1.Lifecycle {
           constructor(label = 'GameObject', x = 0, y = 0) {
+            super();
             /**
              * When Lifecycle Object is updated, it emits this subject.
              * Along with updating his children, which in turn behave the same.
@@ -88530,10 +88538,6 @@ Deprecated since v${version}`
              * Along with destroying his children, which in turn behave the same.
              */
             this.destroy$ = new Subject_1.Subject();
-            /**
-             * Each GameObject has children Lifecycle Objects.
-             */
-            this.children = [];
             this.label = label;
             this.x = x;
             this.y = y;
@@ -88542,16 +88546,10 @@ Deprecated since v${version}`
             return prefab.instantiate();
           }
           /**
-           * get root scene
+           * get parent scene if exists
            */
-          get root() {
-            let cursor = this.gameObject;
-            while (
-              cursor === null || cursor === void 0 ? void 0 : cursor.gameObject
-            ) {
-              cursor = cursor.gameObject;
-            }
-            return cursor;
+          get scene() {
+            return (0, exports.getRoot)(this);
           }
           update(deltaTime) {
             this.children.forEach((child) => {
@@ -88567,33 +88565,41 @@ Deprecated since v${version}`
             }
             lifecycle_1.Lifecycle.destroy(this);
           }
+          recursive(child, callback) {
+            callback(child);
+            if (child instanceof lifecycle_1.Lifecycle) {
+              child.children.forEach((deep) => {
+                this.recursive(deep, callback);
+              });
+            }
+          }
           addChild(...children) {
-            const root = this.root;
+            var _a;
             children.forEach((child) => {
+              child.gameObject = this;
               const index = this.children.indexOf(child);
               if (index === -1) {
-                // add to root scene if exists
-                root === null || root === void 0
-                  ? void 0
-                  : root.addChild(child);
                 this.children.push(child);
-                child.gameObject = this;
               }
             });
+            // add pixi components
+            (_a = (0, exports.getRoot)(this)) === null || _a === void 0
+              ? void 0
+              : _a.stageAddChild(...children);
           }
           removeChild(...children) {
-            const root = this.root;
+            var _a;
             children.forEach((child) => {
+              child.gameObject = null;
               const index = this.children.indexOf(child);
               if (index !== -1) {
-                // remove from root scene if exists
-                root === null || root === void 0
-                  ? void 0
-                  : root.removeChild(child);
                 this.children.splice(index, 1);
-                child.gameObject = null;
               }
             });
+            // remove pixi components
+            (_a = (0, exports.getRoot)(this)) === null || _a === void 0
+              ? void 0
+              : _a.stageRemoveChild(...children);
           }
           getChildOfType(type) {
             return this.children.find(({ label }) => label === type);
@@ -88631,6 +88637,10 @@ Deprecated since v${version}`
              * Along with destroying his children, which in turn behave the same.
              */
             this.destroy$ = new Subject_1.Subject();
+            /**
+             * Lifecycles can have children Lifecycles
+             */
+            this.children = [];
             /**
              * Each Lifecycle Object has label for pixi debugging.
              */
@@ -88920,33 +88930,31 @@ Deprecated since v${version}`
             super.destroy();
             this.children$.complete();
           }
-          addChild(...children) {
+          stageAddChild(...children) {
             children.forEach((child) => {
-              const index = this.children.indexOf(child);
-              if (index === -1) {
-                // add to root scene
-                if (child instanceof PIXI.Container) {
-                  this.stage.addChild(child);
+              this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                  this.stage.addChild(deep);
                 }
-                this.children.push(child);
-                child.gameObject = this;
-              }
+              });
             });
-            this.children$.next();
+          }
+          addChild(...children) {
+            super.addChild(...children);
+            this.stageAddChild(...children);
+          }
+          stageRemoveChild(...children) {
+            children.forEach((child) => {
+              this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                  this.stage.removeChild(deep);
+                }
+              });
+            });
           }
           removeChild(...children) {
-            children.forEach((child) => {
-              const index = this.children.indexOf(child);
-              if (index !== -1) {
-                // remove from root scene
-                if (child instanceof PIXI.Container) {
-                  child.gameObject.removeChild(child);
-                }
-                this.children.splice(index, 1);
-                child.gameObject = null;
-              }
-            });
-            this.children$.next();
+            super.removeChild(...children);
+            this.stageRemoveChild(...children);
           }
           getChildOfType(type) {
             return this.children.find(({ label }) => label === type);
@@ -89120,14 +89128,6 @@ Deprecated since v${version}`
             if (showFPS) {
               this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
             }
-          }
-          addChild(...children) {
-            children.forEach((child) => {
-              super.addChild(child);
-              if (child instanceof PIXI.Container) {
-                this.stage.addChild(child);
-              }
-            });
           }
           start() {
             this.pixi.start();

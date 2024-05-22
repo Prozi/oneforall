@@ -35,7 +35,7 @@ export function createSprite({ scene, data, texture }): TGameObject {
 }
 
 export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
-  const scene = gameObject.root;
+  const scene = gameObject.scene;
   const scale = scene.stage.scale;
   const gameObjects = scene.children as TGameObject[];
   const safeDelta = Math.min(60, deltaTime);

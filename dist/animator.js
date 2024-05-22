@@ -27,7 +27,6 @@ exports.Animator = void 0;
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
-const scene_1 = require("./scene");
 const state_machine_1 = require("./state-machine");
 class Animator extends PIXI.Container {
     /**
@@ -36,6 +35,7 @@ class Animator extends PIXI.Container {
      * @param texture
      */
     constructor(gameObject, { animations, cols, rows, animationSpeed = 16.67, anchor = { x: 0.5, y: 0.5 } }, { width, height, source }) {
+        var _a;
         super();
         /**
          * When Lifecycle Object is updated, it emits this subject.
@@ -72,10 +72,7 @@ class Animator extends PIXI.Container {
             this.sprite.addChild(animatedSprite);
         });
         this.states = Object.keys(animations);
-        const scene = gameObject.root;
-        if (scene instanceof scene_1.Scene) {
-            scene.pixi.stage.addChild(this.sprite);
-        }
+        (_a = gameObject.scene) === null || _a === void 0 ? void 0 : _a.stage.addChild(this.sprite);
     }
     /**
      * Reference to inner State Machine's state.

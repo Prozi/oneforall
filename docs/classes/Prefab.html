@@ -189,11 +189,11 @@
                   <h3 class="tsd-index-heading">Accessors</h3>
                   <div class="tsd-index-list">
                     <a
-                      href="Prefab.html#root"
+                      href="Prefab.html#scene"
                       class="tsd-index-link tsd-is-inherited"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-262144"></use></svg
-                      ><span>root</span></a
+                      ><span>scene</span></a
                     >
                   </div>
                 </section>
@@ -234,6 +234,13 @@
                       ><span>instantiate</span></a
                     >
                     <a
+                      href="Prefab.html#recursive"
+                      class="tsd-index-link tsd-is-inherited"
+                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                        <use href="../assets/icons.svg#icon-2048"></use></svg
+                      ><span>recursive</span></a
+                    >
+                    <a
                       href="Prefab.html#removeChild"
                       class="tsd-index-link tsd-is-inherited"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
@@ -248,11 +255,25 @@
                       ><span>update</span></a
                     >
                     <a
+                      href="Prefab.html#destroy-2"
+                      class="tsd-index-link tsd-is-inherited"
+                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                        <use href="../assets/icons.svg#icon-2048"></use></svg
+                      ><span>destroy</span></a
+                    >
+                    <a
                       href="Prefab.html#instantiate-2"
                       class="tsd-index-link tsd-is-inherited"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>instantiate</span></a
+                    >
+                    <a
+                      href="Prefab.html#update-2"
+                      class="tsd-index-link tsd-is-inherited"
+                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                        <use href="../assets/icons.svg#icon-2048"></use></svg
+                      ><span>update</span></a
                     >
                   </div>
                 </section>
@@ -421,7 +442,7 @@
               ><span class="tsd-signature-symbol"> = []</span>
             </div>
             <div class="tsd-comment tsd-typography">
-              <p>Each GameObject has children Lifecycle Objects.</p>
+              <p>Lifecycles can have children Lifecycles</p>
             </div>
             <div class="tsd-comment tsd-typography"></div>
             <aside class="tsd-sources">
@@ -435,8 +456,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L45"
-                    >src/game-object.ts:45</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L68"
+                    >src/lifecycle.ts:68</a
                   >
                 </li>
               </ul>
@@ -567,8 +588,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L30"
-                    >src/game-object.ts:30</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L42"
+                    >src/game-object.ts:42</a
                   >
                 </li>
               </ul>
@@ -591,23 +612,10 @@
               <span class="tsd-kind-property">game<wbr />Object</span
               ><span class="tsd-signature-symbol">?:</span>
               <a
-                href="GameObject.html"
-                class="tsd-signature-type tsd-kind-class"
-                >GameObject</a
-              ><span class="tsd-signature-symbol"> | </span
-              ><a
-                href="SceneBase.html"
-                class="tsd-signature-type tsd-kind-class"
-                >SceneBase</a
-              ><span class="tsd-signature-symbol">&lt;</span
-              ><span class="tsd-signature-type">Body</span
-              ><span class="tsd-signature-symbol">&gt;</span
-              ><span class="tsd-signature-symbol"> | </span
-              ><a href="Scene.html" class="tsd-signature-type tsd-kind-class"
-                >Scene</a
-              ><span class="tsd-signature-symbol">&lt;</span
-              ><span class="tsd-signature-type">Body</span
-              ><span class="tsd-signature-symbol">&gt;</span>
+                href="../types/GameObjectParent.html"
+                class="tsd-signature-type tsd-kind-type-alias"
+                >GameObjectParent</a
+              >
             </div>
             <div class="tsd-comment tsd-typography">
               <p>Lifecycle Object may be added to a Scene Object.</p>
@@ -624,8 +632,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L35"
-                    >src/game-object.ts:35</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L47"
+                    >src/game-object.ts:47</a
                   >
                 </li>
               </ul>
@@ -660,8 +668,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L40"
-                    >src/game-object.ts:40</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L52"
+                    >src/game-object.ts:52</a
                   >
                 </li>
               </ul>
@@ -704,8 +712,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L24"
-                    >src/game-object.ts:24</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L36"
+                    >src/game-object.ts:36</a
                   >
                 </li>
               </ul>
@@ -738,8 +746,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L50"
-                    >src/game-object.ts:50</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L57"
+                    >src/game-object.ts:57</a
                   >
                 </li>
               </ul>
@@ -772,8 +780,8 @@
                 <li>
                   Defined in
                   <a
-                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L55"
-                    >src/game-object.ts:55</a
+                    href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L62"
+                    >src/game-object.ts:62</a
                   >
                 </li>
               </ul>
@@ -783,66 +791,48 @@
         <section class="tsd-panel-group tsd-member-group">
           <h2>Accessors</h2>
           <section class="tsd-panel tsd-member tsd-is-inherited">
-            <a id="root" class="tsd-anchor"></a>
+            <a id="scene" class="tsd-anchor"></a>
             <h3 class="tsd-anchor-link">
-              <span>root</span
-              ><a href="#root" aria-label="Permalink" class="tsd-anchor-icon"
+              <span>scene</span
+              ><a href="#scene" aria-label="Permalink" class="tsd-anchor-icon"
                 ><svg viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-anchor"></use></svg
               ></a>
             </h3>
             <ul class="tsd-signatures tsd-is-inherited">
-              <li class="tsd-signature" id="root.root-1">
-                <span class="tsd-signature-keyword">get</span> root<span
+              <li class="tsd-signature" id="scene.scene-1">
+                <span class="tsd-signature-keyword">get</span> scene<span
                   class="tsd-signature-symbol"
                   >(</span
                 ><span class="tsd-signature-symbol">)</span
                 ><span class="tsd-signature-symbol">: </span
                 ><a
-                  href="SceneBase.html"
-                  class="tsd-signature-type tsd-kind-class"
-                  >SceneBase</a
-                ><span class="tsd-signature-symbol">&lt;</span
-                ><span class="tsd-signature-type">Body</span
-                ><span class="tsd-signature-symbol">&gt;</span
-                ><span class="tsd-signature-symbol"> | </span
-                ><a href="Scene.html" class="tsd-signature-type tsd-kind-class"
-                  >Scene</a
-                ><span class="tsd-signature-symbol">&lt;</span
-                ><span class="tsd-signature-type">Body</span
-                ><span class="tsd-signature-symbol">&gt;</span>
+                  href="../types/SceneType.html"
+                  class="tsd-signature-type tsd-kind-type-alias"
+                  >SceneType</a
+                >
               </li>
               <li class="tsd-description">
                 <div class="tsd-comment tsd-typography">
-                  <p>get root scene</p>
+                  <p>get parent scene if exists</p>
                 </div>
                 <h4 class="tsd-returns-title">
                   Returns
                   <a
-                    href="SceneBase.html"
-                    class="tsd-signature-type tsd-kind-class"
-                    >SceneBase</a
-                  ><span class="tsd-signature-symbol">&lt;</span
-                  ><span class="tsd-signature-type">Body</span
-                  ><span class="tsd-signature-symbol">&gt;</span
-                  ><span class="tsd-signature-symbol"> | </span
-                  ><a
-                    href="Scene.html"
-                    class="tsd-signature-type tsd-kind-class"
-                    >Scene</a
-                  ><span class="tsd-signature-symbol">&lt;</span
-                  ><span class="tsd-signature-type">Body</span
-                  ><span class="tsd-signature-symbol">&gt;</span>
+                    href="../types/SceneType.html"
+                    class="tsd-signature-type tsd-kind-type-alias"
+                    >SceneType</a
+                  >
                 </h4>
                 <div class="tsd-comment tsd-typography"></div>
                 <aside class="tsd-sources">
-                  <p>Inherited from GameObject.root</p>
+                  <p>Inherited from GameObject.scene</p>
                   <ul>
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L70"
-                        >src/game-object.ts:70</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L78"
+                        >src/game-object.ts:78</a
                       >
                     </li>
                   </ul>
@@ -915,8 +905,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L95"
-                        >src/game-object.ts:95</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L107"
+                        >src/game-object.ts:107</a
                       >
                     </li>
                   </ul>
@@ -968,8 +958,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L86"
-                        >src/game-object.ts:86</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L89"
+                        >src/game-object.ts:89</a
                       >
                     </li>
                   </ul>
@@ -1041,8 +1031,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L121"
-                        >src/game-object.ts:121</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L131"
+                        >src/game-object.ts:131</a
                       >
                     </li>
                   </ul>
@@ -1118,8 +1108,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L125"
-                        >src/game-object.ts:125</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L135"
+                        >src/game-object.ts:135</a
                       >
                     </li>
                   </ul>
@@ -1178,6 +1168,123 @@
                       <a
                         href="https://github.com/Prozi/oneforall/blob/main/src/prefab.ts#L15"
                         >src/prefab.ts:15</a
+                      >
+                    </li>
+                  </ul>
+                </aside>
+              </li>
+            </ul>
+          </section>
+          <section class="tsd-panel tsd-member tsd-is-inherited">
+            <a id="recursive" class="tsd-anchor"></a>
+            <h3 class="tsd-anchor-link">
+              <span>recursive</span
+              ><a
+                href="#recursive"
+                aria-label="Permalink"
+                class="tsd-anchor-icon"
+                ><svg viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-anchor"></use></svg
+              ></a>
+            </h3>
+            <ul class="tsd-signatures tsd-is-inherited">
+              <li class="tsd-signature tsd-anchor-link">
+                <a id="recursive.recursive-1" class="tsd-anchor"></a
+                ><span class="tsd-kind-call-signature">recursive</span
+                ><span class="tsd-signature-symbol">(</span
+                ><span class="tsd-kind-parameter">child</span>,
+                <span class="tsd-kind-parameter">callback</span
+                ><span class="tsd-signature-symbol">)</span
+                ><span class="tsd-signature-symbol">: </span
+                ><span class="tsd-signature-type">void</span
+                ><a
+                  href="#recursive.recursive-1"
+                  aria-label="Permalink"
+                  class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24">
+                    <use href="../assets/icons.svg#icon-anchor"></use></svg
+                ></a>
+              </li>
+              <li class="tsd-description">
+                <div class="tsd-parameters">
+                  <h4 class="tsd-parameters-title">Parameters</h4>
+                  <ul class="tsd-parameter-list">
+                    <li>
+                      <span
+                        ><span class="tsd-kind-parameter">child</span>:
+                        <a
+                          href="../interfaces/LifecycleProps.html"
+                          class="tsd-signature-type tsd-kind-interface"
+                          >LifecycleProps</a
+                        ></span
+                      >
+                    </li>
+                    <li>
+                      <span
+                        ><span class="tsd-kind-parameter">callback</span>:
+                        <span class="tsd-signature-symbol">(</span
+                        ><span class="tsd-signature-symbol">(</span
+                        ><span class="tsd-kind-parameter">deep</span
+                        ><span class="tsd-signature-symbol">)</span
+                        ><span class="tsd-signature-symbol"> =&gt; </span
+                        ><span class="tsd-signature-type">void</span
+                        ><span class="tsd-signature-symbol">)</span></span
+                      >
+                      <ul class="tsd-parameters">
+                        <li class="tsd-parameter-signature">
+                          <ul class="tsd-signatures">
+                            <li class="tsd-signature">
+                              <span class="tsd-signature-symbol">(</span
+                              ><span class="tsd-kind-parameter">deep</span
+                              ><span class="tsd-signature-symbol">)</span
+                              ><span class="tsd-signature-symbol">: </span
+                              ><span class="tsd-signature-type">void</span>
+                            </li>
+                            <li class="tsd-description">
+                              <div class="tsd-parameters">
+                                <h4 class="tsd-parameters-title">Parameters</h4>
+                                <ul class="tsd-parameter-list">
+                                  <li>
+                                    <span
+                                      ><span class="tsd-kind-parameter"
+                                        >deep</span
+                                      >:
+                                      <a
+                                        href="../interfaces/LifecycleProps.html"
+                                        class="tsd-signature-type tsd-kind-interface"
+                                        >LifecycleProps</a
+                                      ></span
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                              <h4 class="tsd-returns-title">
+                                Returns
+                                <span class="tsd-signature-type">void</span>
+                              </h4>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <h4 class="tsd-returns-title">
+                  Returns <span class="tsd-signature-type">void</span>
+                </h4>
+                <aside class="tsd-sources">
+                  <p>
+                    Inherited from <a href="GameObject.html">GameObject</a>.<a
+                      href="GameObject.html#recursive"
+                      >recursive</a
+                    >
+                  </p>
+                  <ul>
+                    <li>
+                      Defined in
+                      <a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L98"
+                        >src/game-object.ts:98</a
                       >
                     </li>
                   </ul>
@@ -1247,8 +1354,8 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L108"
-                        >src/game-object.ts:108</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L119"
+                        >src/game-object.ts:119</a
                       >
                     </li>
                   </ul>
@@ -1314,8 +1421,77 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L79"
-                        >src/game-object.ts:79</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L82"
+                        >src/game-object.ts:82</a
+                      >
+                    </li>
+                  </ul>
+                </aside>
+              </li>
+            </ul>
+          </section>
+          <section class="tsd-panel tsd-member tsd-is-inherited">
+            <a id="destroy-2" class="tsd-anchor"></a>
+            <h3 class="tsd-anchor-link">
+              <code class="tsd-tag ts-flagStatic">Static</code>
+              <span>destroy</span
+              ><a
+                href="#destroy-2"
+                aria-label="Permalink"
+                class="tsd-anchor-icon"
+                ><svg viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-anchor"></use></svg
+              ></a>
+            </h3>
+            <ul class="tsd-signatures tsd-is-inherited">
+              <li class="tsd-signature tsd-anchor-link">
+                <a id="destroy-2.destroy-3" class="tsd-anchor"></a
+                ><span class="tsd-kind-call-signature">destroy</span
+                ><span class="tsd-signature-symbol">(</span
+                ><span class="tsd-kind-parameter">lifecycle</span
+                ><span class="tsd-signature-symbol">)</span
+                ><span class="tsd-signature-symbol">: </span
+                ><span class="tsd-signature-type">void</span
+                ><a
+                  href="#destroy-2.destroy-3"
+                  aria-label="Permalink"
+                  class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24">
+                    <use href="../assets/icons.svg#icon-anchor"></use></svg
+                ></a>
+              </li>
+              <li class="tsd-description">
+                <div class="tsd-parameters">
+                  <h4 class="tsd-parameters-title">Parameters</h4>
+                  <ul class="tsd-parameter-list">
+                    <li>
+                      <span
+                        ><span class="tsd-kind-parameter">lifecycle</span>:
+                        <a
+                          href="../interfaces/LifecycleProps.html"
+                          class="tsd-signature-type tsd-kind-interface"
+                          >LifecycleProps</a
+                        ></span
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <h4 class="tsd-returns-title">
+                  Returns <span class="tsd-signature-type">void</span>
+                </h4>
+                <aside class="tsd-sources">
+                  <p>
+                    Inherited from <a href="GameObject.html">GameObject</a>.<a
+                      href="GameObject.html#destroy-2"
+                      >destroy</a
+                    >
+                  </p>
+                  <ul>
+                    <li>
+                      Defined in
+                      <a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L75"
+                        >src/lifecycle.ts:75</a
                       >
                     </li>
                   </ul>
@@ -1395,8 +1571,84 @@
                     <li>
                       Defined in
                       <a
-                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L63"
-                        >src/game-object.ts:63</a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/game-object.ts#L71"
+                        >src/game-object.ts:71</a
+                      >
+                    </li>
+                  </ul>
+                </aside>
+              </li>
+            </ul>
+          </section>
+          <section class="tsd-panel tsd-member tsd-is-inherited">
+            <a id="update-2" class="tsd-anchor"></a>
+            <h3 class="tsd-anchor-link">
+              <code class="tsd-tag ts-flagStatic">Static</code>
+              <span>update</span
+              ><a
+                href="#update-2"
+                aria-label="Permalink"
+                class="tsd-anchor-icon"
+                ><svg viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-anchor"></use></svg
+              ></a>
+            </h3>
+            <ul class="tsd-signatures tsd-is-inherited">
+              <li class="tsd-signature tsd-anchor-link">
+                <a id="update-2.update-3" class="tsd-anchor"></a
+                ><span class="tsd-kind-call-signature">update</span
+                ><span class="tsd-signature-symbol">(</span
+                ><span class="tsd-kind-parameter">lifecycle</span>,
+                <span class="tsd-kind-parameter">deltaTime</span
+                ><span class="tsd-signature-symbol">)</span
+                ><span class="tsd-signature-symbol">: </span
+                ><span class="tsd-signature-type">void</span
+                ><a
+                  href="#update-2.update-3"
+                  aria-label="Permalink"
+                  class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24">
+                    <use href="../assets/icons.svg#icon-anchor"></use></svg
+                ></a>
+              </li>
+              <li class="tsd-description">
+                <div class="tsd-parameters">
+                  <h4 class="tsd-parameters-title">Parameters</h4>
+                  <ul class="tsd-parameter-list">
+                    <li>
+                      <span
+                        ><span class="tsd-kind-parameter">lifecycle</span>:
+                        <a
+                          href="../interfaces/LifecycleProps.html"
+                          class="tsd-signature-type tsd-kind-interface"
+                          >LifecycleProps</a
+                        ></span
+                      >
+                    </li>
+                    <li>
+                      <span
+                        ><span class="tsd-kind-parameter">deltaTime</span>:
+                        <span class="tsd-signature-type">number</span></span
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <h4 class="tsd-returns-title">
+                  Returns <span class="tsd-signature-type">void</span>
+                </h4>
+                <aside class="tsd-sources">
+                  <p>
+                    Inherited from <a href="GameObject.html">GameObject</a>.<a
+                      href="GameObject.html#update-2"
+                      >update</a
+                    >
+                  </p>
+                  <ul>
+                    <li>
+                      Defined in
+                      <a
+                        href="https://github.com/Prozi/oneforall/blob/main/src/lifecycle.ts#L83"
+                        >src/lifecycle.ts:83</a
                       >
                     </li>
                   </ul>
@@ -1610,10 +1862,10 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-1024"></use></svg
                 ><span>y</span></a
-              ><a href="#root" class="tsd-is-inherited"
+              ><a href="#scene" class="tsd-is-inherited"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-262144"></use></svg
-                ><span>root</span></a
+                ><span>scene</span></a
               ><a href="#addChild" class="tsd-is-inherited"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
@@ -1634,6 +1886,10 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
                 ><span>instantiate</span></a
+              ><a href="#recursive" class="tsd-is-inherited"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-2048"></use></svg
+                ><span>recursive</span></a
               ><a href="#removeChild" class="tsd-is-inherited"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
@@ -1642,10 +1898,18 @@
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
                 ><span>update</span></a
+              ><a href="#destroy-2" class="tsd-is-inherited"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-2048"></use></svg
+                ><span>destroy</span></a
               ><a href="#instantiate-2" class="tsd-is-inherited"
                 ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                   <use href="../assets/icons.svg#icon-2048"></use></svg
                 ><span>instantiate</span></a
+              ><a href="#update-2" class="tsd-is-inherited"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
+                  <use href="../assets/icons.svg#icon-2048"></use></svg
+                ><span>update</span></a
               >
             </div>
           </details>

@@ -75,33 +75,31 @@ class SceneBase extends game_object_1.GameObject {
         super.destroy();
         this.children$.complete();
     }
-    addChild(...children) {
+    stageAddChild(...children) {
         children.forEach((child) => {
-            const index = this.children.indexOf(child);
-            if (index === -1) {
-                // add to root scene
-                if (child instanceof PIXI.Container) {
-                    this.stage.addChild(child);
+            this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                    this.stage.addChild(deep);
                 }
-                this.children.push(child);
-                child.gameObject = this;
-            }
+            });
         });
-        this.children$.next();
+    }
+    addChild(...children) {
+        super.addChild(...children);
+        this.stageAddChild(...children);
+    }
+    stageRemoveChild(...children) {
+        children.forEach((child) => {
+            this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                    this.stage.removeChild(deep);
+                }
+            });
+        });
     }
     removeChild(...children) {
-        children.forEach((child) => {
-            const index = this.children.indexOf(child);
-            if (index !== -1) {
-                // remove from root scene
-                if (child instanceof PIXI.Container) {
-                    child.gameObject.removeChild(child);
-                }
-                this.children.splice(index, 1);
-                child.gameObject = null;
-            }
-        });
-        this.children$.next();
+        super.removeChild(...children);
+        this.stageRemoveChild(...children);
     }
     getChildOfType(type) {
         return this.children.find(({ label }) => label === type);

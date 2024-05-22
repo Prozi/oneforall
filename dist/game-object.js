@@ -1,10 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GameObject = void 0;
+exports.GameObject = exports.getRoot = void 0;
 const Subject_1 = require("rxjs/internal/Subject");
 const lifecycle_1 = require("./lifecycle");
-class GameObject {
+const getRoot = (gameObject) => {
+    let root = gameObject;
+    do {
+        root = root.gameObject;
+    } while (root === null || root === void 0 ? void 0 : root.gameObject);
+    return root;
+};
+exports.getRoot = getRoot;
+class GameObject extends lifecycle_1.Lifecycle {
     constructor(label = 'GameObject', x = 0, y = 0) {
+        super();
         /**
          * When Lifecycle Object is updated, it emits this subject.
          * Along with updating his children, which in turn behave the same.
@@ -15,10 +24,6 @@ class GameObject {
          * Along with destroying his children, which in turn behave the same.
          */
         this.destroy$ = new Subject_1.Subject();
-        /**
-         * Each GameObject has children Lifecycle Objects.
-         */
-        this.children = [];
         this.label = label;
         this.x = x;
         this.y = y;
@@ -27,14 +32,10 @@ class GameObject {
         return prefab.instantiate();
     }
     /**
-     * get root scene
+     * get parent scene if exists
      */
-    get root() {
-        let cursor = this.gameObject;
-        while (cursor === null || cursor === void 0 ? void 0 : cursor.gameObject) {
-            cursor = cursor.gameObject;
-        }
-        return cursor;
+    get scene() {
+        return (0, exports.getRoot)(this);
     }
     update(deltaTime) {
         this.children.forEach((child) => {
@@ -50,29 +51,37 @@ class GameObject {
         }
         lifecycle_1.Lifecycle.destroy(this);
     }
+    recursive(child, callback) {
+        callback(child);
+        if (child instanceof lifecycle_1.Lifecycle) {
+            child.children.forEach((deep) => {
+                this.recursive(deep, callback);
+            });
+        }
+    }
     addChild(...children) {
-        const root = this.root;
+        var _a;
         children.forEach((child) => {
+            child.gameObject = this;
             const index = this.children.indexOf(child);
             if (index === -1) {
-                // add to root scene if exists
-                root === null || root === void 0 ? void 0 : root.addChild(child);
                 this.children.push(child);
-                child.gameObject = this;
             }
         });
+        // add pixi components
+        (_a = (0, exports.getRoot)(this)) === null || _a === void 0 ? void 0 : _a.stageAddChild(...children);
     }
     removeChild(...children) {
-        const root = this.root;
+        var _a;
         children.forEach((child) => {
+            child.gameObject = null;
             const index = this.children.indexOf(child);
             if (index !== -1) {
-                // remove from root scene if exists
-                root === null || root === void 0 ? void 0 : root.removeChild(child);
                 this.children.splice(index, 1);
-                child.gameObject = null;
             }
         });
+        // remove pixi components
+        (_a = (0, exports.getRoot)(this)) === null || _a === void 0 ? void 0 : _a.stageRemoveChild(...children);
     }
     getChildOfType(type) {
         return this.children.find(({ label }) => label === type);

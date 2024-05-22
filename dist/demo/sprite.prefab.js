@@ -28,7 +28,7 @@ function createSprite({ scene, data, texture }) {
 }
 exports.createSprite = createSprite;
 function updateSprite(gameObject, deltaTime) {
-    const scene = gameObject.root;
+    const scene = gameObject.scene;
     const scale = scene.stage.scale;
     const gameObjects = scene.children;
     const safeDelta = Math.min(60, deltaTime);
