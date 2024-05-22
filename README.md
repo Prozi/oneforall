@@ -4,9 +4,9 @@
 
 ### TypeScript gamedev library inspired by Unity
 
-[<img src="https://img.shields.io/npm/v/@jacekpietal/oneforall?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@jacekpietal/oneforall?activeTab=versions)
+[<img src="https://img.shields.io/npm/v/@pietal.dev/engine?style=for-the-badge&color=success" alt="npm version" />](https://www.npmjs.com/package/@pietal.dev/engine?activeTab=versions)
 [<img src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge" alt="build status" />](https://app.circleci.com/pipelines/github/Prozi/oneforall)
-[<img src="https://img.shields.io/npm/l/@jacekpietal/oneforall.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/@jacekpietal/oneforall/blob/master/LICENSE)
+[<img src="https://img.shields.io/npm/l/@pietal.dev/engine.svg?style=for-the-badge&color=success" alt="license: MIT" />](https://github.com/Prozi/oneforall/blob/master/LICENSE)
 
 ## Demo
 
@@ -179,7 +179,7 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
 ## Installation
 
 ```bash
-npm i @jacekpietal/oneforall --save
+npm i @pietal.dev/engine -D
 ```
 
 ## We also have tests

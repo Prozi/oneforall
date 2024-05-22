@@ -1,7 +1,7 @@
 {
-  "name": "@jacekpietal/oneforall",
-  "description": "One For All - TypeScript gamedev library inspired by Unity",
-  "version": "9.0.0",
+  "name": "@pietal.dev/engine",
+  "description": "A Unity-inspired game framework by pietal.dev",
+  "version": "9.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -9,7 +9,7 @@
     "start:demo": "chef-express docs/demo --port 3000",
     "demo": "yarn build && yarn start",
     "dev": "webpack serve",
-    "docs": "yarn build && yarn start:docs",
+    "docs": "yarn build && yarn start",
     "build:demo": "webpack",
     "postbuild:demo": "cp -r demo/*.* docs/demo",
     "prebuild": "rimraf dist",
