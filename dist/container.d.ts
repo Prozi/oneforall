@@ -21,6 +21,9 @@ export declare class Container extends PIXI.Container implements LifecycleProps 
      */
     label: string;
     constructor(gameObject: LifecycleParent);
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
 }

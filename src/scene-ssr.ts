@@ -2,7 +2,7 @@ import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 
-import { GameObject } from './game-object';
+import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 
 export interface SceneOptions {
@@ -34,7 +34,10 @@ export interface SceneOptions {
   debug?: boolean;
 }
 
-export class SceneBase<TBody extends Body = Body> extends GameObject {
+/**
+ * base scene for server side rendering
+ */
+export class SceneSSR<TBody extends Body = Body> extends GameObject {
   /**
    * When Scene Object has children amount changed, it emits this subject.
    */
@@ -44,6 +47,11 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
    * Options are assigned at creation.
    */
   readonly options: SceneOptions;
+
+  /**
+   * Scene doesn't have parent gameObject
+   */
+  gameObject: GameObjectParent = undefined;
 
   /**
    * Reference to Collision Detection System.
@@ -67,11 +75,17 @@ export class SceneBase<TBody extends Body = Body> extends GameObject {
 
   constructor(options: SceneOptions = {}) {
     super(options.label || 'Scene');
-
     this.options = options;
     this.physics = new System<TBody>(options.nodeMaxEntries);
     this.stage = new PIXI.Container();
     this.stage.label = 'Stage';
+  }
+
+  /**
+   * Scene doesn't have parent scene
+   */
+  get scene(): undefined {
+    return undefined;
   }
 
   // tslint:disable-next-line

@@ -37,6 +37,9 @@ class GameObject extends lifecycle_1.Lifecycle {
     get scene() {
         return (0, exports.getRoot)(this);
     }
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         this.children.forEach((child) => {
             child.update(deltaTime);

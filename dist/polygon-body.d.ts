@@ -22,6 +22,9 @@ export declare class PolygonBody extends Polygon implements LifecycleProps {
      */
     label: string;
     constructor(gameObject: GameObject, points: Vector[], options?: BodyOptions);
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
 }

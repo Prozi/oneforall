@@ -1,19 +1,19 @@
 import 'pixi-shim';
 
 import { GameObject } from './game-object';
-import { SceneBase } from './scene-base';
+import { SceneSSR } from './scene-ssr';
 import { StateMachine } from './state-machine';
 
-describe('GIVEN SceneBase', () => {
+describe('GIVEN SceneSSR', () => {
   it('THEN it works', () => {
-    const scene = new SceneBase();
+    const scene = new SceneSSR();
 
     expect(scene).toBeTruthy();
   });
 
   it('THEN it can have children', () => {
-    const scene = new SceneBase({
-      label: 'MySceneBase1',
+    const scene = new SceneSSR({
+      label: 'MySceneSSR1',
       visible: true
     });
     scene.addChild(new GameObject());
@@ -24,8 +24,8 @@ describe('GIVEN SceneBase', () => {
   });
 
   it('THEN scene propagates update to gameobject to component', () => {
-    const scene = new SceneBase({
-      label: 'MySceneBase1',
+    const scene = new SceneSSR({
+      label: 'MySceneSSR1',
       visible: true
     });
     const go = new GameObject();

@@ -14,6 +14,9 @@ export interface TextureAtlasOptions {
   scaleMode?: PIXI.SCALE_MODE;
 }
 
+/**
+ * for slicing textures into tileset
+ */
 export class TextureAtlas {
   /**
    * texture atlas base texture (required in constructor)

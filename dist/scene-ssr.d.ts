@@ -1,7 +1,7 @@
 import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
+import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 export interface SceneOptions {
     /**
@@ -31,7 +31,10 @@ export interface SceneOptions {
      */
     debug?: boolean;
 }
-export declare class SceneBase<TBody extends Body = Body> extends GameObject {
+/**
+ * base scene for server side rendering
+ */
+export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
     /**
      * When Scene Object has children amount changed, it emits this subject.
      */
@@ -40,6 +43,10 @@ export declare class SceneBase<TBody extends Body = Body> extends GameObject {
      * Options are assigned at creation.
      */
     readonly options: SceneOptions;
+    /**
+     * Scene doesn't have parent gameObject
+     */
+    gameObject: GameObjectParent;
     /**
      * Reference to Collision Detection System.
      */
@@ -57,6 +64,10 @@ export declare class SceneBase<TBody extends Body = Body> extends GameObject {
      */
     animationFrame: number;
     constructor(options?: SceneOptions);
+    /**
+     * Scene doesn't have parent scene
+     */
+    get scene(): undefined;
     init(_options?: Record<string, any>): Promise<void>;
     stop(): void;
     start(): void;
@@ -69,4 +80,4 @@ export declare class SceneBase<TBody extends Body = Body> extends GameObject {
     getChildOfType(type: string): LifecycleProps;
     getChildrenOfType(type: string): LifecycleProps[];
 }
-//# sourceMappingURL=scene-base.d.ts.map
+//# sourceMappingURL=scene-ssr.d.ts.map

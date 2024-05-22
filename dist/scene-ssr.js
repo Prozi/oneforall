@@ -23,18 +23,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SceneBase = void 0;
+exports.SceneSSR = void 0;
 const detect_collisions_1 = require("detect-collisions");
 const PIXI = __importStar(require("pixi.js"));
 const Subject_1 = require("rxjs/internal/Subject");
 const game_object_1 = require("./game-object");
-class SceneBase extends game_object_1.GameObject {
+/**
+ * base scene for server side rendering
+ */
+class SceneSSR extends game_object_1.GameObject {
     constructor(options = {}) {
         super(options.label || 'Scene');
         /**
          * When Scene Object has children amount changed, it emits this subject.
          */
         this.children$ = new Subject_1.Subject();
+        /**
+         * Scene doesn't have parent gameObject
+         */
+        this.gameObject = undefined;
         /**
          * requestAnimationFrame reference.
          */
@@ -43,6 +50,12 @@ class SceneBase extends game_object_1.GameObject {
         this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
         this.stage = new PIXI.Container();
         this.stage.label = 'Stage';
+    }
+    /**
+     * Scene doesn't have parent scene
+     */
+    get scene() {
+        return undefined;
     }
     // tslint:disable-next-line
     async init(_options) { }
@@ -108,4 +121,4 @@ class SceneBase extends game_object_1.GameObject {
         return this.children.filter(({ label }) => label === type);
     }
 }
-exports.SceneBase = SceneBase;
+exports.SceneSSR = SceneSSR;

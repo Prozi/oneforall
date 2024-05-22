@@ -22,6 +22,9 @@ export declare class CircleBody extends Ellipse implements LifecycleProps {
      */
     label: string;
     constructor(gameObject: GameObject, radiusX: number, radiusY?: number, step?: number, options?: BodyOptions);
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
 }

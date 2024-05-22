@@ -5,7 +5,7 @@ export * from './container';
 export * from './animator';
 export * from './game-object';
 export * from './prefab';
-export * from './scene-base';
+export * from './scene-ssr';
 export * from './scene';
 export * from './application';
 export * from './resources';

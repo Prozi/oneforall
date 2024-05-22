@@ -6,7 +6,7 @@ import { CircleBody } from './circle-body';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
-import { SceneBase } from './scene-base';
+import { SceneSSR } from './scene-ssr';
 
 export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   extends GameObject {
@@ -15,7 +15,7 @@ export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   target?: Vector;
 }
 
-export type SceneType = SceneBase | Scene;
+export type SceneType = SceneSSR | Scene;
 
 export type GameObjectParent = SceneType | GameObject;
 
@@ -79,6 +79,9 @@ export class GameObject extends Lifecycle {
     return getRoot(this);
   }
 
+  /**
+   * @param deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number): void {
     this.children.forEach((child: Lifecycle) => {
       child.update(deltaTime);

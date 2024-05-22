@@ -88059,6 +88059,7 @@ Deprecated since v${version}`
                   return { texture, time: animationSpeed };
                 })
               );
+              animatedSprite.label = 'Animator_AnimatedSprite';
               animatedSprite.anchor.set(anchor.x, anchor.y);
               this.addChild(animatedSprite);
             });
@@ -88082,6 +88083,9 @@ Deprecated since v${version}`
           get scale() {
             return this.animation.scale;
           }
+          /**
+           * @param deltaTime = 1.0 for 60FPS
+           */
           update(deltaTime) {
             this.x = this.gameObject.x;
             this.y = this.gameObject.y;
@@ -88325,6 +88329,9 @@ Deprecated since v${version}`
             }
             gameObject.addChild(this);
           }
+          /**
+           * @param deltaTime = 1.0 for 60FPS
+           */
           update(deltaTime) {
             this.gameObject.x = this.x;
             this.gameObject.y = this.y;
@@ -88376,6 +88383,9 @@ Deprecated since v${version}`
             this.label = 'Component';
             gameObject.addChild(this);
           }
+          /**
+           * @param deltaTime = 1.0 for 60FPS
+           */
           update(deltaTime) {
             lifecycle_1.Lifecycle.update(this, deltaTime);
           }
@@ -88546,6 +88556,9 @@ Deprecated since v${version}`
           get scene() {
             return (0, exports.getRoot)(this);
           }
+          /**
+           * @param deltaTime = 1.0 for 60FPS
+           */
           update(deltaTime) {
             this.children.forEach((child) => {
               child.update(deltaTime);
@@ -88660,6 +88673,9 @@ Deprecated since v${version}`
           destroy() {
             Lifecycle.destroy(this);
           }
+          /**
+           * Updates the Lifecycle with actual deltaTime = 1.0 for 60FPS
+           */
           update(deltaTime) {
             Lifecycle.update(this, deltaTime);
           }
@@ -88801,10 +88817,10 @@ Deprecated since v${version}`
         /***/
       },
 
-    /***/ './src/scene-base.ts':
-      /*!***************************!*\
-  !*** ./src/scene-base.ts ***!
-  \***************************/
+    /***/ './src/scene-ssr.ts':
+      /*!**************************!*\
+  !*** ./src/scene-ssr.ts ***!
+  \**************************/
       /***/ function (__unused_webpack_module, exports, __webpack_require__) {
         'use strict';
 
@@ -88861,7 +88877,7 @@ Deprecated since v${version}`
             return result;
           };
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.SceneBase = void 0;
+        exports.SceneSSR = void 0;
         const detect_collisions_1 = __webpack_require__(
           /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
         );
@@ -88876,13 +88892,20 @@ Deprecated since v${version}`
         const game_object_1 = __webpack_require__(
           /*! ./game-object */ './src/game-object.ts'
         );
-        class SceneBase extends game_object_1.GameObject {
+        /**
+         * base scene for server side rendering
+         */
+        class SceneSSR extends game_object_1.GameObject {
           constructor(options = {}) {
             super(options.label || 'Scene');
             /**
              * When Scene Object has children amount changed, it emits this subject.
              */
             this.children$ = new Subject_1.Subject();
+            /**
+             * Scene doesn't have parent gameObject
+             */
+            this.gameObject = undefined;
             /**
              * requestAnimationFrame reference.
              */
@@ -88893,6 +88916,12 @@ Deprecated since v${version}`
             );
             this.stage = new PIXI.Container();
             this.stage.label = 'Stage';
+          }
+          /**
+           * Scene doesn't have parent scene
+           */
+          get scene() {
+            return undefined;
           }
           // tslint:disable-next-line
           async init(_options) {}
@@ -88958,7 +88987,7 @@ Deprecated since v${version}`
             return this.children.filter(({ label }) => label === type);
           }
         }
-        exports.SceneBase = SceneBase;
+        exports.SceneSSR = SceneSSR;
 
         /***/
       },
@@ -89077,10 +89106,10 @@ Deprecated since v${version}`
         const resources_1 = __webpack_require__(
           /*! ./resources */ './src/resources.ts'
         );
-        const scene_base_1 = __webpack_require__(
-          /*! ./scene-base */ './src/scene-base.ts'
+        const scene_ssr_1 = __webpack_require__(
+          /*! ./scene-ssr */ './src/scene-ssr.ts'
         );
-        class Scene extends scene_base_1.SceneBase {
+        class Scene extends scene_ssr_1.SceneSSR {
           constructor(options = {}) {
             super(options);
             /**

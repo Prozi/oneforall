@@ -3,9 +3,9 @@ import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject, GameObjectParent } from './game-object';
 import { Scene } from './scene';
-import { SceneBase } from './scene-base';
+import { SceneSSR } from './scene-ssr';
 
-export type LifecycleParent = GameObject | SceneBase | Scene | PIXI.Container;
+export type LifecycleParent = GameObject | SceneSSR | Scene | PIXI.Container;
 
 export type LifecycleChild = GameObject | PIXI.Container;
 
@@ -34,7 +34,7 @@ export interface LifecycleProps {
   label: string;
 
   /**
-   * Updates the Lifecycle Object with actual deltaTime ~60fps
+   * Updates the Lifecycle with actual deltaTime = 1.0 for 60FPS
    */
   update(deltaTime: number): void;
 
@@ -88,6 +88,9 @@ export abstract class Lifecycle implements LifecycleProps {
     Lifecycle.destroy(this);
   }
 
+  /**
+   * Updates the Lifecycle with actual deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number): void {
     Lifecycle.update(this, deltaTime);
   }

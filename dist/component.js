@@ -21,6 +21,9 @@ class Component {
         this.label = 'Component';
         gameObject.addChild(this);
     }
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         lifecycle_1.Lifecycle.update(this, deltaTime);
     }

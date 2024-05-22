@@ -25,6 +25,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextureAtlas = void 0;
 const PIXI = __importStar(require("pixi.js"));
+/**
+ * for slicing textures into tileset
+ */
 class TextureAtlas {
     /**
      * create texture atlas

@@ -23,6 +23,9 @@ class PolygonBody extends detect_collisions_1.Polygon {
         this.label = 'PolygonBody';
         gameObject.addChild(this);
     }
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         this.gameObject.x = this.x;
         this.gameObject.y = this.y;

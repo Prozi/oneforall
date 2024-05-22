@@ -37,6 +37,9 @@ class Lifecycle {
     destroy() {
         Lifecycle.destroy(this);
     }
+    /**
+     * Updates the Lifecycle with actual deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         Lifecycle.update(this, deltaTime);
     }

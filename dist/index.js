@@ -21,7 +21,7 @@ __exportStar(require("./container"), exports);
 __exportStar(require("./animator"), exports);
 __exportStar(require("./game-object"), exports);
 __exportStar(require("./prefab"), exports);
-__exportStar(require("./scene-base"), exports);
+__exportStar(require("./scene-ssr"), exports);
 __exportStar(require("./scene"), exports);
 __exportStar(require("./application"), exports);
 __exportStar(require("./resources"), exports);

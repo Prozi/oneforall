@@ -3,8 +3,8 @@ import * as PIXI from 'pixi.js';
 import { Subject } from 'rxjs/internal/Subject';
 import { Application } from './application';
 import { Resources } from './resources';
-import { SceneBase, SceneOptions } from './scene-base';
-export declare class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
+import { SceneSSR, SceneOptions } from './scene-ssr';
+export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     pixi: Application;
     resources: Resources;
     /**

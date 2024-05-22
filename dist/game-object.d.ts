@@ -5,13 +5,13 @@ import { CircleBody } from './circle-body';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
-import { SceneBase } from './scene-base';
+import { SceneSSR } from './scene-ssr';
 export interface TGameObject<TSprite = Animator, TBody = CircleBody> extends GameObject {
     body: TBody;
     sprite: TSprite;
     target?: Vector;
 }
-export type SceneType = SceneBase | Scene;
+export type SceneType = SceneSSR | Scene;
 export type GameObjectParent = SceneType | GameObject;
 export declare const getRoot: (gameObject: GameObject) => SceneType | undefined;
 export declare class GameObject extends Lifecycle {
@@ -47,6 +47,9 @@ export declare class GameObject extends Lifecycle {
      * get parent scene if exists
      */
     get scene(): SceneType | undefined;
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
     recursive(child: LifecycleProps, callback: (deep: LifecycleProps) => void): void;

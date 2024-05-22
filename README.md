@@ -202,7 +202,7 @@ npm i @jacekpietal/oneforall --save
     ✓ THEN it can't have zero radius (9 ms)
     ✓ THEN update propagates x/y changes
 
- PASS  src/scene-base.spec.ts
+ PASS  src/scene-ssr.spec.ts
   GIVEN SceneBase
     ✓ THEN it works (3 ms)
     ✓ THEN it can have children (1 ms)

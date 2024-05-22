@@ -31,6 +31,9 @@ export class Container extends PIXI.Container implements LifecycleProps {
     gameObject.addChild(this);
   }
 
+  /**
+   * @param deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number): void {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;

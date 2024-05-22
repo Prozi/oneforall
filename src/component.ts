@@ -30,6 +30,9 @@ export class Component implements LifecycleProps {
     gameObject.addChild(this);
   }
 
+  /**
+   * @param deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number): void {
     Lifecycle.update(this, deltaTime);
   }

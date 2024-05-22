@@ -68,6 +68,9 @@ export declare class Animator extends PIXI.Container implements LifecycleProps {
      * Reference to inner animation scale.
      */
     get scale(): PIXI.ObservablePoint;
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     setScale(x?: number, y?: number): void;
     getAnimationIndex(state: string): number;

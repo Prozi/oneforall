@@ -102,6 +102,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
         })
       );
 
+      animatedSprite.label = 'Animator_AnimatedSprite';
       animatedSprite.anchor.set(anchor.x, anchor.y);
       this.addChild(animatedSprite);
     });
@@ -130,6 +131,9 @@ export class Animator extends PIXI.Container implements LifecycleProps {
     return this.animation.scale;
   }
 
+  /**
+   * @param deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number) {
     this.x = this.gameObject.x;
     this.y = this.gameObject.y;

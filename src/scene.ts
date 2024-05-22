@@ -9,9 +9,9 @@ import { Inject } from '@jacekpietal/dependency-injection';
 
 import { Application } from './application';
 import { Resources } from './resources';
-import { SceneBase, SceneOptions } from './scene-base';
+import { SceneSSR, SceneOptions } from './scene-ssr';
 
-export class Scene<TBody extends Body = Body> extends SceneBase<TBody> {
+export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resources: Resources;
 

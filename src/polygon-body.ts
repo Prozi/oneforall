@@ -32,6 +32,9 @@ export class PolygonBody extends Polygon implements LifecycleProps {
     gameObject.addChild(this);
   }
 
+  /**
+   * @param deltaTime = 1.0 for 60FPS
+   */
   update(deltaTime: number): void {
     this.gameObject.x = this.x;
     this.gameObject.y = this.y;

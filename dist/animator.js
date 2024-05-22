@@ -66,6 +66,7 @@ class Animator extends PIXI.Container {
                 texture.source.scaleMode = 'nearest';
                 return { texture, time: animationSpeed };
             }));
+            animatedSprite.label = 'Animator_AnimatedSprite';
             animatedSprite.anchor.set(anchor.x, anchor.y);
             this.addChild(animatedSprite);
         });
@@ -89,6 +90,9 @@ class Animator extends PIXI.Container {
     get scale() {
         return this.animation.scale;
     }
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;

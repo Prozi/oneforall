@@ -22,6 +22,9 @@ export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
      */
     label: string;
     constructor(gameObject: GameObject, texture: PIXI.Texture);
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
 }

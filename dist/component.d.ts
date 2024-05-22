@@ -21,6 +21,9 @@ export declare class Component implements LifecycleProps {
      */
     label: string;
     constructor(gameObject: GameObject);
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime: number): void;
     destroy(): void;
 }

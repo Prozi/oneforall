@@ -46,6 +46,9 @@ class Sprite extends PIXI.Sprite {
         this.label = 'Sprite';
         gameObject.addChild(this);
     }
+    /**
+     * @param deltaTime = 1.0 for 60FPS
+     */
     update(deltaTime) {
         this.x = this.gameObject.x;
         this.y = this.gameObject.y;

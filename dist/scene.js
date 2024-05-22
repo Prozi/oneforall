@@ -38,8 +38,8 @@ const Subject_1 = require("rxjs/internal/Subject");
 const dependency_injection_1 = require("@jacekpietal/dependency-injection");
 const application_1 = require("./application");
 const resources_1 = require("./resources");
-const scene_base_1 = require("./scene-base");
-class Scene extends scene_base_1.SceneBase {
+const scene_ssr_1 = require("./scene-ssr");
+class Scene extends scene_ssr_1.SceneSSR {
     constructor(options = {}) {
         super(options);
         /**
