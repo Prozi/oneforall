@@ -4,5 +4,5 @@
   "plugin": [],
   "theme": "default",
   "tsconfig": "./tsconfig.json",
-  "name": "@jacekpietal / One For All"
+  "name": "@pietal.dev/engine"
 }
