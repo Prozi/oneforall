@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
   "description": "A Unity-inspired game framework by pietal.dev",
-  "version": "9.0.5",
+  "version": "9.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
