@@ -714,15 +714,15 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@pietal.dev/cache@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/cache/-/cache-2.0.1.tgz#eafbc423d0576858f3a42885860a28142e7812b9"
-  integrity sha512-dCUlPDApUO6mNOUIoCtlo9CNeYTFUjiRhwHcbbMMX87SYuTjSSJZoY+sNxrSJK+EI0vhlz3JY+k28AKYGmsdcQ==
+"@pietal.dev/cache@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/cache/-/cache-2.0.2.tgz#87db1595e307544f10d3251ab5bc9c15316eb83e"
+  integrity sha512-UlC9dfsCs2JuHyEwkG7yeT6w2vaKAVMhUI8F4Ul2Zq1T8iVo6EfCuaSXl4uQfwBQpQobNV5xhjLgirUn++F9fw==
 
-"@pietal.dev/dependency-injection@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.3.tgz#c61762ed10bedce298bc90a73da07b99eb58e8f9"
-  integrity sha512-TxBPqYU5sgJyArHfAQ3M3KBgZVbV93HwdDI1/YWDa0tVvNM62K1Bei3PjkTwITSPS9Nh6jt1nC5yUKegpmQgIQ==
+"@pietal.dev/dependency-injection@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.4.tgz#7c2280adf1f784d62988040c7a555a49cf218eb8"
+  integrity sha512-UZ4mdKnXxh/UYnfqE53SIA5RA0K6vgqh8CW9bTb0t4ag8lhlPjn30fH8XvYDptkgpZeZbJtTtijVa63+x3QktQ==
   dependencies:
     reflect-metadata "^0.2.2"
 
@@ -2134,9 +2134,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.668:
-  version "1.4.778"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.778.tgz#1e429f3f9cf572936693a898c0527adf6123ef76"
-  integrity sha512-C6q/xcUJf/2yODRxAVCfIk4j3y3LMsD0ehiE2RQNV2cxc8XU62gR6vvYh3+etSUzlgTfil+qDHI1vubpdf0TOA==
+  version "1.4.779"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.779.tgz#bb6f08b93092a564421adcadcc4b92c5055c7a77"
+  integrity sha512-oaTiIcszNfySXVJzKcjxd2YjPxziAd+GmXyb2HbidCeFo6Z88ygOT7EimlrEQhM2U08VhSrbKhLOXP0kKUCZ6g==
 
 emittery@^0.13.1:
   version "0.13.1"
