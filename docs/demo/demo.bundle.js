@@ -7457,7 +7457,7 @@
             return polygon;
           }
           /**
-           * re-insert body into collision tree and update its aabb
+           * re-insert body into collision tree and update its bbox
            * every body can be part of only one system
            */
           insert(body) {
@@ -7475,8 +7475,6 @@
             body.minY = body.bbox.minY - body.padding;
             body.maxX = body.bbox.maxX + body.padding;
             body.maxY = body.bbox.maxY + body.padding;
-            // set system for later body.system.updateBody(body)
-            body.system = this;
             // reinsert bounding box to collision tree
             return super.insert(body);
           }
@@ -7542,7 +7540,10 @@
                   if (!body) {
                     return false;
                   }
-                  if (body.type && traverseFunction(body, children, index)) {
+                  if (
+                    body.typeGroup &&
+                    traverseFunction(body, children, index)
+                  ) {
                     return true;
                   }
                   // if callback returns true, ends forEach
@@ -7588,6 +7589,10 @@
              * type of body
              */
             this.type = model_1.BodyType.Box;
+            /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Box;
             /**
              * boxes are convex
              */
@@ -7690,6 +7695,10 @@
              */
             this.type = model_1.BodyType.Circle;
             /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Circle;
+            /**
              * always centered
              */
             this.isCentered = true;
@@ -7745,6 +7754,15 @@
            */
           get scaleY() {
             return this.scale;
+          }
+          /**
+           * group for collision filtering
+           */
+          get group() {
+            return this._group;
+          }
+          set group(group) {
+            this._group = (0, model_1.getGroup)(group);
           }
           /**
            * update position
@@ -7911,6 +7929,10 @@
              */
             this.type = model_1.BodyType.Ellipse;
             /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Ellipse;
+            /**
              * ellipses are convex
              */
             this.isConvex = true;
@@ -8042,6 +8064,10 @@
              */
             this.type = model_1.BodyType.Line;
             /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Line;
+            /**
              * line is convex
              */
             this.isConvex = true;
@@ -8125,6 +8151,10 @@
              * point type
              */
             this.type = model_1.BodyType.Point;
+            /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Point;
           }
         }
         exports.Point = Point;
@@ -8182,6 +8212,10 @@
              * type of body
              */
             this.type = model_1.BodyType.Polygon;
+            /**
+             * faster than type
+             */
+            this.typeGroup = model_1.BodyGroup.Polygon;
             /**
              * is body centered
              */
@@ -8259,6 +8293,15 @@
            */
           set scale(scale) {
             this.setScale(scale);
+          }
+          /**
+           * group for collision filtering
+           */
+          get group() {
+            return this._group;
+          }
+          set group(group) {
+            this._group = (0, model_1.getGroup)(group);
           }
           /**
            * update position
@@ -8418,7 +8461,8 @@
            */
           getConvex() {
             if (
-              (this.type && this.type !== model_1.BodyType.Polygon) ||
+              (this.typeGroup &&
+                this.typeGroup !== model_1.BodyGroup.Polygon) ||
               this.points.length < 4
             ) {
               return [];
@@ -8612,7 +8656,7 @@
          * replace body with array of related convex polygons
          */
         function ensureConvex(body) {
-          if (body.isConvex || body.type !== model_1.BodyType.Polygon) {
+          if (body.isConvex || body.typeGroup !== model_1.BodyGroup.Polygon) {
             return [body];
           }
           return body.convexPolygons;
@@ -8893,7 +8937,9 @@
             return mod && mod.__esModule ? mod : { default: mod };
           };
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.BodyType =
+        exports.BodyGroup =
+          exports.getGroup =
+          exports.BodyType =
           exports.SATCircle =
           exports.SATPolygon =
           exports.SATVector =
@@ -8952,12 +8998,32 @@
         var BodyType;
         (function (BodyType) {
           BodyType['Ellipse'] = 'Ellipse';
-          BodyType['Line'] = 'Line';
           BodyType['Circle'] = 'Circle';
-          BodyType['Box'] = 'Box';
-          BodyType['Point'] = 'Point';
           BodyType['Polygon'] = 'Polygon';
+          BodyType['Box'] = 'Box';
+          BodyType['Line'] = 'Line';
+          BodyType['Point'] = 'Point';
         })((BodyType = exports.BodyType || (exports.BodyType = {})));
+        /**
+         * for groups
+         */
+        function getGroup(group) {
+          const limited = Math.max(0, Math.min(group, 0x7fffffff));
+          return (limited << 16) | limited;
+        }
+        exports.getGroup = getGroup;
+        /**
+         * for groups
+         */
+        var BodyGroup;
+        (function (BodyGroup) {
+          BodyGroup[(BodyGroup['Ellipse'] = 32)] = 'Ellipse';
+          BodyGroup[(BodyGroup['Circle'] = 16)] = 'Circle';
+          BodyGroup[(BodyGroup['Polygon'] = 8)] = 'Polygon';
+          BodyGroup[(BodyGroup['Box'] = 4)] = 'Box';
+          BodyGroup[(BodyGroup['Line'] = 2)] = 'Line';
+          BodyGroup[(BodyGroup['Point'] = 1)] = 'Point';
+        })((BodyGroup = exports.BodyGroup || (exports.BodyGroup = {})));
 
         /***/
       },
@@ -9088,6 +9154,16 @@
             this.response = new model_1.Response();
           }
           /**
+           * re-insert body into collision tree and update its bbox
+           * every body can be part of only one system
+           */
+          insert(body) {
+            const insertResult = super.insert(body);
+            // set system for later body.system.updateBody(body)
+            body.system = this;
+            return insertResult;
+          }
+          /**
            * separate (move away) bodies
            */
           separate() {
@@ -9136,6 +9212,19 @@
             return (0, optimized_1.some)(bodies, checkCollision);
           }
           /**
+           * check all bodies collisions in area with callback
+           */
+          checkArea(
+            area,
+            callback = utils_1.returnTrue,
+            response = this.response
+          ) {
+            const checkOne = (body) => {
+              return this.checkOne(body, callback, response);
+            };
+            return (0, optimized_1.some)(this.search(area), checkOne);
+          }
+          /**
            * check all bodies collisions with callback
            */
           checkAll(callback = utils_1.returnTrue, response = this.response) {
@@ -9148,11 +9237,14 @@
            * check do 2 objects collide
            */
           checkCollision(bodyA, bodyB, response = this.response) {
+            const { bbox: bboxA } = bodyA;
+            const { bbox: bboxB } = bodyA;
             // assess the bodies real aabb without padding
             if (
-              !bodyA.bbox ||
-              !bodyB.bbox ||
-              (0, utils_1.notIntersectAABB)(bodyA.bbox, bodyB.bbox)
+              !(0, utils_1.areSameGroup)(bodyA, bodyB) ||
+              !bboxA ||
+              !bboxB ||
+              (0, utils_1.notIntersectAABB)(bboxA, bboxB)
             ) {
               return false;
             }
@@ -9207,11 +9299,11 @@
             }
             this.insert(this.ray);
             this.checkOne(this.ray, ({ b: body }) => {
-              if (!allow(body)) {
+              if (!allow(body, this.ray)) {
                 return false;
               }
               const points =
-                body.type === model_1.BodyType.Circle
+                body.typeGroup === model_1.BodyGroup.Circle
                   ? (0, intersect_1.intersectLineCircle)(this.ray, body)
                   : (0, intersect_1.intersectLinePolygon)(this.ray, body);
               (0, optimized_1.forEach)(points, (point) => {
@@ -9239,7 +9331,8 @@
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.returnTrue =
+        exports.bin2dec =
+          exports.returnTrue =
           exports.cloneResponse =
           exports.drawBVH =
           exports.drawPolygon =
@@ -9250,6 +9343,7 @@
           exports.mapVectorToArray =
           exports.clonePointsArray =
           exports.checkAInB =
+          exports.areSameGroup =
           exports.intersectAABB =
           exports.notIntersectAABB =
           exports.bodyMoved =
@@ -9392,27 +9486,16 @@
         /**
          * used for all types of bodies in constructor
          */
-        function extendBody(body, options) {
-          body.isStatic = !!(options === null || options === void 0
-            ? void 0
-            : options.isStatic);
-          body.isTrigger = !!(options === null || options === void 0
-            ? void 0
-            : options.isTrigger);
-          body.padding =
-            (options === null || options === void 0
-              ? void 0
-              : options.padding) || 0;
-          if (body.type !== model_1.BodyType.Circle) {
-            body.isCentered =
-              (options === null || options === void 0
-                ? void 0
-                : options.isCentered) || false;
+        function extendBody(body, options = {}) {
+          body.isStatic = !!options.isStatic;
+          body.isTrigger = !!options.isTrigger;
+          body.padding = options.padding || 0;
+          body.group =
+            typeof options.group === 'number' ? options.group : 0x7fffffff;
+          if (body.typeGroup !== model_1.BodyGroup.Circle) {
+            body.isCentered = options.isCentered || false;
           }
-          body.setAngle(
-            (options === null || options === void 0 ? void 0 : options.angle) ||
-              0
-          );
+          body.setAngle(options.angle || 0);
         }
         exports.extendBody = extendBody;
         /**
@@ -9448,11 +9531,21 @@
         }
         exports.intersectAABB = intersectAABB;
         /**
+         * checks if two bodies can interact (for collision filtering)
+         */
+        function areSameGroup(bodyA, bodyB) {
+          return (
+            ((bodyA.group >> 16) & (bodyB.group & 0xffff) &&
+              (bodyB.group >> 16) & (bodyA.group & 0xffff)) !== 0
+          );
+        }
+        exports.areSameGroup = areSameGroup;
+        /**
          * checks if body a is in body b
          */
         function checkAInB(bodyA, bodyB) {
           const check =
-            bodyA.type === model_1.BodyType.Circle
+            bodyA.typeGroup === model_1.BodyGroup.Circle
               ? circleInFunctions
               : polygonInFunctions;
           return check[bodyB.type](bodyA, bodyB);
@@ -9497,7 +9590,7 @@
          */
         function getSATTest(bodyA, bodyB) {
           const check =
-            bodyA.type === model_1.BodyType.Circle
+            bodyA.typeGroup === model_1.BodyGroup.Circle
               ? circleSATFunctions
               : polygonSATFunctions;
           return check[bodyB.type];
@@ -9590,6 +9683,13 @@
           return true;
         }
         exports.returnTrue = returnTrue;
+        /**
+         * binary string to decimal number
+         */
+        function bin2dec(binary) {
+          return Number(`0b${binary}`.replace(/\s/g, ''));
+        }
+        exports.bin2dec = bin2dec;
 
         /***/
       },
