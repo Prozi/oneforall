@@ -2,16 +2,18 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.createSprite = createSprite;
 exports.updateSprite = updateSprite;
-const detect_collisions_1 = require('detect-collisions');
-const operators_1 = require('rxjs/operators');
+const game_object_1 = require('../game-object');
 const animator_1 = require('../animator');
 const circle_body_1 = require('../circle-body');
-const game_object_1 = require('../game-object');
+const detect_collisions_1 = require('detect-collisions');
+const operators_1 = require('rxjs/operators');
 function createSprite({ scene, data, texture }) {
   // create game object
   const gameObject = new game_object_1.GameObject('Player');
   // create body
-  gameObject.body = new circle_body_1.CircleBody(gameObject, 20, 14);
+  gameObject.body = new circle_body_1.CircleBody(gameObject, 20, 14, 20, {
+    padding: 7
+  });
   gameObject.body.setPosition(
     Math.random() * innerWidth,
     Math.random() * innerHeight

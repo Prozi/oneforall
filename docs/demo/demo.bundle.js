@@ -89371,11 +89371,8 @@ Deprecated since v${version}`
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.createSprite = createSprite;
         exports.updateSprite = updateSprite;
-        const detect_collisions_1 = __webpack_require__(
-          /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
-        );
-        const operators_1 = __webpack_require__(
-          /*! rxjs/operators */ './node_modules/rxjs/dist/cjs/operators/index.js'
+        const game_object_1 = __webpack_require__(
+          /*! ../game-object */ './src/game-object.ts'
         );
         const animator_1 = __webpack_require__(
           /*! ../animator */ './src/animator.ts'
@@ -89383,14 +89380,23 @@ Deprecated since v${version}`
         const circle_body_1 = __webpack_require__(
           /*! ../circle-body */ './src/circle-body.ts'
         );
-        const game_object_1 = __webpack_require__(
-          /*! ../game-object */ './src/game-object.ts'
+        const detect_collisions_1 = __webpack_require__(
+          /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
+        );
+        const operators_1 = __webpack_require__(
+          /*! rxjs/operators */ './node_modules/rxjs/dist/cjs/operators/index.js'
         );
         function createSprite({ scene, data, texture }) {
           // create game object
           const gameObject = new game_object_1.GameObject('Player');
           // create body
-          gameObject.body = new circle_body_1.CircleBody(gameObject, 20, 14);
+          gameObject.body = new circle_body_1.CircleBody(
+            gameObject,
+            20,
+            14,
+            20,
+            { padding: 7 }
+          );
           gameObject.body.setPosition(
             Math.random() * innerWidth,
             Math.random() * innerHeight

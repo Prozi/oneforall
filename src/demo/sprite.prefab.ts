@@ -1,16 +1,16 @@
-import { distance } from 'detect-collisions';
-import { takeUntil } from 'rxjs/operators';
+import { GameObject, TGameObject } from '../game-object';
 
 import { Animator } from '../animator';
 import { CircleBody } from '../circle-body';
-import { GameObject, TGameObject } from '../game-object';
+import { distance } from 'detect-collisions';
+import { takeUntil } from 'rxjs/operators';
 
 export function createSprite({ scene, data, texture }): TGameObject {
   // create game object
   const gameObject = new GameObject('Player') as TGameObject;
 
   // create body
-  gameObject.body = new CircleBody(gameObject, 20, 14);
+  gameObject.body = new CircleBody(gameObject, 20, 14, 20, { padding: 7 });
   gameObject.body.setPosition(
     Math.random() * innerWidth,
     Math.random() * innerHeight
