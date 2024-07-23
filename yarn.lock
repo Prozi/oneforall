@@ -719,17 +719,17 @@
   resolved "https://registry.yarnpkg.com/@pietal.dev/cache/-/cache-2.0.2.tgz#87db1595e307544f10d3251ab5bc9c15316eb83e"
   integrity sha512-UlC9dfsCs2JuHyEwkG7yeT6w2vaKAVMhUI8F4Ul2Zq1T8iVo6EfCuaSXl4uQfwBQpQobNV5xhjLgirUn++F9fw==
 
-"@pietal.dev/dependency-injection@^1.4.6":
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.6.tgz#e3b3273f362ab68bfd309dce4f56d2b36c9ff1d5"
-  integrity sha512-u1ORb0iSysUUJDARl5SofdXBUO7ammJx6nTtNhEW1vetEHG/lCnwsc4EBo8xDs6ssWfDayRHFQiYflgshIERQQ==
+"@pietal.dev/dependency-injection@^1.4.7":
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.7.tgz#c43181722bb5a2320ea3f0d4fbfbebc1280d90ad"
+  integrity sha512-P/44w5JJq7TuvJwfkA4t65tykf5tIxKhv2Cp0usLDEnsZTIUGiERFfhJP1ceoc1Ez1benTx1NCqTYL6Fphtr2Q==
   dependencies:
     reflect-metadata "^0.2.2"
 
-"@pietal.dev/gstats@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/gstats/-/gstats-0.1.5.tgz#3b23b0c3d86f7e5f5a438186c4b4cf73acf65336"
-  integrity sha512-RapUkIhgpf4sUOsDPbQCmeu04cBnlAD7nBKJGWgcyxcsqB2U7JxVNAgGPn0rPhPM6GBEMsKYq1anKfyv8n3oww==
+"@pietal.dev/gstats@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/gstats/-/gstats-0.1.6.tgz#fe779e5784d54f852b676b4e40c648c94ce03e45"
+  integrity sha512-SJCxaOhXinvRsyt+LtzAsR+u+JzXkc1WeaDnGB4DIZ9kJ3OfEPcY4T7b+3cvyFRdfiWEkOT7T6cVnalLoAdrzQ==
 
 "@pixi/canvas-display@7.4.2":
   version "7.4.2"
@@ -3911,12 +3911,12 @@ pixi-shim@^2.5.3:
   optionalDependencies:
     canvas "^2"
 
-pixi-stats@^1.3.8:
-  version "1.3.8"
-  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-1.3.8.tgz#7a8384ed38dea6be86ed202fd3b3d28fd86ec278"
-  integrity sha512-PUlZDXi5q5pPL+TidcCD5t0TM0Tno2r7GxR8Xq+awCa2Csb0z+91p5PIq63SN2Ay3r+gikleXrp7T/ivQ9ORAA==
+pixi-stats@^1.3.9:
+  version "1.3.9"
+  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-1.3.9.tgz#34b298d3426149423b9b966f8de76901aa3330e6"
+  integrity sha512-rGd1rmANlLAVdxtmPB6kq/VBIfy9RCafLi65qn8v+Vd5MtqwA+Qpo4+PUtNMs5pLOQ6rx3Vz2H3MPlRnId2LKA==
   dependencies:
-    "@pietal.dev/gstats" "^0.1.5"
+    "@pietal.dev/gstats" "^0.1.6"
 
 pixi.js-legacy@^7:
   version "7.4.2"
