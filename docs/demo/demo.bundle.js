@@ -679,10 +679,10 @@
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
+        exports['default'] = Dependency;
         function Dependency(constructor) {
           throw new Error('Deprecated');
         }
-        exports['default'] = Dependency;
         //# sourceMappingURL=Dependency.js.map
 
         /***/
@@ -701,11 +701,10 @@
             return mod && mod.__esModule ? mod : { default: mod };
           };
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.DirectLoad =
-          exports.Inject =
-          exports.NamedInjection =
-          exports.Injection =
-            void 0;
+        exports.Injection = Injection;
+        exports.NamedInjection = NamedInjection;
+        exports.Inject = Inject;
+        exports.DirectLoad = DirectLoad;
         __webpack_require__(
           /*! reflect-metadata */ './node_modules/reflect-metadata/Reflect.js'
         );
@@ -738,14 +737,12 @@
             );
           };
         }
-        exports.Injection = Injection;
         function NamedInjection(name, typeToInject) {
           const proto = typeToInject ? typeToInject.prototype : null;
           return function (target, propertyKey) {
             addNamedInjectionRequest(target, name, propertyKey, proto);
           };
         }
-        exports.NamedInjection = NamedInjection;
         function Inject(dependencyClass) {
           if (!dependencyClass) throw new Error('Missing parameter!');
           return function (prototype, propertyKey) {
@@ -785,7 +782,6 @@
             return prototype;
           };
         }
-        exports.Inject = Inject;
         function autoLoadInjectors(target, proto) {
           Reflect.defineMetadata('isInjected', true, proto);
           const singletonInjectors =
@@ -820,7 +816,6 @@
           wrapper.prototype = proto;
           return wrapper;
         }
-        exports.DirectLoad = DirectLoad;
         function addInjectionRequest(
           targetPrototype,
           injectionPrototype,
@@ -899,6 +894,7 @@
             return mod && mod.__esModule ? mod : { default: mod };
           };
         Object.defineProperty(exports, '__esModule', { value: true });
+        exports['default'] = Injectable;
         const Injectable_1 = __importDefault(
           __webpack_require__(
             /*! ../Injectable */ './node_modules/@pietal.dev/dependency-injection/dist/src/Injectable.js'
@@ -908,7 +904,6 @@
           // Register it in the singleton registry
           Injectable_1.default.addInjectable(constructor);
         }
-        exports['default'] = Injectable;
         //# sourceMappingURL=InjectableAnnotation.js.map
 
         /***/
@@ -11727,7 +11722,8 @@
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.addStats = exports.Stats = void 0;
+        exports.Stats = void 0;
+        exports.addStats = addStats;
         const stats_gl_1 = __webpack_require__(
           /*! ./stats-gl */ './node_modules/pixi-stats/dist/stats-gl.js'
         );
@@ -11813,7 +11809,6 @@
           document.body.appendChild(adapter.stats.domElement);
           return adapter;
         }
-        exports.addStats = addStats;
         //# sourceMappingURL=stats.js.map
 
         /***/

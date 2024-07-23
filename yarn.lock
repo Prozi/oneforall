@@ -719,17 +719,17 @@
   resolved "https://registry.yarnpkg.com/@pietal.dev/cache/-/cache-2.0.2.tgz#87db1595e307544f10d3251ab5bc9c15316eb83e"
   integrity sha512-UlC9dfsCs2JuHyEwkG7yeT6w2vaKAVMhUI8F4Ul2Zq1T8iVo6EfCuaSXl4uQfwBQpQobNV5xhjLgirUn++F9fw==
 
-"@pietal.dev/dependency-injection@^1.4.4":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.4.tgz#7c2280adf1f784d62988040c7a555a49cf218eb8"
-  integrity sha512-UZ4mdKnXxh/UYnfqE53SIA5RA0K6vgqh8CW9bTb0t4ag8lhlPjn30fH8XvYDptkgpZeZbJtTtijVa63+x3QktQ==
+"@pietal.dev/dependency-injection@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/dependency-injection/-/dependency-injection-1.4.5.tgz#646df8583ec4c02d479f355848c320dc3d5e7ab3"
+  integrity sha512-QHkc9AAg8DE5h1ZCNGm6+BrFIeuhlVXYhPIOva/qiMZZ2QMtk6cA7ZHu1NJdx3P9vwRuS3Xv3wKmz/AnpMya1A==
   dependencies:
     reflect-metadata "^0.2.2"
 
-"@pietal.dev/gstats@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@pietal.dev/gstats/-/gstats-0.1.4.tgz#3a1aa5cb09bcbede8f98eb1743801463c2cd8ca0"
-  integrity sha512-46WBF4sI21CcM6NFdGd91QcPIRTKFexyXMCtRN6NcjF+JDz/b0C6t1U8aL705zyONEvn2AdSmSIMRjngzn+DjQ==
+"@pietal.dev/gstats@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@pietal.dev/gstats/-/gstats-0.1.5.tgz#3b23b0c3d86f7e5f5a438186c4b4cf73acf65336"
+  integrity sha512-RapUkIhgpf4sUOsDPbQCmeu04cBnlAD7nBKJGWgcyxcsqB2U7JxVNAgGPn0rPhPM6GBEMsKYq1anKfyv8n3oww==
 
 "@pixi/canvas-display@7.4.2":
   version "7.4.2"
@@ -3911,12 +3911,12 @@ pixi-shim@^2.5.3:
   optionalDependencies:
     canvas "^2"
 
-pixi-stats@^1.3.6:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-1.3.6.tgz#6365a56955afe5f00085a774201281da77bfb051"
-  integrity sha512-9LAUuN0ko4puiToPlQiAZ5cawBwpA5x8hoNzubGKPvSTMJAUwE8c8fxSv+0LilpA/l4uLwcTidEiahYYk/PDkQ==
+pixi-stats@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-1.3.7.tgz#827f2d5d0f170a0b70cd1b9bfefe860d3cc37159"
+  integrity sha512-C/E8QHxOlD9lIow6y04Uq6weIIfhy/KMqfo/CUU5AAmLhcFjpSuqQ7hU63XvV/iGOD/CUHGvn7m1JERfkA7VSg==
   dependencies:
-    "@pietal.dev/gstats" "^0.1.4"
+    "@pietal.dev/gstats" "^0.1.5"
 
 pixi.js-legacy@^7:
   version "7.4.2"
@@ -4763,10 +4763,10 @@ type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typedoc@^0.26.4:
-  version "0.26.4"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.26.4.tgz#7e83047369a29a710d429dac20996680cae9a314"
-  integrity sha512-FlW6HpvULDKgc3rK04V+nbFyXogPV88hurarDPOjuuB5HAwuAlrCMQ5NeH7Zt68a/ikOKu6Z/0hFXAeC9xPccQ==
+typedoc@^0.26.5:
+  version "0.26.5"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.26.5.tgz#08032bd57cac3d56e8ac296a07e3482dc0c645ac"
+  integrity sha512-Vn9YKdjKtDZqSk+by7beZ+xzkkr8T8CYoiasqyt4TTRFy5+UHzL/mF/o4wGBjRF+rlWQHDb0t6xCpA3JNL5phg==
   dependencies:
     lunr "^2.3.9"
     markdown-it "^14.1.0"
