@@ -7498,9 +7498,9 @@
           /**
            * draw bounding boxes hierarchy outline
            */
-          drawBVH(context) {
+          drawBVH(context, isTrigger = true) {
             const drawChildren = (body) => {
-              (0, utils_1.drawBVH)(context, body);
+              (0, utils_1.drawBVH)(context, body, isTrigger);
               if (body.children) {
                 (0, optimized_1.forEach)(body.children, drawChildren);
               }
@@ -10230,11 +10230,18 @@
         /**
          * draw body bounding body box
          */
-        function drawBVH(context, body) {
-          drawPolygon(context, {
-            pos: { x: body.minX, y: body.minY },
-            calcPoints: createBox(body.maxX - body.minX, body.maxY - body.minY)
-          });
+        function drawBVH(context, body, isTrigger = true) {
+          drawPolygon(
+            context,
+            {
+              pos: { x: body.minX, y: body.minY },
+              calcPoints: createBox(
+                body.maxX - body.minX,
+                body.maxY - body.minY
+              )
+            },
+            isTrigger
+          );
         }
         /**
          * clone response object returning new response with previous ones values
@@ -90898,8 +90905,9 @@ Deprecated since v${version}`
           get scene() {
             return undefined;
           }
-          // tslint:disable-next-line
-          async init(_options) {}
+          async init(_options) {
+            return true;
+          }
           stop() {
             if (this.animationFrame) {
               cancelAnimationFrame(this.animationFrame);
@@ -91096,17 +91104,23 @@ Deprecated since v${version}`
              */
             this.disableDebug$ = new Subject_1.Subject();
             this.stage.visible = this.options.visible || false;
+            this.stage.label = 'SceneStage';
             this.pixi.stage.addChild(this.stage);
+            this.pixi.stage.label = 'PixiStage';
             if (this.options.autoSort) {
               this.enableAutoSort();
             }
             if (this.options.debug) {
               this.enableDebug();
             }
-            // for chrome plugin pixi debug devtools
+            globalThis.PIXI = PIXI;
             globalThis.__PIXI_APP__ = this.pixi;
+            globalThis.scene = this;
           }
           static getQueryParams() {
+            if (typeof location === 'undefined') {
+              return {};
+            }
             const matches = location.search.matchAll(
               /[?&]([^=?&]+)=?([^?&]*)/g
             );
@@ -91119,6 +91133,9 @@ Deprecated since v${version}`
             );
           }
           async init(options) {
+            if (this.pixi.isInitialized) {
+              return false;
+            }
             await this.pixi.init(options);
             if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
               document.body.appendChild(this.pixi.canvas);
@@ -91127,6 +91144,7 @@ Deprecated since v${version}`
             if (showFPS) {
               this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
             }
+            return true;
           }
           start() {
             this.pixi.start();
@@ -91142,6 +91160,15 @@ Deprecated since v${version}`
           destroy() {
             super.destroy();
             this.pixi.stage.removeChild(this.stage);
+          }
+          addChild(gameObject) {
+            super.addChild(gameObject);
+            if (gameObject.sprite) {
+              this.stage.addChild(gameObject.sprite);
+            }
+            if (gameObject.body) {
+              this.physics.insert(gameObject.body);
+            }
           }
           enableAutoSort() {
             this.update$
@@ -91159,7 +91186,6 @@ Deprecated since v${version}`
           }
           enableDebug() {
             const debug = new PIXI.Graphics();
-            const canvas = debug;
             this.pixi.stage.addChild(debug);
             this.update$
               .pipe(
@@ -91168,10 +91194,7 @@ Deprecated since v${version}`
                 )
               )
               .subscribe(() => {
-                debug.clear();
-                this.physics.drawBVH(canvas);
-                this.physics.draw(canvas);
-                debug.stroke();
+                this.onUpdateDebug(debug);
               });
           }
           disableDebug() {
@@ -91192,6 +91215,22 @@ Deprecated since v${version}`
             const canvas = stats.stats.domElement;
             canvas.setAttribute('style', style);
             ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
+          }
+          onUpdateDebug(debug) {
+            const canvas = debug;
+            debug.clear();
+            this.physics.draw(canvas);
+            debug.stroke({
+              color: 0xffffff,
+              width: 1.5,
+              alpha: 1
+            });
+            this.physics.drawBVH(canvas);
+            debug.stroke({
+              color: 0x00ff00,
+              width: 1,
+              alpha: 0.5
+            });
           }
         }
         exports.Scene = Scene;

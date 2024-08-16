@@ -78,8 +78,9 @@ class SceneSSR extends game_object_1.GameObject {
   get scene() {
     return undefined;
   }
-  // tslint:disable-next-line
-  async init(_options) {}
+  async init(_options) {
+    return true;
+  }
   stop() {
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);

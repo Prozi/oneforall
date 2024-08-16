@@ -85,17 +85,23 @@ class Scene extends scene_ssr_1.SceneSSR {
      */
     this.disableDebug$ = new Subject_1.Subject();
     this.stage.visible = this.options.visible || false;
+    this.stage.label = 'SceneStage';
     this.pixi.stage.addChild(this.stage);
+    this.pixi.stage.label = 'PixiStage';
     if (this.options.autoSort) {
       this.enableAutoSort();
     }
     if (this.options.debug) {
       this.enableDebug();
     }
-    // for chrome plugin pixi debug devtools
+    globalThis.PIXI = PIXI;
     globalThis.__PIXI_APP__ = this.pixi;
+    globalThis.scene = this;
   }
   static getQueryParams() {
+    if (typeof location === 'undefined') {
+      return {};
+    }
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
     return [...matches].reduce(
       (queryParams, [_wholeMatch, paramName, paramValue]) =>
@@ -106,6 +112,9 @@ class Scene extends scene_ssr_1.SceneSSR {
     );
   }
   async init(options) {
+    if (this.pixi.isInitialized) {
+      return false;
+    }
     await this.pixi.init(options);
     if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
       document.body.appendChild(this.pixi.canvas);
@@ -114,6 +123,7 @@ class Scene extends scene_ssr_1.SceneSSR {
     if (showFPS) {
       this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
     }
+    return true;
   }
   start() {
     this.pixi.start();
@@ -129,6 +139,15 @@ class Scene extends scene_ssr_1.SceneSSR {
   destroy() {
     super.destroy();
     this.pixi.stage.removeChild(this.stage);
+  }
+  addChild(gameObject) {
+    super.addChild(gameObject);
+    if (gameObject.sprite) {
+      this.stage.addChild(gameObject.sprite);
+    }
+    if (gameObject.body) {
+      this.physics.insert(gameObject.body);
+    }
   }
   enableAutoSort() {
     this.update$
@@ -146,7 +165,6 @@ class Scene extends scene_ssr_1.SceneSSR {
   }
   enableDebug() {
     const debug = new PIXI.Graphics();
-    const canvas = debug;
     this.pixi.stage.addChild(debug);
     this.update$
       .pipe(
@@ -155,10 +173,7 @@ class Scene extends scene_ssr_1.SceneSSR {
         )
       )
       .subscribe(() => {
-        debug.clear();
-        this.physics.drawBVH(canvas);
-        this.physics.draw(canvas);
-        debug.stroke();
+        this.onUpdateDebug(debug);
       });
   }
   disableDebug() {
@@ -179,6 +194,22 @@ class Scene extends scene_ssr_1.SceneSSR {
     const canvas = stats.stats.domElement;
     canvas.setAttribute('style', style);
     ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
+  }
+  onUpdateDebug(debug) {
+    const canvas = debug;
+    debug.clear();
+    this.physics.draw(canvas);
+    debug.stroke({
+      color: 0xffffff,
+      width: 1.5,
+      alpha: 1
+    });
+    this.physics.drawBVH(canvas);
+    debug.stroke({
+      color: 0x00ff00,
+      width: 1,
+      alpha: 0.5
+    });
   }
 }
 exports.Scene = Scene;

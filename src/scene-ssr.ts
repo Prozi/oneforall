@@ -89,8 +89,9 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     return undefined;
   }
 
-  // tslint:disable-next-line
-  async init(_options?: Record<string, any>): Promise<void> {}
+  async init(_options?: Partial<PIXI.ApplicationOptions>): Promise<boolean> {
+    return true;
+  }
 
   stop(): void {
     if (this.animationFrame) {

@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
 import { LifecycleParent, LifecycleProps } from './lifecycle';
+import { GameObject } from './game-object';
+import { Subject } from 'rxjs/internal/Subject';
 export declare class Sprite extends PIXI.Sprite implements LifecycleProps {
   /**
    * When Lifecycle Object is updated, it emits this subject.

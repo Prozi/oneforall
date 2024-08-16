@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
+
+import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 
 import { GameObject } from './game-object';
-import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
+import { Subject } from 'rxjs/internal/Subject';
 
 export class Sprite extends PIXI.Sprite implements LifecycleProps {
   /**
@@ -28,7 +29,7 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
   label = 'Sprite';
 
   constructor(gameObject: GameObject, texture: PIXI.Texture) {
-    super(texture);
+    super({ texture });
     gameObject.addChild(this);
   }
 

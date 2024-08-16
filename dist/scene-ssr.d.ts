@@ -68,7 +68,7 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
    * Scene doesn't have parent scene
    */
   get scene(): undefined;
-  init(_options?: Record<string, any>): Promise<void>;
+  init(_options?: Partial<PIXI.ApplicationOptions>): Promise<boolean>;
   stop(): void;
   start(): void;
   update(deltaTime: number): void;

@@ -46,11 +46,11 @@ var __importStar =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Sprite = void 0;
 const PIXI = __importStar(require('pixi.js'));
-const Subject_1 = require('rxjs/internal/Subject');
 const lifecycle_1 = require('./lifecycle');
+const Subject_1 = require('rxjs/internal/Subject');
 class Sprite extends PIXI.Sprite {
   constructor(gameObject, texture) {
-    super(texture);
+    super({ texture });
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.
