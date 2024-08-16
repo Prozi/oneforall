@@ -1,12 +1,12 @@
-import { Vector } from 'detect-collisions';
-import { Subject } from 'rxjs/internal/Subject';
+import { Lifecycle, LifecycleProps } from './lifecycle';
 
 import { Animator } from './animator';
 import { CircleBody } from './circle-body';
-import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { SceneSSR } from './scene-ssr';
+import { Subject } from 'rxjs/internal/Subject';
+import { Vector } from 'detect-collisions';
 
 export interface TGameObject<TSprite = Animator, TBody = CircleBody>
   extends GameObject {

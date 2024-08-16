@@ -66,8 +66,8 @@ var Resources_1;
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Resources = void 0;
 const PIXI = __importStar(require('pixi.js'));
-const dependency_injection_1 = require('@pietal.dev/dependency-injection');
 const cache_1 = require('@pietal.dev/cache');
+const dependency_injection_1 = require('@pietal.dev/dependency-injection');
 let Resources = (Resources_1 = class Resources {
   static async loadResource(url) {
     return await Resources_1.cache.get(url);
@@ -87,9 +87,9 @@ let Resources = (Resources_1 = class Resources {
   }
 });
 exports.Resources = Resources;
-Resources.cache = new cache_1.Cache(async (url) =>
-  PIXI.Assets.loader.load(url)
-);
+Resources.cache = new cache_1.Cache(async (url) => {
+  return PIXI.Assets.loader.load(url);
+});
 exports.Resources =
   Resources =
   Resources_1 =

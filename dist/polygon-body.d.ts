@@ -1,7 +1,7 @@
 import { BodyOptions, Polygon, Vector } from 'detect-collisions';
-import { Subject } from 'rxjs/internal/Subject';
-import { GameObject } from './game-object';
 import { LifecycleParent, LifecycleProps } from './lifecycle';
+import { GameObject } from './game-object';
+import { Subject } from 'rxjs/internal/Subject';
 export declare class PolygonBody extends Polygon implements LifecycleProps {
   /**
    * When Lifecycle Object is updated, it emits this subject.

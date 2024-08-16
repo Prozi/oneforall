@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
 
 import { GameObject, GameObjectParent } from './game-object';
+
 import { Scene } from './scene';
 import { SceneSSR } from './scene-ssr';
+import { Subject } from 'rxjs/internal/Subject';
 
 export type LifecycleParent = GameObject | SceneSSR | Scene | PIXI.Container;
 

@@ -46,9 +46,9 @@ var __importStar =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Animator = void 0;
 const PIXI = __importStar(require('pixi.js'));
-const Subject_1 = require('rxjs/internal/Subject');
 const lifecycle_1 = require('./lifecycle');
 const state_machine_1 = require('./state-machine');
+const Subject_1 = require('rxjs/internal/Subject');
 class Animator extends PIXI.Container {
   /**
    * @param gameObject
@@ -89,7 +89,7 @@ class Animator extends PIXI.Container {
     this.stateMachine = new state_machine_1.StateMachine(gameObject);
     const tileWidth = width / cols;
     const tileHeight = height / rows;
-    Object.values(animations).forEach((animationFrames) => {
+    Object.entries(animations).forEach(([animation, animationFrames]) => {
       const animatedSprite = new PIXI.AnimatedSprite(
         animationFrames.map((animationFrame) => {
           const frameWidth = Math.floor(animationFrame * tileWidth);
@@ -104,7 +104,7 @@ class Animator extends PIXI.Container {
           return { texture, time: animationSpeed };
         })
       );
-      animatedSprite.label = 'Animator_AnimatedSprite';
+      animatedSprite.label = `Animator_AnimatedSprite_${animation}`;
       animatedSprite.anchor.set(anchor.x, anchor.y);
       this.addChild(animatedSprite);
     });

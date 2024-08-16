@@ -1,8 +1,8 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.GameObject = exports.getRoot = void 0;
-const Subject_1 = require('rxjs/internal/Subject');
 const lifecycle_1 = require('./lifecycle');
+const Subject_1 = require('rxjs/internal/Subject');
 const getRoot = (gameObject) => {
   let root = gameObject;
   do {

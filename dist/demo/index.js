@@ -1,9 +1,9 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
-const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
 const resources_1 = require('../resources');
 const scene_1 = require('../scene');
 const sprite_prefab_1 = require('./sprite.prefab');
+const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
 async function start() {
   const queryParams = scene_1.Scene.getQueryParams();
   // create main Scene

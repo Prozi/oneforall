@@ -1,8 +1,8 @@
-import { Body, System } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
+import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
+import { Subject } from 'rxjs/internal/Subject';
 export interface SceneOptions {
   /**
    * set name

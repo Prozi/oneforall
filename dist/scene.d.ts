@@ -1,9 +1,9 @@
-import { Body } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
+import { SceneOptions, SceneSSR } from './scene-ssr';
 import { Application } from './application';
+import { Body } from 'detect-collisions';
 import { Resources } from './resources';
-import { SceneSSR, SceneOptions } from './scene-ssr';
+import { Subject } from 'rxjs/internal/Subject';
 export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   pixi: Application;
   resources: Resources;

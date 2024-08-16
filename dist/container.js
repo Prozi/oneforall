@@ -46,8 +46,8 @@ var __importStar =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Container = void 0;
 const PIXI = __importStar(require('pixi.js'));
-const Subject_1 = require('rxjs/internal/Subject');
 const lifecycle_1 = require('./lifecycle');
+const Subject_1 = require('rxjs/internal/Subject');
 class Container extends PIXI.Container {
   constructor(gameObject) {
     super();

@@ -64,15 +64,15 @@ var __importStar =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Scene = void 0;
-const pixi_stats_1 = require('pixi-stats');
 const PIXI = __importStar(require('pixi.js'));
+const scene_ssr_1 = require('./scene-ssr');
+const pixi_stats_1 = require('pixi-stats');
+const application_1 = require('./application');
+const dependency_injection_1 = require('@pietal.dev/dependency-injection');
+const resources_1 = require('./resources');
+const Subject_1 = require('rxjs/internal/Subject');
 const merge_1 = require('rxjs/internal/observable/merge');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
-const Subject_1 = require('rxjs/internal/Subject');
-const dependency_injection_1 = require('@pietal.dev/dependency-injection');
-const application_1 = require('./application');
-const resources_1 = require('./resources');
-const scene_ssr_1 = require('./scene-ssr');
 class Scene extends scene_ssr_1.SceneSSR {
   constructor(options = {}) {
     super(options);

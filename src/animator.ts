@@ -1,10 +1,11 @@
-import { Vector } from 'detect-collisions';
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
+
+import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 
 import { GameObject } from './game-object';
-import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
 import { StateMachine } from './state-machine';
+import { Subject } from 'rxjs/internal/Subject';
+import { Vector } from 'detect-collisions';
 
 export interface AnimatorData {
   animations: Record<string, number[]>;
@@ -79,12 +80,14 @@ export class Animator extends PIXI.Container implements LifecycleProps {
     { width, height, source }: PIXI.Texture
   ) {
     super();
+
     gameObject.addChild(this);
     this.stateMachine = new StateMachine(gameObject);
 
     const tileWidth = width / cols;
     const tileHeight = height / rows;
-    Object.values(animations).forEach((animationFrames) => {
+
+    Object.entries(animations).forEach(([animation, animationFrames]) => {
       const animatedSprite = new PIXI.AnimatedSprite(
         animationFrames.map((animationFrame) => {
           const frameWidth = Math.floor(animationFrame * tileWidth);
@@ -102,7 +105,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
         })
       );
 
-      animatedSprite.label = 'Animator_AnimatedSprite';
+      animatedSprite.label = `Animator_AnimatedSprite_${animation}`;
       animatedSprite.anchor.set(anchor.x, anchor.y);
       this.addChild(animatedSprite);
     });

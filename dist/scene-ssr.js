@@ -45,10 +45,10 @@ var __importStar =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.SceneSSR = void 0;
-const detect_collisions_1 = require('detect-collisions');
 const PIXI = __importStar(require('pixi.js'));
-const Subject_1 = require('rxjs/internal/Subject');
+const detect_collisions_1 = require('detect-collisions');
 const game_object_1 = require('./game-object');
+const Subject_1 = require('rxjs/internal/Subject');
 /**
  * base scene for server side rendering
  */

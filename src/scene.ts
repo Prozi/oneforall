@@ -1,15 +1,15 @@
-import { Body } from 'detect-collisions';
-import { addStats, StatsJSAdapter } from 'pixi-stats';
 import * as PIXI from 'pixi.js';
-import { merge } from 'rxjs/internal/observable/merge';
-import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { Subject } from 'rxjs/internal/Subject';
 
-import { Inject } from '@pietal.dev/dependency-injection';
+import { SceneOptions, SceneSSR } from './scene-ssr';
+import { StatsJSAdapter, addStats } from 'pixi-stats';
 
 import { Application } from './application';
+import { Body } from 'detect-collisions';
+import { Inject } from '@pietal.dev/dependency-injection';
 import { Resources } from './resources';
-import { SceneSSR, SceneOptions } from './scene-ssr';
+import { Subject } from 'rxjs/internal/Subject';
+import { merge } from 'rxjs/internal/observable/merge';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   @Inject(Application) pixi: Application;

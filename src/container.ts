@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
-import { Subject } from 'rxjs/internal/Subject';
 
 import { Lifecycle, LifecycleParent, LifecycleProps } from './lifecycle';
+
+import { Subject } from 'rxjs/internal/Subject';
 
 export class Container extends PIXI.Container implements LifecycleProps {
   /**

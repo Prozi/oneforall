@@ -3,8 +3,9 @@ import 'pixi.js-legacy';
 
 import * as PIXI from 'pixi.js';
 
-import { CircleBody } from './circle-body';
 import { GameObject, TGameObject } from './game-object';
+
+import { CircleBody } from './circle-body';
 import { Prefab } from './prefab';
 import { Scene } from './scene';
 import { Sprite } from './sprite';
