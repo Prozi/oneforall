@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 
 import { Body, System } from 'detect-collisions';
-import { GameObject, GameObjectParent } from './game-object';
+import { GameObject, GameObjectParent, TGameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 
 import { Subject } from 'rxjs/internal/Subject';
@@ -89,6 +89,7 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     return undefined;
   }
 
+  // eslint-disable-next-line
   async init(_options?: Partial<PIXI.ApplicationOptions>): Promise<boolean> {
     return true;
   }
@@ -130,6 +131,18 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     this.children$.complete();
   }
 
+  addChild(...children: LifecycleProps[]): void {
+    super.addChild(...children);
+    this.stageAddChild(...children);
+
+    // eslint-disable-next-line
+    children.forEach(({ body }: TGameObject<any, TBody>) => {
+      if (body) {
+        this.physics.insert(body);
+      }
+    });
+  }
+
   stageAddChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
@@ -138,11 +151,6 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
         }
       });
     });
-  }
-
-  addChild(...children: LifecycleProps[]): void {
-    super.addChild(...children);
-    this.stageAddChild(...children);
   }
 
   stageRemoveChild(...children: LifecycleProps[]): void {

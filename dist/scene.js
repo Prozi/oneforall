@@ -104,6 +104,7 @@ class Scene extends scene_ssr_1.SceneSSR {
     }
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
     return [...matches].reduce(
+      // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) =>
         Object.assign(Object.assign({}, queryParams), {
           [paramName]: paramValue
@@ -144,9 +145,6 @@ class Scene extends scene_ssr_1.SceneSSR {
     super.addChild(gameObject);
     if (gameObject.sprite) {
       this.stage.addChild(gameObject.sprite);
-    }
-    if (gameObject.body) {
-      this.physics.insert(gameObject.body);
     }
   }
   enableAutoSort() {

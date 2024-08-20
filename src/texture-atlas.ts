@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 
 // declare this on server or in tests to save memory
-declare var headless: boolean;
+declare let headless: boolean;
 
 export interface TextureAtlasOptions {
   texture: PIXI.Texture;

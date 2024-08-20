@@ -90420,9 +90420,6 @@ Deprecated since v${version}`
             Math.random() * innerWidth,
             Math.random() * innerHeight
           );
-          // insert body to physics and game object to scene
-          scene.physics.insert(gameObject.body);
-          scene.addChild(gameObject);
           // create animator with few animations from json + texture
           gameObject.sprite = new animator_1.Animator(
             gameObject,
@@ -90430,6 +90427,8 @@ Deprecated since v${version}`
             texture
           );
           gameObject.sprite.setState('idle');
+          // insert body to physics and game object to scene
+          scene.addChild(gameObject);
           // subscribe to *own* update function until *own* destroy
           gameObject.update$
             .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
@@ -90643,7 +90642,7 @@ Deprecated since v${version}`
           }
           static destroy(lifecycle) {
             var _a, _b;
-            // tslint:disable-next-line: no-any
+            // eslint-disable-next-line
             (_b =
               (_a = lifecycle.gameObject) === null || _a === void 0
                 ? void 0
@@ -90910,6 +90909,7 @@ Deprecated since v${version}`
           get scene() {
             return undefined;
           }
+          // eslint-disable-next-line
           async init(_options) {
             return true;
           }
@@ -90942,6 +90942,16 @@ Deprecated since v${version}`
             super.destroy();
             this.children$.complete();
           }
+          addChild(...children) {
+            super.addChild(...children);
+            this.stageAddChild(...children);
+            // eslint-disable-next-line
+            children.forEach(({ body }) => {
+              if (body) {
+                this.physics.insert(body);
+              }
+            });
+          }
           stageAddChild(...children) {
             children.forEach((child) => {
               this.recursive(child, (deep) => {
@@ -90950,10 +90960,6 @@ Deprecated since v${version}`
                 }
               });
             });
-          }
-          addChild(...children) {
-            super.addChild(...children);
-            this.stageAddChild(...children);
           }
           stageRemoveChild(...children) {
             children.forEach((child) => {
@@ -91130,6 +91136,7 @@ Deprecated since v${version}`
               /[?&]([^=?&]+)=?([^?&]*)/g
             );
             return [...matches].reduce(
+              // eslint-disable-next-line
               (queryParams, [_wholeMatch, paramName, paramValue]) =>
                 Object.assign(Object.assign({}, queryParams), {
                   [paramName]: paramValue
@@ -91170,9 +91177,6 @@ Deprecated since v${version}`
             super.addChild(gameObject);
             if (gameObject.sprite) {
               this.stage.addChild(gameObject.sprite);
-            }
-            if (gameObject.body) {
-              this.physics.insert(gameObject.body);
             }
           }
           enableAutoSort() {

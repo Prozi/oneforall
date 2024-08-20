@@ -78,6 +78,7 @@ class SceneSSR extends game_object_1.GameObject {
   get scene() {
     return undefined;
   }
+  // eslint-disable-next-line
   async init(_options) {
     return true;
   }
@@ -110,6 +111,16 @@ class SceneSSR extends game_object_1.GameObject {
     super.destroy();
     this.children$.complete();
   }
+  addChild(...children) {
+    super.addChild(...children);
+    this.stageAddChild(...children);
+    // eslint-disable-next-line
+    children.forEach(({ body }) => {
+      if (body) {
+        this.physics.insert(body);
+      }
+    });
+  }
   stageAddChild(...children) {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
@@ -118,10 +129,6 @@ class SceneSSR extends game_object_1.GameObject {
         }
       });
     });
-  }
-  addChild(...children) {
-    super.addChild(...children);
-    this.stageAddChild(...children);
   }
   stageRemoveChild(...children) {
     children.forEach((child) => {

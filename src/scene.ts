@@ -9,7 +9,6 @@ import { Inject } from '@pietal.dev/dependency-injection';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Subject } from 'rxjs/internal/Subject';
-import { TGameObject } from './game-object';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
@@ -57,6 +56,7 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
 
     return [...matches].reduce(
+      // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) => ({
         ...queryParams,
         [paramName]: paramValue
@@ -103,11 +103,9 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     gameObject: LifecycleProps & { sprite?: PIXI.Container; body?: TBody }
   ): void {
     super.addChild(gameObject);
+
     if (gameObject.sprite) {
       this.stage.addChild(gameObject.sprite);
-    }
-    if (gameObject.body) {
-      this.physics.insert(gameObject.body);
     }
   }
 

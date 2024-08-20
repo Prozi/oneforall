@@ -73,8 +73,8 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
   start(): void;
   update(deltaTime: number): void;
   destroy(): void;
-  stageAddChild(...children: LifecycleProps[]): void;
   addChild(...children: LifecycleProps[]): void;
+  stageAddChild(...children: LifecycleProps[]): void;
   stageRemoveChild(...children: LifecycleProps[]): void;
   removeChild(...children: LifecycleProps[]): void;
   getChildOfType(type: string): LifecycleProps;

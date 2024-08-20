@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import { Cache } from '@pietal.dev/cache';
 import { Injectable } from '@pietal.dev/dependency-injection';
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line
 export type PIXIResource = any;
 
 @Injectable

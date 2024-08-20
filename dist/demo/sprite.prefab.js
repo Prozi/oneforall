@@ -18,12 +18,11 @@ function createSprite({ scene, data, texture }) {
     Math.random() * innerWidth,
     Math.random() * innerHeight
   );
-  // insert body to physics and game object to scene
-  scene.physics.insert(gameObject.body);
-  scene.addChild(gameObject);
   // create animator with few animations from json + texture
   gameObject.sprite = new animator_1.Animator(gameObject, data, texture);
   gameObject.sprite.setState('idle');
+  // insert body to physics and game object to scene
+  scene.addChild(gameObject);
   // subscribe to *own* update function until *own* destroy
   gameObject.update$
     .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
