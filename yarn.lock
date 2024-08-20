@@ -2197,10 +2197,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.12.0:
-  version "9.12.0"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.12.0.tgz#7ec1994423fa30ff7c6366c1dc007284cc9f7449"
-  integrity sha512-D5ov+fIbDW9oIwMwtaSvXjyTV9YZeOWvTvvTrIS4RA37KCLFGkMKh5EfWzb5Qcl9tpg070KJ893HgcjGIv0mMw==
+detect-collisions@^9.14.0:
+  version "9.14.0"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.14.0.tgz#cb7149dd8feb016ea15edcac760b5f603450820d"
+  integrity sha512-ryxzMQOnkMWSYnInMUfiCw4qf2KfglAOK+QHK21GzXbm8AuKqZExC+UN5kGyiNKj8Hk9M4FY694M5qJ7ij8Xgw==
   dependencies:
     "@types/sat" "^0.0.35"
     poly-decomp-es "^0.4.2"
@@ -4866,10 +4866,10 @@ type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typedoc@^0.26.5:
-  version "0.26.5"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.26.5.tgz#08032bd57cac3d56e8ac296a07e3482dc0c645ac"
-  integrity sha512-Vn9YKdjKtDZqSk+by7beZ+xzkkr8T8CYoiasqyt4TTRFy5+UHzL/mF/o4wGBjRF+rlWQHDb0t6xCpA3JNL5phg==
+typedoc@^0.26.6:
+  version "0.26.6"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.26.6.tgz#9cb3d6f0ed5070f86af169c3f88ca2c9b7031f59"
+  integrity sha512-SfEU3SH3wHNaxhFPjaZE2kNl/NFtLNW5c1oHsg7mti7GjmUj1Roq6osBQeMd+F4kL0BoRBBr8gQAuqBlfFu8LA==
   dependencies:
     lunr "^2.3.9"
     markdown-it "^14.1.0"
