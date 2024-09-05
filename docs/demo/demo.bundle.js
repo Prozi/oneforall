@@ -9752,9 +9752,8 @@
             }
             const offsets = { x: 0, y: 0 };
             const addOffsets = (collision) => {
-              // optional callback
-              callback(collision);
-              if (!collision.b.isTrigger) {
+              // when is not trigger and callback returns true it continues
+              if (!collision.b.isTrigger && callback(collision)) {
                 offsets.x += collision.overlapV.x;
                 offsets.y += collision.overlapV.y;
               }
@@ -25044,9 +25043,9 @@ ${e}`);
             bounds
               .scale(resolution)
               .fitBounds(0, viewPort.width, 0, viewPort.height)
+              .ceil()
               .scale(1 / resolution)
-              .pad(padding)
-              .ceil();
+              .pad(padding | 0);
             if (!bounds.isPositive) {
               filterData.skip = true;
               return;
@@ -26130,12 +26129,14 @@ ${e}`);
               let flip = input;
               let flop = tempTexture;
               this._state.blend = false;
+              const shouldClear =
+                filterManager.renderer.type === types.RendererType.WEBGPU;
               for (let i = 0; i < this.passes - 1; i++) {
                 filterManager.applyFilter(
                   this,
                   flip,
                   flop,
-                  filterManager.renderer.type === types.RendererType.WEBGPU
+                  i === 0 ? true : shouldClear
                 );
                 const temp = flop;
                 flop = flip;
@@ -26387,7 +26388,7 @@ ${e}`);
         Object.defineProperty(exports, '__esModule', { value: true });
 
         var source =
-          '\n\nstruct GlobalFilterUniforms {\n  uInputSize:vec4<f32>,\n  uInputPixel:vec4<f32>,\n  uInputClamp:vec4<f32>,\n  uOutputFrame:vec4<f32>,\n  uGlobalFrame:vec4<f32>,\n  uOutputTexture:vec4<f32>,\n};\n\nstruct BlurUniforms {\n  uStrength:f32,\n};\n\n@group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;\n@group(0) @binding(1) var uTexture: texture_2d<f32>;\n@group(0) @binding(2) var uSampler : sampler;\n\n@group(1) @binding(0) var<uniform> blurUniforms : BlurUniforms;\n\n\nstruct VSOutput {\n    @builtin(position) position: vec4<f32>,\n    %blur-struct%\n  };\n\nfn filterVertexPosition(aPosition:vec2<f32>) -> vec4<f32>\n{\n    var position = aPosition * gfu.uOutputFrame.zw + gfu.uOutputFrame.xy;\n\n    position.x = position.x * (2.0 / gfu.uOutputTexture.x) - 1.0;\n    position.y = position.y * (2.0*gfu.uOutputTexture.z / gfu.uOutputTexture.y) - gfu.uOutputTexture.z;\n\n    return vec4(position, 0.0, 1.0);\n}\n\nfn filterTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n    return aPosition * (gfu.uOutputFrame.zw * gfu.uInputSize.zw);\n}\n\nfn globalTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return  (aPosition.xy / gfu.uGlobalFrame.zw) + (gfu.uGlobalFrame.xy / gfu.uGlobalFrame.zw);  \n}\n\nfn getSize() -> vec2<f32>\n{\n  return gfu.uGlobalFrame.zw;\n}\n\n\n@vertex\nfn mainVertex(\n  @location(0) aPosition : vec2<f32>, \n) -> VSOutput {\n\n  let filteredCord = filterTextureCoord(aPosition);\n\n  let strength = gfu.uInputSize.w * blurUniforms.uStrength;\n\n  return VSOutput(\n   filterVertexPosition(aPosition),\n    %blur-vertex-out%\n  );\n}\n\n@fragment\nfn mainFragment(\n  @builtin(position) position: vec4<f32>,\n  %blur-fragment-in%\n) -> @location(0) vec4<f32> {\n\n    var   finalColor = vec4(0.0);\n\n    %blur-sampling%\n\n    return finalColor;\n}';
+          '\n\nstruct GlobalFilterUniforms {\n  uInputSize:vec4<f32>,\n  uInputPixel:vec4<f32>,\n  uInputClamp:vec4<f32>,\n  uOutputFrame:vec4<f32>,\n  uGlobalFrame:vec4<f32>,\n  uOutputTexture:vec4<f32>,\n};\n\nstruct BlurUniforms {\n  uStrength:f32,\n};\n\n@group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;\n@group(0) @binding(1) var uTexture: texture_2d<f32>;\n@group(0) @binding(2) var uSampler : sampler;\n\n@group(1) @binding(0) var<uniform> blurUniforms : BlurUniforms;\n\n\nstruct VSOutput {\n    @builtin(position) position: vec4<f32>,\n    %blur-struct%\n  };\n\nfn filterVertexPosition(aPosition:vec2<f32>) -> vec4<f32>\n{\n    var position = aPosition * gfu.uOutputFrame.zw + gfu.uOutputFrame.xy;\n\n    position.x = position.x * (2.0 / gfu.uOutputTexture.x) - 1.0;\n    position.y = position.y * (2.0*gfu.uOutputTexture.z / gfu.uOutputTexture.y) - gfu.uOutputTexture.z;\n\n    return vec4(position, 0.0, 1.0);\n}\n\nfn filterTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n    return aPosition * (gfu.uOutputFrame.zw * gfu.uInputSize.zw);\n}\n\nfn globalTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return  (aPosition.xy / gfu.uGlobalFrame.zw) + (gfu.uGlobalFrame.xy / gfu.uGlobalFrame.zw);  \n}\n\nfn getSize() -> vec2<f32>\n{\n  return gfu.uGlobalFrame.zw;\n}\n\n\n@vertex\nfn mainVertex(\n  @location(0) aPosition : vec2<f32>, \n) -> VSOutput {\n\n  let filteredCord = filterTextureCoord(aPosition);\n\n  let pixelStrength = gfu.uInputSize.%dimension% * blurUniforms.uStrength;\n\n  return VSOutput(\n   filterVertexPosition(aPosition),\n    %blur-vertex-out%\n  );\n}\n\n@fragment\nfn mainFragment(\n  @builtin(position) position: vec4<f32>,\n  %blur-fragment-in%\n) -> @location(0) vec4<f32> {\n\n    var   finalColor = vec4(0.0);\n\n    %blur-sampling%\n\n    return finalColor;\n}';
 
         exports['default'] = source;
         //# sourceMappingURL=blur-template.wgsl.js.map
@@ -26423,10 +26424,10 @@ ${e}`);
             blurStructSource[i] = `@location(${i}) offset${i}: vec2<f32>,`;
             if (horizontal) {
               blurOutSource[i] =
-                `filteredCord + vec2(${i - halfLength + 1} * strength, 0.0),`;
+                `filteredCord + vec2(${i - halfLength + 1} * pixelStrength, 0.0),`;
             } else {
               blurOutSource[i] =
-                `filteredCord + vec2(0.0, ${i - halfLength + 1} * strength),`;
+                `filteredCord + vec2(0.0, ${i - halfLength + 1} * pixelStrength),`;
             }
             const kernelIndex = i < halfLength ? i : kernelSize - i - 1;
             const kernelValue = kernel[kernelIndex].toString();
@@ -26440,7 +26441,8 @@ ${e}`);
             .replace('%blur-struct%', blurStruct)
             .replace('%blur-vertex-out%', blurOut)
             .replace('%blur-fragment-in%', blurStruct)
-            .replace('%blur-sampling%', blurSampling);
+            .replace('%blur-sampling%', blurSampling)
+            .replace('%dimension%', horizontal ? 'z' : 'w');
           return GpuProgram.GpuProgram.from({
             vertex: {
               source: finalSource,
@@ -42750,10 +42752,14 @@ ${src}`;
             this.renderPassEncoder.setBindGroup(index, gpuBindGroup);
           }
           setGeometry(geometry, program) {
-            for (const i in program.attributeData) {
+            const buffersToBind = this._renderer.pipeline.getBufferNamesToBind(
+              geometry,
+              program
+            );
+            for (const i in buffersToBind) {
               this._setVertexBuffer(
-                program.attributeData[i].location,
-                geometry.attributes[i].buffer
+                i,
+                geometry.attributes[buffersToBind[i]].buffer
               );
             }
             if (geometry.indexBuffer) {
@@ -43583,6 +43589,7 @@ ${src}`;
           constructor(renderer) {
             this._moduleCache = /* @__PURE__ */ Object.create(null);
             this._bufferLayoutsCache = /* @__PURE__ */ Object.create(null);
+            this._bindingNamesCache = /* @__PURE__ */ Object.create(null);
             this._pipeCache = /* @__PURE__ */ Object.create(null);
             this._pipeStateCaches = /* @__PURE__ */ Object.create(null);
             this._colorMask = 15;
@@ -43737,6 +43744,32 @@ ${src}`;
                 'programAttributes'
               );
             return program._attributeLocationsKey;
+          }
+          /**
+           * Returns a hash of buffer names mapped to bind locations.
+           * This is used to bind the correct buffer to the correct location in the shader.
+           * @param geometry - The geometry where to get the buffer names
+           * @param program - The program where to get the buffer names
+           * @returns An object of buffer names mapped to the bind location.
+           */
+          getBufferNamesToBind(geometry, program) {
+            const key =
+              (geometry._layoutKey << 16) | program._attributeLocationsKey;
+            if (this._bindingNamesCache[key])
+              return this._bindingNamesCache[key];
+            const data = this._createVertexBufferLayouts(geometry, program);
+            const bufferNamesToBind = /* @__PURE__ */ Object.create(null);
+            const attributeData = program.attributeData;
+            for (let i = 0; i < data.length; i++) {
+              for (const j in attributeData) {
+                if (attributeData[j].location === i) {
+                  bufferNamesToBind[i] = j;
+                  break;
+                }
+              }
+            }
+            this._bindingNamesCache[key] = bufferNamesToBind;
+            return bufferNamesToBind;
           }
           _createVertexBufferLayouts(geometry, program) {
             if (!program._attributeLocationsKey)
@@ -49415,6 +49448,7 @@ ${src}`;
            * @param resolution - The resolution / device pixel ratio of the renderer.
            */
           resize(desiredScreenWidth, desiredScreenHeight, resolution) {
+            const previousResolution = this.view.resolution;
             this.view.resize(
               desiredScreenWidth,
               desiredScreenHeight,
@@ -49426,6 +49460,9 @@ ${src}`;
               this.view.screen.height,
               this.view.resolution
             );
+            if (resolution !== void 0 && resolution !== previousResolution) {
+              this.runners.resolutionChange.emit(resolution);
+            }
           }
           clear(options = {}) {
             const renderer = this;
@@ -50038,9 +50075,11 @@ ${src}`;
             this._now = performance.now();
           }
           addRenderable(renderable, instructionSet) {
+            if (!this.enabled) return;
             renderable._lastUsed = this._now;
             if (renderable._lastInstructionTick === -1) {
               this._managedRenderables.push(renderable);
+              renderable.once('destroyed', this._removeRenderable, this);
             }
             renderable._lastInstructionTick = instructionSet.tick;
           }
@@ -50052,6 +50091,10 @@ ${src}`;
             let offset = 0;
             for (let i = 0; i < managedRenderables.length; i++) {
               const renderable = managedRenderables[i];
+              if (renderable === null) {
+                offset++;
+                continue;
+              }
               const renderGroup =
                 renderable.renderGroup ?? renderable.parentRenderGroup;
               const currentIndex = renderGroup?.instructionSet?.tick ?? -1;
@@ -50065,6 +50108,7 @@ ${src}`;
                 }
                 renderable._lastInstructionTick = -1;
                 offset++;
+                renderable.off('destroyed', this._removeRenderable, this);
               } else {
                 managedRenderables[i - offset] = renderable;
               }
@@ -50075,6 +50119,13 @@ ${src}`;
             this.enabled = false;
             this._renderer = null;
             this._managedRenderables.length = 0;
+          }
+          _removeRenderable(renderable) {
+            const index = this._managedRenderables.indexOf(renderable);
+            if (index >= 0) {
+              renderable.off('destroyed', this._removeRenderable, this);
+              this._managedRenderables[index] = null;
+            }
           }
         };
         /** @ignore */
@@ -52353,6 +52404,16 @@ ${src}`;
 
         ('use strict');
         const _ViewSystem = class _ViewSystem {
+          /**
+           * Whether CSS dimensions of canvas view should be resized to screen dimensions automatically.
+           * @member {boolean}
+           */
+          get autoDensity() {
+            return this.texture.source.autoDensity;
+          }
+          set autoDensity(value) {
+            this.texture.source.autoDensity = value;
+          }
           /** The resolution / device pixel ratio of the renderer. */
           get resolution() {
             return this.texture.source._resolution;
@@ -52400,10 +52461,6 @@ ${src}`;
             });
             this.texture.source.transparent = options.backgroundAlpha < 1;
             this.multiView = !!options.multiView;
-            if (this.autoDensity) {
-              this.canvas.style.width = `${this.texture.width}px`;
-              this.canvas.style.height = `${this.texture.height}px`;
-            }
             this.resolution = options.resolution;
           }
           /**
@@ -52420,10 +52477,6 @@ ${src}`;
             );
             this.screen.width = this.texture.frame.width;
             this.screen.height = this.texture.frame.height;
-            if (this.autoDensity) {
-              this.canvas.style.width = `${desiredScreenWidth}px`;
-              this.canvas.style.height = `${desiredScreenHeight}px`;
-            }
           }
           /**
            * Destroys this System and optionally removes the canvas from the dom.
@@ -53107,21 +53160,14 @@ ${src}`;
            */
           setSize(value, height) {
             const size = this.getLocalBounds();
-            let convertedWidth;
-            let convertedHeight;
-            if (typeof value !== 'object') {
-              convertedWidth = value;
-              convertedHeight = height ?? value;
+            if (typeof value === 'object') {
+              height = value.height ?? value.width;
+              value = value.width;
             } else {
-              convertedWidth = value.width;
-              convertedHeight = value.height ?? value.width;
+              height ?? (height = value);
             }
-            if (convertedWidth !== void 0) {
-              this._setWidth(convertedWidth, size.width);
-            }
-            if (convertedHeight !== void 0) {
-              this._setHeight(convertedHeight, size.height);
-            }
+            value !== void 0 && this._setWidth(value, size.width);
+            height !== void 0 && this._setHeight(height, size.height);
           }
           /** Called when the skew or the rotation changes. */
           _updateSkew() {
@@ -65132,6 +65178,34 @@ ${src}`;
             this.bounds.maxY = this._height = value;
             this.onViewUpdate();
           }
+          /**
+           * Sets the size of the NiceSliceSprite to the specified width and height.
+           * setting this will actually modify the vertices and UV's of this plane
+           * This is faster than setting the width and height separately.
+           * @param value - This can be either a number or a [Size]{@link Size} object.
+           * @param height - The height to set. Defaults to the value of `width` if not provided.
+           */
+          setSize(value, height) {
+            if (typeof value === 'object') {
+              height = value.height ?? value.width;
+              value = value.width;
+            }
+            this.bounds.maxX = this._width = value;
+            this.bounds.maxY = this._height = height ?? value;
+            this.onViewUpdate();
+          }
+          /**
+           * Retrieves the size of the NineSliceSprite as a [Size]{@link Size} object.
+           * This is faster than get the width and height separately.
+           * @param out - Optional object to store the size in.
+           * @returns - The size of the NineSliceSprite.
+           */
+          getSize(out) {
+            out || (out = {});
+            out.width = this._width;
+            out.height = this._height;
+            return out;
+          }
           /** The width of the left column (a) of the NineSliceSprite. */
           get leftWidth() {
             return this._leftWidth;
@@ -65601,6 +65675,33 @@ ${src}`;
           /** The height of the tiling area. */
           get height() {
             return this._height;
+          }
+          /**
+           * Sets the size of the TilingSprite to the specified width and height.
+           * This is faster than setting the width and height separately.
+           * @param value - This can be either a number or a [Size]{@link Size} object.
+           * @param height - The height to set. Defaults to the value of `width` if not provided.
+           */
+          setSize(value, height) {
+            if (typeof value === 'object') {
+              height = value.height ?? value.width;
+              value = value.width;
+            }
+            this._width = value;
+            this._height = height ?? value;
+            this.onViewUpdate();
+          }
+          /**
+           * Retrieves the size of the TilingSprite as a [Size]{@link Size} object.
+           * This is faster than get the width and height separately.
+           * @param out - Optional object to store the size in.
+           * @returns - The size of the TilingSprite.
+           */
+          getSize(out) {
+            out || (out = {});
+            out.width = this._width;
+            out.height = this._height;
+            return out;
           }
           _updateBounds() {
             const bounds = this._bounds;
@@ -66658,9 +66759,7 @@ ${src}`;
            * @returns - The size of the Sprite.
            */
           getSize(out) {
-            if (!out) {
-              out = {};
-            }
+            out || (out = {});
             out.width = Math.abs(this.scale.x) * this._texture.orig.width;
             out.height = Math.abs(this.scale.y) * this._texture.orig.height;
             return out;
@@ -66672,21 +66771,15 @@ ${src}`;
            * @param height - The height to set. Defaults to the value of `width` if not provided.
            */
           setSize(value, height) {
-            let convertedWidth;
-            let convertedHeight;
-            if (typeof value !== 'object') {
-              convertedWidth = value;
-              convertedHeight = height ?? value;
+            if (typeof value === 'object') {
+              height = value.height ?? value.width;
+              value = value.width;
             } else {
-              convertedWidth = value.width;
-              convertedHeight = value.height ?? value.width;
+              height ?? (height = value);
             }
-            if (convertedWidth !== void 0) {
-              this._setWidth(convertedWidth, this._texture.orig.width);
-            }
-            if (convertedHeight !== void 0) {
-              this._setHeight(convertedHeight, this._texture.orig.height);
-            }
+            value !== void 0 && this._setWidth(value, this._texture.orig.width);
+            height !== void 0 &&
+              this._setHeight(height, this._texture.orig.height);
           }
         }
 
@@ -69670,9 +69763,7 @@ ${src}`;
            * @returns - The size of the Text.
            */
           getSize(out) {
-            if (!out) {
-              out = {};
-            }
+            out || (out = {});
             out.width = Math.abs(this.scale.x) * this.bounds.width;
             out.height = Math.abs(this.scale.y) * this.bounds.height;
             return out;
@@ -69684,21 +69775,14 @@ ${src}`;
            * @param height - The height to set. Defaults to the value of `width` if not provided.
            */
           setSize(value, height) {
-            let convertedWidth;
-            let convertedHeight;
-            if (typeof value !== 'object') {
-              convertedWidth = value;
-              convertedHeight = height ?? value;
+            if (typeof value === 'object') {
+              height = value.height ?? value.width;
+              value = value.width;
             } else {
-              convertedWidth = value.width;
-              convertedHeight = value.height ?? value.width;
+              height ?? (height = value);
             }
-            if (convertedWidth !== void 0) {
-              this._setWidth(convertedWidth, this.bounds.width);
-            }
-            if (convertedHeight !== void 0) {
-              this._setHeight(convertedHeight, this.bounds.height);
-            }
+            value !== void 0 && this._setWidth(value, this.bounds.width);
+            height !== void 0 && this._setHeight(height, this.bounds.height);
           }
           /**
            * Adds the bounds of this text to the bounds object.
@@ -74951,7 +75035,7 @@ Deprecated since v${version}`
 
         ('use strict');
         let saidHello = false;
-        const VERSION = '8.3.3';
+        const VERSION = '8.3.4';
         function sayHello(type) {
           if (saidHello) {
             return;
