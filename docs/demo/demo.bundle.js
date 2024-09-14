@@ -9747,13 +9747,17 @@
             callback = utils_1.returnTrue,
             response = this.response
           ) {
-            if (body.isStatic || body.isTrigger) {
+            if (body.isStatic && !body.isTrigger) {
               return;
             }
             const offsets = { x: 0, y: 0 };
             const addOffsets = (collision) => {
               // when is not trigger and callback returns true it continues
-              if (!collision.b.isTrigger && callback(collision)) {
+              if (
+                callback(collision) &&
+                !body.isTrigger &&
+                !collision.b.isTrigger
+              ) {
                 offsets.x += collision.overlapV.x;
                 offsets.y += collision.overlapV.y;
               }
@@ -17876,8 +17880,8 @@ ${e}`);
               this._value === null ||
               !this._isSourceEqual(this._value, value)
             ) {
-              this._normalize(value);
               this._value = this._cloneSource(value);
+              this._normalize(this._value);
             }
           }
           get value() {
@@ -24483,6 +24487,7 @@ ${e}`);
           ExtensionType2['TextureSource'] = 'texture-source';
           ExtensionType2['Environment'] = 'environment';
           ExtensionType2['ShapeBuilder'] = 'shape-builder';
+          ExtensionType2['Batcher'] = 'batcher';
           return ExtensionType2;
         })(ExtensionType || {});
         const normalizeExtension = (ext) => {
@@ -28410,6 +28415,12 @@ ${e}`);
         var BatchTextureArray = __webpack_require__(
           /*! ./rendering/batcher/shared/BatchTextureArray.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchTextureArray.js'
         );
+        var DefaultBatcher = __webpack_require__(
+          /*! ./rendering/batcher/shared/DefaultBatcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js'
+        );
+        var DefaultShader = __webpack_require__(
+          /*! ./rendering/batcher/shared/DefaultShader.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultShader.js'
+        );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ./rendering/high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
         );
@@ -29690,6 +29701,8 @@ ${e}`);
         exports.BatcherPipe = BatcherPipe.BatcherPipe;
         exports.BatchGeometry = BatchGeometry.BatchGeometry;
         exports.BatchTextureArray = BatchTextureArray.BatchTextureArray;
+        exports.DefaultBatcher = DefaultBatcher.DefaultBatcher;
+        exports.DefaultShader = DefaultShader.DefaultShader;
         exports.compileHighShaderGlProgram =
           compileHighShaderToProgram.compileHighShaderGlProgram;
         exports.compileHighShaderGpuProgram =
@@ -30183,6 +30196,7 @@ ${e}`);
         exports.getCanvasBoundingBox =
           getCanvasBoundingBox.getCanvasBoundingBox;
         exports.DATA_URI = _const$e.DATA_URI;
+        exports.VERSION = _const$e.VERSION;
         exports.EventEmitter = EventEmitter;
         exports.removeItems = removeItems.removeItems;
         exports.resetUids = uid.resetUids;
@@ -30193,6 +30207,7 @@ ${e}`);
         exports.RendererInitHook = globalHooks.RendererInitHook;
         exports.deprecation = deprecation.deprecation;
         exports.v8_0_0 = deprecation.v8_0_0;
+        exports.v8_3_4 = deprecation.v8_3_4;
         exports.logDebugTexture = logDebugTexture.logDebugTexture;
         exports.logRenderGroupScene = logScene.logRenderGroupScene;
         exports.logScene = logScene.logScene;
@@ -30204,7 +30219,6 @@ ${e}`);
         exports.Pool = Pool.Pool;
         exports.BigPool = PoolGroup.BigPool;
         exports.PoolGroupClass = PoolGroup.PoolGroupClass;
-        exports.VERSION = sayHello.VERSION;
         exports.sayHello = sayHello.sayHello;
         exports.earcut = earcut;
         //# sourceMappingURL=index.js.map
@@ -32972,29 +32986,8 @@ ${e}`);
         var Extensions = __webpack_require__(
           /*! ../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
-        var compileHighShaderToProgram = __webpack_require__(
-          /*! ../../high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
-        );
-        var colorBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/colorBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/colorBit.js'
-        );
-        var generateTextureBatchBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/generateTextureBatchBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/generateTextureBatchBit.js'
-        );
-        var roundPixelsBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
-        );
-        var getBatchSamplersUniformGroup = __webpack_require__(
-          /*! ../../renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
-        );
-        var Shader = __webpack_require__(
-          /*! ../../renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
-        );
         var State = __webpack_require__(
           /*! ../../renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
-        );
-        var maxRecommendedTextures = __webpack_require__(
-          /*! ./utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/batcher/gl/utils/maxRecommendedTextures.js'
         );
 
         ('use strict');
@@ -33004,39 +32997,18 @@ ${e}`);
             this._tempState = State.State.for2d();
           }
           init(batcherPipe) {
-            const maxTextures = maxRecommendedTextures.getMaxTexturesPerBatch();
-            const glProgram =
-              compileHighShaderToProgram.compileHighShaderGlProgram({
-                name: 'batch',
-                bits: [
-                  colorBit.colorBitGl,
-                  generateTextureBatchBit.generateTextureBatchBitGl(
-                    maxTextures
-                  ),
-                  roundPixelsBit.roundPixelsBitGl
-                ]
-              });
-            this._shader = new Shader.Shader({
-              glProgram,
-              resources: {
-                batchSamplers:
-                  getBatchSamplersUniformGroup.getBatchSamplersUniformGroup(
-                    maxTextures
-                  )
-              }
-            });
             batcherPipe.renderer.runners.contextChange.add(this);
           }
           contextChange() {
             this._didUpload = false;
           }
-          start(batchPipe, geometry) {
+          start(batchPipe, geometry, shader) {
             const renderer = batchPipe.renderer;
-            renderer.shader.bind(this._shader, this._didUpload);
+            renderer.shader.bind(shader, this._didUpload);
             renderer.shader.updateUniformGroup(
               renderer.globalUniforms.uniformGroup
             );
-            renderer.geometry.bind(geometry, this._shader.glProgram);
+            renderer.geometry.bind(geometry, shader.glProgram);
           }
           execute(batchPipe, batch) {
             const renderer = batchPipe.renderer;
@@ -33048,10 +33020,6 @@ ${e}`);
               renderer.texture.bind(textures[i], i);
             }
             renderer.geometry.draw('triangle-list', batch.size, batch.start);
-          }
-          destroy() {
-            this._shader.destroy(true);
-            this._shader = null;
           }
         }
         /** @ignore */
@@ -33174,26 +33142,8 @@ ${e}`);
         var Extensions = __webpack_require__(
           /*! ../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
-        var compileHighShaderToProgram = __webpack_require__(
-          /*! ../../high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
-        );
-        var colorBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/colorBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/colorBit.js'
-        );
-        var generateTextureBatchBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/generateTextureBatchBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/generateTextureBatchBit.js'
-        );
-        var roundPixelsBit = __webpack_require__(
-          /*! ../../high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
-        );
-        var Shader = __webpack_require__(
-          /*! ../../renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
-        );
         var State = __webpack_require__(
           /*! ../../renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
-        );
-        var maxRecommendedTextures = __webpack_require__(
-          /*! ../gl/utils/maxRecommendedTextures.js */ './node_modules/pixi.js/lib/rendering/batcher/gl/utils/maxRecommendedTextures.js'
         );
         var getTextureBatchBindGroup = __webpack_require__(
           /*! ./getTextureBatchBindGroup.js */ './node_modules/pixi.js/lib/rendering/batcher/gpu/getTextureBatchBindGroup.js'
@@ -33202,29 +33152,11 @@ ${e}`);
         ('use strict');
         const tempState = State.State.for2d();
         class GpuBatchAdaptor {
-          init() {
-            const gpuProgram =
-              compileHighShaderToProgram.compileHighShaderGpuProgram({
-                name: 'batch',
-                bits: [
-                  colorBit.colorBit,
-                  generateTextureBatchBit.generateTextureBatchBit(
-                    maxRecommendedTextures.getMaxTexturesPerBatch()
-                  ),
-                  roundPixelsBit.roundPixelsBit
-                ]
-              });
-            this._shader = new Shader.Shader({
-              gpuProgram,
-              groups: {
-                // these will be dynamically allocated
-              }
-            });
-          }
-          start(batchPipe, geometry) {
+          start(batchPipe, geometry, shader) {
             const renderer = batchPipe.renderer;
             const encoder = renderer.encoder;
-            const program = this._shader.gpuProgram;
+            const program = shader.gpuProgram;
+            this._shader = shader;
             this._geometry = geometry;
             encoder.setGeometry(geometry, program);
             tempState.blendMode = 'normal';
@@ -33260,10 +33192,6 @@ ${e}`);
             encoder.setPipeline(pipeline);
             encoder.renderPassEncoder.setBindGroup(1, gpuBindGroup);
             encoder.renderPassEncoder.drawIndexed(batch.size, 1, batch.start);
-          }
-          destroy() {
-            this._shader.destroy(true);
-            this._shader = null;
           }
         }
         /** @ignore */
@@ -33564,21 +33492,23 @@ ${e}`);
           constructor(options = {}) {
             /** unique id for this batcher */
             this.uid = uid.uid('batcher');
+            /** Indicates whether the batch data has been modified and needs updating. */
             this.dirty = true;
+            /** The current index of the batch being processed. */
             this.batchIndex = 0;
+            /** An array of all batches created during the current rendering process. */
             this.batches = [];
-            // specifics.
-            this._vertexSize = 6;
             this._elements = [];
             _Batcher.defaultOptions.maxTextures =
               _Batcher.defaultOptions.maxTextures ??
               maxRecommendedTextures.getMaxTexturesPerBatch();
             options = { ..._Batcher.defaultOptions, ...options };
-            const { vertexSize, indexSize, maxTextures } = options;
+            const { maxTextures, attributesInitialSize, indicesInitialSize } =
+              options;
             this.attributeBuffer = new ViewableBuffer.ViewableBuffer(
-              vertexSize * this._vertexSize * 4
+              attributesInitialSize * 4
             );
-            this.indexBuffer = new Uint16Array(indexSize);
+            this.indexBuffer = new Uint16Array(indicesInitialSize);
             this.maxTextures = maxTextures;
           }
           begin() {
@@ -33596,28 +33526,41 @@ ${e}`);
           }
           add(batchableObject) {
             this._elements[this.elementSize++] = batchableObject;
-            batchableObject.indexStart = this.indexSize;
-            batchableObject.location = this.attributeSize;
-            batchableObject.batcher = this;
+            batchableObject._indexStart = this.indexSize;
+            batchableObject._attributeStart = this.attributeSize;
+            batchableObject._batcher = this;
             this.indexSize += batchableObject.indexSize;
-            this.attributeSize += batchableObject.vertexSize * this._vertexSize;
+            this.attributeSize +=
+              batchableObject.attributeSize * this.vertexSize;
           }
           checkAndUpdateTexture(batchableObject, texture) {
             const textureId =
-              batchableObject.batch.textures.ids[texture._source.uid];
+              batchableObject._batch.textures.ids[texture._source.uid];
             if (!textureId && textureId !== 0) return false;
-            batchableObject.textureId = textureId;
+            batchableObject._textureId = textureId;
             batchableObject.texture = texture;
             return true;
           }
           updateElement(batchableObject) {
             this.dirty = true;
-            batchableObject.packAttributes(
-              this.attributeBuffer.float32View,
-              this.attributeBuffer.uint32View,
-              batchableObject.location,
-              batchableObject.textureId
-            );
+            const attributeBuffer = this.attributeBuffer;
+            if (batchableObject.packAsQuad) {
+              this.packQuadAttributes(
+                batchableObject,
+                attributeBuffer.float32View,
+                attributeBuffer.uint32View,
+                batchableObject._attributeStart,
+                batchableObject._textureId
+              );
+            } else {
+              this.packAttributes(
+                batchableObject,
+                attributeBuffer.float32View,
+                attributeBuffer.uint32View,
+                batchableObject._attributeStart,
+                batchableObject._textureId
+              );
+            }
           }
           /**
            * breaks the batcher. This happens when a batch gets too big,
@@ -33643,7 +33586,7 @@ ${e}`);
             }
             const f32 = this.attributeBuffer.float32View;
             const u32 = this.attributeBuffer.uint32View;
-            const iBuffer = this.indexBuffer;
+            const indexBuffer = this.indexBuffer;
             let size = this._batchIndexSize;
             let start = this._batchIndexStart;
             let action = 'startBatch';
@@ -33658,26 +33601,43 @@ ${e}`);
                   element.blendMode,
                   source
                 );
-              const blendModeChange = blendMode !== adjustedBlendMode;
-              if (source._batchTick === BATCH_TICK && !blendModeChange) {
-                element.textureId = source._textureBindLocation;
+              const breakRequired = blendMode !== adjustedBlendMode;
+              if (source._batchTick === BATCH_TICK && !breakRequired) {
+                element._textureId = source._textureBindLocation;
                 size += element.indexSize;
-                element.packAttributes(
-                  f32,
-                  u32,
-                  element.location,
-                  element.textureId
-                );
-                element.packIndex(
-                  iBuffer,
-                  element.indexStart,
-                  element.location / this._vertexSize
-                );
-                element.batch = batch;
+                if (element.packAsQuad) {
+                  this.packQuadAttributes(
+                    element,
+                    f32,
+                    u32,
+                    element._attributeStart,
+                    element._textureId
+                  );
+                  this.packQuadIndex(
+                    indexBuffer,
+                    element._indexStart,
+                    element._attributeStart / this.vertexSize
+                  );
+                } else {
+                  this.packAttributes(
+                    element,
+                    f32,
+                    u32,
+                    element._attributeStart,
+                    element._textureId
+                  );
+                  this.packIndex(
+                    element,
+                    indexBuffer,
+                    element._indexStart,
+                    element._attributeStart / this.vertexSize
+                  );
+                }
+                element._batch = batch;
                 continue;
               }
               source._batchTick = BATCH_TICK;
-              if (textureBatch.count >= maxTextures || blendModeChange) {
+              if (textureBatch.count >= maxTextures || breakRequired) {
                 this._finishBatch(
                   batch,
                   start,
@@ -33695,23 +33655,40 @@ ${e}`);
                 textureBatch.clear();
                 ++BATCH_TICK;
               }
-              element.textureId = source._textureBindLocation =
+              element._textureId = source._textureBindLocation =
                 textureBatch.count;
               textureBatch.ids[source.uid] = textureBatch.count;
               textureBatch.textures[textureBatch.count++] = source;
-              element.batch = batch;
+              element._batch = batch;
               size += element.indexSize;
-              element.packAttributes(
-                f32,
-                u32,
-                element.location,
-                element.textureId
-              );
-              element.packIndex(
-                iBuffer,
-                element.indexStart,
-                element.location / this._vertexSize
-              );
+              if (element.packAsQuad) {
+                this.packQuadAttributes(
+                  element,
+                  f32,
+                  u32,
+                  element._attributeStart,
+                  element._textureId
+                );
+                this.packQuadIndex(
+                  indexBuffer,
+                  element._indexStart,
+                  element._attributeStart / this.vertexSize
+                );
+              } else {
+                this.packAttributes(
+                  element,
+                  f32,
+                  u32,
+                  element._attributeStart,
+                  element._textureId
+                );
+                this.packIndex(
+                  element,
+                  indexBuffer,
+                  element._indexStart,
+                  element._attributeStart / this.vertexSize
+                );
+              }
             }
             if (textureBatch.count > 0) {
               this._finishBatch(
@@ -33798,13 +33775,31 @@ ${e}`);
             }
             this.indexBuffer = newIndexBuffer;
           }
+          packQuadIndex(indexBuffer, index, indicesOffset) {
+            indexBuffer[index] = indicesOffset + 0;
+            indexBuffer[index + 1] = indicesOffset + 1;
+            indexBuffer[index + 2] = indicesOffset + 2;
+            indexBuffer[index + 3] = indicesOffset + 0;
+            indexBuffer[index + 4] = indicesOffset + 2;
+            indexBuffer[index + 5] = indicesOffset + 3;
+          }
+          packIndex(element, indexBuffer, index, indicesOffset) {
+            const indices = element.indices;
+            const size = element.indexSize;
+            const indexOffset = element.indexOffset;
+            const attributeOffset = element.attributeOffset;
+            for (let i = 0; i < size; i++) {
+              indexBuffer[index++] =
+                indicesOffset + indices[i + indexOffset] - attributeOffset;
+            }
+          }
           destroy() {
             for (let i = 0; i < this.batches.length; i++) {
               returnBatchToPool(this.batches[i]);
             }
             this.batches = null;
             for (let i = 0; i < this._elements.length; i++) {
-              this._elements[i].batch = null;
+              this._elements[i]._batch = null;
             }
             this._elements = null;
             this.indexBuffer = null;
@@ -33813,9 +33808,9 @@ ${e}`);
           }
         };
         _Batcher.defaultOptions = {
-          vertexSize: 4,
-          indexSize: 6,
-          maxTextures: null
+          maxTextures: null,
+          attributesInitialSize: 4,
+          indicesInitialSize: 6
         };
         let Batcher = _Batcher;
 
@@ -33839,87 +33834,105 @@ ${e}`);
         var State = __webpack_require__(
           /*! ../../renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
         );
-        var Batcher = __webpack_require__(
-          /*! ./Batcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/Batcher.js'
-        );
-        var BatchGeometry = __webpack_require__(
-          /*! ./BatchGeometry.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchGeometry.js'
+        var DefaultBatcher = __webpack_require__(
+          /*! ./DefaultBatcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js'
         );
 
         ('use strict');
-        class BatcherPipe {
+        const _BatcherPipe = class _BatcherPipe {
           constructor(renderer, adaptor) {
             this.state = State.State.for2d();
-            this._batches = /* @__PURE__ */ Object.create(null);
-            this._geometries = /* @__PURE__ */ Object.create(null);
+            this._batchersByInstructionSet =
+              /* @__PURE__ */ Object.create(null);
+            /** A record of all active batchers, keyed by their names */
+            this._activeBatches = /* @__PURE__ */ Object.create(null);
             this.renderer = renderer;
             this._adaptor = adaptor;
-            this._adaptor.init(this);
+            this._adaptor.init?.(this);
+          }
+          static getBatcher(name) {
+            return new this._availableBatchers[name]();
           }
           buildStart(instructionSet) {
-            if (!this._batches[instructionSet.uid]) {
-              const batcher = new Batcher.Batcher();
-              this._batches[instructionSet.uid] = batcher;
-              this._geometries[batcher.uid] = new BatchGeometry.BatchGeometry();
+            let batchers = this._batchersByInstructionSet[instructionSet.uid];
+            if (!batchers) {
+              batchers = this._batchersByInstructionSet[instructionSet.uid] =
+                /* @__PURE__ */ Object.create(null);
+              batchers.default ||
+                (batchers.default = new DefaultBatcher.DefaultBatcher());
             }
-            this._activeBatch = this._batches[instructionSet.uid];
-            this._activeGeometry = this._geometries[this._activeBatch.uid];
-            this._activeBatch.begin();
+            this._activeBatches = batchers;
+            this._activeBatch = this._activeBatches.default;
+            for (const i in this._activeBatches) {
+              this._activeBatches[i].begin();
+            }
           }
-          addToBatch(batchableObject) {
+          addToBatch(batchableObject, instructionSet) {
+            if (this._activeBatch.name !== batchableObject.batcherName) {
+              this._activeBatch.break(instructionSet);
+              let batch = this._activeBatches[batchableObject.batcherName];
+              if (!batch) {
+                batch = this._activeBatches[batchableObject.batcherName] =
+                  _BatcherPipe.getBatcher(batchableObject.batcherName);
+                batch.begin();
+              }
+              this._activeBatch = batch;
+            }
             this._activeBatch.add(batchableObject);
           }
           break(instructionSet) {
             this._activeBatch.break(instructionSet);
           }
           buildEnd(instructionSet) {
-            const activeBatch = this._activeBatch;
-            const geometry = this._activeGeometry;
-            activeBatch.finish(instructionSet);
-            geometry.indexBuffer.setDataWithSize(
-              activeBatch.indexBuffer,
-              activeBatch.indexSize,
-              true
-            );
-            geometry.buffers[0].setDataWithSize(
-              activeBatch.attributeBuffer.float32View,
-              activeBatch.attributeSize,
-              false
-            );
+            this._activeBatch.break(instructionSet);
+            const batches = this._activeBatches;
+            for (const i in batches) {
+              const batch = batches[i];
+              const geometry = batch.geometry;
+              geometry.indexBuffer.setDataWithSize(
+                batch.indexBuffer,
+                batch.indexSize,
+                true
+              );
+              geometry.buffers[0].setDataWithSize(
+                batch.attributeBuffer.float32View,
+                batch.attributeSize,
+                false
+              );
+            }
           }
           upload(instructionSet) {
-            const batcher = this._batches[instructionSet.uid];
-            const geometry = this._geometries[batcher.uid];
-            if (batcher.dirty) {
-              batcher.dirty = false;
-              geometry.buffers[0].update(batcher.attributeSize * 4);
+            const batchers = this._batchersByInstructionSet[instructionSet.uid];
+            for (const i in batchers) {
+              const batcher = batchers[i];
+              const geometry = batcher.geometry;
+              if (batcher.dirty) {
+                batcher.dirty = false;
+                geometry.buffers[0].update(batcher.attributeSize * 4);
+              }
             }
           }
           execute(batch) {
             if (batch.action === 'startBatch') {
               const batcher = batch.batcher;
-              const geometry = this._geometries[batcher.uid];
-              this._adaptor.start(this, geometry);
+              const geometry = batcher.geometry;
+              const shader = batcher.shader;
+              this._adaptor.start(this, geometry, shader);
             }
             this._adaptor.execute(this, batch);
           }
           destroy() {
             this.state = null;
             this.renderer = null;
-            this._adaptor.destroy();
             this._adaptor = null;
-            for (const i in this._batches) {
-              this._batches[i].destroy();
+            for (const i in this._activeBatches) {
+              this._activeBatches[i].destroy();
             }
-            this._batches = null;
-            for (const i in this._geometries) {
-              this._geometries[i].destroy();
-            }
-            this._geometries = null;
+            this._activeBatches = null;
           }
-        }
+        };
         /** @ignore */
-        BatcherPipe.extension = {
+        _BatcherPipe.extension = {
           type: [
             Extensions.ExtensionType.WebGLPipes,
             Extensions.ExtensionType.WebGPUPipes,
@@ -33927,9 +33940,224 @@ ${e}`);
           ],
           name: 'batch'
         };
+        _BatcherPipe._availableBatchers = /* @__PURE__ */ Object.create(null);
+        let BatcherPipe = _BatcherPipe;
+        Extensions.extensions.handleByMap(
+          Extensions.ExtensionType.Batcher,
+          BatcherPipe._availableBatchers
+        );
+        Extensions.extensions.add(DefaultBatcher.DefaultBatcher);
 
         exports.BatcherPipe = BatcherPipe;
         //# sourceMappingURL=BatcherPipe.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js':
+      /*!*****************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js ***!
+  \*****************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+        var Batcher = __webpack_require__(
+          /*! ./Batcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/Batcher.js'
+        );
+        var BatchGeometry = __webpack_require__(
+          /*! ./BatchGeometry.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchGeometry.js'
+        );
+        var DefaultShader = __webpack_require__(
+          /*! ./DefaultShader.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultShader.js'
+        );
+
+        ('use strict');
+        let defaultShader = null;
+        const _DefaultBatcher = class _DefaultBatcher extends Batcher.Batcher {
+          constructor() {
+            super(...arguments);
+            this.geometry = new BatchGeometry.BatchGeometry();
+            this.shader =
+              defaultShader ||
+              (defaultShader = new DefaultShader.DefaultShader(
+                this.maxTextures
+              ));
+            this.name = _DefaultBatcher.extension.name;
+            /** The size of one attribute. 1 = 32 bit. x, y, u, v, color, textureIdAndRound -> total = 6 */
+            this.vertexSize = 6;
+          }
+          /**
+           * Packs the attributes of a DefaultBatchableMeshElement into the provided views.
+           * @param element - The DefaultBatchableMeshElement to pack.
+           * @param float32View - The Float32Array view to pack into.
+           * @param uint32View - The Uint32Array view to pack into.
+           * @param index - The starting index in the views.
+           * @param textureId - The texture ID to use.
+           */
+          packAttributes(element, float32View, uint32View, index, textureId) {
+            const textureIdAndRound =
+              (textureId << 16) | (element.roundPixels & 65535);
+            const wt = element.transform;
+            const a = wt.a;
+            const b = wt.b;
+            const c = wt.c;
+            const d = wt.d;
+            const tx = wt.tx;
+            const ty = wt.ty;
+            const { positions, uvs } = element;
+            const argb = element.color;
+            const offset = element.attributeOffset;
+            const end = offset + element.attributeSize;
+            for (let i = offset; i < end; i++) {
+              const i2 = i * 2;
+              const x = positions[i2];
+              const y = positions[i2 + 1];
+              float32View[index++] = a * x + c * y + tx;
+              float32View[index++] = d * y + b * x + ty;
+              float32View[index++] = uvs[i2];
+              float32View[index++] = uvs[i2 + 1];
+              uint32View[index++] = argb;
+              uint32View[index++] = textureIdAndRound;
+            }
+          }
+          /**
+           * Packs the attributes of a DefaultBatchableQuadElement into the provided views.
+           * @param element - The DefaultBatchableQuadElement to pack.
+           * @param float32View - The Float32Array view to pack into.
+           * @param uint32View - The Uint32Array view to pack into.
+           * @param index - The starting index in the views.
+           * @param textureId - The texture ID to use.
+           */
+          packQuadAttributes(
+            element,
+            float32View,
+            uint32View,
+            index,
+            textureId
+          ) {
+            const texture = element.texture;
+            const wt = element.transform;
+            const a = wt.a;
+            const b = wt.b;
+            const c = wt.c;
+            const d = wt.d;
+            const tx = wt.tx;
+            const ty = wt.ty;
+            const bounds = element.bounds;
+            const w0 = bounds.maxX;
+            const w1 = bounds.minX;
+            const h0 = bounds.maxY;
+            const h1 = bounds.minY;
+            const uvs = texture.uvs;
+            const argb = element.color;
+            const textureIdAndRound =
+              (textureId << 16) | (element.roundPixels & 65535);
+            float32View[index + 0] = a * w1 + c * h1 + tx;
+            float32View[index + 1] = d * h1 + b * w1 + ty;
+            float32View[index + 2] = uvs.x0;
+            float32View[index + 3] = uvs.y0;
+            uint32View[index + 4] = argb;
+            uint32View[index + 5] = textureIdAndRound;
+            float32View[index + 6] = a * w0 + c * h1 + tx;
+            float32View[index + 7] = d * h1 + b * w0 + ty;
+            float32View[index + 8] = uvs.x1;
+            float32View[index + 9] = uvs.y1;
+            uint32View[index + 10] = argb;
+            uint32View[index + 11] = textureIdAndRound;
+            float32View[index + 12] = a * w0 + c * h0 + tx;
+            float32View[index + 13] = d * h0 + b * w0 + ty;
+            float32View[index + 14] = uvs.x2;
+            float32View[index + 15] = uvs.y2;
+            uint32View[index + 16] = argb;
+            uint32View[index + 17] = textureIdAndRound;
+            float32View[index + 18] = a * w1 + c * h0 + tx;
+            float32View[index + 19] = d * h0 + b * w1 + ty;
+            float32View[index + 20] = uvs.x3;
+            float32View[index + 21] = uvs.y3;
+            uint32View[index + 22] = argb;
+            uint32View[index + 23] = textureIdAndRound;
+          }
+        };
+        /** @ignore */
+        _DefaultBatcher.extension = {
+          type: [Extensions.ExtensionType.Batcher],
+          name: 'default'
+        };
+        let DefaultBatcher = _DefaultBatcher;
+
+        exports.DefaultBatcher = DefaultBatcher;
+        //# sourceMappingURL=DefaultBatcher.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultShader.js':
+      /*!****************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/rendering/batcher/shared/DefaultShader.js ***!
+  \****************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var compileHighShaderToProgram = __webpack_require__(
+          /*! ../../high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
+        );
+        var colorBit = __webpack_require__(
+          /*! ../../high-shader/shader-bits/colorBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/colorBit.js'
+        );
+        var generateTextureBatchBit = __webpack_require__(
+          /*! ../../high-shader/shader-bits/generateTextureBatchBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/generateTextureBatchBit.js'
+        );
+        var roundPixelsBit = __webpack_require__(
+          /*! ../../high-shader/shader-bits/roundPixelsBit.js */ './node_modules/pixi.js/lib/rendering/high-shader/shader-bits/roundPixelsBit.js'
+        );
+        var getBatchSamplersUniformGroup = __webpack_require__(
+          /*! ../../renderers/gl/shader/getBatchSamplersUniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/getBatchSamplersUniformGroup.js'
+        );
+        var Shader = __webpack_require__(
+          /*! ../../renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
+        );
+
+        ('use strict');
+        class DefaultShader extends Shader.Shader {
+          constructor(maxTextures) {
+            const glProgram =
+              compileHighShaderToProgram.compileHighShaderGlProgram({
+                name: 'batch',
+                bits: [
+                  colorBit.colorBitGl,
+                  generateTextureBatchBit.generateTextureBatchBitGl(
+                    maxTextures
+                  ),
+                  roundPixelsBit.roundPixelsBitGl
+                ]
+              });
+            const gpuProgram =
+              compileHighShaderToProgram.compileHighShaderGpuProgram({
+                name: 'batch',
+                bits: [
+                  colorBit.colorBit,
+                  generateTextureBatchBit.generateTextureBatchBit(maxTextures),
+                  roundPixelsBit.roundPixelsBit
+                ]
+              });
+            super({
+              glProgram,
+              gpuProgram,
+              resources: {
+                batchSamplers:
+                  getBatchSamplersUniformGroup.getBatchSamplersUniformGroup(
+                    maxTextures
+                  )
+              }
+            });
+          }
+        }
+
+        exports.DefaultShader = DefaultShader;
+        //# sourceMappingURL=DefaultShader.js.map
 
         /***/
       },
@@ -34452,7 +34680,11 @@ ${parts.join('\n')}
       
         {{main}}
         
-        return outColor * vColor;
+        var finalColor:vec4<f32> = outColor * vColor;
+
+        {{end}}
+
+        return finalColor;
       };
 `;
         const vertexGlTemplate =
@@ -34514,6 +34746,8 @@ ${parts.join('\n')}
         {{main}}
         
         finalColor = outColor * vColor;
+        
+        {{end}}
     }
 `;
 
@@ -35029,6 +35263,12 @@ ${parts.join('\n')}
         );
         var BatchTextureArray = __webpack_require__(
           /*! ./batcher/shared/BatchTextureArray.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchTextureArray.js'
+        );
+        var DefaultBatcher = __webpack_require__(
+          /*! ./batcher/shared/DefaultBatcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js'
+        );
+        var DefaultShader = __webpack_require__(
+          /*! ./batcher/shared/DefaultShader.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultShader.js'
         );
         var compileHighShaderToProgram = __webpack_require__(
           /*! ./high-shader/compileHighShaderToProgram.js */ './node_modules/pixi.js/lib/rendering/high-shader/compileHighShaderToProgram.js'
@@ -35654,6 +35894,8 @@ ${parts.join('\n')}
         exports.BatcherPipe = BatcherPipe.BatcherPipe;
         exports.BatchGeometry = BatchGeometry.BatchGeometry;
         exports.BatchTextureArray = BatchTextureArray.BatchTextureArray;
+        exports.DefaultBatcher = DefaultBatcher.DefaultBatcher;
+        exports.DefaultShader = DefaultShader.DefaultShader;
         exports.compileHighShaderGlProgram =
           compileHighShaderToProgram.compileHighShaderGlProgram;
         exports.compileHighShaderGpuProgram =
@@ -37803,6 +38045,21 @@ ${parts.join('\n')}
           }
           init(options) {
             options = { ..._GlContextSystem.defaultOptions, ...options };
+            let multiView = (this.multiView = options.multiView);
+            if (options.context && multiView) {
+              warn.warn(
+                'Renderer created with both a context and multiview enabled. Disabling multiView as both cannot work together.'
+              );
+              multiView = false;
+            }
+            if (multiView) {
+              this.canvas = adapter.DOMAdapter.get().createCanvas(
+                this._renderer.canvas.width,
+                this._renderer.canvas.height
+              );
+            } else {
+              this.canvas = this._renderer.view.canvas;
+            }
             if (options.context) {
               this.initFromContext(options.context);
             } else {
@@ -37818,6 +38075,27 @@ ${parts.join('\n')}
                 preserveDrawingBuffer: options.preserveDrawingBuffer,
                 powerPreference: options.powerPreference ?? 'default'
               });
+            }
+          }
+          ensureCanvasSize(targetCanvas) {
+            if (!this.multiView) {
+              if (targetCanvas !== this.canvas) {
+                warn.warn(
+                  'multiView is disabled, but targetCanvas is not the main canvas'
+                );
+              }
+              return;
+            }
+            const { canvas } = this;
+            if (
+              canvas.width < targetCanvas.width ||
+              canvas.height < targetCanvas.height
+            ) {
+              canvas.width = Math.max(targetCanvas.width, targetCanvas.width);
+              canvas.height = Math.max(
+                targetCanvas.height,
+                targetCanvas.height
+              );
             }
           }
           /**
@@ -37855,7 +38133,7 @@ ${parts.join('\n')}
            */
           createContext(preferWebGLVersion, options) {
             let gl;
-            const canvas = this._renderer.view.canvas;
+            const canvas = this.canvas;
             if (preferWebGLVersion === 2) {
               gl = canvas.getContext('webgl2', options);
             }
@@ -38032,7 +38310,12 @@ ${parts.join('\n')}
            * {@link WebGLOptions.webGLVersion}
            * @default 2
            */
-          preferWebGLVersion: 2
+          preferWebGLVersion: 2,
+          /**
+           * {@link WebGLOptions.multiView}
+           * @default false
+           */
+          multiView: false
         };
         let GlContextSystem = _GlContextSystem;
 
@@ -38493,6 +38776,9 @@ ${parts.join('\n')}
         var warn = __webpack_require__(
           /*! ../../../../utils/logging/warn.js */ './node_modules/pixi.js/lib/utils/logging/warn.js'
         );
+        var CanvasSource = __webpack_require__(
+          /*! ../../shared/texture/sources/CanvasSource.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/sources/CanvasSource.js'
+        );
         var _const = __webpack_require__(
           /*! ../const.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/const.js'
         );
@@ -38615,7 +38901,11 @@ ${parts.join('\n')}
             const renderer = this._renderer;
             const gl = renderer.gl;
             const glRenderTarget = new GlRenderTarget.GlRenderTarget();
-            if (renderTarget.colorTexture.resource === renderer.gl.canvas) {
+            const colorTexture = renderTarget.colorTexture;
+            if (CanvasSource.CanvasSource.test(colorTexture.resource)) {
+              this._renderer.context.ensureCanvasSize(
+                renderTarget.colorTexture.resource
+              );
               glRenderTarget.framebuffer = null;
               return glRenderTarget;
             }
@@ -38804,6 +39094,20 @@ ${parts.join('\n')}
                   : gl.DEPTH_STENCIL,
                 glRenderTarget.width,
                 glRenderTarget.height
+              );
+            }
+          }
+          postrender(renderTarget) {
+            if (!this._renderer.context.multiView) return;
+            if (
+              CanvasSource.CanvasSource.test(renderTarget.colorTexture.resource)
+            ) {
+              const contextCanvas = this._renderer.context.canvas;
+              const canvasSource = renderTarget.colorTexture;
+              canvasSource.context2D.drawImage(
+                contextCanvas,
+                0,
+                canvasSource.pixelHeight - contextCanvas.height
               );
             }
           }
@@ -47925,6 +48229,9 @@ ${src}`;
               this.rootRenderTarget
             );
           }
+          postrender() {
+            this.adaptor.postrender?.(this.rootRenderTarget);
+          }
           /**
            * Binding a render surface! This is the main function of the render target system.
            * It will take the RenderSurface (which can be a texture, canvas, or render target) and bind it to the renderer.
@@ -51182,6 +51489,17 @@ ${src}`;
                 resource instanceof OffscreenCanvas)
             );
           }
+          /**
+           * Returns the 2D rendering context for the canvas.
+           * Caches the context after creating it.
+           * @returns The 2D rendering context of the canvas.
+           */
+          get context2D() {
+            return (
+              this._context2D ||
+              (this._context2D = this.resource.getContext('2d'))
+            );
+          }
         }
         CanvasSource.extension = Extensions.ExtensionType.TextureSource;
 
@@ -52460,7 +52778,6 @@ ${src}`;
               isRoot: true
             });
             this.texture.source.transparent = options.backgroundAlpha < 1;
-            this.multiView = !!options.multiView;
             this.resolution = options.resolution;
           }
           /**
@@ -56160,12 +56477,12 @@ ${src}`;
             const shader = context.customShader || this.shader;
             const renderer = graphicsPipe.renderer;
             const contextSystem = renderer.graphicsContext;
-            const { geometry, instructions } =
+            const { batcher, instructions } =
               contextSystem.getContextRenderData(context);
             shader.groups[0] = renderer.globalUniforms.bindGroup;
             renderer.state.set(graphicsPipe.state);
             renderer.shader.bind(shader);
-            renderer.geometry.bind(geometry, shader.glProgram);
+            renderer.geometry.bind(batcher.geometry, shader.glProgram);
             const batches = instructions.instructions;
             for (let i = 0; i < instructions.instructionSize; i++) {
               const batch = batches[i];
@@ -56278,15 +56595,15 @@ ${src}`;
             const shader = context.customShader || this.shader;
             const renderer = graphicsPipe.renderer;
             const contextSystem = renderer.graphicsContext;
-            const { geometry, instructions } =
+            const { batcher, instructions } =
               contextSystem.getContextRenderData(context);
             const encoder = renderer.encoder;
             encoder.setPipelineFromGeometryProgramAndState(
-              geometry,
+              batcher.geometry,
               shader.gpuProgram,
               graphicsPipe.state
             );
-            encoder.setGeometry(geometry, shader.gpuProgram);
+            encoder.setGeometry(batcher.geometry, shader.gpuProgram);
             const globalUniformsBindGroup = renderer.globalUniforms.bindGroup;
             encoder.setBindGroup(0, globalUniformsBindGroup, shader.gpuProgram);
             const localBindGroup =
@@ -56398,17 +56715,32 @@ ${src}`;
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        var Matrix = __webpack_require__(
+          /*! ../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
+        );
         var multiplyHexColors = __webpack_require__(
           /*! ../../container/utils/multiplyHexColors.js */ './node_modules/pixi.js/lib/scene/container/utils/multiplyHexColors.js'
         );
 
         ('use strict');
+        const identityMatrix = new Matrix.Matrix();
         class BatchableGraphics {
           constructor() {
-            this.batcher = null;
-            this.batch = null;
+            this.packAsQuad = false;
+            this.batcherName = 'default';
             this.applyTransform = true;
             this.roundPixels = 0;
+            this._batcher = null;
+            this._batch = null;
+          }
+          get uvs() {
+            return this.geometryData.uvs;
+          }
+          get positions() {
+            return this.geometryData.vertices;
+          }
+          get indices() {
+            return this.geometryData.indices;
           }
           get blendMode() {
             if (this.applyTransform) {
@@ -56416,71 +56748,30 @@ ${src}`;
             }
             return 'normal';
           }
-          packIndex(indexBuffer, index, indicesOffset) {
-            const indices = this.geometryData.indices;
-            for (let i = 0; i < this.indexSize; i++) {
-              indexBuffer[index++] =
-                indices[i + this.indexOffset] +
-                indicesOffset -
-                this.vertexOffset;
-            }
-          }
-          packAttributes(float32View, uint32View, index, textureId) {
-            const geometry = this.geometryData;
-            const graphics = this.renderable;
-            const positions = geometry.vertices;
-            const uvs = geometry.uvs;
-            const offset = this.vertexOffset * 2;
-            const vertSize = (this.vertexOffset + this.vertexSize) * 2;
-            const rgb = this.color;
+          get color() {
+            const rgb = this.baseColor;
             const bgr = (rgb >> 16) | (rgb & 65280) | ((rgb & 255) << 16);
-            if (this.applyTransform) {
-              const argb =
-                multiplyHexColors.multiplyHexColors(bgr, graphics.groupColor) +
-                ((this.alpha * graphics.groupAlpha * 255) << 24);
-              const wt = graphics.groupTransform;
-              const textureIdAndRound =
-                (textureId << 16) | (this.roundPixels & 65535);
-              const a = wt.a;
-              const b = wt.b;
-              const c = wt.c;
-              const d = wt.d;
-              const tx = wt.tx;
-              const ty = wt.ty;
-              for (let i = offset; i < vertSize; i += 2) {
-                const x = positions[i];
-                const y = positions[i + 1];
-                float32View[index] = a * x + c * y + tx;
-                float32View[index + 1] = b * x + d * y + ty;
-                float32View[index + 2] = uvs[i];
-                float32View[index + 3] = uvs[i + 1];
-                uint32View[index + 4] = argb;
-                uint32View[index + 5] = textureIdAndRound;
-                index += 6;
-              }
-            } else {
-              const argb = bgr + ((this.alpha * 255) << 24);
-              for (let i = offset; i < vertSize; i += 2) {
-                float32View[index] = positions[i];
-                float32View[index + 1] = positions[i + 1];
-                float32View[index + 2] = uvs[i];
-                float32View[index + 3] = uvs[i + 1];
-                uint32View[index + 4] = argb;
-                uint32View[index + 5] = textureId << 16;
-                index += 6;
-              }
+            const renderable = this.renderable;
+            if (renderable) {
+              return (
+                multiplyHexColors.multiplyHexColors(
+                  bgr,
+                  renderable.groupColor
+                ) +
+                ((this.alpha * renderable.groupAlpha * 255) << 24)
+              );
             }
+            return bgr + ((this.alpha * 255) << 24);
           }
-          // TODO rename to vertexSize
-          get vertSize() {
-            return this.vertexSize;
+          get transform() {
+            return this.renderable?.groupTransform || identityMatrix;
           }
           copyTo(gpuBuffer) {
             gpuBuffer.indexOffset = this.indexOffset;
             gpuBuffer.indexSize = this.indexSize;
-            gpuBuffer.vertexOffset = this.vertexOffset;
-            gpuBuffer.vertexSize = this.vertexSize;
-            gpuBuffer.color = this.color;
+            gpuBuffer.attributeOffset = this.attributeOffset;
+            gpuBuffer.attributeSize = this.attributeSize;
+            gpuBuffer.baseColor = this.baseColor;
             gpuBuffer.alpha = this.alpha;
             gpuBuffer.texture = this.texture;
             gpuBuffer.geometryData = this.geometryData;
@@ -57900,14 +58191,14 @@ ${src}`;
         var getTextureBatchBindGroup = __webpack_require__(
           /*! ../../../rendering/batcher/gpu/getTextureBatchBindGroup.js */ './node_modules/pixi.js/lib/rendering/batcher/gpu/getTextureBatchBindGroup.js'
         );
-        var Batcher = __webpack_require__(
-          /*! ../../../rendering/batcher/shared/Batcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/Batcher.js'
-        );
-        var BatchGeometry = __webpack_require__(
-          /*! ../../../rendering/batcher/shared/BatchGeometry.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/BatchGeometry.js'
+        var DefaultBatcher = __webpack_require__(
+          /*! ../../../rendering/batcher/shared/DefaultBatcher.js */ './node_modules/pixi.js/lib/rendering/batcher/shared/DefaultBatcher.js'
         );
         var InstructionSet = __webpack_require__(
           /*! ../../../rendering/renderers/shared/instructions/InstructionSet.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/instructions/InstructionSet.js'
+        );
+        var deprecation = __webpack_require__(
+          /*! ../../../utils/logging/deprecation.js */ './node_modules/pixi.js/lib/utils/logging/deprecation.js'
         );
         var PoolGroup = __webpack_require__(
           /*! ../../../utils/pool/PoolGroup.js */ './node_modules/pixi.js/lib/utils/pool/PoolGroup.js'
@@ -57919,7 +58210,6 @@ ${src}`;
         ('use strict');
         class GpuGraphicsContext {
           constructor() {
-            this.batcher = new Batcher.Batcher();
             this.batches = [];
             this.geometryData = {
               vertices: [],
@@ -57930,11 +58220,23 @@ ${src}`;
         }
         class GraphicsContextRenderData {
           constructor() {
-            this.geometry = new BatchGeometry.BatchGeometry();
+            this.batcher = new DefaultBatcher.DefaultBatcher();
             this.instructions = new InstructionSet.InstructionSet();
           }
           init() {
             this.instructions.reset();
+          }
+          /**
+           * @deprecated since version 8.0.0
+           * Use `batcher.geometry` instead.
+           * @see {Batcher#geometry}
+           */
+          get geometry() {
+            deprecation.deprecation(
+              deprecation.v8_3_4,
+              'GraphicsContextRenderData#geometry is deprecated, please use batcher.geometry instead.'
+            );
+            return this.batcher.geometry;
           }
         }
         const _GraphicsContextSystem = class _GraphicsContextSystem {
@@ -57991,13 +58293,13 @@ ${src}`;
             const graphicsData = PoolGroup.BigPool.get(
               GraphicsContextRenderData
             );
-            const { batches, geometryData, batcher } =
-              this._gpuContextHash[context.uid];
+            const { batches, geometryData } = this._gpuContextHash[context.uid];
             const vertexSize = geometryData.vertices.length;
             const indexSize = geometryData.indices.length;
             for (let i = 0; i < batches.length; i++) {
               batches[i].applyTransform = false;
             }
+            const batcher = graphicsData.batcher;
             batcher.ensureAttributeBuffer(vertexSize);
             batcher.ensureIndexBuffer(indexSize);
             batcher.begin();
@@ -58006,7 +58308,7 @@ ${src}`;
               batcher.add(batch);
             }
             batcher.finish(graphicsData.instructions);
-            const geometry = graphicsData.geometry;
+            const geometry = batcher.geometry;
             geometry.indexBuffer.setDataWithSize(
               batcher.indexBuffer,
               batcher.indexSize,
@@ -58146,7 +58448,7 @@ ${src}`;
               this._rebuild(graphics);
             }
             if (gpuContext.isBatchable) {
-              this._addToBatcher(graphics);
+              this._addToBatcher(graphics, instructionSet);
             } else {
               this.renderer.renderPipes.batch.break(instructionSet);
               instructionSet.add(graphics);
@@ -58157,7 +58459,7 @@ ${src}`;
             if (batches) {
               for (let i = 0; i < batches.length; i++) {
                 const batch = batches[i];
-                batch.batcher.updateElement(batch);
+                batch._batcher.updateElement(batch);
               }
             }
           }
@@ -58201,12 +58503,12 @@ ${src}`;
             }
             graphics.batched = gpuContext.isBatchable;
           }
-          _addToBatcher(graphics) {
+          _addToBatcher(graphics, instructionSet) {
             const batchPipe = this.renderer.renderPipes.batch;
             const batches = this._getBatchesForRenderable(graphics);
             for (let i = 0; i < batches.length; i++) {
               const batch = batches[i];
-              batchPipe.addToBatch(batch);
+              batchPipe.addToBatch(batch, instructionSet);
             }
           }
           _getBatchesForRenderable(graphics) {
@@ -61765,9 +62067,9 @@ ${src}`;
           );
           graphicsBatch.indexOffset = indexOffset;
           graphicsBatch.indexSize = indices.length - indexOffset;
-          graphicsBatch.vertexOffset = vertOffset;
-          graphicsBatch.vertexSize = vertices.length / 2 - vertOffset;
-          graphicsBatch.color = data.style;
+          graphicsBatch.attributeOffset = vertOffset;
+          graphicsBatch.attributeSize = vertices.length / 2 - vertOffset;
+          graphicsBatch.baseColor = data.style;
           graphicsBatch.alpha = data.alpha;
           graphicsBatch.texture = texture;
           graphicsBatch.geometryData = geometryData;
@@ -61873,9 +62175,9 @@ ${src}`;
               );
               graphicsBatch.indexOffset = indexOffset;
               graphicsBatch.indexSize = indices.length - indexOffset;
-              graphicsBatch.vertexOffset = vertOffset;
-              graphicsBatch.vertexSize = vertices.length / 2 - vertOffset;
-              graphicsBatch.color = style.color;
+              graphicsBatch.attributeOffset = vertOffset;
+              graphicsBatch.attributeSize = vertices.length / 2 - vertOffset;
+              graphicsBatch.baseColor = style.color;
               graphicsBatch.alpha = style.alpha;
               graphicsBatch.texture = texture;
               graphicsBatch.geometryData = geometryData;
@@ -64012,43 +64314,30 @@ ${src}`;
         'use strict';
         class BatchableMesh {
           constructor() {
-            this.batcher = null;
-            this.batch = null;
+            this.batcherName = 'default';
+            this.packAsQuad = false;
+            this.indexOffset = 0;
+            this.attributeOffset = 0;
             this.roundPixels = 0;
+            this._batcher = null;
+            this._batch = null;
             this._uvUpdateId = -1;
             this._textureMatrixUpdateId = -1;
           }
           get blendMode() {
-            return this.mesh.groupBlendMode;
+            return this.renderable.groupBlendMode;
           }
           reset() {
-            this.mesh = null;
+            this.renderable = null;
             this.texture = null;
-            this.batcher = null;
-            this.batch = null;
+            this._batcher = null;
+            this._batch = null;
             this.geometry = null;
             this._uvUpdateId = -1;
             this._textureMatrixUpdateId = -1;
           }
-          packIndex(indexBuffer, index, indicesOffset) {
-            const indices = this.geometry.indices;
-            for (let i = 0; i < indices.length; i++) {
-              indexBuffer[index++] = indices[i] + indicesOffset;
-            }
-          }
-          packAttributes(float32View, uint32View, index, textureId) {
-            const mesh = this.mesh;
+          get uvs() {
             const geometry = this.geometry;
-            const wt = mesh.groupTransform;
-            const textureIdAndRound =
-              (textureId << 16) | (this.roundPixels & 65535);
-            const a = wt.a;
-            const b = wt.b;
-            const c = wt.c;
-            const d = wt.d;
-            const tx = wt.tx;
-            const ty = wt.ty;
-            const positions = geometry.positions;
             const uvBuffer = geometry.getBuffer('aUV');
             const uvs = uvBuffer.data;
             let transformedUvs = uvs;
@@ -64069,20 +64358,21 @@ ${src}`;
                 textureMatrix.multiplyUvs(uvs, transformedUvs);
               }
             }
-            const abgr = mesh.groupColorAlpha;
-            for (let i = 0; i < positions.length; i += 2) {
-              const x = positions[i];
-              const y = positions[i + 1];
-              float32View[index] = a * x + c * y + tx;
-              float32View[index + 1] = b * x + d * y + ty;
-              float32View[index + 2] = transformedUvs[i];
-              float32View[index + 3] = transformedUvs[i + 1];
-              uint32View[index + 4] = abgr;
-              uint32View[index + 5] = textureIdAndRound;
-              index += 6;
-            }
+            return transformedUvs;
           }
-          get vertexSize() {
+          get positions() {
+            return this.geometry.positions;
+          }
+          get indices() {
+            return this.geometry.indices;
+          }
+          get color() {
+            return this.renderable.groupColorAlpha;
+          }
+          get groupTransform() {
+            return this.renderable.groupTransform;
+          }
+          get attributeSize() {
             return this.geometry.positions.length / 2;
           }
           get indexSize() {
@@ -64526,7 +64816,7 @@ ${src}`;
               const texture = mesh.texture;
               if (batchableMesh.texture._source !== texture._source) {
                 if (batchableMesh.texture._source !== texture._source) {
-                  return !batchableMesh.batcher.checkAndUpdateTexture(
+                  return !batchableMesh._batcher.checkAndUpdateTexture(
                     batchableMesh,
                     texture
                   );
@@ -64542,7 +64832,7 @@ ${src}`;
               const gpuBatchableMesh = this._getBatchableMesh(mesh);
               gpuBatchableMesh.texture = mesh._texture;
               gpuBatchableMesh.geometry = mesh._geometry;
-              batcher.addToBatch(gpuBatchableMesh);
+              batcher.addToBatch(gpuBatchableMesh, instructionSet);
             } else {
               batcher.break(instructionSet);
               instructionSet.add(mesh);
@@ -64553,7 +64843,7 @@ ${src}`;
               const gpuBatchableMesh = this._gpuBatchableMeshHash[mesh.uid];
               gpuBatchableMesh.texture = mesh._texture;
               gpuBatchableMesh.geometry = mesh._geometry;
-              gpuBatchableMesh.batcher.updateElement(gpuBatchableMesh);
+              gpuBatchableMesh._batcher.updateElement(gpuBatchableMesh);
             }
           }
           destroyRenderable(mesh) {
@@ -64604,12 +64894,12 @@ ${src}`;
           }
           _initBatchableMesh(mesh) {
             const gpuMesh = PoolGroup.BigPool.get(BatchableMesh.BatchableMesh);
-            gpuMesh.mesh = mesh;
+            gpuMesh.renderable = mesh;
             gpuMesh.texture = mesh._texture;
+            gpuMesh.transform = mesh.groupTransform;
             gpuMesh.roundPixels =
               this.renderer._roundPixels | mesh._roundPixels;
             this._gpuBatchableMeshHash[mesh.uid] = gpuMesh;
-            gpuMesh.mesh = mesh;
             return gpuMesh;
           }
           destroy() {
@@ -65366,23 +65656,26 @@ ${src}`;
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
           }
-          addRenderable(sprite, _instructionSet) {
+          addRenderable(sprite, instructionSet) {
             const gpuSprite = this._getGpuSprite(sprite);
             if (sprite._didSpriteUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
-            this._renderer.renderPipes.batch.addToBatch(gpuSprite);
+            this._renderer.renderPipes.batch.addToBatch(
+              gpuSprite,
+              instructionSet
+            );
           }
           updateRenderable(sprite) {
             const gpuSprite = this._gpuSpriteHash[sprite.uid];
             if (sprite._didSpriteUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
-            gpuSprite.batcher.updateElement(gpuSprite);
+            gpuSprite._batcher.updateElement(gpuSprite);
           }
           validateRenderable(sprite) {
             const texture = sprite._texture;
             const gpuSprite = this._getGpuSprite(sprite);
             if (gpuSprite.texture._source !== texture._source) {
-              return !gpuSprite.batcher.checkAndUpdateTexture(
+              return !gpuSprite._batcher.checkAndUpdateTexture(
                 gpuSprite,
                 texture
               );
@@ -65413,7 +65706,8 @@ ${src}`;
             batchableMesh.geometry = PoolGroup.BigPool.get(
               NineSliceGeometry.NineSliceGeometry
             );
-            batchableMesh.mesh = sprite;
+            batchableMesh.renderable = sprite;
+            batchableMesh.transform = sprite.groupTransform;
             batchableMesh.texture = sprite._texture;
             batchableMesh.roundPixels =
               this._renderer._roundPixels | sprite._roundPixels;
@@ -65858,7 +66152,7 @@ ${src}`;
                 batchableMesh &&
                 batchableMesh.texture._source !== renderable.texture._source
               ) {
-                return !batchableMesh.batcher.checkAndUpdateTexture(
+                return !batchableMesh._batcher.checkAndUpdateTexture(
                   batchableMesh,
                   renderable.texture
                 );
@@ -65880,12 +66174,13 @@ ${src}`;
                 tilingSprite._didTilingSpriteUpdate = false;
                 this._updateBatchableMesh(tilingSprite);
                 batchableMesh.geometry = geometry;
-                batchableMesh.mesh = tilingSprite;
+                batchableMesh.renderable = tilingSprite;
+                batchableMesh.transform = tilingSprite.groupTransform;
                 batchableMesh.texture = tilingSprite._texture;
               }
               batchableMesh.roundPixels =
                 this._renderer._roundPixels | tilingSprite._roundPixels;
-              batcher.addToBatch(batchableMesh);
+              batcher.addToBatch(batchableMesh, instructionSet);
             } else {
               batcher.break(instructionSet);
               tilingSpriteData.shader ||
@@ -65925,7 +66220,7 @@ ${src}`;
               const { batchableMesh } = tilingSpriteData;
               if (tilingSprite._didTilingSpriteUpdate)
                 this._updateBatchableMesh(tilingSprite);
-              batchableMesh.batcher.updateElement(batchableMesh);
+              batchableMesh._batcher.updateElement(batchableMesh);
             } else if (tilingSprite._didTilingSpriteUpdate) {
               const { shader } = tilingSpriteData;
               shader.updateUniforms(
@@ -66437,75 +66732,28 @@ ${src}`;
         'use strict';
         class BatchableSprite {
           constructor() {
+            this.batcherName = 'default';
             // batch specific..
-            this.vertexSize = 4;
+            this.attributeSize = 4;
             this.indexSize = 6;
-            this.location = 0;
-            // location in the buffer
-            this.batcher = null;
-            this.batch = null;
+            this.packAsQuad = true;
             this.roundPixels = 0;
+            this._attributeStart = 0;
+            // location in the buffer
+            this._batcher = null;
+            this._batch = null;
           }
           get blendMode() {
             return this.renderable.groupBlendMode;
           }
-          packAttributes(float32View, uint32View, index, textureId) {
-            const sprite = this.renderable;
-            const texture = this.texture;
-            const wt = sprite.groupTransform;
-            const a = wt.a;
-            const b = wt.b;
-            const c = wt.c;
-            const d = wt.d;
-            const tx = wt.tx;
-            const ty = wt.ty;
-            const bounds = this.bounds;
-            const w0 = bounds.maxX;
-            const w1 = bounds.minX;
-            const h0 = bounds.maxY;
-            const h1 = bounds.minY;
-            const uvs = texture.uvs;
-            const argb = sprite.groupColorAlpha;
-            const textureIdAndRound =
-              (textureId << 16) | (this.roundPixels & 65535);
-            float32View[index + 0] = a * w1 + c * h1 + tx;
-            float32View[index + 1] = d * h1 + b * w1 + ty;
-            float32View[index + 2] = uvs.x0;
-            float32View[index + 3] = uvs.y0;
-            uint32View[index + 4] = argb;
-            uint32View[index + 5] = textureIdAndRound;
-            float32View[index + 6] = a * w0 + c * h1 + tx;
-            float32View[index + 7] = d * h1 + b * w0 + ty;
-            float32View[index + 8] = uvs.x1;
-            float32View[index + 9] = uvs.y1;
-            uint32View[index + 10] = argb;
-            uint32View[index + 11] = textureIdAndRound;
-            float32View[index + 12] = a * w0 + c * h0 + tx;
-            float32View[index + 13] = d * h0 + b * w0 + ty;
-            float32View[index + 14] = uvs.x2;
-            float32View[index + 15] = uvs.y2;
-            uint32View[index + 16] = argb;
-            uint32View[index + 17] = textureIdAndRound;
-            float32View[index + 18] = a * w1 + c * h0 + tx;
-            float32View[index + 19] = d * h0 + b * w1 + ty;
-            float32View[index + 20] = uvs.x3;
-            float32View[index + 21] = uvs.y3;
-            uint32View[index + 22] = argb;
-            uint32View[index + 23] = textureIdAndRound;
-          }
-          packIndex(indexBuffer, index, indicesOffset) {
-            indexBuffer[index] = indicesOffset + 0;
-            indexBuffer[index + 1] = indicesOffset + 1;
-            indexBuffer[index + 2] = indicesOffset + 2;
-            indexBuffer[index + 3] = indicesOffset + 0;
-            indexBuffer[index + 4] = indicesOffset + 2;
-            indexBuffer[index + 5] = indicesOffset + 3;
+          get color() {
+            return this.renderable.groupColorAlpha;
           }
           reset() {
             this.renderable = null;
             this.texture = null;
-            this.batcher = null;
-            this.batch = null;
+            this._batcher = null;
+            this._batch = null;
             this.bounds = null;
           }
         }
@@ -66813,23 +67061,26 @@ ${src}`;
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
           }
-          addRenderable(sprite, _instructionSet) {
+          addRenderable(sprite, instructionSet) {
             const gpuSprite = this._getGpuSprite(sprite);
             if (sprite._didSpriteUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
-            this._renderer.renderPipes.batch.addToBatch(gpuSprite);
+            this._renderer.renderPipes.batch.addToBatch(
+              gpuSprite,
+              instructionSet
+            );
           }
           updateRenderable(sprite) {
             const gpuSprite = this._gpuSpriteHash[sprite.uid];
             if (sprite._didSpriteUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
-            gpuSprite.batcher.updateElement(gpuSprite);
+            gpuSprite._batcher.updateElement(gpuSprite);
           }
           validateRenderable(sprite) {
             const texture = sprite._texture;
             const gpuSprite = this._getGpuSprite(sprite);
             if (gpuSprite.texture._source !== texture._source) {
-              return !gpuSprite.batcher.checkAndUpdateTexture(
+              return !gpuSprite._batcher.checkAndUpdateTexture(
                 gpuSprite,
                 texture
               );
@@ -66857,6 +67108,7 @@ ${src}`;
               BatchableSprite.BatchableSprite
             );
             batchableSprite.renderable = sprite;
+            batchableSprite.transform = sprite.groupTransform;
             batchableSprite.texture = sprite._texture;
             batchableSprite.bounds = sprite.bounds;
             batchableSprite.roundPixels =
@@ -67235,22 +67487,25 @@ ${src}`;
            * Get the layout of a text for the specified style.
            * @param text - The text to get the layout for
            * @param style - The style to use
+           * @param trimEnd - Whether to ignore whitespaces at the end of each line
            */
-          getLayout(text, style) {
+          getLayout(text, style, trimEnd = true) {
             const bitmapFont = this.getFont(text, style);
             return getBitmapTextLayout.getBitmapTextLayout(
               [...text],
               style,
-              bitmapFont
+              bitmapFont,
+              trimEnd
             );
           }
           /**
            * Measure the text using the specified style.
            * @param text - The text to measure
            * @param style - The style to use
+           * @param trimEnd - Whether to ignore whitespaces at the end of each line
            */
-          measureText(text, style) {
-            return this.getLayout(text, style);
+          measureText(text, style, trimEnd = true) {
+            return this.getLayout(text, style, trimEnd);
           }
           // eslint-disable-next-line max-len
           install(...args) {
@@ -67481,7 +67736,8 @@ ${src}`;
             const bitmapTextLayout = getBitmapTextLayout.getBitmapTextLayout(
               chars,
               style,
-              bitmapFont
+              bitmapFont,
+              true
             );
             let index = 0;
             const padding = style.padding;
@@ -68333,7 +68589,7 @@ ${src}`;
         'use strict';
 
         'use strict';
-        function getBitmapTextLayout(chars, style, font) {
+        function getBitmapTextLayout(chars, style, font, trimEnd) {
           const layoutData = {
             width: 0,
             height: 0,
@@ -68377,10 +68633,12 @@ ${src}`;
           };
           const nextLine = () => {
             let index = currentLine.chars.length - 1;
-            let lastChar = currentLine.chars[index];
-            while (lastChar === ' ') {
-              currentLine.width -= font.chars[lastChar].xAdvance;
-              lastChar = currentLine.chars[--index];
+            if (trimEnd) {
+              let lastChar = currentLine.chars[index];
+              while (lastChar === ' ') {
+                currentLine.width -= font.chars[lastChar].xAdvance;
+                lastChar = currentLine.chars[--index];
+              }
             }
             layoutData.width = Math.max(layoutData.width, currentLine.width);
             currentLine = {
@@ -68637,6 +68895,7 @@ ${src}`;
           resolutionChange() {
             for (const i in this._gpuText) {
               const gpuText = this._gpuText[i];
+              if (!gpuText) continue;
               const text = gpuText.batchableSprite.renderable;
               if (text._autoResolution) {
                 text._resolution = this._renderer.resolution;
@@ -68656,13 +68915,16 @@ ${src}`;
             }
             return false;
           }
-          addRenderable(htmlText, _instructionSet) {
+          addRenderable(htmlText, instructionSet) {
             const gpuText = this._getGpuText(htmlText);
             const batchableSprite = gpuText.batchableSprite;
             if (htmlText._didTextUpdate) {
               this._updateText(htmlText);
             }
-            this._renderer.renderPipes.batch.addToBatch(batchableSprite);
+            this._renderer.renderPipes.batch.addToBatch(
+              batchableSprite,
+              instructionSet
+            );
           }
           updateRenderable(htmlText) {
             const gpuText = this._getGpuText(htmlText);
@@ -68670,7 +68932,7 @@ ${src}`;
             if (htmlText._didTextUpdate) {
               this._updateText(htmlText);
             }
-            batchableSprite.batcher.updateElement(batchableSprite);
+            batchableSprite._batcher.updateElement(batchableSprite);
           }
           destroyRenderable(htmlText) {
             htmlText.off('destroyed', this._destroyRenderableBound);
@@ -68743,6 +69005,7 @@ ${src}`;
             };
             const batchableSprite = gpuTextData.batchableSprite;
             batchableSprite.renderable = htmlText;
+            batchableSprite.transform = htmlText.groupTransform;
             batchableSprite.texture = Texture.Texture.EMPTY;
             batchableSprite.bounds = { minX: 0, maxX: 1, minY: 0, maxY: 0 };
             batchableSprite.roundPixels =
@@ -71095,6 +71358,7 @@ ${src}`;
           resolutionChange() {
             for (const i in this._gpuText) {
               const gpuText = this._gpuText[i];
+              if (!gpuText) continue;
               const text = gpuText.batchableSprite.renderable;
               if (text._autoResolution) {
                 text._resolution = this._renderer.resolution;
@@ -71126,13 +71390,16 @@ ${src}`;
             }
             return false;
           }
-          addRenderable(text, _instructionSet) {
+          addRenderable(text, instructionSet) {
             const gpuText = this._getGpuText(text);
             const batchableSprite = gpuText.batchableSprite;
             if (text._didTextUpdate) {
               this._updateText(text);
             }
-            this._renderer.renderPipes.batch.addToBatch(batchableSprite);
+            this._renderer.renderPipes.batch.addToBatch(
+              batchableSprite,
+              instructionSet
+            );
           }
           updateRenderable(text) {
             const gpuText = this._getGpuText(text);
@@ -71140,7 +71407,7 @@ ${src}`;
             if (text._didTextUpdate) {
               this._updateText(text);
             }
-            batchableSprite.batcher.updateElement(batchableSprite);
+            batchableSprite._batcher.updateElement(batchableSprite);
           }
           destroyRenderable(text) {
             text.off('destroyed', this._destroyRenderableBound);
@@ -71195,6 +71462,7 @@ ${src}`;
               )
             };
             gpuTextData.batchableSprite.renderable = text;
+            gpuTextData.batchableSprite.transform = text.groupTransform;
             gpuTextData.batchableSprite.bounds = {
               minX: 0,
               maxX: 1,
@@ -73614,9 +73882,11 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
+        const VERSION = '8.4.0';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
+        exports.VERSION = VERSION;
         //# sourceMappingURL=const.js.map
 
         /***/
@@ -73837,11 +74107,14 @@ ${src}`;
         var Extensions = __webpack_require__(
           /*! ../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
+        var _const = __webpack_require__(
+          /*! ../const.js */ './node_modules/pixi.js/lib/utils/const.js'
+        );
 
         ('use strict');
         class ApplicationInitHook {
           static init() {
-            globalThis.__PIXI_APP_INIT__?.(this);
+            globalThis.__PIXI_APP_INIT__?.(this, _const.VERSION);
           }
           static destroy() {}
         }
@@ -73852,7 +74125,7 @@ ${src}`;
             this._renderer = renderer;
           }
           init() {
-            globalThis.__PIXI_RENDERER_INIT__?.(this._renderer);
+            globalThis.__PIXI_RENDERER_INIT__?.(this._renderer, _const.VERSION);
           }
           destroy() {
             this._renderer = null;
@@ -73973,6 +74246,7 @@ ${src}`;
         exports.getCanvasBoundingBox =
           getCanvasBoundingBox.getCanvasBoundingBox;
         exports.DATA_URI = _const.DATA_URI;
+        exports.VERSION = _const.VERSION;
         exports.removeItems = removeItems.removeItems;
         exports.resetUids = uid.resetUids;
         exports.uid = uid.uid;
@@ -73982,6 +74256,7 @@ ${src}`;
         exports.RendererInitHook = globalHooks.RendererInitHook;
         exports.deprecation = deprecation.deprecation;
         exports.v8_0_0 = deprecation.v8_0_0;
+        exports.v8_3_4 = deprecation.v8_3_4;
         exports.logDebugTexture = logDebugTexture.logDebugTexture;
         exports.logRenderGroupScene = logScene.logRenderGroupScene;
         exports.logScene = logScene.logScene;
@@ -73993,7 +74268,6 @@ ${src}`;
         exports.Pool = Pool.Pool;
         exports.BigPool = PoolGroup.BigPool;
         exports.PoolGroupClass = PoolGroup.PoolGroupClass;
-        exports.VERSION = sayHello.VERSION;
         exports.sayHello = sayHello.sayHello;
         //# sourceMappingURL=index.js.map
 
@@ -74010,6 +74284,7 @@ ${src}`;
         'use strict';
         const warnings = {};
         const v8_0_0 = '8.0.0';
+        const v8_3_4 = '8.3.4';
         function deprecation(version, message, ignoreDepth = 3) {
           if (warnings[message]) {
             return;
@@ -74047,6 +74322,7 @@ Deprecated since v${version}`
 
         exports.deprecation = deprecation;
         exports.v8_0_0 = v8_0_0;
+        exports.v8_3_4 = v8_3_4;
         //# sourceMappingURL=deprecation.js.map
 
         /***/
@@ -75032,10 +75308,12 @@ Deprecated since v${version}`
         var adapter = __webpack_require__(
           /*! ../environment/adapter.js */ './node_modules/pixi.js/lib/environment/adapter.js'
         );
+        var _const = __webpack_require__(
+          /*! ./const.js */ './node_modules/pixi.js/lib/utils/const.js'
+        );
 
         ('use strict');
         let saidHello = false;
-        const VERSION = '8.3.4';
         function sayHello(type) {
           if (saidHello) {
             return;
@@ -75047,7 +75325,7 @@ Deprecated since v${version}`
               .indexOf('chrome') > -1
           ) {
             const args = [
-              `%c  %c  %c  %c  %c PixiJS %c v${VERSION} (${type}) http://www.pixijs.com/
+              `%c  %c  %c  %c  %c PixiJS %c v${_const.VERSION} (${type}) http://www.pixijs.com/
 
 `,
               'background: #E72264; padding:5px 0;',
@@ -75060,13 +75338,12 @@ Deprecated since v${version}`
             globalThis.console.log(...args);
           } else if (globalThis.console) {
             globalThis.console.log(
-              `PixiJS ${VERSION} - ${type} - http://www.pixijs.com/`
+              `PixiJS ${_const.VERSION} - ${type} - http://www.pixijs.com/`
             );
           }
           saidHello = true;
         }
 
-        exports.VERSION = VERSION;
         exports.sayHello = sayHello;
         //# sourceMappingURL=sayHello.js.map
 

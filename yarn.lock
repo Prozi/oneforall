@@ -2277,10 +2277,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.15.2:
-  version "9.15.2"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.15.2.tgz#327ae2ac95d92867d65164341bfeb50467cc1923"
-  integrity sha512-xcU5x70rtN2CFIzio2CTPmXQT4r8P5I7KtcLks1EC6Nc5zahZjH5U8Acf324cH9Q6zA1rAX+lojVBEoDLZAEIQ==
+detect-collisions@^9.15.3:
+  version "9.15.3"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.15.3.tgz#adba300d0631f8801953727e405882b1f3ab1878"
+  integrity sha512-9395JlyD/9AWItf5HSOSDUFr99T0jyP4PwQ0YoJXbjQAkavuSrCf/hu+egYTC9x4OpD28erfjetPDjB+em/Llg==
   dependencies:
     "@types/sat" "^0.0.35"
     poly-decomp-es "^0.4.2"
