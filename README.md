@@ -20,7 +20,7 @@
             └──[1x StateMachine]
 ```
 
-Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/demo/?fps) to see below code in action.
+Tiny code, big results! Check out the [demo](https://prozi.github.io/oneforall/demo/?fps&debug) to see below code in action.
 
 Also, here is the [documentation](https://prozi.github.io/oneforall/modules.html).
 
