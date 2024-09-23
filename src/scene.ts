@@ -149,11 +149,9 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;'): void {
     const stats = new Stats(document, this.pixi.renderer as PIXI.WebGLRenderer);
-    const ticker: PIXI.Ticker = PIXI.Ticker.shared;
     const canvas = stats.domElement;
 
     canvas.setAttribute('style', style);
-    ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
   }
 
   protected onUpdateDebug(debug: PIXI.Graphics): void {

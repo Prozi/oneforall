@@ -11515,9 +11515,6 @@
           constructor(hook, stats) {
             this.hook = hook;
             this.stats = stats;
-            if (stats) {
-              this.stats = stats;
-            }
             if (this.stats) {
               this.dcPanel = this.stats.addPanel(
                 new stats_panel_1.Panel('DC', '#f60', '#300')
@@ -11525,7 +11522,6 @@
               this.tcPanel = this.stats.addPanel(
                 new stats_panel_1.Panel('TC', '#0c6', '#033')
               );
-              this.stats.showPanel(0);
             } else {
               throw new Error(
                 "Stats can't found in window, pass instance of Stats.js as second param"
@@ -11572,7 +11568,7 @@
                   glTextures.length
                 );
                 Object.values(glTextures).forEach((glTexture) => {
-                  if (glTexture.gl === renderer.gl) {
+                  if (glTexture.gl === renderer.gl && glTexture.texture) {
                     this.texturehook.registerTexture(glTexture.texture);
                   }
                 });
@@ -11740,11 +11736,13 @@
         const stats_panel_1 = __webpack_require__(
           /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
         );
+        const pixi_js_1 = __webpack_require__(
+          /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
+        );
         class Stats {
           constructor(document, renderer) {
             this.mode = 0;
             this.frames = 0;
-            this.setMode = this.showPanel;
             this.beginTime = (performance || Date).now();
             this.prevTime = this.beginTime;
             this.domElement = document.createElement('div');
@@ -11757,9 +11755,6 @@
               },
               false
             );
-            document.body.appendChild(this.domElement);
-            this.pixiHooks = new stats_gl_1.PIXIHooks(renderer);
-            this.adapter = new stats_gl_1.StatsJSAdapter(this.pixiHooks, this);
             this.fpsPanel = this.addPanel(
               new stats_panel_1.Panel('FPS', '#3ff', '#002')
             );
@@ -11771,6 +11766,16 @@
                 new stats_panel_1.Panel('MB', '#f08', '#200')
               );
             }
+            this.pixiHooks = new stats_gl_1.PIXIHooks(renderer);
+            this.adapter = new stats_gl_1.StatsJSAdapter(this.pixiHooks, this);
+            this.showPanel(0);
+            document.body.appendChild(this.domElement);
+            const ticker = pixi_js_1.Ticker.shared || new pixi_js_1.Ticker();
+            ticker.add(
+              this.adapter.update,
+              this.adapter,
+              pixi_js_1.UPDATE_PRIORITY.UTILITY
+            );
           }
           addPanel(panel) {
             this.domElement.appendChild(panel.dom);
@@ -11816,7 +11821,6 @@
           }
         }
         exports.Stats = Stats;
-        Stats.Panel = stats_panel_1.Panel;
         //# sourceMappingURL=stats.js.map
 
         /***/
@@ -91575,10 +91579,8 @@ Deprecated since v${version}`
            */
           showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
             const stats = new pixi_stats_1.Stats(document, this.pixi.renderer);
-            const ticker = PIXI.Ticker.shared;
             const canvas = stats.domElement;
             canvas.setAttribute('style', style);
-            ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
           }
           onUpdateDebug(debug) {
             const canvas = debug;

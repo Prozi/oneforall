@@ -4360,10 +4360,10 @@ pixi-shim@^2.5.3:
   optionalDependencies:
     canvas "^2"
 
-pixi-stats@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-2.0.0.tgz#6ffc7e5924e989c3d9dedbabaa4a00c9507f1c46"
-  integrity sha512-FsAyOIP5Dnz12jWll2bCU8YmkO7hJvY6yfPOvPbFq5/LG0T/kNy6Ve8CaehVtYJPBHZu/jEKOcx9APl5Q9uFiA==
+pixi-stats@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-2.0.2.tgz#f00a60b15254c8fc5c8470accbba0b24d23f218c"
+  integrity sha512-QCCFvE1PNKku4hbdfPOmeNwanqbhQDmWslec5ANcl2n4D63kc8GK9VhCzXRFt9WG+Gxrc8SH/iIR3+ornIBPig==
   dependencies:
     "@pietal.dev/gstats" "^0.1.6"
 
