@@ -1,13 +1,13 @@
 import * as PIXI from 'pixi.js';
 
 import { SceneOptions, SceneSSR } from './scene-ssr';
-import { StatsJSAdapter, addStats } from 'pixi-stats';
 
 import { Application } from './application';
 import { Body } from 'detect-collisions';
 import { Inject } from '@pietal.dev/dependency-injection';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
+import { Stats } from 'pixi-stats';
 import { Subject } from 'rxjs/internal/Subject';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
@@ -148,9 +148,9 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;'): void {
-    const stats: StatsJSAdapter = addStats(document, this.pixi);
+    const stats = new Stats(document, this.pixi.renderer as PIXI.WebGLRenderer);
     const ticker: PIXI.Ticker = PIXI.Ticker.shared;
-    const canvas = stats.stats.domElement;
+    const canvas = stats.domElement;
 
     canvas.setAttribute('style', style);
     ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);

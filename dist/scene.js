@@ -66,10 +66,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require('pixi.js'));
 const scene_ssr_1 = require('./scene-ssr');
-const pixi_stats_1 = require('pixi-stats');
 const application_1 = require('./application');
 const dependency_injection_1 = require('@pietal.dev/dependency-injection');
 const resources_1 = require('./resources');
+const pixi_stats_1 = require('pixi-stats');
 const Subject_1 = require('rxjs/internal/Subject');
 const merge_1 = require('rxjs/internal/observable/merge');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
@@ -187,9 +187,9 @@ class Scene extends scene_ssr_1.SceneSSR {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
-    const stats = (0, pixi_stats_1.addStats)(document, this.pixi);
+    const stats = new pixi_stats_1.Stats(document, this.pixi.renderer);
     const ticker = PIXI.Ticker.shared;
-    const canvas = stats.stats.domElement;
+    const canvas = stats.domElement;
     canvas.setAttribute('style', style);
     ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
   }

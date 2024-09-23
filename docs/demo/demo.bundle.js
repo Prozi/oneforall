@@ -11514,10 +11514,9 @@
         class StatsJSAdapter {
           constructor(hook, stats) {
             this.hook = hook;
+            this.stats = stats;
             if (stats) {
               this.stats = stats;
-            } else if (window.Stats) {
-              this.stats = new window.Stats();
             }
             if (this.stats) {
               this.dcPanel = this.stats.addPanel(
@@ -11549,22 +11548,22 @@
             }
           }
           reset() {
-            if (this.hook) this.hook.reset();
+            if (this.hook) {
+              this.hook.reset();
+            }
           }
         }
         exports.StatsJSAdapter = StatsJSAdapter;
         class PIXIHooks extends BaseHooks_1.default {
-          constructor(app) {
+          constructor(renderer) {
             super();
-            if (!app) {
-              console.error('[PIXI Hooks] missing PIXI.Application');
+            if (!renderer) {
+              console.error('[PIXI Hooks] missing PIXI.WebGLRenderer');
               return;
             }
-            const renderer = app.renderer;
             if (renderer.gl) {
               this.attach(renderer.gl);
-              // const startTextures = renderer.texture.managedTextures;
-              const glTextures = renderer.texture._glTextures;
+              const { _glTextures: glTextures } = renderer.texture;
               if (!glTextures || !this.texturehook) {
                 console.error('[PIXI Hooks] !glTextures || !this.texturehook');
               } else {
@@ -11572,14 +11571,11 @@
                   '[PIXI Hooks] Collect used textures:',
                   glTextures.length
                 );
-                // for (let i = 0; i < startTextures.length; i++) {
-                //   const txr = startTextures[i];
                 Object.values(glTextures).forEach((glTexture) => {
                   if (glTexture.gl === renderer.gl) {
                     this.texturehook.registerTexture(glTexture.texture);
                   }
                 });
-                // }
               }
             } else {
               console.error('[PIXI Hook] Canvas renderer is not allowed');
@@ -11738,7 +11734,6 @@
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.Stats = void 0;
-        exports.addStats = addStats;
         const stats_gl_1 = __webpack_require__(
           /*! ./stats-gl */ './node_modules/pixi-stats/dist/stats-gl.js'
         );
@@ -11746,9 +11741,12 @@
           /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
         );
         class Stats {
-          constructor() {
-            this.setMode = this.showPanel;
+          constructor(document, renderer) {
             this.mode = 0;
+            this.frames = 0;
+            this.setMode = this.showPanel;
+            this.beginTime = (performance || Date).now();
+            this.prevTime = this.beginTime;
             this.domElement = document.createElement('div');
             this.domElement.id = 'stats';
             this.domElement.addEventListener(
@@ -11759,16 +11757,18 @@
               },
               false
             );
-            this.beginTime = (performance || Date).now();
-            this.prevTime = this.beginTime;
-            this.frames = 0;
+            document.body.appendChild(this.domElement);
+            this.pixiHooks = new stats_gl_1.PIXIHooks(renderer);
+            this.adapter = new stats_gl_1.StatsJSAdapter(this.pixiHooks, this);
             this.fpsPanel = this.addPanel(
-              new Stats.Panel('FPS', '#3ff', '#002')
+              new stats_panel_1.Panel('FPS', '#3ff', '#002')
             );
-            this.msPanel = this.addPanel(new Stats.Panel('MS', '#0f0', '#020'));
-            if (performance && performance.memory) {
+            this.msPanel = this.addPanel(
+              new stats_panel_1.Panel('MS', '#0f0', '#020')
+            );
+            if ('memory' in performance) {
               this.memPanel = this.addPanel(
-                new Stats.Panel('MB', '#f08', '#200')
+                new stats_panel_1.Panel('MB', '#f08', '#200')
               );
             }
           }
@@ -11801,7 +11801,7 @@
               );
               this.prevTime = time;
               this.frames = 0;
-              if (this.memPanel) {
+              if (this.memPanel && 'memory' in performance) {
                 const memory = performance.memory;
                 this.memPanel.update(
                   memory.usedJSHeapSize / 1048576,
@@ -11817,13 +11817,6 @@
         }
         exports.Stats = Stats;
         Stats.Panel = stats_panel_1.Panel;
-        function addStats(document, app) {
-          const stats = new Stats();
-          const pixiHooks = new stats_gl_1.PIXIHooks(app);
-          const adapter = new stats_gl_1.StatsJSAdapter(pixiHooks, stats);
-          document.body.appendChild(adapter.stats.domElement);
-          return adapter;
-        }
         //# sourceMappingURL=stats.js.map
 
         /***/
@@ -56778,6 +56771,7 @@ ${src}`;
           }
           reset() {
             this.applyTransform = true;
+            this.renderable = null;
           }
         }
 
@@ -73882,7 +73876,7 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
-        const VERSION = '8.4.0';
+        const VERSION = '8.4.1';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
@@ -91443,9 +91437,6 @@ Deprecated since v${version}`
         const scene_ssr_1 = __webpack_require__(
           /*! ./scene-ssr */ './src/scene-ssr.ts'
         );
-        const pixi_stats_1 = __webpack_require__(
-          /*! pixi-stats */ './node_modules/pixi-stats/dist/index.js'
-        );
         const application_1 = __webpack_require__(
           /*! ./application */ './src/application.ts'
         );
@@ -91454,6 +91445,9 @@ Deprecated since v${version}`
         );
         const resources_1 = __webpack_require__(
           /*! ./resources */ './src/resources.ts'
+        );
+        const pixi_stats_1 = __webpack_require__(
+          /*! pixi-stats */ './node_modules/pixi-stats/dist/index.js'
         );
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
@@ -91580,9 +91574,9 @@ Deprecated since v${version}`
            * add body font family to set font of pixi-stats
            */
           showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
-            const stats = (0, pixi_stats_1.addStats)(document, this.pixi);
+            const stats = new pixi_stats_1.Stats(document, this.pixi.renderer);
             const ticker = PIXI.Ticker.shared;
-            const canvas = stats.stats.domElement;
+            const canvas = stats.domElement;
             canvas.setAttribute('style', style);
             ticker.add(stats.update, stats, PIXI.UPDATE_PRIORITY.UTILITY);
           }
