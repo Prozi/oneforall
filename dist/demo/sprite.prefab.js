@@ -1,13 +1,13 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
-exports.createSprite = createSprite;
-exports.updateSprite = updateSprite;
+exports.create = create;
+exports.update = update;
 const game_object_1 = require('../game-object');
 const animator_1 = require('../animator');
 const circle_body_1 = require('../circle-body');
 const detect_collisions_1 = require('detect-collisions');
 const operators_1 = require('rxjs/operators');
-function createSprite({ scene, data, texture }) {
+function create({ scene, data, texture }) {
   // create game object
   const gameObject = new game_object_1.GameObject('Player');
   // create body
@@ -27,11 +27,11 @@ function createSprite({ scene, data, texture }) {
   gameObject.update$
     .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
     .subscribe((deltaTime) => {
-      updateSprite(gameObject, deltaTime);
+      update(gameObject, deltaTime);
     });
   return gameObject;
 }
-function updateSprite(gameObject, deltaTime) {
+function update(gameObject, deltaTime) {
   const scene = gameObject.scene;
   const scale = scene.stage.scale;
   const gameObjects = scene.children;

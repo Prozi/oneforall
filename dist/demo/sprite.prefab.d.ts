@@ -1,5 +1,5 @@
 import { TGameObject } from '../game-object';
-export declare function createSprite({
+export declare function create({
   scene,
   data,
   texture
@@ -8,7 +8,7 @@ export declare function createSprite({
   data: any;
   texture: any;
 }): TGameObject;
-export declare function updateSprite(
+export declare function update(
   gameObject: TGameObject,
   deltaTime: number
 ): void;

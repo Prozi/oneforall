@@ -5,7 +5,7 @@ import { CircleBody } from '../circle-body';
 import { distance } from 'detect-collisions';
 import { takeUntil } from 'rxjs/operators';
 
-export function createSprite({ scene, data, texture }): TGameObject {
+export function create({ scene, data, texture }): TGameObject {
   // create game object
   const gameObject = new GameObject('Player') as TGameObject;
 
@@ -27,13 +27,13 @@ export function createSprite({ scene, data, texture }): TGameObject {
   gameObject.update$
     .pipe(takeUntil(gameObject.destroy$))
     .subscribe((deltaTime) => {
-      updateSprite(gameObject, deltaTime);
+      update(gameObject, deltaTime);
     });
 
   return gameObject;
 }
 
-export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
+export function update(gameObject: TGameObject, deltaTime: number): void {
   const scene = gameObject.scene;
   const scale = scene.stage.scale;
   const gameObjects = scene.children as TGameObject[];

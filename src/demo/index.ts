@@ -1,6 +1,6 @@
 import { Resources } from '../resources';
 import { Scene } from '../scene';
-import { createSprite } from './sprite.prefab';
+import { create } from './sprite.prefab';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 async function start(): Promise<void> {
@@ -27,7 +27,7 @@ async function start(): Promise<void> {
 
   // create 50 sprites from template
   Array.from({ length: Number(queryParams.limit || 50) }, () => {
-    createSprite({ scene, data, texture });
+    create({ scene, data, texture });
   });
 
   scene.start();

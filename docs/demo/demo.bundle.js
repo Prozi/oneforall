@@ -90747,8 +90747,8 @@ Deprecated since v${version}`
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.createSprite = createSprite;
-        exports.updateSprite = updateSprite;
+        exports.create = create;
+        exports.update = update;
         const game_object_1 = __webpack_require__(
           /*! ../game-object */ './src/game-object.ts'
         );
@@ -90764,7 +90764,7 @@ Deprecated since v${version}`
         const operators_1 = __webpack_require__(
           /*! rxjs/operators */ './node_modules/rxjs/dist/cjs/operators/index.js'
         );
-        function createSprite({ scene, data, texture }) {
+        function create({ scene, data, texture }) {
           // create game object
           const gameObject = new game_object_1.GameObject('Player');
           // create body
@@ -90792,11 +90792,11 @@ Deprecated since v${version}`
           gameObject.update$
             .pipe((0, operators_1.takeUntil)(gameObject.destroy$))
             .subscribe((deltaTime) => {
-              updateSprite(gameObject, deltaTime);
+              update(gameObject, deltaTime);
             });
           return gameObject;
         }
-        function updateSprite(gameObject, deltaTime) {
+        function update(gameObject, deltaTime) {
           const scene = gameObject.scene;
           const scale = scene.stage.scale;
           const gameObjects = scene.children;
@@ -91462,6 +91462,9 @@ Deprecated since v${version}`
         const takeUntil_1 = __webpack_require__(
           /*! rxjs/internal/operators/takeUntil */ './node_modules/rxjs/dist/cjs/internal/operators/takeUntil.js'
         );
+        /**
+         * base scene for front end rendering
+         */
         class Scene extends scene_ssr_1.SceneSSR {
           constructor(options = {}) {
             super(options);
@@ -91539,6 +91542,7 @@ Deprecated since v${version}`
             }
           }
           enableAutoSort() {
+            this.stage.sortableChildren = true;
             this.update$
               .pipe(
                 (0, takeUntil_1.takeUntil)(
@@ -91546,10 +91550,13 @@ Deprecated since v${version}`
                 )
               )
               .subscribe(() => {
-                this.stage.children.sort((bodyA, bodyB) => bodyA.y - bodyB.y);
+                this.stage.children.forEach((child) => {
+                  child.zIndex = child.y;
+                });
               });
           }
           disableAutoSort() {
+            this.stage.sortableChildren = false;
             this.disableAutoSort$.next();
           }
           enableDebug() {
@@ -93411,7 +93418,7 @@ and limitations under the License.
       const texture = await resources_1.Resources.loadResource(data.tileset);
       // create 50 sprites from template
       Array.from({ length: Number(queryParams.limit || 50) }, () => {
-        (0, sprite_prefab_1.createSprite)({ scene, data, texture });
+        (0, sprite_prefab_1.create)({ scene, data, texture });
       });
       scene.start();
       scene.update$

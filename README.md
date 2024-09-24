@@ -53,7 +53,7 @@ async function start(): Promise<void> {
 
   // create 50 sprites from template
   Array.from({ length: Number(queryParams.limit || 50) }, () => {
-    createSprite({ scene, data, texture });
+    create({ scene, data, texture });
   });
 
   scene.start();
@@ -68,12 +68,12 @@ start();
 `src/demo/sprite.prefab.ts`
 
 ```typescript
-export function createSprite({ scene, data, texture }): TGameObject {
+export function create({ scene, data, texture }): TGameObject {
   // create game object
   const gameObject = new GameObject('Player') as TGameObject;
 
   // create body
-  gameObject.body = new CircleBody(gameObject, 20, 14);
+  gameObject.body = new CircleBody(gameObject, 20, 14, 20, { padding: 7 });
   gameObject.body.setPosition(
     Math.random() * innerWidth,
     Math.random() * innerHeight
@@ -90,15 +90,16 @@ export function createSprite({ scene, data, texture }): TGameObject {
   gameObject.update$
     .pipe(takeUntil(gameObject.destroy$))
     .subscribe((deltaTime) => {
-      updateSprite(gameObject, deltaTime);
+      update(gameObject, deltaTime);
     });
 
   return gameObject;
 }
 
-export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
-  const scale = gameObject.scene.stage.scale;
-  const gameObjects = gameObject.scene.children as TGameObject[];
+export function update(gameObject: TGameObject, deltaTime: number): void {
+  const scene = gameObject.scene;
+  const scale = scene.stage.scale;
+  const gameObjects = scene.children as TGameObject[];
   const safeDelta = Math.min(60, deltaTime);
   const chance = safeDelta * 0.01;
 
@@ -142,7 +143,7 @@ export function updateSprite(gameObject: TGameObject, deltaTime: number): void {
         gameObject.sprite.setScale(flipX, gameObject.sprite.scale.y);
       }
 
-      // update body which updates parent game object
+      // update body which updates gameObject game object
       gameObject.body.setPosition(
         gameObject.body.x + safeDelta * offsetX,
         gameObject.body.y + safeDelta * offsetY

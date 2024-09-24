@@ -73,6 +73,9 @@ const pixi_stats_1 = require('pixi-stats');
 const Subject_1 = require('rxjs/internal/Subject');
 const merge_1 = require('rxjs/internal/observable/merge');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
+/**
+ * base scene for front end rendering
+ */
 class Scene extends scene_ssr_1.SceneSSR {
   constructor(options = {}) {
     super(options);
@@ -148,6 +151,7 @@ class Scene extends scene_ssr_1.SceneSSR {
     }
   }
   enableAutoSort() {
+    this.stage.sortableChildren = true;
     this.update$
       .pipe(
         (0, takeUntil_1.takeUntil)(
@@ -155,10 +159,13 @@ class Scene extends scene_ssr_1.SceneSSR {
         )
       )
       .subscribe(() => {
-        this.stage.children.sort((bodyA, bodyB) => bodyA.y - bodyB.y);
+        this.stage.children.forEach((child) => {
+          child.zIndex = child.y;
+        });
       });
   }
   disableAutoSort() {
+    this.stage.sortableChildren = false;
     this.disableAutoSort$.next();
   }
   enableDebug() {

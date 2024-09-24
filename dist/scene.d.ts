@@ -5,6 +5,9 @@ import { Body } from 'detect-collisions';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Subject } from 'rxjs/internal/Subject';
+/**
+ * base scene for front end rendering
+ */
 export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   pixi: Application;
   resources: Resources;

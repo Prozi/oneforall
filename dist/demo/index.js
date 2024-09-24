@@ -25,7 +25,7 @@ async function start() {
   const texture = await resources_1.Resources.loadResource(data.tileset);
   // create 50 sprites from template
   Array.from({ length: Number(queryParams.limit || 50) }, () => {
-    (0, sprite_prefab_1.createSprite)({ scene, data, texture });
+    (0, sprite_prefab_1.create)({ scene, data, texture });
   });
   scene.start();
   scene.update$

@@ -12,6 +12,9 @@ import { Subject } from 'rxjs/internal/Subject';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
+/**
+ * base scene for front end rendering
+ */
 export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resources: Resources;
@@ -110,16 +113,20 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   }
 
   enableAutoSort(): void {
+    this.stage.sortableChildren = true;
+
     this.update$
       .pipe(takeUntil(merge(this.destroy$, this.disableAutoSort$)))
       .subscribe(() => {
-        this.stage.children.sort(
-          (bodyA: PIXI.Container, bodyB: PIXI.Container) => bodyA.y - bodyB.y
-        );
+        this.stage.children.forEach((child) => {
+          child.zIndex = child.y;
+        });
       });
   }
 
   disableAutoSort(): void {
+    this.stage.sortableChildren = false;
+
     this.disableAutoSort$.next();
   }
 
