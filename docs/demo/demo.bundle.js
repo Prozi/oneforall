@@ -93400,7 +93400,6 @@ and limitations under the License.
     );
     async function start() {
       const queryParams = scene_1.Scene.getQueryParams();
-      globalThis.queryParams = queryParams;
       // create main Scene
       const scene = new scene_1.Scene({
         visible: true,
