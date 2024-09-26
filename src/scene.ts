@@ -62,7 +62,7 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
       // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) => ({
         ...queryParams,
-        [paramName]: paramValue
+        [decodeURIComponent(paramName)]: decodeURIComponent(paramValue)
       }),
       {}
     );
@@ -155,7 +155,7 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;'): void {
-    const stats = new Stats(document, this.pixi.renderer as PIXI.WebGLRenderer);
+    const stats = new Stats(this.pixi.renderer as PIXI.WebGLRenderer);
     const canvas = stats.domElement;
 
     canvas.setAttribute('style', style);

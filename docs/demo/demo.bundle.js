@@ -909,205 +909,6 @@
         /***/
       },
 
-    /***/ './node_modules/@pietal.dev/gstats/dist/BaseHooks.js':
-      /*!***********************************************************!*\
-  !*** ./node_modules/@pietal.dev/gstats/dist/BaseHooks.js ***!
-  \***********************************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const GLHook_1 = __importDefault(
-          __webpack_require__(
-            /*! ./GLHook */ './node_modules/@pietal.dev/gstats/dist/GLHook.js'
-          )
-        );
-        const TextureHook_1 = __importDefault(
-          __webpack_require__(
-            /*! ./TextureHook */ './node_modules/@pietal.dev/gstats/dist/TextureHook.js'
-          )
-        );
-        class BaseHooks {
-          constructor() {
-            this._drawCalls = -1;
-            this._maxDeltaDrawCalls = -1;
-          }
-          attach(gl) {
-            this.glhook = new GLHook_1.default(gl);
-            this.texturehook = new TextureHook_1.default(gl);
-          }
-          get drawCalls() {
-            if (this.glhook && this.glhook.isInit) {
-              return this.glhook.drawPasses;
-            }
-            return -1;
-          }
-          get maxDeltaDrawCalls() {
-            return this._maxDeltaDrawCalls;
-          }
-          get deltaDrawCalls() {
-            if (this._drawCalls == -1) {
-              this._drawCalls = this.drawCalls;
-              return 0;
-            }
-            var dc = this.drawCalls;
-            var delta = dc - this._drawCalls;
-            this._drawCalls = dc;
-            this._maxDeltaDrawCalls = Math.max(this._maxDeltaDrawCalls, delta);
-            return delta;
-          }
-          get maxTextureCount() {
-            if (this.texturehook && this.texturehook.isInit)
-              return this.texturehook.maxTexturesCount;
-            return 0;
-          }
-          get texturesCount() {
-            if (this.texturehook && this.texturehook.isInit)
-              return this.texturehook.currentTextureCount;
-            return 0;
-          }
-          reset() {
-            this._maxDeltaDrawCalls = -1;
-            this._drawCalls = -1;
-            if (this.glhook) this.glhook.reset();
-            if (this.texturehook) this.texturehook.reset();
-          }
-          release() {
-            if (this.glhook) this.glhook.release();
-            if (this.texturehook) this.texturehook.release();
-          }
-        }
-        exports['default'] = BaseHooks;
-        //# sourceMappingURL=BaseHooks.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@pietal.dev/gstats/dist/GLHook.js':
-      /*!********************************************************!*\
-  !*** ./node_modules/@pietal.dev/gstats/dist/GLHook.js ***!
-  \********************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class GLHook {
-          constructor(_gl) {
-            this.drawPasses = 0;
-            this.isInit = false;
-            this.realGLDrawElements = function () {};
-            if (_gl) {
-              if (_gl.__proto__.drawElements) {
-                this.gl = _gl;
-                this.realGLDrawElements = _gl.__proto__.drawElements;
-                //replace to new function
-                _gl.__proto__.drawElements = this.fakeGLdrawElements.bind(this);
-                this.isInit = true;
-                console.log('[GLHook] GL was Hooked!');
-              }
-            } else {
-              console.error("[GLHook] GL can't be NULL");
-            }
-          }
-          fakeGLdrawElements(mode, count, type, offset) {
-            this.drawPasses++;
-            this.realGLDrawElements.call(this.gl, mode, count, type, offset);
-          }
-          reset() {
-            this.drawPasses = 0;
-          }
-          release() {
-            if (this.isInit) {
-              this.gl.__proto__.drawElements = this.realGLDrawElements;
-              console.log('[GLHook] Hook was removed!');
-            }
-            this.isInit = false;
-          }
-        }
-        exports['default'] = GLHook;
-        //# sourceMappingURL=GLHook.js.map
-
-        /***/
-      },
-
-    /***/ './node_modules/@pietal.dev/gstats/dist/TextureHook.js':
-      /*!*************************************************************!*\
-  !*** ./node_modules/@pietal.dev/gstats/dist/TextureHook.js ***!
-  \*************************************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class TextureHook {
-          constructor(_gl) {
-            this.createdTextures = new Array();
-            this.maxTexturesCount = 0;
-            this.isInit = false;
-            this.realGLCreateTexture = function () {};
-            this.realGLDeleteTexture = function () {};
-            if (_gl) {
-              if (_gl.__proto__.createTexture) {
-                this.gl = _gl;
-                this.realGLCreateTexture = _gl.__proto__.createTexture;
-                this.realGLDeleteTexture = _gl.__proto__.deleteTexture;
-                //replace to new function
-                _gl.__proto__.createTexture =
-                  this.fakeGLCreateTexture.bind(this);
-                _gl.__proto__.deleteTexture =
-                  this.fakeGLDeleteTexture.bind(this);
-                this.isInit = true;
-                console.log('[TextureHook] GL was Hooked!');
-              }
-            } else {
-              console.error("[TextureHook] GL can't be NULL");
-            }
-          }
-          get currentTextureCount() {
-            return this.createdTextures.length;
-          }
-          registerTexture(texture) {
-            this.createdTextures.push(texture); // ++;
-            this.maxTexturesCount = Math.max(
-              this.createdTextures.length,
-              this.maxTexturesCount
-            );
-          }
-          fakeGLCreateTexture() {
-            var texture = this.realGLCreateTexture.call(this.gl);
-            this.registerTexture(texture);
-            return texture;
-          }
-          fakeGLDeleteTexture(texture) {
-            var index = this.createdTextures.indexOf(texture);
-            if (index > -1) {
-              this.createdTextures.splice(index, 1);
-            }
-            this.realGLDeleteTexture.call(this.gl, texture);
-          }
-          reset() {
-            this.createdTextures = new Array();
-            this.maxTexturesCount = 0;
-          }
-          release() {
-            if (this.isInit) {
-              this.gl.__proto__.createTexture = this.realGLCreateTexture;
-              this.gl.__proto__.deleteTexture = this.realGLDeleteTexture;
-              console.log('[TextureHook] Hook was removed!');
-            }
-            this.isInit = false;
-          }
-        }
-        exports['default'] = TextureHook;
-        //# sourceMappingURL=TextureHook.js.map
-
-        /***/
-      },
-
     /***/ './node_modules/@pixi/colord/index.js':
       /*!********************************************!*\
   !*** ./node_modules/@pixi/colord/index.js ***!
@@ -11382,6 +11183,205 @@
         /***/
       },
 
+    /***/ './node_modules/pixi-stats/dist/hooks/BaseHooks.js':
+      /*!*********************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/BaseHooks.js ***!
+  \*********************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const GLHook_1 = __importDefault(
+          __webpack_require__(
+            /*! ./GLHook */ './node_modules/pixi-stats/dist/hooks/GLHook.js'
+          )
+        );
+        const TextureHook_1 = __importDefault(
+          __webpack_require__(
+            /*! ./TextureHook */ './node_modules/pixi-stats/dist/hooks/TextureHook.js'
+          )
+        );
+        class BaseHooks {
+          constructor() {
+            this._drawCalls = -1;
+            this._maxDeltaDrawCalls = -1;
+          }
+          attach(gl) {
+            this.glhook = new GLHook_1.default(gl);
+            this.texturehook = new TextureHook_1.default(gl);
+          }
+          get drawCalls() {
+            if (this.glhook && this.glhook.isInit) {
+              return this.glhook.drawPasses;
+            }
+            return -1;
+          }
+          get maxDeltaDrawCalls() {
+            return this._maxDeltaDrawCalls;
+          }
+          get deltaDrawCalls() {
+            if (this._drawCalls == -1) {
+              this._drawCalls = this.drawCalls;
+              return 0;
+            }
+            const dc = this.drawCalls;
+            const delta = dc - this._drawCalls;
+            this._drawCalls = dc;
+            this._maxDeltaDrawCalls = Math.max(this._maxDeltaDrawCalls, delta);
+            return delta;
+          }
+          get maxTextureCount() {
+            if (this.texturehook && this.texturehook.isInit)
+              return this.texturehook.maxTexturesCount;
+            return 0;
+          }
+          get texturesCount() {
+            if (this.texturehook && this.texturehook.isInit)
+              return this.texturehook.currentTextureCount;
+            return 0;
+          }
+          reset() {
+            this._maxDeltaDrawCalls = -1;
+            this._drawCalls = -1;
+            if (this.glhook) this.glhook.reset();
+            if (this.texturehook) this.texturehook.reset();
+          }
+          release() {
+            if (this.glhook) this.glhook.release();
+            if (this.texturehook) this.texturehook.release();
+          }
+        }
+        exports['default'] = BaseHooks;
+        //# sourceMappingURL=BaseHooks.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/hooks/GLHook.js':
+      /*!******************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/GLHook.js ***!
+  \******************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class GLHook {
+          constructor(_gl) {
+            this.drawPasses = 0;
+            this.isInit = false;
+            this.realGLDrawElements = function () {};
+            if (_gl) {
+              if (_gl.__proto__.drawElements) {
+                this.gl = _gl;
+                this.realGLDrawElements = _gl.__proto__.drawElements;
+                //replace to new function
+                _gl.__proto__.drawElements = this.fakeGLdrawElements.bind(this);
+                this.isInit = true;
+                console.log('[GLHook] GL was Hooked!');
+              }
+            } else {
+              console.error("[GLHook] GL can't be NULL");
+            }
+          }
+          fakeGLdrawElements(mode, count, type, offset) {
+            this.drawPasses++;
+            this.realGLDrawElements.call(this.gl, mode, count, type, offset);
+          }
+          reset() {
+            this.drawPasses = 0;
+          }
+          release() {
+            if (this.isInit) {
+              this.gl.__proto__.drawElements = this.realGLDrawElements;
+              console.log('[GLHook] Hook was removed!');
+            }
+            this.isInit = false;
+          }
+        }
+        exports['default'] = GLHook;
+        //# sourceMappingURL=GLHook.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/hooks/TextureHook.js':
+      /*!***********************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/TextureHook.js ***!
+  \***********************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class TextureHook {
+          constructor(_gl) {
+            this.createdTextures = new Array();
+            this.maxTexturesCount = 0;
+            this.isInit = false;
+            this.realGLCreateTexture = function () {};
+            this.realGLDeleteTexture = function () {};
+            if (_gl) {
+              if (_gl.__proto__.createTexture) {
+                this.gl = _gl;
+                this.realGLCreateTexture = _gl.__proto__.createTexture;
+                this.realGLDeleteTexture = _gl.__proto__.deleteTexture;
+                //replace to new function
+                _gl.__proto__.createTexture =
+                  this.fakeGLCreateTexture.bind(this);
+                _gl.__proto__.deleteTexture =
+                  this.fakeGLDeleteTexture.bind(this);
+                this.isInit = true;
+                console.log('[TextureHook] GL was Hooked!');
+              }
+            } else {
+              console.error("[TextureHook] GL can't be NULL");
+            }
+          }
+          get currentTextureCount() {
+            return this.createdTextures.length;
+          }
+          registerTexture(texture) {
+            this.createdTextures.push(texture); // ++;
+            this.maxTexturesCount = Math.max(
+              this.createdTextures.length,
+              this.maxTexturesCount
+            );
+          }
+          fakeGLCreateTexture() {
+            const texture = this.realGLCreateTexture.call(this.gl);
+            this.registerTexture(texture);
+            return texture;
+          }
+          fakeGLDeleteTexture(texture) {
+            const index = this.createdTextures.indexOf(texture);
+            if (index > -1) {
+              this.createdTextures.splice(index, 1);
+            }
+            this.realGLDeleteTexture.call(this.gl, texture);
+          }
+          reset() {
+            this.createdTextures = new Array();
+            this.maxTexturesCount = 0;
+          }
+          release() {
+            if (this.isInit) {
+              this.gl.__proto__.createTexture = this.realGLCreateTexture;
+              this.gl.__proto__.deleteTexture = this.realGLDeleteTexture;
+              console.log('[TextureHook] Hook was removed!');
+            }
+            this.isInit = false;
+          }
+        }
+        exports['default'] = TextureHook;
+        //# sourceMappingURL=TextureHook.js.map
+
+        /***/
+      },
+
     /***/ './node_modules/pixi-stats/dist/index.js':
       /*!***********************************************!*\
   !*** ./node_modules/pixi-stats/dist/index.js ***!
@@ -11505,7 +11505,7 @@
         exports.PIXIHooks = exports.StatsJSAdapter = void 0;
         const BaseHooks_1 = __importDefault(
           __webpack_require__(
-            /*! @pietal.dev/gstats/dist/BaseHooks */ './node_modules/@pietal.dev/gstats/dist/BaseHooks.js'
+            /*! ./hooks/BaseHooks */ './node_modules/pixi-stats/dist/hooks/BaseHooks.js'
           )
         );
         const stats_panel_1 = __webpack_require__(
@@ -11740,7 +11740,7 @@
           /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
         );
         class Stats {
-          constructor(document, renderer) {
+          constructor(renderer, containerElement = document.body) {
             this.mode = 0;
             this.frames = 0;
             this.beginTime = (performance || Date).now();
@@ -11769,7 +11769,7 @@
             this.pixiHooks = new stats_gl_1.PIXIHooks(renderer);
             this.adapter = new stats_gl_1.StatsJSAdapter(this.pixiHooks, this);
             this.showPanel(0);
-            document.body.appendChild(this.domElement);
+            containerElement.appendChild(this.domElement);
             const ticker = pixi_js_1.Ticker.shared || new pixi_js_1.Ticker();
             ticker.add(
               this.adapter.update,
@@ -91501,7 +91501,8 @@ Deprecated since v${version}`
               // eslint-disable-next-line
               (queryParams, [_wholeMatch, paramName, paramValue]) =>
                 Object.assign(Object.assign({}, queryParams), {
-                  [paramName]: paramValue
+                  [decodeURIComponent(paramName)]:
+                    decodeURIComponent(paramValue)
                 }),
               {}
             );
@@ -91585,7 +91586,7 @@ Deprecated since v${version}`
            * add body font family to set font of pixi-stats
            */
           showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
-            const stats = new pixi_stats_1.Stats(document, this.pixi.renderer);
+            const stats = new pixi_stats_1.Stats(this.pixi.renderer);
             const canvas = stats.domElement;
             canvas.setAttribute('style', style);
           }
@@ -93399,6 +93400,7 @@ and limitations under the License.
     );
     async function start() {
       const queryParams = scene_1.Scene.getQueryParams();
+      globalThis.queryParams = queryParams;
       // create main Scene
       const scene = new scene_1.Scene({
         visible: true,

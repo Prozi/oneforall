@@ -5,6 +5,9 @@ import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 async function start(): Promise<void> {
   const queryParams = Scene.getQueryParams();
+
+  globalThis.queryParams = queryParams;
+
   // create main Scene
   const scene: Scene = new Scene({
     visible: true,

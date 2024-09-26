@@ -6,6 +6,7 @@ const sprite_prefab_1 = require('./sprite.prefab');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
 async function start() {
   const queryParams = scene_1.Scene.getQueryParams();
+  globalThis.queryParams = queryParams;
   // create main Scene
   const scene = new scene_1.Scene({
     visible: true,

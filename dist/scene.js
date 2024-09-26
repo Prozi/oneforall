@@ -110,7 +110,7 @@ class Scene extends scene_ssr_1.SceneSSR {
       // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) =>
         Object.assign(Object.assign({}, queryParams), {
-          [paramName]: paramValue
+          [decodeURIComponent(paramName)]: decodeURIComponent(paramValue)
         }),
       {}
     );
@@ -194,7 +194,7 @@ class Scene extends scene_ssr_1.SceneSSR {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
-    const stats = new pixi_stats_1.Stats(document, this.pixi.renderer);
+    const stats = new pixi_stats_1.Stats(this.pixi.renderer);
     const canvas = stats.domElement;
     canvas.setAttribute('style', style);
   }
