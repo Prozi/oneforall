@@ -1680,17 +1680,67 @@
                 <li class="tsd-description">
                   <div class="tsd-comment tsd-typography">
                     <p>group for collision filtering</p>
+                    <p>
+                      Based on
+                      <a
+                        href="https://box2d.org/documentation/md_simulation.html#filtering"
+                        >Box2D</a
+                      >
+                      (<a
+                        href="https://aurelienribon.wordpress.com/2011/07/01/box2d-tutorial-collision-filtering/"
+                        >tutorial</a
+                      >)
+                    </p>
+                    <p>
+                      Values in BodyGroup are predefined and used each the body
+                      type and should not be used for custom filtering
+                    </p>
+                    <p>
+                      <code>0b00000001 &lt;&lt; 16</code> to
+                      <code>0b01000000 &lt;&lt; 16</code> (max 0x7fffffff) are
+                      free to use for custom groups
+                    </p>
                   </div>
                   <h4 class="tsd-returns-title">
                     Returns <span class="tsd-signature-type">number</span>
                   </h4>
-                  <div class="tsd-comment tsd-typography"></div>
+                  <div class="tsd-comment tsd-typography">
+                    <div class="tsd-tag-See">
+                      <h4 class="tsd-anchor-link">
+                        <a id="See" class="tsd-anchor"></a>See<a
+                          href="#See"
+                          aria-label="Permalink"
+                          class="tsd-anchor-icon"
+                          ><svg viewBox="0 0 24 24">
+                            <use
+                              href="../assets/icons.svg#icon-anchor"
+                            ></use></svg
+                        ></a>
+                      </h4>
+                      <p>canInteract for how groups are used</p>
+                    </div>
+                    <div class="tsd-tag-Default">
+                      <h4 class="tsd-anchor-link">
+                        <a id="Default" class="tsd-anchor"></a>Default<a
+                          href="#Default"
+                          aria-label="Permalink"
+                          class="tsd-anchor-icon"
+                          ><svg viewBox="0 0 24 24">
+                            <use
+                              href="../assets/icons.svg#icon-anchor"
+                            ></use></svg
+                        ></a>
+                      </h4>
+                      <pre><code class="ts"><span class="hl-9">0x7fffffff</span><span class="hl-0"> </span><span class="hl-6">// member of all groups (can interact with everyting)</span>
+</code><button type="button">Copy</button></pre>
+                    </div>
+                  </div>
                   <aside class="tsd-sources">
                     <p>Inherited from Polygon.group</p>
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:147
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:144
                       </li>
                     </ul>
                   </aside>
@@ -1707,6 +1757,26 @@
                 <li class="tsd-description">
                   <div class="tsd-comment tsd-typography">
                     <p>group for collision filtering</p>
+                    <p>
+                      Based on
+                      <a
+                        href="https://box2d.org/documentation/md_simulation.html#filtering"
+                        >Box2D</a
+                      >
+                      (<a
+                        href="https://aurelienribon.wordpress.com/2011/07/01/box2d-tutorial-collision-filtering/"
+                        >tutorial</a
+                      >)
+                    </p>
+                    <p>
+                      Values in BodyGroup are predefined and used each the body
+                      type and should not be used for custom filtering
+                    </p>
+                    <p>
+                      <code>0b00000001 &lt;&lt; 16</code> to
+                      <code>0b01000000 &lt;&lt; 16</code> (max 0x7fffffff) are
+                      free to use for custom groups
+                    </p>
                   </div>
                   <div class="tsd-parameters">
                     <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1722,13 +1792,43 @@
                   <h4 class="tsd-returns-title">
                     Returns <span class="tsd-signature-type">void</span>
                   </h4>
-                  <div class="tsd-comment tsd-typography"></div>
+                  <div class="tsd-comment tsd-typography">
+                    <div class="tsd-tag-See">
+                      <h4 class="tsd-anchor-link">
+                        <a id="See-1" class="tsd-anchor"></a>See<a
+                          href="#See-1"
+                          aria-label="Permalink"
+                          class="tsd-anchor-icon"
+                          ><svg viewBox="0 0 24 24">
+                            <use
+                              href="../assets/icons.svg#icon-anchor"
+                            ></use></svg
+                        ></a>
+                      </h4>
+                      <p>canInteract for how groups are used</p>
+                    </div>
+                    <div class="tsd-tag-Default">
+                      <h4 class="tsd-anchor-link">
+                        <a id="Default-1" class="tsd-anchor"></a>Default<a
+                          href="#Default-1"
+                          aria-label="Permalink"
+                          class="tsd-anchor-icon"
+                          ><svg viewBox="0 0 24 24">
+                            <use
+                              href="../assets/icons.svg#icon-anchor"
+                            ></use></svg
+                        ></a>
+                      </h4>
+                      <pre><code class="ts"><span class="hl-9">0x7fffffff</span><span class="hl-0"> </span><span class="hl-6">// member of all groups (can interact with everyting)</span>
+</code><button type="button">Copy</button></pre>
+                    </div>
+                  </div>
                   <aside class="tsd-sources">
                     <p>Inherited from Polygon.group</p>
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:148
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:145
                       </li>
                     </ul>
                   </aside>
@@ -2256,7 +2356,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:170
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:167
                       </li>
                     </ul>
                   </aside>
@@ -2320,7 +2420,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:174
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:171
                       </li>
                     </ul>
                   </aside>
@@ -2413,7 +2513,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:166
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:163
                       </li>
                     </ul>
                   </aside>
@@ -2511,7 +2611,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:178
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:175
                       </li>
                     </ul>
                   </aside>
@@ -2569,7 +2669,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:212
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:209
                       </li>
                     </ul>
                   </aside>
@@ -2621,7 +2721,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:194
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:191
                       </li>
                     </ul>
                   </aside>
@@ -2689,7 +2789,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:203
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:200
                       </li>
                     </ul>
                   </aside>
@@ -2759,7 +2859,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:152
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:149
                       </li>
                     </ul>
                   </aside>
@@ -2821,7 +2921,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:199
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:196
                       </li>
                     </ul>
                   </aside>
@@ -2883,7 +2983,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:190
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:187
                       </li>
                     </ul>
                   </aside>
@@ -2950,7 +3050,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:161
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:158
                       </li>
                     </ul>
                   </aside>
@@ -3017,7 +3117,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:162
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:159
                       </li>
                     </ul>
                   </aside>
@@ -3080,7 +3180,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:182
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:179
                       </li>
                     </ul>
                   </aside>
@@ -3159,7 +3259,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:156
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:153
                       </li>
                     </ul>
                   </aside>
@@ -3239,7 +3339,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:160
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:157
                       </li>
                     </ul>
                   </aside>
@@ -3308,7 +3408,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:186
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:183
                       </li>
                     </ul>
                   </aside>
@@ -3446,7 +3546,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:198
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:195
                       </li>
                     </ul>
                   </aside>
@@ -3506,7 +3606,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:208
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:205
                       </li>
                     </ul>
                   </aside>
@@ -3578,7 +3678,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:216
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:213
                       </li>
                     </ul>
                   </aside>
@@ -3632,7 +3732,7 @@
                     <ul>
                       <li>
                         Defined in
-                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:220
+                        node_modules/detect-collisions/dist/bodies/polygon.d.ts:217
                       </li>
                     </ul>
                   </aside>

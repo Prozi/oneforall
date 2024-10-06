@@ -1,12 +1,10 @@
 import * as PIXI from 'pixi.js';
 
 import { Cache } from '@pietal.dev/cache';
-import { Injectable } from '@pietal.dev/dependency-injection';
 
 // eslint-disable-next-line
 export type PIXIResource = any;
 
-@Injectable
 export class Resources {
   static cache: Cache<PIXIResource> = new Cache(async (url: string) => {
     return PIXI.Assets.loader.load(url);

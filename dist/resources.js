@@ -31,25 +31,6 @@ var __setModuleDefault =
     : function (o, v) {
         o['default'] = v;
       });
-var __decorate =
-  (this && this.__decorate) ||
-  function (decorators, target, key, desc) {
-    var c = arguments.length,
-      r =
-        c < 3
-          ? target
-          : desc === null
-            ? (desc = Object.getOwnPropertyDescriptor(target, key))
-            : desc,
-      d;
-    if (typeof Reflect === 'object' && typeof Reflect.decorate === 'function')
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if ((d = decorators[i]))
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
 var __importStar =
   (this && this.__importStar) ||
   function (mod) {
@@ -62,20 +43,17 @@ var __importStar =
     __setModuleDefault(result, mod);
     return result;
   };
-var Resources_1;
+var _a;
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Resources = void 0;
 const PIXI = __importStar(require('pixi.js'));
 const cache_1 = require('@pietal.dev/cache');
-const dependency_injection_1 = require('@pietal.dev/dependency-injection');
-let Resources = (Resources_1 = class Resources {
+class Resources {
   static async loadResource(url) {
-    return await Resources_1.cache.get(url);
+    return await _a.cache.get(url);
   }
   static async loadResources(resources) {
-    const promises = resources.map(async (url) =>
-      Resources_1.loadResource(url)
-    );
+    const promises = resources.map(async (url) => _a.loadResource(url));
     const results = await Promise.all(promises);
     return results.reduce((resolved, resource, index) => {
       const name = resources[index];
@@ -83,14 +61,11 @@ let Resources = (Resources_1 = class Resources {
     }, {});
   }
   async get(url) {
-    return Resources_1.loadResource(url);
+    return _a.loadResource(url);
   }
-});
+}
 exports.Resources = Resources;
+_a = Resources;
 Resources.cache = new cache_1.Cache(async (url) => {
   return PIXI.Assets.loader.load(url);
 });
-exports.Resources =
-  Resources =
-  Resources_1 =
-    __decorate([dependency_injection_1.Injectable], Resources);

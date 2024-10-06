@@ -4,7 +4,7 @@ import { SceneOptions, SceneSSR } from './scene-ssr';
 
 import { Application } from './application';
 import { Body } from 'detect-collisions';
-import { Inject } from '@pietal.dev/dependency-injection';
+import { Inject } from 'inject.min';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Stats } from 'pixi-stats';
@@ -35,8 +35,10 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     this.stage.visible = this.options.visible || false;
     this.stage.label = 'SceneStage';
 
-    this.pixi.stage.addChild(this.stage);
-    this.pixi.stage.label = 'PixiStage';
+    if (this.pixi) {
+      this.pixi.stage.addChild(this.stage);
+      this.pixi.stage.label = 'PixiStage';
+    }
 
     if (this.options.autoSort) {
       this.enableAutoSort();
@@ -47,8 +49,8 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     }
 
     globalThis.PIXI = PIXI;
-    globalThis.__PIXI_APP__ = this.pixi;
     globalThis.scene = this;
+    globalThis.__PIXI_APP__ = this.pixi;
   }
 
   static getQueryParams(): Record<string, string> {
@@ -88,18 +90,18 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   }
 
   start(): void {
-    this.pixi.start();
+    this.pixi?.start();
     super.start();
   }
 
   stop(): void {
-    this.pixi.stop?.();
+    this.pixi?.stop?.();
     super.stop();
   }
 
   destroy(): void {
     super.destroy();
-    this.pixi.stage.removeChild(this.stage);
+    this.pixi?.stage.removeChild(this.stage);
   }
 
   addChild(

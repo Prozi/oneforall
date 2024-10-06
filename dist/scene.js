@@ -67,7 +67,7 @@ exports.Scene = void 0;
 const PIXI = __importStar(require('pixi.js'));
 const scene_ssr_1 = require('./scene-ssr');
 const application_1 = require('./application');
-const dependency_injection_1 = require('@pietal.dev/dependency-injection');
+const inject_min_1 = require('inject.min');
 const resources_1 = require('./resources');
 const pixi_stats_1 = require('pixi-stats');
 const Subject_1 = require('rxjs/internal/Subject');
@@ -89,8 +89,10 @@ class Scene extends scene_ssr_1.SceneSSR {
     this.disableDebug$ = new Subject_1.Subject();
     this.stage.visible = this.options.visible || false;
     this.stage.label = 'SceneStage';
-    this.pixi.stage.addChild(this.stage);
-    this.pixi.stage.label = 'PixiStage';
+    if (this.pixi) {
+      this.pixi.stage.addChild(this.stage);
+      this.pixi.stage.label = 'PixiStage';
+    }
     if (this.options.autoSort) {
       this.enableAutoSort();
     }
@@ -98,8 +100,8 @@ class Scene extends scene_ssr_1.SceneSSR {
       this.enableDebug();
     }
     globalThis.PIXI = PIXI;
-    globalThis.__PIXI_APP__ = this.pixi;
     globalThis.scene = this;
+    globalThis.__PIXI_APP__ = this.pixi;
   }
   static getQueryParams() {
     if (typeof location === 'undefined') {
@@ -130,19 +132,24 @@ class Scene extends scene_ssr_1.SceneSSR {
     return true;
   }
   start() {
-    this.pixi.start();
+    var _a;
+    (_a = this.pixi) === null || _a === void 0 ? void 0 : _a.start();
     super.start();
   }
   stop() {
     var _a, _b;
-    (_b = (_a = this.pixi).stop) === null || _b === void 0
+    (_b = (_a = this.pixi) === null || _a === void 0 ? void 0 : _a.stop) ===
+      null || _b === void 0
       ? void 0
       : _b.call(_a);
     super.stop();
   }
   destroy() {
+    var _a;
     super.destroy();
-    this.pixi.stage.removeChild(this.stage);
+    (_a = this.pixi) === null || _a === void 0
+      ? void 0
+      : _a.stage.removeChild(this.stage);
   }
   addChild(gameObject) {
     super.addChild(gameObject);
@@ -217,13 +224,13 @@ class Scene extends scene_ssr_1.SceneSSR {
 }
 exports.Scene = Scene;
 __decorate(
-  [(0, dependency_injection_1.Inject)(application_1.Application)],
+  [(0, inject_min_1.Inject)(application_1.Application)],
   Scene.prototype,
   'pixi',
   void 0
 );
 __decorate(
-  [(0, dependency_injection_1.Inject)(resources_1.Resources)],
+  [(0, inject_min_1.Inject)(resources_1.Resources)],
   Scene.prototype,
   'resources',
   void 0
