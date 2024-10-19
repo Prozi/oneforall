@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-import { SceneOptions, SceneSSR } from './scene-ssr';
+import { DebugStroke, SceneOptions, SceneSSR } from './scene-ssr';
 
 import { Application } from './application';
 import { Body } from 'detect-collisions';
@@ -33,7 +33,6 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     super(options);
 
     this.stage.visible = this.options.visible || false;
-    this.stage.label = 'SceneStage';
 
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
@@ -163,22 +162,29 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     canvas.setAttribute('style', style);
   }
 
-  protected onUpdateDebug(debug: PIXI.Graphics): void {
-    const canvas = debug as unknown as CanvasRenderingContext2D;
-    debug.clear();
+  protected onUpdateDebug(canvas: PIXI.Graphics): void {
+    const context = canvas as unknown as CanvasRenderingContext2D;
+    const debug =
+      typeof this.options.debug === 'object' ? this.options.debug : {};
 
-    this.physics.draw(canvas);
-    debug.stroke({
-      color: 0xffffff,
-      width: 1.5,
-      alpha: 1
-    });
+    canvas.clear();
 
-    this.physics.drawBVH(canvas);
-    debug.stroke({
-      color: 0x00ff00,
-      width: 1,
-      alpha: 0.5
-    });
+    this.physics.draw(context);
+    canvas.stroke(
+      debug.debugStroke || {
+        color: 0xffffff,
+        width: 1.5,
+        alpha: 1
+      }
+    );
+
+    this.physics.drawBVH(context);
+    canvas.stroke(
+      debug.debugBVHStroke || {
+        color: 0x00ff00,
+        width: 1,
+        alpha: 0.5
+      }
+    );
   }
 }

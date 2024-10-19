@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import { Container } from 'pixi.js';
 
 import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent, TGameObject } from './game-object';
@@ -6,33 +6,62 @@ import { Lifecycle, LifecycleProps } from './lifecycle';
 
 import { Subject } from 'rxjs/internal/Subject';
 
+/**
+ * params for debug type
+ */
+export interface DebugStroke {
+  color: number;
+  width: number;
+  alpha: number;
+}
+
+/**
+ * possible options for scene constructor
+ */
 export interface SceneOptions {
   /**
    * set name
    */
   label?: string;
+
   /**
    * show scene after creation
    */
   visible?: boolean;
+
   /**
    * enables zIndex (per-y) sort of sprites
    */
   autoSort?: boolean;
+
   /**
    * max size of group in collision tree
    */
   nodeMaxEntries?: number;
+
   /**
    * set to true to show pixi-stats
    * set to string to show and set style
    * set body font to set font of pixi-stats
    */
   showFPS?: boolean | string;
+
   /**
    * set to true to enable debug bounding boxes
    */
-  debug?: boolean;
+  debug?:
+    | boolean
+    | {
+        /**
+         * optional modify debug stroke
+         */
+        debugStroke?: DebugStroke;
+
+        /**
+         * optional modify debug bvh stroke
+         */
+        debugBVHStroke?: DebugStroke;
+      };
 }
 
 /**
@@ -62,7 +91,7 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
   /**
    * Top Level Container.
    */
-  stage: PIXI.Container;
+  stage: Container;
 
   /**
    * Scene has last update unix time stored.
@@ -76,10 +105,11 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
 
   constructor(options: SceneOptions = {}) {
     super(options.label || 'Scene');
+
     this.options = options;
     this.physics = new System<TBody>(options.nodeMaxEntries);
-    this.stage = new PIXI.Container();
-    this.stage.label = 'Stage';
+    this.stage = this.createStage();
+    this.stage.label = 'SceneStage';
   }
 
   /**
@@ -90,7 +120,7 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
   }
 
   // eslint-disable-next-line
-  async init(_options?: Partial<PIXI.ApplicationOptions>): Promise<boolean> {
+  async init(_options?: Partial<Record<string, any>>): Promise<boolean> {
     return true;
   }
 
@@ -146,7 +176,7 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
   stageAddChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
-        if (deep instanceof PIXI.Container) {
+        if (deep instanceof Container) {
           this.stage.addChild(deep);
         }
       });
@@ -156,7 +186,7 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
   stageRemoveChild(...children: LifecycleProps[]): void {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
-        if (deep instanceof PIXI.Container) {
+        if (deep instanceof Container) {
           this.stage.removeChild(deep);
         }
       });
@@ -174,5 +204,9 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
 
   getChildrenOfType(type: string): LifecycleProps[] {
     return this.children.filter(({ label }) => label === type);
+  }
+
+  createStage(): Container {
+    return new Container();
   }
 }

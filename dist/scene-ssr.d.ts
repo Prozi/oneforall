@@ -1,8 +1,19 @@
-import * as PIXI from 'pixi.js';
+import { Container } from 'pixi.js';
 import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Subject } from 'rxjs/internal/Subject';
+/**
+ * params for debug type
+ */
+export interface DebugStroke {
+  color: number;
+  width: number;
+  alpha: number;
+}
+/**
+ * possible options for scene constructor
+ */
 export interface SceneOptions {
   /**
    * set name
@@ -29,7 +40,18 @@ export interface SceneOptions {
   /**
    * set to true to enable debug bounding boxes
    */
-  debug?: boolean;
+  debug?:
+    | boolean
+    | {
+        /**
+         * optional modify debug stroke
+         */
+        debugStroke?: DebugStroke;
+        /**
+         * optional modify debug bvh stroke
+         */
+        debugBVHStroke?: DebugStroke;
+      };
 }
 /**
  * base scene for server side rendering
@@ -54,7 +76,7 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
   /**
    * Top Level Container.
    */
-  stage: PIXI.Container;
+  stage: Container;
   /**
    * Scene has last update unix time stored.
    */
@@ -68,7 +90,7 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
    * Scene doesn't have parent scene
    */
   get scene(): undefined;
-  init(_options?: Partial<PIXI.ApplicationOptions>): Promise<boolean>;
+  init(_options?: Partial<Record<string, any>>): Promise<boolean>;
   stop(): void;
   start(): void;
   update(deltaTime: number): void;
@@ -79,5 +101,6 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
   removeChild(...children: LifecycleProps[]): void;
   getChildOfType(type: string): LifecycleProps;
   getChildrenOfType(type: string): LifecycleProps[];
+  createStage(): Container;
 }
 //# sourceMappingURL=scene-ssr.d.ts.map

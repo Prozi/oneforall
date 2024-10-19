@@ -35,7 +35,8 @@ function update(gameObject, deltaTime) {
   const scene = gameObject.scene;
   const scale = scene.stage.scale;
   const gameObjects = scene.children;
-  const safeDelta = Math.min(60, deltaTime);
+  // at 60fps deltaTime = 1.0, at 30fps deltaTime = 2.0
+  const safeDelta = Math.min(deltaTime, 2);
   const chance = safeDelta * 0.01;
   if (Math.random() < chance) {
     // goto random place

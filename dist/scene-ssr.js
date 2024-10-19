@@ -1,51 +1,7 @@
 'use strict';
-var __createBinding =
-  (this && this.__createBinding) ||
-  (Object.create
-    ? function (o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (
-          !desc ||
-          ('get' in desc ? !m.__esModule : desc.writable || desc.configurable)
-        ) {
-          desc = {
-            enumerable: true,
-            get: function () {
-              return m[k];
-            }
-          };
-        }
-        Object.defineProperty(o, k2, desc);
-      }
-    : function (o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        o[k2] = m[k];
-      });
-var __setModuleDefault =
-  (this && this.__setModuleDefault) ||
-  (Object.create
-    ? function (o, v) {
-        Object.defineProperty(o, 'default', { enumerable: true, value: v });
-      }
-    : function (o, v) {
-        o['default'] = v;
-      });
-var __importStar =
-  (this && this.__importStar) ||
-  function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null)
-      for (var k in mod)
-        if (k !== 'default' && Object.prototype.hasOwnProperty.call(mod, k))
-          __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-  };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.SceneSSR = void 0;
-const PIXI = __importStar(require('pixi.js'));
+const pixi_js_1 = require('pixi.js');
 const detect_collisions_1 = require('detect-collisions');
 const game_object_1 = require('./game-object');
 const Subject_1 = require('rxjs/internal/Subject');
@@ -69,8 +25,8 @@ class SceneSSR extends game_object_1.GameObject {
     this.animationFrame = 0;
     this.options = options;
     this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
-    this.stage = new PIXI.Container();
-    this.stage.label = 'Stage';
+    this.stage = this.createStage();
+    this.stage.label = 'SceneStage';
   }
   /**
    * Scene doesn't have parent scene
@@ -124,7 +80,7 @@ class SceneSSR extends game_object_1.GameObject {
   stageAddChild(...children) {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
-        if (deep instanceof PIXI.Container) {
+        if (deep instanceof pixi_js_1.Container) {
           this.stage.addChild(deep);
         }
       });
@@ -133,7 +89,7 @@ class SceneSSR extends game_object_1.GameObject {
   stageRemoveChild(...children) {
     children.forEach((child) => {
       this.recursive(child, (deep) => {
-        if (deep instanceof PIXI.Container) {
+        if (deep instanceof pixi_js_1.Container) {
           this.stage.removeChild(deep);
         }
       });
@@ -148,6 +104,9 @@ class SceneSSR extends game_object_1.GameObject {
   }
   getChildrenOfType(type) {
     return this.children.filter(({ label }) => label === type);
+  }
+  createStage() {
+    return new pixi_js_1.Container();
   }
 }
 exports.SceneSSR = SceneSSR;
