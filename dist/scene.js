@@ -176,8 +176,6 @@ class Scene extends scene_ssr_1.SceneSSR {
   }
   enableDebug() {
     const debug = new PIXI.Graphics();
-    const { debugStroke, debugBVHStroke } =
-      typeof this.options.debug === 'object' ? this.options.debug : {};
     this.pixi.stage.addChild(debug);
     this.update$
       .pipe(
@@ -186,7 +184,7 @@ class Scene extends scene_ssr_1.SceneSSR {
         )
       )
       .subscribe(() => {
-        this.onUpdateDebug(debug, debugStroke, debugBVHStroke);
+        this.onUpdateDebug(debug);
       });
   }
   disableDebug() {
@@ -206,25 +204,27 @@ class Scene extends scene_ssr_1.SceneSSR {
     const canvas = stats.domElement;
     canvas.setAttribute('style', style);
   }
-  onUpdateDebug(
-    debug,
-    debugStroke = {
-      color: 0xffffff,
-      width: 1.5,
-      alpha: 1
-    },
-    debugBVHStroke = {
-      color: 0x00ff00,
-      width: 1,
-      alpha: 0.5
-    }
-  ) {
-    const canvas = debug;
-    debug.clear();
-    this.physics.draw(canvas);
-    debug.stroke(debugStroke);
-    this.physics.drawBVH(canvas);
-    debug.stroke(debugBVHStroke);
+  onUpdateDebug(canvas) {
+    const context = canvas;
+    const debug =
+      typeof this.options.debug === 'object' ? this.options.debug : {};
+    canvas.clear();
+    this.physics.draw(context);
+    canvas.stroke(
+      debug.debugStroke || {
+        color: 0xffffff,
+        width: 1.5,
+        alpha: 1
+      }
+    );
+    this.physics.drawBVH(context);
+    canvas.stroke(
+      debug.debugBVHStroke || {
+        color: 0x00ff00,
+        width: 1,
+        alpha: 0.5
+      }
+    );
   }
 }
 exports.Scene = Scene;

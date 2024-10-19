@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-import { DebugStroke, SceneOptions, SceneSSR } from './scene-ssr';
+import { SceneOptions, SceneSSR } from './scene-ssr';
 
 import { Application } from './application';
 import { Body } from 'detect-collisions';

@@ -64,6 +64,12 @@
           </ul>
           <h1>Interface SceneOptions</h1>
         </div>
+        <section class="tsd-panel tsd-comment">
+          <div class="tsd-comment tsd-typography">
+            <p>possible options for scene constructor</p>
+          </div>
+          <div class="tsd-comment tsd-typography"></div>
+        </section>
         <div class="tsd-signature">
           <span class="tsd-signature-keyword">interface </span
           ><span class="tsd-kind-interface">SceneOptions</span>
@@ -76,6 +82,25 @@
           ><a class="tsd-kind-property" href="SceneOptions.html#debug">debug</a
           ><span class="tsd-signature-symbol">?: </span
           ><span class="tsd-signature-type">boolean</span
+          ><span class="tsd-signature-symbol"> | </span
+          ><span class="tsd-signature-symbol">{ </span><br /><span
+            >        </span
+          ><span class="tsd-kind-property">debugBVHStroke</span
+          ><span class="tsd-signature-symbol">?: </span
+          ><a
+            href="DebugStroke.html"
+            class="tsd-signature-type tsd-kind-interface"
+            >DebugStroke</a
+          ><span class="tsd-signature-symbol">; </span><br /><span
+            >        </span
+          ><span class="tsd-kind-property">debugStroke</span
+          ><span class="tsd-signature-symbol">?: </span
+          ><a
+            href="DebugStroke.html"
+            class="tsd-signature-type tsd-kind-interface"
+            >DebugStroke</a
+          ><span class="tsd-signature-symbol">; </span><br /><span>    </span
+          ><span class="tsd-signature-symbol">}</span
           ><span class="tsd-signature-symbol">; </span><br /><span>    </span
           ><a class="tsd-kind-property" href="SceneOptions.html#label">label</a
           ><span class="tsd-signature-symbol">?: </span
@@ -107,8 +132,8 @@
             <li>
               Defined in
               <a
-                href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L9"
-                >src/scene-ssr.ts:9</a
+                href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L21"
+                >src/scene-ssr.ts:21</a
               >
             </li>
           </ul>
@@ -207,8 +232,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L21"
-                      >src/scene-ssr.ts:21</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L35"
+                      >src/scene-ssr.ts:35</a
                     >
                   </li>
                 </ul>
@@ -226,10 +251,68 @@
               <div class="tsd-signature">
                 <span class="tsd-kind-property">debug</span
                 ><span class="tsd-signature-symbol">?:</span>
-                <span class="tsd-signature-type">boolean</span>
+                <span class="tsd-signature-type">boolean</span
+                ><span class="tsd-signature-symbol"> | </span
+                ><span class="tsd-signature-symbol">{ </span><br /><span
+                  >    </span
+                ><span class="tsd-kind-property">debugBVHStroke</span
+                ><span class="tsd-signature-symbol">?: </span
+                ><a
+                  href="DebugStroke.html"
+                  class="tsd-signature-type tsd-kind-interface"
+                  >DebugStroke</a
+                ><span class="tsd-signature-symbol">; </span><br /><span
+                  >    </span
+                ><span class="tsd-kind-property">debugStroke</span
+                ><span class="tsd-signature-symbol">?: </span
+                ><a
+                  href="DebugStroke.html"
+                  class="tsd-signature-type tsd-kind-interface"
+                  >DebugStroke</a
+                ><span class="tsd-signature-symbol">; </span><br /><span
+                  class="tsd-signature-symbol"
+                  >}</span
+                >
               </div>
               <div class="tsd-comment tsd-typography">
                 <p>set to true to enable debug bounding boxes</p>
+              </div>
+              <div class="tsd-type-declaration">
+                <h4>Type declaration</h4>
+                <ul class="tsd-parameters">
+                  <li class="tsd-parameter">
+                    <h5>
+                      <code class="tsd-tag">Optional</code
+                      ><span class="tsd-kind-property">debugBVHStroke</span
+                      ><span class="tsd-signature-symbol">?: </span
+                      ><a
+                        href="DebugStroke.html"
+                        class="tsd-signature-type tsd-kind-interface"
+                        >DebugStroke</a
+                      >
+                    </h5>
+                    <div class="tsd-comment tsd-typography">
+                      <p>optional modify debug bvh stroke</p>
+                    </div>
+                    <div class="tsd-comment tsd-typography"></div>
+                  </li>
+                  <li class="tsd-parameter">
+                    <h5>
+                      <code class="tsd-tag">Optional</code
+                      ><span class="tsd-kind-property">debug<wbr />Stroke</span
+                      ><span class="tsd-signature-symbol">?: </span
+                      ><a
+                        href="DebugStroke.html"
+                        class="tsd-signature-type tsd-kind-interface"
+                        >DebugStroke</a
+                      >
+                    </h5>
+                    <div class="tsd-comment tsd-typography">
+                      <p>optional modify debug stroke</p>
+                    </div>
+                    <div class="tsd-comment tsd-typography"></div>
+                  </li>
+                </ul>
               </div>
               <div class="tsd-comment tsd-typography"></div>
               <aside class="tsd-sources">
@@ -237,8 +320,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L35"
-                      >src/scene-ssr.ts:35</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L52"
+                      >src/scene-ssr.ts:52</a
                     >
                   </li>
                 </ul>
@@ -265,8 +348,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L13"
-                      >src/scene-ssr.ts:13</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L25"
+                      >src/scene-ssr.ts:25</a
                     >
                   </li>
                 </ul>
@@ -300,8 +383,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L25"
-                      >src/scene-ssr.ts:25</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L40"
+                      >src/scene-ssr.ts:40</a
                     >
                   </li>
                 </ul>
@@ -338,8 +421,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L31"
-                      >src/scene-ssr.ts:31</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L47"
+                      >src/scene-ssr.ts:47</a
                     >
                   </li>
                 </ul>
@@ -371,8 +454,8 @@
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L17"
-                      >src/scene-ssr.ts:17</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/scene-ssr.ts#L30"
+                      >src/scene-ssr.ts:30</a
                     >
                   </li>
                 </ul>

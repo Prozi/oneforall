@@ -20289,6 +20289,9 @@ ${e}`);
           /*! ../scene/mesh/init.js */ './node_modules/pixi.js/lib/scene/mesh/init.js'
         );
         __webpack_require__(
+          /*! ../scene/particle-container/init.js */ './node_modules/pixi.js/lib/scene/particle-container/init.js'
+        );
+        __webpack_require__(
           /*! ../scene/text/init.js */ './node_modules/pixi.js/lib/scene/text/init.js'
         );
         __webpack_require__(
@@ -20451,6 +20454,9 @@ ${e}`);
         );
         __webpack_require__(
           /*! ../scene/mesh/init.js */ './node_modules/pixi.js/lib/scene/mesh/init.js'
+        );
+        __webpack_require__(
+          /*! ../scene/particle-container/init.js */ './node_modules/pixi.js/lib/scene/particle-container/init.js'
         );
         __webpack_require__(
           /*! ../scene/text/init.js */ './node_modules/pixi.js/lib/scene/text/init.js'
@@ -21738,6 +21744,7 @@ ${e}`);
               this.eventPool.get(constructor).pop() || new constructor(this);
             event.eventPhase = event.NONE;
             event.currentTarget = null;
+            event.defaultPrevented = false;
             event.path = null;
             event.target = null;
             return event;
@@ -23947,6 +23954,7 @@ ${e}`);
             }
             this.resolution = options.resolution;
             this.blendRequired = options.blendRequired;
+            this.clipToViewport = options.clipToViewport;
             this.addResource('uTexture', 0, 1);
           }
           /**
@@ -24001,7 +24009,8 @@ ${e}`);
           resolution: 1,
           padding: 0,
           antialias: 'off',
-          blendRequired: false
+          blendRequired: false,
+          clipToViewport: true
         };
         let Filter = _Filter;
 
@@ -24218,6 +24227,7 @@ ${e}`);
             let antialias = true;
             let blendRequired = false;
             let enabled = false;
+            let clipToViewport = true;
             for (let i = 0; i < filters.length; i++) {
               const filter = filters[i];
               resolution = Math.min(
@@ -24231,6 +24241,9 @@ ${e}`);
                 antialias = false;
               } else if (filter.antialias === 'inherit') {
                 antialias && (antialias = colorTextureSource.antialias);
+              }
+              if (!filter.clipToViewport) {
+                clipToViewport = false;
               }
               const isCompatible = !!(
                 filter.compatibleRenderers & renderer.type
@@ -24256,10 +24269,12 @@ ${e}`);
               filterData.skip = true;
               return;
             }
-            const viewPort = renderer.renderTarget.rootViewPort;
+            bounds.scale(resolution);
+            if (clipToViewport) {
+              const viewPort = renderer.renderTarget.rootViewPort;
+              bounds.fitBounds(0, viewPort.width, 0, viewPort.height);
+            }
             bounds
-              .scale(resolution)
-              .fitBounds(0, viewPort.width, 0, viewPort.height)
               .ceil()
               .scale(1 / resolution)
               .pad(padding | 0);
@@ -26957,7 +26972,8 @@ ${e}`);
                 value: textureMatrix.uClampFrame,
                 type: 'vec4<f32>'
               },
-              uAlpha: { value: 1, type: 'f32' }
+              uAlpha: { value: 1, type: 'f32' },
+              uInverse: { value: options.inverse ? 1 : 0, type: 'f32' }
             });
             const gpuProgram = GpuProgram.GpuProgram.from({
               vertex: {
@@ -26985,6 +27001,12 @@ ${e}`);
             });
             this.sprite = sprite;
             this._textureMatrix = textureMatrix;
+          }
+          set inverse(value) {
+            this.resources.filterUniforms.uniforms.uInverse = value ? 1 : 0;
+          }
+          get inverse() {
+            return this.resources.filterUniforms.uniforms.uInverse === 1;
           }
           apply(filterManager, input, output, clearMode) {
             this._textureMatrix.texture = this.sprite.texture;
@@ -27015,7 +27037,7 @@ ${e}`);
         Object.defineProperty(exports, '__esModule', { value: true });
 
         var fragment =
-          'in vec2 vMaskCoord;\nin vec2 vTextureCoord;\n\nuniform sampler2D uTexture;\nuniform sampler2D uMaskTexture;\n\nuniform float uAlpha;\nuniform vec4 uMaskClamp;\n\nout vec4 finalColor;\n\nvoid main(void)\n{\n    float clip = step(3.5,\n        step(uMaskClamp.x, vMaskCoord.x) +\n        step(uMaskClamp.y, vMaskCoord.y) +\n        step(vMaskCoord.x, uMaskClamp.z) +\n        step(vMaskCoord.y, uMaskClamp.w));\n\n    // TODO look into why this is needed\n    float npmAlpha = uAlpha; \n    vec4 original = texture(uTexture, vTextureCoord);\n    vec4 masky = texture(uMaskTexture, vMaskCoord);\n    float alphaMul = 1.0 - npmAlpha * (1.0 - masky.a);\n\n    original *= (alphaMul * masky.r * uAlpha * clip);\n\n    finalColor = original;\n}\n';
+          'in vec2 vMaskCoord;\nin vec2 vTextureCoord;\n\nuniform sampler2D uTexture;\nuniform sampler2D uMaskTexture;\n\nuniform float uAlpha;\nuniform vec4 uMaskClamp;\nuniform float uInverse;\n\nout vec4 finalColor;\n\nvoid main(void)\n{\n    float clip = step(3.5,\n        step(uMaskClamp.x, vMaskCoord.x) +\n        step(uMaskClamp.y, vMaskCoord.y) +\n        step(vMaskCoord.x, uMaskClamp.z) +\n        step(vMaskCoord.y, uMaskClamp.w));\n\n    // TODO look into why this is needed\n    float npmAlpha = uAlpha;\n    vec4 original = texture(uTexture, vTextureCoord);\n    vec4 masky = texture(uMaskTexture, vMaskCoord);\n    float alphaMul = 1.0 - npmAlpha * (1.0 - masky.a);\n\n    float a = alphaMul * masky.r * npmAlpha * clip;\n\n    if (uInverse == 1.0) {\n        a = 1.0 - a;\n    }\n\n    finalColor = original * a;\n}\n';
 
         exports['default'] = fragment;
         //# sourceMappingURL=mask.frag.js.map
@@ -27051,7 +27073,7 @@ ${e}`);
         Object.defineProperty(exports, '__esModule', { value: true });
 
         var source =
-          'struct GlobalFilterUniforms {\n  uInputSize:vec4<f32>,\n  uInputPixel:vec4<f32>,\n  uInputClamp:vec4<f32>,\n  uOutputFrame:vec4<f32>,\n  uGlobalFrame:vec4<f32>,\n  uOutputTexture:vec4<f32>,  \n};\n\nstruct MaskUniforms {\n  uFilterMatrix:mat3x3<f32>,\n  uMaskClamp:vec4<f32>,\n  uAlpha:f32,\n};\n\n\n@group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;\n@group(0) @binding(1) var uTexture: texture_2d<f32>;\n@group(0) @binding(2) var uSampler : sampler;\n\n@group(1) @binding(0) var<uniform> filterUniforms : MaskUniforms;\n@group(1) @binding(1) var uMaskTexture: texture_2d<f32>;\n\nstruct VSOutput {\n    @builtin(position) position: vec4<f32>,\n    @location(0) uv : vec2<f32>,\n    @location(1) filterUv : vec2<f32>,\n  };\n\nfn filterVertexPosition(aPosition:vec2<f32>) -> vec4<f32>\n{\n    var position = aPosition * gfu.uOutputFrame.zw + gfu.uOutputFrame.xy;\n\n    position.x = position.x * (2.0 / gfu.uOutputTexture.x) - 1.0;\n    position.y = position.y * (2.0*gfu.uOutputTexture.z / gfu.uOutputTexture.y) - gfu.uOutputTexture.z;\n\n    return vec4(position, 0.0, 1.0);\n}\n\nfn filterTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n    return aPosition * (gfu.uOutputFrame.zw * gfu.uInputSize.zw);\n}\n\nfn globalTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return  (aPosition.xy / gfu.uGlobalFrame.zw) + (gfu.uGlobalFrame.xy / gfu.uGlobalFrame.zw);  \n}\n\nfn getFilterCoord(aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return ( filterUniforms.uFilterMatrix * vec3( filterTextureCoord(aPosition), 1.0)  ).xy;\n}\n\nfn getSize() -> vec2<f32>\n{\n\n  \n  return gfu.uGlobalFrame.zw;\n}\n  \n@vertex\nfn mainVertex(\n  @location(0) aPosition : vec2<f32>, \n) -> VSOutput {\n  return VSOutput(\n   filterVertexPosition(aPosition),\n   filterTextureCoord(aPosition),\n   getFilterCoord(aPosition)\n  );\n}\n\n@fragment\nfn mainFragment(\n  @location(0) uv: vec2<f32>,\n  @location(1) filterUv: vec2<f32>,\n  @builtin(position) position: vec4<f32>\n) -> @location(0) vec4<f32> {\n\n    var maskClamp = filterUniforms.uMaskClamp;\n\n     var clip = step(3.5,\n        step(maskClamp.x, filterUv.x) +\n        step(maskClamp.y, filterUv.y) +\n        step(filterUv.x, maskClamp.z) +\n        step(filterUv.y, maskClamp.w));\n\n    var mask = textureSample(uMaskTexture, uSampler, filterUv);\n    var source = textureSample(uTexture, uSampler, uv);\n    \n    var npmAlpha = 0.0;\n\n    var alphaMul = 1.0 - npmAlpha * (1.0 - mask.a);\n\n    var a = (alphaMul * mask.r) * clip;\n\n    return vec4(source.rgb, source.a) * a;\n}';
+          'struct GlobalFilterUniforms {\n  uInputSize:vec4<f32>,\n  uInputPixel:vec4<f32>,\n  uInputClamp:vec4<f32>,\n  uOutputFrame:vec4<f32>,\n  uGlobalFrame:vec4<f32>,\n  uOutputTexture:vec4<f32>,\n};\n\nstruct MaskUniforms {\n  uFilterMatrix:mat3x3<f32>,\n  uMaskClamp:vec4<f32>,\n  uAlpha:f32,\n  uInverse:f32,\n};\n\n@group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;\n@group(0) @binding(1) var uTexture: texture_2d<f32>;\n@group(0) @binding(2) var uSampler : sampler;\n\n@group(1) @binding(0) var<uniform> filterUniforms : MaskUniforms;\n@group(1) @binding(1) var uMaskTexture: texture_2d<f32>;\n\nstruct VSOutput {\n    @builtin(position) position: vec4<f32>,\n    @location(0) uv : vec2<f32>,\n    @location(1) filterUv : vec2<f32>,\n};\n\nfn filterVertexPosition(aPosition:vec2<f32>) -> vec4<f32>\n{\n    var position = aPosition * gfu.uOutputFrame.zw + gfu.uOutputFrame.xy;\n\n    position.x = position.x * (2.0 / gfu.uOutputTexture.x) - 1.0;\n    position.y = position.y * (2.0*gfu.uOutputTexture.z / gfu.uOutputTexture.y) - gfu.uOutputTexture.z;\n\n    return vec4(position, 0.0, 1.0);\n}\n\nfn filterTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n    return aPosition * (gfu.uOutputFrame.zw * gfu.uInputSize.zw);\n}\n\nfn globalTextureCoord( aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return  (aPosition.xy / gfu.uGlobalFrame.zw) + (gfu.uGlobalFrame.xy / gfu.uGlobalFrame.zw);\n}\n\nfn getFilterCoord(aPosition:vec2<f32> ) -> vec2<f32>\n{\n  return ( filterUniforms.uFilterMatrix * vec3( filterTextureCoord(aPosition), 1.0)  ).xy;\n}\n\nfn getSize() -> vec2<f32>\n{\n  return gfu.uGlobalFrame.zw;\n}\n\n@vertex\nfn mainVertex(\n  @location(0) aPosition : vec2<f32>,\n) -> VSOutput {\n  return VSOutput(\n   filterVertexPosition(aPosition),\n   filterTextureCoord(aPosition),\n   getFilterCoord(aPosition)\n  );\n}\n\n@fragment\nfn mainFragment(\n  @location(0) uv: vec2<f32>,\n  @location(1) filterUv: vec2<f32>,\n  @builtin(position) position: vec4<f32>\n) -> @location(0) vec4<f32> {\n\n    var maskClamp = filterUniforms.uMaskClamp;\n    var uAlpha = filterUniforms.uAlpha;\n\n    var clip = step(3.5,\n      step(maskClamp.x, filterUv.x) +\n      step(maskClamp.y, filterUv.y) +\n      step(filterUv.x, maskClamp.z) +\n      step(filterUv.y, maskClamp.w));\n\n    var mask = textureSample(uMaskTexture, uSampler, filterUv);\n    var source = textureSample(uTexture, uSampler, uv);\n    var alphaMul = 1.0 - uAlpha * (1.0 - mask.a);\n\n    var a: f32 = alphaMul * mask.r * uAlpha * clip;\n\n    if (filterUniforms.uInverse == 1.0) {\n        a = 1.0 - a;\n    }\n\n    return source * a;\n}\n';
 
         exports['default'] = source;
         //# sourceMappingURL=mask.wgsl.js.map
@@ -28194,6 +28216,15 @@ ${e}`);
         var types$1 = __webpack_require__(
           /*! ./rendering/renderers/types.js */ './node_modules/pixi.js/lib/rendering/renderers/types.js'
         );
+        var particles = __webpack_require__(
+          /*! ./scene/particle-container/shared/shader/particles.frag.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.frag.js'
+        );
+        var particles$1 = __webpack_require__(
+          /*! ./scene/particle-container/shared/shader/particles.vert.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.vert.js'
+        );
+        var particles$2 = __webpack_require__(
+          /*! ./scene/particle-container/shared/shader/particles.wgsl.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.wgsl.js'
+        );
         var Bounds = __webpack_require__(
           /*! ./scene/container/bounds/Bounds.js */ './node_modules/pixi.js/lib/scene/container/bounds/Bounds.js'
         );
@@ -28434,6 +28465,42 @@ ${e}`);
         var MeshPipe = __webpack_require__(
           /*! ./scene/mesh/shared/MeshPipe.js */ './node_modules/pixi.js/lib/scene/mesh/shared/MeshPipe.js'
         );
+        var GlParticleContainerAdaptor = __webpack_require__(
+          /*! ./scene/particle-container/gl/GlParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gl/GlParticleContainerAdaptor.js'
+        );
+        var GpuParticleContainerAdaptor = __webpack_require__(
+          /*! ./scene/particle-container/gpu/GpuParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gpu/GpuParticleContainerAdaptor.js'
+        );
+        var GlParticleContainerPipe = __webpack_require__(
+          /*! ./scene/particle-container/shared/GlParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GlParticleContainerPipe.js'
+        );
+        var GpuParticleContainerPipe = __webpack_require__(
+          /*! ./scene/particle-container/shared/GpuParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GpuParticleContainerPipe.js'
+        );
+        var Particle = __webpack_require__(
+          /*! ./scene/particle-container/shared/Particle.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/Particle.js'
+        );
+        var ParticleBuffer = __webpack_require__(
+          /*! ./scene/particle-container/shared/ParticleBuffer.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleBuffer.js'
+        );
+        var ParticleContainer = __webpack_require__(
+          /*! ./scene/particle-container/shared/ParticleContainer.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainer.js'
+        );
+        var ParticleContainerPipe = __webpack_require__(
+          /*! ./scene/particle-container/shared/ParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js'
+        );
+        var particleData = __webpack_require__(
+          /*! ./scene/particle-container/shared/particleData.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/particleData.js'
+        );
+        var ParticleShader = __webpack_require__(
+          /*! ./scene/particle-container/shared/shader/ParticleShader.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/ParticleShader.js'
+        );
+        var createIndicesForQuads = __webpack_require__(
+          /*! ./scene/particle-container/shared/utils/createIndicesForQuads.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/createIndicesForQuads.js'
+        );
+        var generateParticleUpdateFunction = __webpack_require__(
+          /*! ./scene/particle-container/shared/utils/generateParticleUpdateFunction.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/generateParticleUpdateFunction.js'
+        );
         var AnimatedSprite = __webpack_require__(
           /*! ./scene/sprite-animated/AnimatedSprite.js */ './node_modules/pixi.js/lib/scene/sprite-animated/AnimatedSprite.js'
         );
@@ -28599,8 +28666,8 @@ ${e}`);
         var getPo2TextureFromSource = __webpack_require__(
           /*! ./scene/text/utils/getPo2TextureFromSource.js */ './node_modules/pixi.js/lib/scene/text/utils/getPo2TextureFromSource.js'
         );
-        var View = __webpack_require__(
-          /*! ./scene/view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ./scene/view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
         var Spritesheet = __webpack_require__(
           /*! ./spritesheet/Spritesheet.js */ './node_modules/pixi.js/lib/spritesheet/Spritesheet.js'
@@ -28643,6 +28710,9 @@ ${e}`);
         );
         var EventEmitter = __webpack_require__(
           /*! eventemitter3 */ './node_modules/pixi.js/node_modules/eventemitter3/index.js'
+        );
+        var clean = __webpack_require__(
+          /*! ./utils/data/clean.js */ './node_modules/pixi.js/lib/utils/data/clean.js'
         );
         var removeItems = __webpack_require__(
           /*! ./utils/data/removeItems.js */ './node_modules/pixi.js/lib/utils/data/removeItems.js'
@@ -29200,6 +29270,9 @@ ${e}`);
         exports.parseFunctionBody = parseFunctionBody.parseFunctionBody;
         exports.ViewSystem = ViewSystem.ViewSystem;
         exports.RendererType = types$1.RendererType;
+        exports.particlesFrag = particles.default;
+        exports.particlesVert = particles$1.default;
+        exports.particlesWgsl = particles$2.default;
         exports.Bounds = Bounds.Bounds;
         exports._getGlobalBoundsRecursive =
           getFastGlobalBounds._getGlobalBoundsRecursive;
@@ -29321,6 +29394,25 @@ ${e}`);
         exports.Mesh = Mesh.Mesh;
         exports.MeshGeometry = MeshGeometry.MeshGeometry;
         exports.MeshPipe = MeshPipe.MeshPipe;
+        exports.GlParticleContainerAdaptor =
+          GlParticleContainerAdaptor.GlParticleContainerAdaptor;
+        exports.GpuParticleContainerAdaptor =
+          GpuParticleContainerAdaptor.GpuParticleContainerAdaptor;
+        exports.GlParticleContainerPipe =
+          GlParticleContainerPipe.GlParticleContainerPipe;
+        exports.GpuParticleContainerPipe =
+          GpuParticleContainerPipe.GpuParticleContainerPipe;
+        exports.Particle = Particle.Particle;
+        exports.ParticleBuffer = ParticleBuffer.ParticleBuffer;
+        exports.ParticleContainer = ParticleContainer.ParticleContainer;
+        exports.ParticleContainerPipe =
+          ParticleContainerPipe.ParticleContainerPipe;
+        exports.particleData = particleData.particleData;
+        exports.ParticleShader = ParticleShader.ParticleShader;
+        exports.createIndicesForQuads =
+          createIndicesForQuads.createIndicesForQuads;
+        exports.generateParticleUpdateFunction =
+          generateParticleUpdateFunction.generateParticleUpdateFunction;
         exports.AnimatedSprite = AnimatedSprite.AnimatedSprite;
         exports.NineSliceGeometry = NineSliceGeometry.NineSliceGeometry;
         exports.NineSlicePlane = NineSliceSprite.NineSlicePlane;
@@ -29392,7 +29484,7 @@ ${e}`);
           generateTextStyleKey.generateTextStyleKey;
         exports.getPo2TextureFromSource =
           getPo2TextureFromSource.getPo2TextureFromSource;
-        exports.ViewContainer = View.ViewContainer;
+        exports.ViewContainer = ViewContainer.ViewContainer;
         exports.Spritesheet = Spritesheet.Spritesheet;
         exports.spritesheetAsset = spritesheetAsset.spritesheetAsset;
         exports.UPDATE_PRIORITY = _const$d.UPDATE_PRIORITY;
@@ -29410,6 +29502,8 @@ ${e}`);
         exports.DATA_URI = _const$e.DATA_URI;
         exports.VERSION = _const$e.VERSION;
         exports.EventEmitter = EventEmitter;
+        exports.cleanArray = clean.cleanArray;
+        exports.cleanHash = clean.cleanHash;
         exports.removeItems = removeItems.removeItems;
         exports.resetUids = uid.resetUids;
         exports.uid = uid.uid;
@@ -35543,6 +35637,7 @@ ${parts.join('\n')}
         class AlphaMask {
           constructor(options) {
             this.priority = 0;
+            this.inverse = false;
             this.pipe = 'alphaMask';
             if (options?.mask) {
               this.init(options.mask);
@@ -35560,7 +35655,13 @@ ${parts.join('\n')}
             this.mask = null;
           }
           addBounds(bounds, skipUpdateTransform) {
-            addMaskBounds.addMaskBounds(this.mask, bounds, skipUpdateTransform);
+            if (!this.inverse) {
+              addMaskBounds.addMaskBounds(
+                this.mask,
+                bounds,
+                skipUpdateTransform
+              );
+            }
           }
           addLocalBounds(bounds, localRoot) {
             addMaskLocalBounds.addMaskLocalBounds(this.mask, bounds, localRoot);
@@ -35633,6 +35734,7 @@ ${parts.join('\n')}
             this.filters = [
               new MaskFilter.MaskFilter({
                 sprite: new Sprite.Sprite(Texture.Texture.EMPTY),
+                inverse: false,
                 resolution: 'inherit',
                 antialias: 'inherit'
               })
@@ -35643,6 +35745,12 @@ ${parts.join('\n')}
           }
           set sprite(value) {
             this.filters[0].sprite = value;
+          }
+          get inverse() {
+            return this.filters[0].inverse;
+          }
+          set inverse(value) {
+            this.filters[0].inverse = value;
           }
         }
         class AlphaMaskPipe {
@@ -35657,9 +35765,11 @@ ${parts.join('\n')}
               renderPipeId: 'alphaMask',
               action: 'pushMaskBegin',
               mask,
+              inverse: maskedContainer._maskOptions.inverse,
               canBundle: false,
               maskedContainer
             });
+            mask.inverse = maskedContainer._maskOptions.inverse;
             if (mask.renderMaskToTexture) {
               const maskContainer = mask.mask;
               maskContainer.includeInBuild = true;
@@ -35676,6 +35786,7 @@ ${parts.join('\n')}
               action: 'pushMaskEnd',
               mask,
               maskedContainer,
+              inverse: maskedContainer._maskOptions.inverse,
               canBundle: false
             });
           }
@@ -35686,6 +35797,7 @@ ${parts.join('\n')}
               renderPipeId: 'alphaMask',
               action: 'popMaskEnd',
               mask,
+              inverse: _maskedContainer._maskOptions.inverse,
               canBundle: false
             });
           }
@@ -35694,6 +35806,7 @@ ${parts.join('\n')}
             const renderMask = instruction.mask.renderMaskToTexture;
             if (instruction.action === 'pushMaskBegin') {
               const filterEffect = PoolGroup.BigPool.get(AlphaMaskEffect);
+              filterEffect.inverse = instruction.inverse;
               if (renderMask) {
                 instruction.mask.mask.measurable = true;
                 const bounds = getGlobalBounds.getGlobalBounds(
@@ -36049,6 +36162,7 @@ ${parts.join('\n')}
               renderPipeId: 'stencilMask',
               action: 'pushMaskBegin',
               mask,
+              inverse: _container._maskOptions.inverse,
               canBundle: false
             });
             const maskContainer = effect.mask;
@@ -36072,6 +36186,7 @@ ${parts.join('\n')}
               renderPipeId: 'stencilMask',
               action: 'pushMaskEnd',
               mask,
+              inverse: _container._maskOptions.inverse,
               canBundle: false
             });
             const instructionsLength =
@@ -36093,6 +36208,7 @@ ${parts.join('\n')}
             instructionSet.add({
               renderPipeId: 'stencilMask',
               action: 'popMaskBegin',
+              inverse: _container._maskOptions.inverse,
               canBundle: false
             });
             const maskData = this._maskHash.get(mask);
@@ -36122,10 +36238,17 @@ ${parts.join('\n')}
               maskStackIndex++;
               renderer.colorMask.setMask(0);
             } else if (instruction.action === 'pushMaskEnd') {
-              renderer.stencil.setStencilMode(
-                _const.STENCIL_MODES.MASK_ACTIVE,
-                maskStackIndex
-              );
+              if (instruction.inverse) {
+                renderer.stencil.setStencilMode(
+                  _const.STENCIL_MODES.INVERSE_MASK_ACTIVE,
+                  maskStackIndex
+                );
+              } else {
+                renderer.stencil.setStencilMode(
+                  _const.STENCIL_MODES.MASK_ACTIVE,
+                  maskStackIndex
+                );
+              }
               renderer.colorMask.setMask(15);
             } else if (instruction.action === 'popMaskBegin') {
               renderer.colorMask.setMask(0);
@@ -36143,10 +36266,17 @@ ${parts.join('\n')}
               }
               maskStackIndex--;
             } else if (instruction.action === 'popMaskEnd') {
-              renderer.stencil.setStencilMode(
-                _const.STENCIL_MODES.MASK_ACTIVE,
-                maskStackIndex
-              );
+              if (instruction.inverse) {
+                renderer.stencil.setStencilMode(
+                  _const.STENCIL_MODES.INVERSE_MASK_ACTIVE,
+                  maskStackIndex
+                );
+              } else {
+                renderer.stencil.setStencilMode(
+                  _const.STENCIL_MODES.MASK_ACTIVE,
+                  maskStackIndex
+                );
+              }
               renderer.colorMask.setMask(15);
             }
             this._maskStackHash[renderTargetUid] = maskStackIndex;
@@ -37000,6 +37130,7 @@ ${parts.join('\n')}
             /** Cache keeping track of the base bound buffer bases */
             this._boundBufferBases = /* @__PURE__ */ Object.create(null);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_gpuBuffers');
           }
           /**
            * @ignore
@@ -37600,6 +37731,10 @@ ${parts.join('\n')}
             this._activeVao = null;
             this.hasVao = true;
             this.hasInstance = true;
+            this._renderer.renderableGC.addManagedHash(
+              this,
+              '_geometryVaoHash'
+            );
           }
           /** Sets up the renderer context and necessary buffers. */
           contextChange() {
@@ -38114,7 +38249,7 @@ ${parts.join('\n')}
             const gl = renderer.gl;
             const glRenderTarget = new GlRenderTarget.GlRenderTarget();
             const colorTexture = renderTarget.colorTexture;
-            if (CanvasSource.CanvasSource.test(colorTexture.resource)) {
+            if (colorTexture.resource === renderer.canvas) {
               this._renderer.context.ensureCanvasSize(
                 renderTarget.colorTexture.resource
               );
@@ -38660,6 +38795,10 @@ ${parts.join('\n')}
               /* @__PURE__ */ Object.create(null);
             this._shaderSyncFunctions = /* @__PURE__ */ Object.create(null);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(
+              this,
+              '_programDataHash'
+            );
           }
           contextChange(gl) {
             this._gl = gl;
@@ -40611,6 +40750,8 @@ ${src}`;
             // TODO - separate samplers will be a cool thing to add, but not right now!
             this._useSeparateSamplers = false;
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_glTextures');
+            this._renderer.renderableGC.addManagedHash(this, '_glSamplers');
           }
           contextChange(gl) {
             this._gl = gl;
@@ -41950,6 +42091,7 @@ ${src}`;
           constructor(renderer) {
             this._hash = /* @__PURE__ */ Object.create(null);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_hash');
           }
           contextChange(gpu) {
             this._gpu = gpu;
@@ -42557,6 +42699,7 @@ ${src}`;
             this._bindGroups = [];
             this._bufferResources = [];
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_bindGroupHash');
             this._batchBuffer = new UboBatch.UboBatch({
               minUniformOffsetAlignment
             });
@@ -42834,9 +42977,10 @@ ${src}`;
 
         ('use strict');
         class GpuBufferSystem {
-          constructor() {
+          constructor(renderer) {
             this._gpuBuffers = /* @__PURE__ */ Object.create(null);
             this._managedBuffers = [];
+            renderer.renderableGC.addManagedHash(this, '_gpuBuffers');
           }
           contextChange(gpu) {
             this._gpu = gpu;
@@ -44702,6 +44846,17 @@ ${src}`;
             passOp: 'keep'
           }
         };
+        GpuStencilModesToPixi[_const.STENCIL_MODES.INVERSE_MASK_ACTIVE] = {
+          stencilWriteMask: 0,
+          stencilFront: {
+            compare: 'not-equal',
+            passOp: 'replace'
+          },
+          stencilBack: {
+            compare: 'not-equal',
+            passOp: 'replace'
+          }
+        };
 
         exports.GpuStencilModesToPixi = GpuStencilModesToPixi;
         //# sourceMappingURL=GpuStencilModesToPixi.js.map
@@ -44763,6 +44918,10 @@ ${src}`;
                 gpuUploadCompressedTextureResource.gpuUploadCompressedTextureResource
             };
             this._renderer = renderer;
+            renderer.renderableGC.addManagedHash(this, '_gpuSources');
+            renderer.renderableGC.addManagedHash(this, '_gpuSamplers');
+            renderer.renderableGC.addManagedHash(this, '_bindGroupHash');
+            renderer.renderableGC.addManagedHash(this, '_textureViewHash');
           }
           contextChange(gpu) {
             this._gpu = gpu;
@@ -45510,6 +45669,8 @@ ${src}`;
         class SchedulerSystem {
           constructor() {
             this._tasks = [];
+            /** a small off set to apply to the repeat schedules. This is just to make sure they run at slightly different times */
+            this._offset = 0;
           }
           /** Initializes the scheduler system and starts the ticker. */
           init() {
@@ -45519,14 +45680,21 @@ ${src}`;
            * Schedules a repeating task.
            * @param func - The function to execute.
            * @param duration - The interval duration in milliseconds.
+           * @param useOffset - this will spread out tasks so that they do not all run at the same time
            * @returns The unique identifier for the scheduled task.
            */
-          repeat(func, duration) {
+          repeat(func, duration, useOffset = true) {
             const id = uid++;
+            let offset = 0;
+            if (useOffset) {
+              this._offset += 1e3;
+              offset = this._offset;
+            }
             this._tasks.push({
               func,
               duration,
               start: performance.now(),
+              offset,
               last: performance.now(),
               repeat: true,
               id
@@ -45553,7 +45721,7 @@ ${src}`;
             const now = performance.now();
             for (let i = 0; i < this._tasks.length; i++) {
               const task = this._tasks[i];
-              if (now - task.last >= task.duration) {
+              if (now - task.offset - task.last >= task.duration) {
                 const elapsed = now - task.start;
                 task.func(elapsed);
                 task.last = now;
@@ -46533,8 +46701,7 @@ ${src}`;
            * Create a new instance of a geometry
            * @param options - The options for the geometry.
            */
-          constructor(options) {
-            const { attributes, indexBuffer, topology } = options;
+          constructor(options = {}) {
             super();
             /** The unique id of the geometry. */
             this.uid = uid.uid('geometry');
@@ -46549,26 +46716,17 @@ ${src}`;
             this.instanceCount = 1;
             this._bounds = new Bounds.Bounds();
             this._boundsDirty = true;
-            this.attributes = attributes;
+            const { attributes, indexBuffer, topology } = options;
             this.buffers = [];
-            this.instanceCount = options.instanceCount || 1;
-            for (const i in attributes) {
-              const attribute = (attributes[i] = ensureIsAttribute(
-                attributes[i]
-              ));
-              const bufferIndex = this.buffers.indexOf(attribute.buffer);
-              if (bufferIndex === -1) {
-                this.buffers.push(attribute.buffer);
-                attribute.buffer.on('update', this.onBufferUpdate, this);
-                attribute.buffer.on('change', this.onBufferUpdate, this);
+            this.attributes = {};
+            if (attributes) {
+              for (const i in attributes) {
+                this.addAttribute(i, attributes[i]);
               }
             }
+            this.instanceCount = options.instanceCount || 1;
             if (indexBuffer) {
-              this.indexBuffer = ensureIsBuffer.ensureIsBuffer(
-                indexBuffer,
-                true
-              );
-              this.buffers.push(this.indexBuffer);
+              this.addIndex(indexBuffer);
             }
             this.topology = topology || 'triangle-list';
           }
@@ -46612,6 +46770,29 @@ ${src}`;
               );
             }
             return 0;
+          }
+          /**
+           * Adds an attribute to the geometry.
+           * @param name - The name of the attribute to add.
+           * @param attributeOption - The attribute option to add.
+           */
+          addAttribute(name, attributeOption) {
+            const attribute = ensureIsAttribute(attributeOption);
+            const bufferIndex = this.buffers.indexOf(attribute.buffer);
+            if (bufferIndex === -1) {
+              this.buffers.push(attribute.buffer);
+              attribute.buffer.on('update', this.onBufferUpdate, this);
+              attribute.buffer.on('change', this.onBufferUpdate, this);
+            }
+            this.attributes[name] = attribute;
+          }
+          /**
+           * Adds an index buffer to the geometry.
+           * @param indexBuffer - The index buffer to add. Can be a Buffer, TypedArray, or an array of numbers.
+           */
+          addIndex(indexBuffer) {
+            this.indexBuffer = ensureIsBuffer.ensureIsBuffer(indexBuffer, true);
+            this.buffers.push(this.indexBuffer);
           }
           /** Returns the bounds of the geometry. */
           get bounds() {
@@ -47120,6 +47301,9 @@ ${src}`;
           get bindGroup() {
             return this._currentGlobalUniformData.bindGroup;
           }
+          get globalUniformData() {
+            return this._currentGlobalUniformData;
+          }
           get uniformGroup() {
             return this._currentGlobalUniformData.bindGroup.resources[0];
           }
@@ -47419,6 +47603,7 @@ ${src}`;
              */
             this._renderTargetStack = [];
             this._renderer = renderer;
+            renderer.renderableGC.addManagedHash(this, '_gpuRenderTargetHash');
           }
           /** called when dev wants to finish a render pass */
           finishRenderPass() {
@@ -48789,9 +48974,11 @@ ${src}`;
           STENCIL_MODES2[(STENCIL_MODES2['RENDERING_MASK_ADD'] = 1)] =
             'RENDERING_MASK_ADD';
           STENCIL_MODES2[(STENCIL_MODES2['MASK_ACTIVE'] = 2)] = 'MASK_ACTIVE';
-          STENCIL_MODES2[(STENCIL_MODES2['RENDERING_MASK_REMOVE'] = 3)] =
+          STENCIL_MODES2[(STENCIL_MODES2['INVERSE_MASK_ACTIVE'] = 3)] =
+            'INVERSE_MASK_ACTIVE';
+          STENCIL_MODES2[(STENCIL_MODES2['RENDERING_MASK_REMOVE'] = 4)] =
             'RENDERING_MASK_REMOVE';
-          STENCIL_MODES2[(STENCIL_MODES2['NONE'] = 4)] = 'NONE';
+          STENCIL_MODES2[(STENCIL_MODES2['NONE'] = 5)] = 'NONE';
           return STENCIL_MODES2;
         })(STENCIL_MODES || {});
 
@@ -49484,6 +49671,7 @@ ${src}`;
             const canvas = canvasAndContext.canvas;
             const { width, height } = canvas;
             const key = (width << 17) + (height << 1);
+            canvasAndContext.context.clearRect(0, 0, width, height);
             this._canvasPool[key].push(canvasAndContext);
           }
           clear() {
@@ -49562,12 +49750,17 @@ ${src}`;
         var Extensions = __webpack_require__(
           /*! ../../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
+        var clean = __webpack_require__(
+          /*! ../../../../utils/data/clean.js */ './node_modules/pixi.js/lib/utils/data/clean.js'
+        );
 
         ('use strict');
         const _RenderableGCSystem = class _RenderableGCSystem {
           /** @param renderer - The renderer this System works for. */
           constructor(renderer) {
             this._managedRenderables = [];
+            this._managedHashes = [];
+            this._managedArrays = [];
             this._renderer = renderer;
           }
           init(options) {
@@ -49584,11 +49777,32 @@ ${src}`;
             if (value) {
               this._handler = this._renderer.scheduler.repeat(
                 () => this.run(),
-                this._frequency
+                this._frequency,
+                false
               );
+              this._hashHandler = this._renderer.scheduler.repeat(() => {
+                for (const hash of this._managedHashes) {
+                  hash.context[hash.hash] = clean.cleanHash(
+                    hash.context[hash.hash]
+                  );
+                }
+              }, this._frequency);
+              this._arrayHandler = this._renderer.scheduler.repeat(() => {
+                for (const array of this._managedArrays) {
+                  clean.cleanArray(array.context[array.hash]);
+                }
+              }, this._frequency);
             } else {
               this._renderer.scheduler.cancel(this._handler);
+              this._renderer.scheduler.cancel(this._hashHandler);
+              this._renderer.scheduler.cancel(this._arrayHandler);
             }
+          }
+          addManagedHash(context, hash) {
+            this._managedHashes.push({ context, hash });
+          }
+          addManagedArray(context, hash) {
+            this._managedArrays.push({ context, hash });
           }
           prerender() {
             this._now = performance.now();
@@ -49638,6 +49852,8 @@ ${src}`;
             this.enabled = false;
             this._renderer = null;
             this._managedRenderables.length = 0;
+            this._managedHashes.length = 0;
+            this._managedArrays.length = 0;
           }
           _removeRenderable(renderable) {
             const index = this._managedRenderables.indexOf(renderable);
@@ -49653,7 +49869,8 @@ ${src}`;
             Extensions.ExtensionType.WebGLSystem,
             Extensions.ExtensionType.WebGPUSystem
           ],
-          name: 'renderableGC'
+          name: 'renderableGC',
+          priority: 0
         };
         /** default options for the renderableGCSystem */
         _RenderableGCSystem.defaultOptions = {
@@ -49871,7 +50088,11 @@ ${src}`;
             this.emit('destroy', this);
             this.removeAllListeners();
           }
-          /** call this if you have modified the `texture outside` of the constructor */
+          /**
+           * Call this if you have modified the `texture outside` of the constructor.
+           *
+           * If you have modified this texture's source, you must separately call `texture.source.update()` to see those changes.
+           */
           update() {
             if (this.noFrame) {
               this.frame.width = this._source.width;
@@ -52411,7 +52632,6 @@ ${src}`;
             if (this.sortableChildren) this.sortDirty = true;
             child.parent = this;
             child.didChange = true;
-            child.didViewUpdate = false;
             child._updateFlags = 15;
             const renderGroup = this.renderGroup || this.parentRenderGroup;
             if (renderGroup) {
@@ -52938,6 +53158,11 @@ ${src}`;
           constructor(renderer) {
             this._renderer = renderer;
           }
+          updateRenderable() {}
+          destroyRenderable() {}
+          validateRenderable() {
+            return false;
+          }
           addRenderable(container, instructionSet) {
             this._renderer.renderPipes.batch.break(instructionSet);
             instructionSet.add(container);
@@ -53169,13 +53394,12 @@ ${src}`;
             }
             childrenToUpdate.list[childrenToUpdate.index++] = child;
           }
-          // SHOULD THIS BE HERE?
-          updateRenderable(container) {
-            if (container.globalDisplayStatus < 7) return;
-            container.didViewUpdate = false;
+          updateRenderable(renderable) {
+            if (renderable.globalDisplayStatus < 7) return;
             this.instructionSet.renderPipes[
-              container.renderPipeId
-            ].updateRenderable(container);
+              renderable.renderPipeId
+            ].updateRenderable(renderable);
+            renderable.didViewUpdate = false;
           }
           onChildViewUpdate(child) {
             this.childrenRenderablesToUpdate.list[
@@ -54303,7 +54527,6 @@ ${src}`;
             }
             child.parent = this;
             child.didChange = true;
-            child.didViewUpdate = false;
             child._updateFlags = 15;
             const renderGroup = this.renderGroup || this.parentRenderGroup;
             if (renderGroup) {
@@ -54318,6 +54541,7 @@ ${src}`;
            * Swaps the position of 2 Containers within this container.
            * @param child - First container to swap
            * @param child2 - Second container to swap
+           * @memberof scene.Container#
            */
           swapChildren(child, child2) {
             if (child === child2) {
@@ -54398,6 +54622,9 @@ ${src}`;
         ('use strict');
         const effectsMixin = {
           _maskEffect: null,
+          _maskOptions: {
+            inverse: false
+          },
           _filterEffect: null,
           /**
            * @todo Needs docs.
@@ -54449,6 +54676,33 @@ ${src}`;
             this._maskEffect =
               MaskEffectManager.MaskEffectManager.getMaskEffect(value);
             this.addEffect(this._maskEffect);
+          },
+          /**
+           * Used to set mask and control mask options.
+           * @param options
+           * @example
+           * import { Graphics, Sprite } from 'pixi.js';
+           *
+           * const graphics = new Graphics();
+           * graphics.beginFill(0xFF3300);
+           * graphics.drawRect(50, 250, 100, 100);
+           * graphics.endFill();
+           *
+           * const sprite = new Sprite(texture);
+           * sprite.setMask({
+           *     mask: graphics,
+           *     inverse: true,
+           * });
+           * @memberof scene.Container#
+           */
+          setMask(options) {
+            this._maskOptions = {
+              ...this._maskOptions,
+              ...options
+            };
+            if (options.mask) {
+              this.mask = options.mask;
+            }
           },
           /**
            * Sets a mask for the displayObject. A mask is an object that limits the visibility of an
@@ -55050,16 +55304,20 @@ ${src}`;
           renderer
         ) {
           if (container.renderPipeId) {
+            const renderable = container;
             const { renderPipes, renderableGC } = renderer;
             renderPipes.blendMode.setBlendMode(
-              container,
+              renderable,
               container.groupBlendMode,
               instructionSet
             );
-            container.didViewUpdate = false;
             const rp = renderPipes;
-            rp[container.renderPipeId].addRenderable(container, instructionSet);
-            renderableGC.addRenderable(container, instructionSet);
+            rp[renderable.renderPipeId].addRenderable(
+              renderable,
+              instructionSet
+            );
+            renderableGC.addRenderable(renderable, instructionSet);
+            renderable.didViewUpdate = false;
           }
           if (!container.renderGroup) {
             const children = container.children;
@@ -55087,17 +55345,18 @@ ${src}`;
               const pipe = renderPipes[effect.pipe];
               pipe.push(effect, container, instructionSet);
             }
-            const renderPipeId = container.renderPipeId;
+            const renderable = container;
+            const renderPipeId = renderable.renderPipeId;
             if (renderPipeId) {
               renderPipes.blendMode.setBlendMode(
-                container,
-                container.groupBlendMode,
+                renderable,
+                renderable.groupBlendMode,
                 instructionSet
               );
-              container.didViewUpdate = false;
               const pipe = renderPipes[renderPipeId];
-              pipe.addRenderable(container, instructionSet);
-              renderableGC.addRenderable(container, instructionSet);
+              pipe.addRenderable(renderable, instructionSet);
+              renderableGC.addRenderable(renderable, instructionSet);
+              renderable.didViewUpdate = false;
             }
             const children = container.children;
             if (children.length) {
@@ -55504,8 +55763,9 @@ ${src}`;
               updateTransformAndChildren(children[i], updateTick, updateFlags);
             }
             const renderGroup = container.parentRenderGroup;
-            if (container.renderPipeId && !renderGroup.structureDidChange) {
-              renderGroup.updateRenderable(container);
+            const renderable = container;
+            if (renderable.renderPipeId && !renderGroup.structureDidChange) {
+              renderGroup.updateRenderable(renderable);
             }
           }
         }
@@ -56023,15 +56283,15 @@ ${src}`;
         var deprecation = __webpack_require__(
           /*! ../../../utils/logging/deprecation.js */ './node_modules/pixi.js/lib/utils/logging/deprecation.js'
         );
-        var View = __webpack_require__(
-          /*! ../../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
         var GraphicsContext = __webpack_require__(
           /*! ./GraphicsContext.js */ './node_modules/pixi.js/lib/scene/graphics/shared/GraphicsContext.js'
         );
 
         ('use strict');
-        class Graphics extends View.ViewContainer {
+        class Graphics extends ViewContainer.ViewContainer {
           /**
            * @param options - Options for the Graphics.
            */
@@ -56085,16 +56345,6 @@ ${src}`;
            */
           containsPoint(point) {
             return this._context.containsPoint(point);
-          }
-          onViewUpdate() {
-            this._didViewChangeTick++;
-            this._didGraphicsUpdate = true;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
           }
           /**
            * Destroys this graphics renderable and optionally its context.
@@ -57453,12 +57703,17 @@ ${src}`;
           }
         }
         const _GraphicsContextSystem = class _GraphicsContextSystem {
-          constructor() {
+          constructor(renderer) {
             // the root context batches, used to either make a batch or geometry
             // all graphics use this as a base
             this._gpuContextHash = {};
             // used for non-batchable graphics
             this._graphicsDataContextHash = /* @__PURE__ */ Object.create(null);
+            renderer.renderableGC.addManagedHash(this, '_gpuContextHash');
+            renderer.renderableGC.addManagedHash(
+              this,
+              '_graphicsDataContextHash'
+            );
           }
           /**
            * Runner init called, update the default options
@@ -57638,6 +57893,10 @@ ${src}`;
             this.renderer = renderer;
             this._adaptor = adaptor;
             this._adaptor.init();
+            this.renderer.renderableGC.addManagedHash(
+              this,
+              '_graphicsBatchesHash'
+            );
           }
           validateRenderable(graphics) {
             const context = graphics.context;
@@ -57656,8 +57915,7 @@ ${src}`;
             const gpuContext = this.renderer.graphicsContext.updateGpuContext(
               graphics.context
             );
-            if (graphics._didGraphicsUpdate) {
-              graphics._didGraphicsUpdate = false;
+            if (graphics.didViewUpdate) {
               this._rebuild(graphics);
             }
             if (gpuContext.isBatchable) {
@@ -62005,6 +62263,42 @@ ${src}`;
         var MeshPipe = __webpack_require__(
           /*! ./mesh/shared/MeshPipe.js */ './node_modules/pixi.js/lib/scene/mesh/shared/MeshPipe.js'
         );
+        var GlParticleContainerAdaptor = __webpack_require__(
+          /*! ./particle-container/gl/GlParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gl/GlParticleContainerAdaptor.js'
+        );
+        var GpuParticleContainerAdaptor = __webpack_require__(
+          /*! ./particle-container/gpu/GpuParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gpu/GpuParticleContainerAdaptor.js'
+        );
+        var GlParticleContainerPipe = __webpack_require__(
+          /*! ./particle-container/shared/GlParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GlParticleContainerPipe.js'
+        );
+        var GpuParticleContainerPipe = __webpack_require__(
+          /*! ./particle-container/shared/GpuParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GpuParticleContainerPipe.js'
+        );
+        var Particle = __webpack_require__(
+          /*! ./particle-container/shared/Particle.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/Particle.js'
+        );
+        var ParticleBuffer = __webpack_require__(
+          /*! ./particle-container/shared/ParticleBuffer.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleBuffer.js'
+        );
+        var ParticleContainer = __webpack_require__(
+          /*! ./particle-container/shared/ParticleContainer.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainer.js'
+        );
+        var ParticleContainerPipe = __webpack_require__(
+          /*! ./particle-container/shared/ParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js'
+        );
+        var particleData = __webpack_require__(
+          /*! ./particle-container/shared/particleData.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/particleData.js'
+        );
+        var ParticleShader = __webpack_require__(
+          /*! ./particle-container/shared/shader/ParticleShader.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/ParticleShader.js'
+        );
+        var createIndicesForQuads = __webpack_require__(
+          /*! ./particle-container/shared/utils/createIndicesForQuads.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/createIndicesForQuads.js'
+        );
+        var generateParticleUpdateFunction = __webpack_require__(
+          /*! ./particle-container/shared/utils/generateParticleUpdateFunction.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/generateParticleUpdateFunction.js'
+        );
         var AnimatedSprite = __webpack_require__(
           /*! ./sprite-animated/AnimatedSprite.js */ './node_modules/pixi.js/lib/scene/sprite-animated/AnimatedSprite.js'
         );
@@ -62170,8 +62464,17 @@ ${src}`;
         var getPo2TextureFromSource = __webpack_require__(
           /*! ./text/utils/getPo2TextureFromSource.js */ './node_modules/pixi.js/lib/scene/text/utils/getPo2TextureFromSource.js'
         );
-        var View = __webpack_require__(
-          /*! ./view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ./view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
+        );
+        var particles = __webpack_require__(
+          /*! ./particle-container/shared/shader/particles.frag.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.frag.js'
+        );
+        var particles$1 = __webpack_require__(
+          /*! ./particle-container/shared/shader/particles.vert.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.vert.js'
+        );
+        var particles$2 = __webpack_require__(
+          /*! ./particle-container/shared/shader/particles.wgsl.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.wgsl.js'
         );
 
         ('use strict');
@@ -62297,6 +62600,25 @@ ${src}`;
         exports.Mesh = Mesh.Mesh;
         exports.MeshGeometry = MeshGeometry.MeshGeometry;
         exports.MeshPipe = MeshPipe.MeshPipe;
+        exports.GlParticleContainerAdaptor =
+          GlParticleContainerAdaptor.GlParticleContainerAdaptor;
+        exports.GpuParticleContainerAdaptor =
+          GpuParticleContainerAdaptor.GpuParticleContainerAdaptor;
+        exports.GlParticleContainerPipe =
+          GlParticleContainerPipe.GlParticleContainerPipe;
+        exports.GpuParticleContainerPipe =
+          GpuParticleContainerPipe.GpuParticleContainerPipe;
+        exports.Particle = Particle.Particle;
+        exports.ParticleBuffer = ParticleBuffer.ParticleBuffer;
+        exports.ParticleContainer = ParticleContainer.ParticleContainer;
+        exports.ParticleContainerPipe =
+          ParticleContainerPipe.ParticleContainerPipe;
+        exports.particleData = particleData.particleData;
+        exports.ParticleShader = ParticleShader.ParticleShader;
+        exports.createIndicesForQuads =
+          createIndicesForQuads.createIndicesForQuads;
+        exports.generateParticleUpdateFunction =
+          generateParticleUpdateFunction.generateParticleUpdateFunction;
         exports.AnimatedSprite = AnimatedSprite.AnimatedSprite;
         exports.NineSliceGeometry = NineSliceGeometry.NineSliceGeometry;
         exports.NineSlicePlane = NineSliceSprite.NineSlicePlane;
@@ -62368,7 +62690,10 @@ ${src}`;
           generateTextStyleKey.generateTextStyleKey;
         exports.getPo2TextureFromSource =
           getPo2TextureFromSource.getPo2TextureFromSource;
-        exports.ViewContainer = View.ViewContainer;
+        exports.ViewContainer = ViewContainer.ViewContainer;
+        exports.particlesFrag = particles.default;
+        exports.particlesVert = particles$1.default;
+        exports.particlesWgsl = particles$2.default;
         //# sourceMappingURL=index.js.map
 
         /***/
@@ -63621,15 +63946,15 @@ ${src}`;
         var deprecation = __webpack_require__(
           /*! ../../../utils/logging/deprecation.js */ './node_modules/pixi.js/lib/utils/logging/deprecation.js'
         );
-        var View = __webpack_require__(
-          /*! ../../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
         var MeshGeometry = __webpack_require__(
           /*! ./MeshGeometry.js */ './node_modules/pixi.js/lib/scene/mesh/shared/MeshGeometry.js'
         );
 
         ('use strict');
-        class Mesh extends View.ViewContainer {
+        class Mesh extends ViewContainer.ViewContainer {
           constructor(...args) {
             let options = args[0];
             if (options instanceof Geometry.Geometry) {
@@ -63797,16 +64122,6 @@ ${src}`;
               }
             }
             return false;
-          }
-          /** @ignore */
-          onViewUpdate() {
-            this._didViewChangeTick++;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
           }
           /**
            * Destroys this sprite renderable and optionally its texture.
@@ -64007,6 +64322,8 @@ ${src}`;
             this.renderer = renderer;
             this._adaptor = adaptor;
             this._adaptor.init();
+            renderer.renderableGC.addManagedHash(this, '_gpuBatchableMeshHash');
+            renderer.renderableGC.addManagedHash(this, '_meshDataHash');
           }
           validateRenderable(mesh) {
             const meshData = this._getMeshData(mesh);
@@ -64162,6 +64479,1291 @@ ${src}`;
 
         exports.getTextureDefaultMatrix = getTextureDefaultMatrix;
         //# sourceMappingURL=getTextureDefaultMatrix.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/gl/GlParticleContainerAdaptor.js':
+      /*!********************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/gl/GlParticleContainerAdaptor.js ***!
+  \********************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        'use strict';
+        class GlParticleContainerAdaptor {
+          execute(particleContainerPop, container) {
+            const state = particleContainerPop.state;
+            const renderer = particleContainerPop.renderer;
+            const shader =
+              container.shader || particleContainerPop.defaultShader;
+            shader.resources.uTexture = container.texture._source;
+            shader.resources.uniforms = particleContainerPop.localUniforms;
+            const gl = renderer.gl;
+            const buffer = particleContainerPop.getBuffers(container);
+            renderer.shader.bind(shader);
+            renderer.state.set(state);
+            renderer.geometry.bind(buffer.geometry, shader.glProgram);
+            const byteSize = buffer.geometry.indexBuffer.data.BYTES_PER_ELEMENT;
+            const glType = byteSize === 2 ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
+            gl.drawElements(
+              gl.TRIANGLES,
+              container.particleChildren.length * 6,
+              glType,
+              0
+            );
+          }
+        }
+
+        exports.GlParticleContainerAdaptor = GlParticleContainerAdaptor;
+        //# sourceMappingURL=GlParticleContainerAdaptor.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/gpu/GpuParticleContainerAdaptor.js':
+      /*!**********************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/gpu/GpuParticleContainerAdaptor.js ***!
+  \**********************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        'use strict';
+        class GpuParticleContainerAdaptor {
+          execute(particleContainerPop, container) {
+            const renderer = particleContainerPop.renderer;
+            const shader =
+              container.shader || particleContainerPop.defaultShader;
+            shader.groups[0] =
+              renderer.renderPipes.uniformBatch.getUniformBindGroup(
+                particleContainerPop.localUniforms,
+                true
+              );
+            shader.groups[1] = renderer.texture.getTextureBindGroup(
+              container.texture
+            );
+            const state = particleContainerPop.state;
+            const buffer = particleContainerPop.getBuffers(container);
+            renderer.encoder.draw({
+              geometry: buffer.geometry,
+              shader: container.shader || particleContainerPop.defaultShader,
+              state,
+              size: container.particleChildren.length * 6
+            });
+          }
+        }
+
+        exports.GpuParticleContainerAdaptor = GpuParticleContainerAdaptor;
+        //# sourceMappingURL=GpuParticleContainerAdaptor.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/init.js':
+      /*!*******************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/init.js ***!
+  \*******************************************************************/
+      /***/ (
+        __unused_webpack_module,
+        __unused_webpack_exports,
+        __webpack_require__
+      ) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+        var GlParticleContainerPipe = __webpack_require__(
+          /*! ./shared/GlParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GlParticleContainerPipe.js'
+        );
+        var GpuParticleContainerPipe = __webpack_require__(
+          /*! ./shared/GpuParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/GpuParticleContainerPipe.js'
+        );
+
+        ('use strict');
+        Extensions.extensions.add(
+          GlParticleContainerPipe.GlParticleContainerPipe
+        );
+        Extensions.extensions.add(
+          GpuParticleContainerPipe.GpuParticleContainerPipe
+        );
+        //# sourceMappingURL=init.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/GlParticleContainerPipe.js':
+      /*!*********************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/GlParticleContainerPipe.js ***!
+  \*********************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+        var GlParticleContainerAdaptor = __webpack_require__(
+          /*! ../gl/GlParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gl/GlParticleContainerAdaptor.js'
+        );
+        var ParticleContainerPipe = __webpack_require__(
+          /*! ./ParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js'
+        );
+
+        ('use strict');
+        class GlParticleContainerPipe extends ParticleContainerPipe.ParticleContainerPipe {
+          constructor(renderer) {
+            super(
+              renderer,
+              new GlParticleContainerAdaptor.GlParticleContainerAdaptor()
+            );
+          }
+        }
+        /** @ignore */
+        GlParticleContainerPipe.extension = {
+          type: [Extensions.ExtensionType.WebGLPipes],
+          name: 'particle'
+        };
+
+        exports.GlParticleContainerPipe = GlParticleContainerPipe;
+        //# sourceMappingURL=GlParticleContainerPipe.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/GpuParticleContainerPipe.js':
+      /*!**********************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/GpuParticleContainerPipe.js ***!
+  \**********************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+        var GpuParticleContainerAdaptor = __webpack_require__(
+          /*! ../gpu/GpuParticleContainerAdaptor.js */ './node_modules/pixi.js/lib/scene/particle-container/gpu/GpuParticleContainerAdaptor.js'
+        );
+        var ParticleContainerPipe = __webpack_require__(
+          /*! ./ParticleContainerPipe.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js'
+        );
+
+        ('use strict');
+        class GpuParticleContainerPipe extends ParticleContainerPipe.ParticleContainerPipe {
+          constructor(renderer) {
+            super(
+              renderer,
+              new GpuParticleContainerAdaptor.GpuParticleContainerAdaptor()
+            );
+          }
+        }
+        /** @ignore */
+        GpuParticleContainerPipe.extension = {
+          type: [Extensions.ExtensionType.WebGPUPipes],
+          name: 'particle'
+        };
+
+        exports.GpuParticleContainerPipe = GpuParticleContainerPipe;
+        //# sourceMappingURL=GpuParticleContainerPipe.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/Particle.js':
+      /*!******************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/Particle.js ***!
+  \******************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Color = __webpack_require__(
+          /*! ../../../color/Color.js */ './node_modules/pixi.js/lib/color/Color.js'
+        );
+        var Texture = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/texture/Texture.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/Texture.js'
+        );
+        var assignWithIgnore = __webpack_require__(
+          /*! ../../container/utils/assignWithIgnore.js */ './node_modules/pixi.js/lib/scene/container/utils/assignWithIgnore.js'
+        );
+
+        ('use strict');
+        const _Particle = class _Particle {
+          constructor(options) {
+            if (options instanceof Texture.Texture) {
+              this.texture = options;
+              assignWithIgnore.assignWithIgnore(
+                this,
+                _Particle.defaultOptions,
+                {}
+              );
+            } else {
+              const combined = { ..._Particle.defaultOptions, ...options };
+              assignWithIgnore.assignWithIgnore(this, combined, {});
+            }
+          }
+          /** Gets or sets the alpha value of the particle. */
+          get alpha() {
+            return this._alpha;
+          }
+          set alpha(value) {
+            this._alpha = Math.min(Math.max(value, 0), 1);
+            this._updateColor();
+          }
+          /** Gets or sets the tint color of the particle. */
+          get tint() {
+            const bgr = this._tint;
+            return ((bgr & 255) << 16) + (bgr & 65280) + ((bgr >> 16) & 255);
+          }
+          set tint(value) {
+            if (typeof value === 'number') {
+              this._tint = value;
+            } else {
+              this._tint = Color.Color.shared.setValue(value).toBgrNumber();
+            }
+            this._updateColor();
+          }
+          _updateColor() {
+            this.color = this._tint + (((this._alpha * 255) | 0) << 24);
+          }
+        };
+        /** Default options for constructing with options */
+        _Particle.defaultOptions = {
+          anchorX: 0,
+          anchorY: 0,
+          x: 0,
+          y: 0,
+          scaleX: 1,
+          scaleY: 1,
+          rotation: 0,
+          tint: 16777215,
+          alpha: 1
+        };
+        let Particle = _Particle;
+
+        exports.Particle = Particle;
+        //# sourceMappingURL=Particle.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleBuffer.js':
+      /*!************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/ParticleBuffer.js ***!
+  \************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Buffer = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/buffer/Buffer.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/Buffer.js'
+        );
+        var _const = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/buffer/const.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/buffer/const.js'
+        );
+        var Geometry = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/geometry/Geometry.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/geometry/Geometry.js'
+        );
+        var getAttributeInfoFromFormat = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/geometry/utils/getAttributeInfoFromFormat.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/geometry/utils/getAttributeInfoFromFormat.js'
+        );
+        var ViewableBuffer = __webpack_require__(
+          /*! ../../../utils/data/ViewableBuffer.js */ './node_modules/pixi.js/lib/utils/data/ViewableBuffer.js'
+        );
+        var createIndicesForQuads = __webpack_require__(
+          /*! ./utils/createIndicesForQuads.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/createIndicesForQuads.js'
+        );
+        var generateParticleUpdateFunction = __webpack_require__(
+          /*! ./utils/generateParticleUpdateFunction.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/generateParticleUpdateFunction.js'
+        );
+
+        ('use strict');
+        class ParticleBuffer {
+          constructor(options) {
+            this._size = 0;
+            this._generateParticleUpdateCache = {};
+            const size = (this._size = options.size ?? 1e3);
+            const properties = options.properties;
+            let staticVertexSize = 0;
+            let dynamicVertexSize = 0;
+            for (const i in properties) {
+              const property = properties[i];
+              const attributeInfo =
+                getAttributeInfoFromFormat.getAttributeInfoFromFormat(
+                  property.format
+                );
+              if (property.dynamic) {
+                dynamicVertexSize += attributeInfo.stride;
+              } else {
+                staticVertexSize += attributeInfo.stride;
+              }
+            }
+            this._dynamicStride = dynamicVertexSize / 4;
+            this._staticStride = staticVertexSize / 4;
+            this.staticAttributeBuffer = new ViewableBuffer.ViewableBuffer(
+              size * 4 * staticVertexSize
+            );
+            this.dynamicAttributeBuffer = new ViewableBuffer.ViewableBuffer(
+              size * 4 * dynamicVertexSize
+            );
+            this.indexBuffer =
+              createIndicesForQuads.createIndicesForQuads(size);
+            const geometry = new Geometry.Geometry();
+            let dynamicOffset = 0;
+            let staticOffset = 0;
+            this._staticBuffer = new Buffer.Buffer({
+              data: new Float32Array(1),
+              label: 'static-particle-buffer',
+              shrinkToFit: false,
+              usage: _const.BufferUsage.VERTEX | _const.BufferUsage.COPY_DST
+            });
+            this._dynamicBuffer = new Buffer.Buffer({
+              data: new Float32Array(1),
+              label: 'dynamic-particle-buffer',
+              shrinkToFit: false,
+              usage: _const.BufferUsage.VERTEX | _const.BufferUsage.COPY_DST
+            });
+            for (const i in properties) {
+              const property = properties[i];
+              const attributeInfo =
+                getAttributeInfoFromFormat.getAttributeInfoFromFormat(
+                  property.format
+                );
+              if (property.dynamic) {
+                geometry.addAttribute(property.attributeName, {
+                  buffer: this._dynamicBuffer,
+                  stride: this._dynamicStride * 4,
+                  offset: dynamicOffset * 4,
+                  format: property.format
+                });
+                dynamicOffset += attributeInfo.size;
+              } else {
+                geometry.addAttribute(property.attributeName, {
+                  buffer: this._staticBuffer,
+                  stride: this._staticStride * 4,
+                  offset: staticOffset * 4,
+                  format: property.format
+                });
+                staticOffset += attributeInfo.size;
+              }
+            }
+            geometry.addIndex(this.indexBuffer);
+            const uploadFunction = this.getParticleUpdate(properties);
+            this._dynamicUpload = uploadFunction.dynamicUpdate;
+            this._staticUpload = uploadFunction.staticUpdate;
+            this.geometry = geometry;
+          }
+          getParticleUpdate(properties) {
+            const key = getParticleSyncKey(properties);
+            if (this._generateParticleUpdateCache[key]) {
+              return this._generateParticleUpdateCache[key];
+            }
+            this._generateParticleUpdateCache[key] =
+              this.generateParticleUpdate(properties);
+            return this._generateParticleUpdateCache[key];
+          }
+          generateParticleUpdate(properties) {
+            return generateParticleUpdateFunction.generateParticleUpdateFunction(
+              properties
+            );
+          }
+          update(particles, uploadStatic) {
+            if (particles.length > this._size) {
+              uploadStatic = true;
+              this._size = Math.max(particles.length, (this._size * 1.5) | 0);
+              this.staticAttributeBuffer = new ViewableBuffer.ViewableBuffer(
+                this._size * this._staticStride * 4 * 4
+              );
+              this.dynamicAttributeBuffer = new ViewableBuffer.ViewableBuffer(
+                this._size * this._dynamicStride * 4 * 4
+              );
+              this.indexBuffer = createIndicesForQuads.createIndicesForQuads(
+                this._size
+              );
+              this.geometry.indexBuffer.setDataWithSize(
+                this.indexBuffer,
+                this.indexBuffer.byteLength,
+                true
+              );
+            }
+            const dynamicAttributeBuffer = this.dynamicAttributeBuffer;
+            this._dynamicUpload(
+              particles,
+              dynamicAttributeBuffer.float32View,
+              dynamicAttributeBuffer.uint32View
+            );
+            this._dynamicBuffer.setDataWithSize(
+              this.dynamicAttributeBuffer.float32View,
+              particles.length * this._dynamicStride * 4,
+              true
+            );
+            if (uploadStatic) {
+              const staticAttributeBuffer = this.staticAttributeBuffer;
+              this._staticUpload(
+                particles,
+                staticAttributeBuffer.float32View,
+                staticAttributeBuffer.uint32View
+              );
+              this._staticBuffer.setDataWithSize(
+                staticAttributeBuffer.float32View,
+                particles.length * this._staticStride * 4,
+                true
+              );
+            }
+          }
+          destroy() {
+            this._staticBuffer.destroy();
+            this._dynamicBuffer.destroy();
+            this.geometry.destroy();
+          }
+        }
+        function getParticleSyncKey(properties) {
+          const keyGen = [];
+          for (const key in properties) {
+            const property = properties[key];
+            keyGen.push(key, property.code, property.dynamic ? 'd' : 's');
+          }
+          return keyGen.join('_');
+        }
+
+        exports.ParticleBuffer = ParticleBuffer;
+        //# sourceMappingURL=ParticleBuffer.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainer.js':
+      /*!***************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainer.js ***!
+  \***************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var ViewContainer = __webpack_require__(
+          /*! ../../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
+        );
+        var particleData = __webpack_require__(
+          /*! ./particleData.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/particleData.js'
+        );
+
+        ('use strict');
+        const emptyBounds = {
+          minX: 0,
+          minY: 0,
+          maxX: 0,
+          maxY: 0
+        };
+        const _ParticleContainer = class _ParticleContainer extends ViewContainer.ViewContainer {
+          /**
+           * @param options - The options for creating the sprite.
+           */
+          constructor(options = {}) {
+            options = {
+              ..._ParticleContainer.defaultOptions,
+              ...options,
+              dynamicProperties: {
+                ..._ParticleContainer.defaultOptions.dynamicProperties,
+                ...options?.dynamicProperties
+              }
+            };
+            const {
+              dynamicProperties,
+              shader,
+              roundPixels,
+              texture,
+              particles,
+              ...rest
+            } = options;
+            super({
+              label: 'ParticleContainer',
+              ...rest
+            });
+            /** The unique identifier for the render pipe of this ParticleContainer. */
+            this.renderPipeId = 'particle';
+            this.batched = false;
+            /** Indicates if the children of this ParticleContainer have changed and need to be updated. */
+            this._childrenDirty = false;
+            this.texture = texture || null;
+            this.shader = shader;
+            this._properties = {};
+            for (const key in particleData.particleData) {
+              const property = particleData.particleData[key];
+              const dynamic = dynamicProperties[key];
+              this._properties[key] = {
+                ...property,
+                dynamic
+              };
+            }
+            this.allowChildren = true;
+            this.roundPixels = roundPixels ?? false;
+            this.particleChildren = particles ?? [];
+          }
+          /**
+           * Adds one or more particles to the container.
+           *
+           * Multiple items can be added like so: `myContainer.addParticle(thingOne, thingTwo, thingThree)`
+           * @param {...IParticle} children - The Particle(s) to add to the container
+           * @returns {IParticle} - The first child that was added.
+           */
+          addParticle(...children) {
+            for (let i = 0; i < children.length; i++) {
+              this.particleChildren.push(children[i]);
+            }
+            this.onViewUpdate();
+            return children[0];
+          }
+          /**
+           * Removes one or more particles from the container.
+           * @param {...IParticle} children - The Particle(s) to remove
+           * @returns {IParticle} The first child that was removed.
+           */
+          removeParticle(...children) {
+            let didRemove = false;
+            for (let i = 0; i < children.length; i++) {
+              const index = this.particleChildren.indexOf(children[i]);
+              if (index > -1) {
+                this.particleChildren.splice(index, 1);
+                didRemove = true;
+              }
+            }
+            if (didRemove) this.onViewUpdate();
+            return children[0];
+          }
+          /**
+           * Updates the particle container.
+           * Please call this when you modify the particleChildren array.
+           * or any static properties of the particles.
+           */
+          update() {
+            this._childrenDirty = true;
+          }
+          onViewUpdate() {
+            this._childrenDirty = true;
+            super.onViewUpdate();
+          }
+          /**
+           * ParticleContainer does not calculated bounds as it would slow things down,
+           * its up to you to set this via the boundsArea property
+           */
+          get bounds() {
+            return emptyBounds;
+          }
+          /**
+           * ParticleContainer does not calculated bounds as it would slow things down,
+           * its up to you to set this via the boundsArea property
+           * @param _bounds - The output bounds object.
+           */
+          addBounds(_bounds) {}
+          /**
+           * Destroys this sprite renderable and optionally its texture.
+           * @param options - Options parameter. A boolean will act as if all options
+           *  have been set to that value
+           * @param {boolean} [options.texture=false] - Should it destroy the current texture of the renderable as well
+           * @param {boolean} [options.textureSource=false] - Should it destroy the textureSource of the renderable as well
+           */
+          destroy(options = false) {
+            super.destroy(options);
+            const destroyTexture =
+              typeof options === 'boolean' ? options : options?.texture;
+            if (destroyTexture) {
+              const destroyTextureSource =
+                typeof options === 'boolean' ? options : options?.textureSource;
+              const texture = this.texture ?? this.particleChildren[0]?.texture;
+              if (texture) {
+                texture.destroy(destroyTextureSource);
+              }
+            }
+            this.texture = null;
+            this.shader?.destroy();
+          }
+          /**
+           * Removes all particles from this container that are within the begin and end indexes.
+           * @param beginIndex - The beginning position.
+           * @param endIndex - The ending position. Default value is size of the container.
+           * @returns - List of removed particles
+           */
+          removeParticles(beginIndex, endIndex) {
+            const children = this.particleChildren.splice(beginIndex, endIndex);
+            this.onViewUpdate();
+            return children;
+          }
+          /**
+           * Removes a particle from the specified index position.
+           * @param index - The index to get the particle from
+           * @returns The particle that was removed.
+           */
+          removeParticleAt(index) {
+            const child = this.particleChildren.splice(index, 1);
+            this.onViewUpdate();
+            return child[0];
+          }
+          /**
+           * Adds a particle to the container at a specified index. If the index is out of bounds an error will be thrown.
+           * If the particle is already in this container, it will be moved to the specified index.
+           * @param {Container} child - The particle to add.
+           * @param {number} index - The absolute index where the particle will be positioned at the end of the operation.
+           * @returns {Container} The particle that was added.
+           */
+          addParticleAt(child, index) {
+            this.particleChildren.splice(index, 0, child);
+            this.onViewUpdate();
+            return child;
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.addParticle()` instead.
+           * @param {...any} _children
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          addChild(..._children) {
+            throw new Error(
+              'ParticleContainer.addChild() is not available. Please use ParticleContainer.addParticle()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           * Calling this method will throw an error. Please use `ParticleContainer.removeParticle()` instead.
+           * @param {...any} _children
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          removeChild(..._children) {
+            throw new Error(
+              'ParticleContainer.removeChild() is not available. Please use ParticleContainer.removeParticle()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.removeParticles()` instead.
+           * @param {number} [_beginIndex]
+           * @param {number} [_endIndex]
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          removeChildren(_beginIndex, _endIndex) {
+            throw new Error(
+              'ParticleContainer.removeChildren() is not available. Please use ParticleContainer.removeParticles()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.removeParticleAt()` instead.
+           * @param {number} _index
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          removeChildAt(_index) {
+            throw new Error(
+              'ParticleContainer.removeChildAt() is not available. Please use ParticleContainer.removeParticleAt()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.getParticleAt()` instead.
+           * @param {number} _index
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          getChildAt(_index) {
+            throw new Error(
+              'ParticleContainer.getChildAt() is not available. Please use ParticleContainer.getParticleAt()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.setParticleIndex()` instead.
+           * @param {ContainerChild} _child
+           * @param {number} _index
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          setChildIndex(_child, _index) {
+            throw new Error(
+              'ParticleContainer.setChildIndex() is not available. Please use ParticleContainer.setParticleIndex()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.getParticleIndex()` instead.
+           * @param {ContainerChild} _child
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          getChildIndex(_child) {
+            throw new Error(
+              'ParticleContainer.getChildIndex() is not available. Please use ParticleContainer.getParticleIndex()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.addParticleAt()` instead.
+           * @param {ContainerChild} _child
+           * @param {number} _index
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          addChildAt(_child, _index) {
+            throw new Error(
+              'ParticleContainer.addChildAt() is not available. Please use ParticleContainer.addParticleAt()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error. Please use `ParticleContainer.swapParticles()` instead.
+           * @param {ContainerChild} _child
+           * @param {ContainerChild} _child2
+           */
+          swapChildren(_child, _child2) {
+            throw new Error(
+              'ParticleContainer.swapChildren() is not available. Please use ParticleContainer.swapParticles()'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error.
+           * @param _child - The child to reparent
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          reparentChild(..._child) {
+            throw new Error(
+              'ParticleContainer.reparentChild() is not available with the particle container'
+            );
+          }
+          /**
+           * This method is not available in ParticleContainer.
+           *
+           * Calling this method will throw an error.
+           * @param _child - The child to reparent
+           * @param _index - The index to reparent the child to
+           * @throws {Error} Always throws an error as this method is not available.
+           */
+          reparentChildAt(_child, _index) {
+            throw new Error(
+              'ParticleContainer.reparentChildAt() is not available with the particle container'
+            );
+          }
+        };
+        /**
+         * Defines the default options for creating a ParticleContainer.
+         * @property {Record<string, boolean>} dynamicProperties - Specifies which properties are dynamic.
+         * @property {boolean} roundPixels - Indicates if pixels should be  rounded.
+         */
+        _ParticleContainer.defaultOptions = {
+          dynamicProperties: {
+            vertex: false,
+            // Indicates if vertex positions are dynamic.
+            position: true,
+            // Indicates if particle positions are dynamic.
+            rotation: false,
+            // Indicates if particle rotations are dynamic.
+            uvs: false,
+            // Indicates if UV coordinates are dynamic.
+            color: false
+            // Indicates if particle colors are dynamic.
+          },
+          roundPixels: false
+          // Indicates if pixels should be rounded for rendering.
+        };
+        let ParticleContainer = _ParticleContainer;
+
+        exports.ParticleContainer = ParticleContainer;
+        //# sourceMappingURL=ParticleContainer.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/ParticleContainerPipe.js ***!
+  \*******************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Matrix = __webpack_require__(
+          /*! ../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
+        );
+        var UniformGroup = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/shader/UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
+        );
+        var getAdjustedBlendModeBlend = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/state/getAdjustedBlendModeBlend.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/getAdjustedBlendModeBlend.js'
+        );
+        var State = __webpack_require__(
+          /*! ../../../rendering/renderers/shared/state/State.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/state/State.js'
+        );
+        var colorToUniform = __webpack_require__(
+          /*! ../../graphics/gpu/colorToUniform.js */ './node_modules/pixi.js/lib/scene/graphics/gpu/colorToUniform.js'
+        );
+        var ParticleBuffer = __webpack_require__(
+          /*! ./ParticleBuffer.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/ParticleBuffer.js'
+        );
+        var ParticleShader = __webpack_require__(
+          /*! ./shader/ParticleShader.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/ParticleShader.js'
+        );
+
+        ('use strict');
+        class ParticleContainerPipe {
+          /**
+           * @param renderer - The renderer this sprite batch works for.
+           * @param adaptor
+           */
+          constructor(renderer, adaptor) {
+            this.state = State.State.for2d();
+            this._gpuBufferHash = /* @__PURE__ */ Object.create(null);
+            // eslint-disable-next-line max-len
+            this._destroyRenderableBound = this.destroyRenderable.bind(this);
+            this.localUniforms = new UniformGroup.UniformGroup({
+              uTranslationMatrix: {
+                value: new Matrix.Matrix(),
+                type: 'mat3x3<f32>'
+              },
+              uColor: { value: new Float32Array(4), type: 'vec4<f32>' },
+              uRound: { value: 1, type: 'f32' },
+              uResolution: { value: [0, 0], type: 'vec2<f32>' }
+            });
+            this.renderer = renderer;
+            this.adaptor = adaptor;
+            this.defaultShader = new ParticleShader.ParticleShader();
+            this.state = State.State.for2d();
+          }
+          validateRenderable(_renderable) {
+            return false;
+          }
+          addRenderable(renderable, instructionSet) {
+            this.renderer.renderPipes.batch.break(instructionSet);
+            instructionSet.add(renderable);
+          }
+          getBuffers(renderable) {
+            return (
+              this._gpuBufferHash[renderable.uid] ||
+              this._initBuffer(renderable)
+            );
+          }
+          _initBuffer(renderable) {
+            this._gpuBufferHash[renderable.uid] =
+              new ParticleBuffer.ParticleBuffer({
+                size: renderable.particleChildren.length,
+                properties: renderable._properties
+              });
+            renderable.on('destroyed', this._destroyRenderableBound);
+            return this._gpuBufferHash[renderable.uid];
+          }
+          updateRenderable(_renderable) {}
+          destroyRenderable(renderable) {
+            const buffer = this._gpuBufferHash[renderable.uid];
+            buffer.destroy();
+            this._gpuBufferHash[renderable.uid] = null;
+            renderable.off('destroyed', this._destroyRenderableBound);
+          }
+          execute(container) {
+            const children = container.particleChildren;
+            if (children.length === 0) {
+              return;
+            }
+            const renderer = this.renderer;
+            const buffer = this.getBuffers(container);
+            container.texture || (container.texture = children[0].texture);
+            const state = this.state;
+            buffer.update(children, container._childrenDirty);
+            container._childrenDirty = false;
+            state.blendMode =
+              getAdjustedBlendModeBlend.getAdjustedBlendModeBlend(
+                container.blendMode,
+                container.texture._source
+              );
+            const uniforms = this.localUniforms.uniforms;
+            const transformationMatrix = uniforms.uTranslationMatrix;
+            container.worldTransform.copyTo(transformationMatrix);
+            transformationMatrix.prepend(
+              renderer.globalUniforms.globalUniformData.projectionMatrix
+            );
+            uniforms.uResolution =
+              renderer.globalUniforms.globalUniformData.resolution;
+            uniforms.uRound = renderer._roundPixels | container._roundPixels;
+            colorToUniform.color32BitToUniform(
+              container.groupColorAlpha,
+              uniforms.uColor,
+              0
+            );
+            this.adaptor.execute(this, container);
+          }
+          /** Destroys the ParticleRenderer. */
+          destroy() {
+            if (this.defaultShader) {
+              this.defaultShader.destroy();
+              this.defaultShader = null;
+            }
+          }
+        }
+
+        exports.ParticleContainerPipe = ParticleContainerPipe;
+        //# sourceMappingURL=ParticleContainerPipe.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/particleData.js':
+      /*!**********************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/particleData.js ***!
+  \**********************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        'use strict';
+        const particleData = {
+          vertex: {
+            attributeName: 'aVertex',
+            format: 'float32x2',
+            code: `
+            const texture = p.texture;
+            const sx = p.scaleX;
+            const sy = p.scaleY;
+            const ax = p.anchorX;
+            const ay = p.anchorY;
+            const trim = texture.trim;
+            const orig = texture.orig;
+
+            if (trim)
+            {
+                w1 = trim.x - (ax * orig.width);
+                w0 = w1 + trim.width;
+
+                h1 = trim.y - (ay * orig.height);
+                h0 = h1 + trim.height;
+            }
+            else
+            {
+                w1 = -ax * (orig.width);
+                w0 = w1 + orig.width;
+
+                h1 = -ay * (orig.height);
+                h0 = h1 + orig.height;
+            }
+
+            f32v[offset] = w1 * sx;
+            f32v[offset + 1] = h1 * sy;
+
+            f32v[offset + stride] = w0 * sx;
+            f32v[offset + stride + 1] = h1 * sy;
+
+            f32v[offset + (stride * 2)] = w0 * sx;
+            f32v[offset + (stride * 2) + 1] = h0 * sy;
+
+            f32v[offset + (stride * 3)] = w1 * sx;
+            f32v[offset + (stride * 3) + 1] = h0 * sy;
+        `,
+            dynamic: false
+          },
+          // positionData
+          position: {
+            attributeName: 'aPosition',
+            format: 'float32x2',
+            code: `
+            var x = p.x;
+            var y = p.y;
+
+            f32v[offset] = x;
+            f32v[offset + 1] = y;
+
+            f32v[offset + stride] = x;
+            f32v[offset + stride + 1] = y;
+
+            f32v[offset + (stride * 2)] = x;
+            f32v[offset + (stride * 2) + 1] = y;
+
+            f32v[offset + (stride * 3)] = x;
+            f32v[offset + (stride * 3) + 1] = y;
+        `,
+            dynamic: true
+          },
+          // rotationData
+          rotation: {
+            attributeName: 'aRotation',
+            format: 'float32',
+            code: `
+            var rotation = p.rotation;
+
+            f32v[offset] = rotation;
+            f32v[offset + stride] = rotation;
+            f32v[offset + (stride * 2)] = rotation;
+            f32v[offset + (stride * 3)] = rotation;
+        `,
+            dynamic: false
+          },
+          // uvsData
+          uvs: {
+            attributeName: 'aUV',
+            format: 'float32x2',
+            code: `
+            var uvs = p.texture.uvs;
+
+            f32v[offset] = uvs.x0;
+            f32v[offset + 1] = uvs.y0;
+
+            f32v[offset + stride] = uvs.x1;
+            f32v[offset + stride + 1] = uvs.y1;
+
+            f32v[offset + (stride * 2)] = uvs.x2;
+            f32v[offset + (stride * 2) + 1] = uvs.y2;
+
+            f32v[offset + (stride * 3)] = uvs.x3;
+            f32v[offset + (stride * 3) + 1] = uvs.y3;
+        `,
+            dynamic: false
+          },
+          // tintData
+          color: {
+            attributeName: 'aColor',
+            format: 'unorm8x4',
+            code: `
+            const c = p.color;
+
+            u32v[offset] = c;
+            u32v[offset + stride] = c;
+            u32v[offset + (stride * 2)] = c;
+            u32v[offset + (stride * 3)] = c;
+        `,
+            dynamic: false
+          }
+        };
+
+        exports.particleData = particleData;
+        //# sourceMappingURL=particleData.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/ParticleShader.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/shader/ParticleShader.js ***!
+  \*******************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Color = __webpack_require__(
+          /*! ../../../../color/Color.js */ './node_modules/pixi.js/lib/color/Color.js'
+        );
+        var Matrix = __webpack_require__(
+          /*! ../../../../maths/matrix/Matrix.js */ './node_modules/pixi.js/lib/maths/matrix/Matrix.js'
+        );
+        var GlProgram = __webpack_require__(
+          /*! ../../../../rendering/renderers/gl/shader/GlProgram.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GlProgram.js'
+        );
+        var GpuProgram = __webpack_require__(
+          /*! ../../../../rendering/renderers/gpu/shader/GpuProgram.js */ './node_modules/pixi.js/lib/rendering/renderers/gpu/shader/GpuProgram.js'
+        );
+        var Shader = __webpack_require__(
+          /*! ../../../../rendering/renderers/shared/shader/Shader.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/Shader.js'
+        );
+        var Texture = __webpack_require__(
+          /*! ../../../../rendering/renderers/shared/texture/Texture.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/Texture.js'
+        );
+        var TextureStyle = __webpack_require__(
+          /*! ../../../../rendering/renderers/shared/texture/TextureStyle.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/TextureStyle.js'
+        );
+        var particles$1 = __webpack_require__(
+          /*! ./particles.frag.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.frag.js'
+        );
+        var particles = __webpack_require__(
+          /*! ./particles.vert.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.vert.js'
+        );
+        var particles$2 = __webpack_require__(
+          /*! ./particles.wgsl.js */ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.wgsl.js'
+        );
+
+        ('use strict');
+        class ParticleShader extends Shader.Shader {
+          constructor() {
+            const glProgram = GlProgram.GlProgram.from({
+              vertex: particles.default,
+              fragment: particles$1.default
+            });
+            const gpuProgram = GpuProgram.GpuProgram.from({
+              fragment: {
+                source: particles$2.default,
+                entryPoint: 'mainFragment'
+              },
+              vertex: {
+                source: particles$2.default,
+                entryPoint: 'mainVertex'
+              }
+            });
+            super({
+              glProgram,
+              gpuProgram,
+              resources: {
+                // this will be replaced with the texture from the particle container
+                uTexture: Texture.Texture.WHITE.source,
+                // this will be replaced with the texture style from the particle container
+                uSampler: new TextureStyle.TextureStyle({}),
+                // this will be replaced with the local uniforms from the particle container
+                uniforms: {
+                  uTranslationMatrix: {
+                    value: new Matrix.Matrix(),
+                    type: 'mat3x3<f32>'
+                  },
+                  uColor: {
+                    value: new Color.Color(16777215),
+                    type: 'vec4<f32>'
+                  },
+                  uRound: { value: 1, type: 'f32' },
+                  uResolution: { value: [0, 0], type: 'vec2<f32>' }
+                }
+              }
+            });
+          }
+        }
+
+        exports.ParticleShader = ParticleShader;
+        //# sourceMappingURL=ParticleShader.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.frag.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.frag.js ***!
+  \*******************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+
+        var fragment =
+          'varying vec2 vUV;\nvarying vec4 vColor;\n\nuniform sampler2D uTexture;\n\nvoid main(void){\n    vec4 color = texture2D(uTexture, vUV) * vColor;\n    gl_FragColor = color;\n}';
+
+        exports['default'] = fragment;
+        //# sourceMappingURL=particles.frag.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.vert.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.vert.js ***!
+  \*******************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+
+        var vertex =
+          'attribute vec2 aVertex;\nattribute vec2 aUV;\nattribute vec4 aColor;\n\nattribute vec2 aPosition;\nattribute float aRotation;\n\nuniform mat3 uTranslationMatrix;\nuniform float uRound;\nuniform vec2 uResolution;\nuniform vec4 uColor;\n\nvarying vec2 vUV;\nvarying vec4 vColor;\n\nvec2 roundPixels(vec2 position, vec2 targetSize)\n{       \n    return (floor(((position * 0.5 + 0.5) * targetSize) + 0.5) / targetSize) * 2.0 - 1.0;\n}\n\nvoid main(void){\n    float cosRotation = cos(aRotation);\n    float sinRotation = sin(aRotation);\n    float x = aVertex.x * cosRotation - aVertex.y * sinRotation;\n    float y = aVertex.x * sinRotation + aVertex.y * cosRotation;\n\n    vec2 v = vec2(x, y);\n    v = v + aPosition;\n\n    gl_Position = vec4((uTranslationMatrix * vec3(v, 1.0)).xy, 0.0, 1.0);\n\n    if(uRound == 1.0)\n    {\n        gl_Position.xy = roundPixels(gl_Position.xy, uResolution);\n    }\n\n    vUV = aUV;\n    vColor = aColor * uColor;\n}\n';
+
+        exports['default'] = vertex;
+        //# sourceMappingURL=particles.vert.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.wgsl.js':
+      /*!*******************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/shader/particles.wgsl.js ***!
+  \*******************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+
+        var wgsl =
+          '\nstruct ParticleUniforms {\n  uProjectionMatrix:mat3x3<f32>,\n  uResolution:vec2<f32>,\n  uRoundPixels:f32,\n};\n\n@group(0) @binding(0) var<uniform> uniforms: ParticleUniforms;\n\n@group(1) @binding(0) var uTexture: texture_2d<f32>;\n@group(1) @binding(1) var uSampler : sampler;\n\nstruct VSOutput {\n    @builtin(position) position: vec4<f32>,\n    @location(0) uv : vec2<f32>,\n    @location(1) color : vec4<f32>,\n  };\n@vertex\nfn mainVertex(\n  @location(0) aVertex: vec2<f32>,\n  @location(1) aPosition: vec2<f32>,\n  @location(2) aUV: vec2<f32>,\n  @location(3) aColor: vec4<f32>,\n  @location(4) aRotation: f32,\n) -> VSOutput {\n  \n   let v = vec2(\n       aVertex.x * cos(aRotation) - aVertex.y * sin(aRotation),\n       aVertex.x * sin(aRotation) + aVertex.y * cos(aRotation)\n   ) + aPosition;\n\n   let position = vec4((uniforms.uProjectionMatrix * vec3(v, 1.0)).xy, 0.0, 1.0);\n\n  return VSOutput(\n   position,\n   aUV,\n   aColor,\n  );\n}\n\n@fragment\nfn mainFragment(\n  @location(0) uv: vec2<f32>,\n  @location(1) color: vec4<f32>,\n  @builtin(position) position: vec4<f32>,\n) -> @location(0) vec4<f32> {\n\n    var sample = textureSample(uTexture, uSampler, uv) * color;\n   \n    return sample;\n}';
+
+        exports['default'] = wgsl;
+        //# sourceMappingURL=particles.wgsl.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/createIndicesForQuads.js':
+      /*!*************************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/utils/createIndicesForQuads.js ***!
+  \*************************************************************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        'use strict';
+        function createIndicesForQuads(size, outBuffer = null) {
+          const totalIndices = size * 6;
+          if (totalIndices > 65535) {
+            outBuffer = outBuffer || new Uint32Array(totalIndices);
+          } else {
+            outBuffer = outBuffer || new Uint16Array(totalIndices);
+          }
+          if (outBuffer.length !== totalIndices) {
+            throw new Error(
+              `Out buffer length is incorrect, got ${outBuffer.length} and expected ${totalIndices}`
+            );
+          }
+          for (let i = 0, j = 0; i < totalIndices; i += 6, j += 4) {
+            outBuffer[i + 0] = j + 0;
+            outBuffer[i + 1] = j + 1;
+            outBuffer[i + 2] = j + 2;
+            outBuffer[i + 3] = j + 0;
+            outBuffer[i + 4] = j + 2;
+            outBuffer[i + 5] = j + 3;
+          }
+          return outBuffer;
+        }
+
+        exports.createIndicesForQuads = createIndicesForQuads;
+        //# sourceMappingURL=createIndicesForQuads.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/scene/particle-container/shared/utils/generateParticleUpdateFunction.js':
+      /*!**********************************************************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/particle-container/shared/utils/generateParticleUpdateFunction.js ***!
+  \**********************************************************************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var getAttributeInfoFromFormat = __webpack_require__(
+          /*! ../../../../rendering/renderers/shared/geometry/utils/getAttributeInfoFromFormat.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/geometry/utils/getAttributeInfoFromFormat.js'
+        );
+
+        ('use strict');
+        function generateParticleUpdateFunction(properties) {
+          return {
+            dynamicUpdate: generateUpdateFunction(properties, true),
+            staticUpdate: generateUpdateFunction(properties, false)
+          };
+        }
+        function generateUpdateFunction(properties, dynamic) {
+          const funcFragments = [];
+          funcFragments.push(`
+      
+        var index = 0;
+
+        for (let i = 0; i < ps.length; ++i)
+        {
+            const p = ps[i];
+
+            `);
+          let offset = 0;
+          for (const i in properties) {
+            const property = properties[i];
+            if (dynamic !== property.dynamic) continue;
+            funcFragments.push(`offset = index + ${offset}`);
+            funcFragments.push(property.code);
+            const attributeInfo =
+              getAttributeInfoFromFormat.getAttributeInfoFromFormat(
+                property.format
+              );
+            offset += attributeInfo.stride / 4;
+          }
+          funcFragments.push(`
+            index += stride * 4;
+        }
+    `);
+          funcFragments.unshift(`
+        var stride = ${offset};
+    `);
+          const functionSource = funcFragments.join('\n');
+          return new Function('ps', 'f32v', 'u32v', functionSource);
+        }
+
+        exports.generateParticleUpdateFunction = generateParticleUpdateFunction;
+        //# sourceMappingURL=generateParticleUpdateFunction.js.map
 
         /***/
       },
@@ -64590,15 +66192,15 @@ ${src}`;
         var deprecation = __webpack_require__(
           /*! ../../utils/logging/deprecation.js */ './node_modules/pixi.js/lib/utils/logging/deprecation.js'
         );
-        var View = __webpack_require__(
-          /*! ../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
         var NineSliceGeometry = __webpack_require__(
           /*! ./NineSliceGeometry.js */ './node_modules/pixi.js/lib/scene/sprite-nine-slice/NineSliceGeometry.js'
         );
 
         ('use strict');
-        const _NineSliceSprite = class _NineSliceSprite extends View.ViewContainer {
+        const _NineSliceSprite = class _NineSliceSprite extends ViewContainer.ViewContainer {
           /**
            * @param {scene.NineSliceSpriteOptions|Texture} options - Options to use
            * @param options.texture - The texture to use on the NineSliceSprite.
@@ -64632,7 +66234,6 @@ ${src}`;
             });
             this.renderPipeId = 'nineSliceSprite';
             this.batched = true;
-            this._didSpriteUpdate = true;
             this._leftWidth =
               leftWidth ??
               texture?.defaultBorders?.left ??
@@ -64763,16 +66364,6 @@ ${src}`;
           get originalHeight() {
             return this._texture.height;
           }
-          onViewUpdate() {
-            this._didViewChangeTick++;
-            this._didSpriteUpdate = true;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
-          }
           /**
            * Adds the bounds of this object to the bounds object.
            * @param bounds - The output bounds object.
@@ -64868,10 +66459,11 @@ ${src}`;
             this._gpuSpriteHash = /* @__PURE__ */ Object.create(null);
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_gpuSpriteHash');
           }
           addRenderable(sprite, instructionSet) {
             const gpuSprite = this._getGpuSprite(sprite);
-            if (sprite._didSpriteUpdate)
+            if (sprite.didViewUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
             this._renderer.renderPipes.batch.addToBatch(
               gpuSprite,
@@ -64880,7 +66472,7 @@ ${src}`;
           }
           updateRenderable(sprite) {
             const gpuSprite = this._gpuSpriteHash[sprite.uid];
-            if (sprite._didSpriteUpdate)
+            if (sprite.didViewUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
             gpuSprite._batcher.updateElement(gpuSprite);
           }
@@ -64903,7 +66495,6 @@ ${src}`;
             sprite.off('destroyed', this._destroyRenderableBound);
           }
           _updateBatchableSprite(sprite, batchableSprite) {
-            sprite._didSpriteUpdate = false;
             batchableSprite.geometry.update(sprite);
             batchableSprite.texture = sprite._texture;
           }
@@ -64924,7 +66515,6 @@ ${src}`;
             batchableMesh.texture = sprite._texture;
             batchableMesh.roundPixels =
               this._renderer._roundPixels | sprite._roundPixels;
-            sprite._didSpriteUpdate = true;
             this._gpuSpriteHash[sprite.uid] = batchableMesh;
             sprite.on('destroyed', this._destroyRenderableBound);
             return batchableMesh;
@@ -65001,12 +66591,12 @@ ${src}`;
         var Transform = __webpack_require__(
           /*! ../../utils/misc/Transform.js */ './node_modules/pixi.js/lib/utils/misc/Transform.js'
         );
-        var View = __webpack_require__(
-          /*! ../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
 
         ('use strict');
-        const _TilingSprite = class _TilingSprite extends View.ViewContainer {
+        const _TilingSprite = class _TilingSprite extends ViewContainer.ViewContainer {
           constructor(...args) {
             let options = args[0] || {};
             if (options instanceof Texture.Texture) {
@@ -65250,14 +66840,7 @@ ${src}`;
           }
           onViewUpdate() {
             this._boundsDirty = true;
-            this._didTilingSpriteUpdate = true;
-            this._didViewChangeTick++;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
+            super.onViewUpdate();
           }
           /**
            * Destroys this sprite renderable and optionally its texture.
@@ -65353,6 +66936,10 @@ ${src}`;
             this._tilingSpriteDataHash = /* @__PURE__ */ Object.create(null);
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(
+              this,
+              '_tilingSpriteDataHash'
+            );
           }
           validateRenderable(renderable) {
             const tilingSpriteData = this._getTilingSpriteData(renderable);
@@ -65383,8 +66970,7 @@ ${src}`;
                 (tilingSpriteData.batchableMesh =
                   new BatchableMesh.BatchableMesh());
               const batchableMesh = tilingSpriteData.batchableMesh;
-              if (tilingSprite._didTilingSpriteUpdate) {
-                tilingSprite._didTilingSpriteUpdate = false;
+              if (tilingSprite.didViewUpdate) {
                 this._updateBatchableMesh(tilingSprite);
                 batchableMesh.geometry = geometry;
                 batchableMesh.renderable = tilingSprite;
@@ -65431,10 +67017,10 @@ ${src}`;
             const { canBatch } = tilingSpriteData;
             if (canBatch) {
               const { batchableMesh } = tilingSpriteData;
-              if (tilingSprite._didTilingSpriteUpdate)
+              if (tilingSprite.didViewUpdate)
                 this._updateBatchableMesh(tilingSprite);
               batchableMesh._batcher.updateElement(batchableMesh);
-            } else if (tilingSprite._didTilingSpriteUpdate) {
+            } else if (tilingSprite.didViewUpdate) {
               const { shader } = tilingSpriteData;
               shader.updateUniforms(
                 tilingSprite.width,
@@ -65445,7 +67031,6 @@ ${src}`;
                 tilingSprite.texture
               );
             }
-            tilingSprite._didTilingSpriteUpdate = false;
           }
           destroyRenderable(tilingSprite) {
             const tilingSpriteData = this._getTilingSpriteData(tilingSprite);
@@ -65993,12 +67578,12 @@ ${src}`;
         var updateQuadBounds = __webpack_require__(
           /*! ../../utils/data/updateQuadBounds.js */ './node_modules/pixi.js/lib/utils/data/updateQuadBounds.js'
         );
-        var View = __webpack_require__(
-          /*! ../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
 
         ('use strict');
-        class Sprite extends View.ViewContainer {
+        class Sprite extends ViewContainer.ViewContainer {
           /**
            * @param options - The options for creating the sprite.
            */
@@ -66020,7 +67605,6 @@ ${src}`;
             });
             this.renderPipeId = 'sprite';
             this.batched = true;
-            this._didSpriteUpdate = false;
             this._sourceBounds = { minX: 0, maxX: 1, minY: 0, maxY: 0 };
             this._sourceBoundsDirty = true;
             this._anchor = new ObservablePoint.ObservablePoint({
@@ -66123,15 +67707,8 @@ ${src}`;
             );
           }
           onViewUpdate() {
-            this._didViewChangeTick++;
-            this._didSpriteUpdate = true;
             this._sourceBoundsDirty = this._boundsDirty = true;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
+            super.onViewUpdate();
           }
           _updateBounds() {
             updateQuadBounds.updateQuadBounds(
@@ -66273,10 +67850,11 @@ ${src}`;
             this._gpuSpriteHash = /* @__PURE__ */ Object.create(null);
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_gpuSpriteHash');
           }
           addRenderable(sprite, instructionSet) {
             const gpuSprite = this._getGpuSprite(sprite);
-            if (sprite._didSpriteUpdate)
+            if (sprite.didViewUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
             this._renderer.renderPipes.batch.addToBatch(
               gpuSprite,
@@ -66285,7 +67863,7 @@ ${src}`;
           }
           updateRenderable(sprite) {
             const gpuSprite = this._gpuSpriteHash[sprite.uid];
-            if (sprite._didSpriteUpdate)
+            if (sprite.didViewUpdate)
               this._updateBatchableSprite(sprite, gpuSprite);
             gpuSprite._batcher.updateElement(gpuSprite);
           }
@@ -66307,7 +67885,6 @@ ${src}`;
             sprite.off('destroyed', this._destroyRenderableBound);
           }
           _updateBatchableSprite(sprite, batchableSprite) {
-            sprite._didSpriteUpdate = false;
             batchableSprite.bounds = sprite.bounds;
             batchableSprite.texture = sprite._texture;
           }
@@ -66327,7 +67904,6 @@ ${src}`;
             batchableSprite.roundPixels =
               this._renderer._roundPixels | sprite._roundPixels;
             this._gpuSpriteHash[sprite.uid] = batchableSprite;
-            sprite._didSpriteUpdate = false;
             sprite.on('destroyed', this._destroyRenderableBound);
             return batchableSprite;
           }
@@ -66775,7 +68351,6 @@ ${src}`;
             const cacheKey = `${name}-bitmap`;
             const font = Cache.Cache.get(cacheKey);
             if (font) {
-              Cache.Cache.remove(cacheKey);
               font.destroy();
             }
           }
@@ -66795,6 +68370,9 @@ ${src}`;
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        var warn = __webpack_require__(
+          /*! ../../utils/logging/warn.js */ './node_modules/pixi.js/lib/utils/logging/warn.js'
+        );
         var AbstractText = __webpack_require__(
           /*! ../text/AbstractText.js */ './node_modules/pixi.js/lib/scene/text/AbstractText.js'
         );
@@ -66836,6 +68414,21 @@ ${src}`;
             bounds.maxX = bounds.minX + width;
             bounds.minY = -anchor._y * (height + offset);
             bounds.maxY = bounds.minY + height;
+          }
+          /**
+           * The resolution / device pixel ratio of the canvas.
+           * @default 1
+           */
+          set resolution(value) {
+            if (value !== null) {
+              warn.warn(
+                // eslint-disable-next-line max-len
+                '[BitmapText] dynamically updating the resolution is not supported. Resolution should be managed by the BitmapFont.'
+              );
+            }
+          }
+          get resolution() {
+            return this._resolution;
           }
         }
 
@@ -66880,6 +68473,7 @@ ${src}`;
             this._gpuBitmapText = {};
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
+            this._renderer.renderableGC.addManagedHash(this, '_gpuBitmapText');
           }
           validateRenderable(bitmapText) {
             const graphicsRenderable = this._getGpuBitmapText(bitmapText);
@@ -67170,7 +68764,6 @@ ${src}`;
             const fontScale =
               this.baseRenderedFontSize / this.baseMeasurementFontSize;
             const padding = this._padding * fontScale;
-            const widthScale = style.fontStyle === 'italic' ? 2 : 1;
             let maxCharHeight = 0;
             let skipTexture = false;
             for (let i = 0; i < charList.length; i++) {
@@ -67181,10 +68774,13 @@ ${src}`;
                 canvas,
                 false
               );
+              const textureGlyphWidth = Math.ceil(
+                (style.fontStyle === 'italic' ? 2 : 1) * metrics.width
+              );
               metrics.lineHeight = metrics.height;
-              const width = widthScale * metrics.width * fontScale;
+              const width = metrics.width * fontScale;
               const height = metrics.height * fontScale;
-              const paddedWidth = width + padding * 2;
+              const paddedWidth = textureGlyphWidth + padding * 2;
               const paddedHeight = height + padding * 2;
               skipTexture = false;
               if (
@@ -67384,7 +68980,6 @@ ${src}`;
             super.destroy();
             for (let i = 0; i < this.pages.length; i++) {
               const { canvasAndContext, texture } = this.pages[i];
-              canvasAndContext.canvas.width = canvasAndContext.canvas.width;
               CanvasPool.CanvasPool.returnCanvasAndContext(canvasAndContext);
               texture.destroy(true);
             }
@@ -68104,6 +69699,7 @@ ${src}`;
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
             this._renderer.runners.resolutionChange.add(this);
+            this._renderer.renderableGC.addManagedHash(this, '_gpuText');
           }
           resolutionChange() {
             for (const i in this._gpuText) {
@@ -68302,6 +69898,9 @@ ${src}`;
         var Extensions = __webpack_require__(
           /*! ../../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
         );
+        var CanvasPool = __webpack_require__(
+          /*! ../../rendering/renderers/shared/texture/CanvasPool.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/CanvasPool.js'
+        );
         var TexturePool = __webpack_require__(
           /*! ../../rendering/renderers/shared/texture/TexturePool.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/TexturePool.js'
         );
@@ -68422,22 +70021,24 @@ ${src}`;
               svgURL,
               isSafari.isSafari() && fontFamilies.length > 0
             );
-            let resource = image;
+            const resource = image;
+            let canvasAndContext;
             if (this._createCanvas) {
-              resource =
+              canvasAndContext =
                 getTemporaryCanvasFromImage.getTemporaryCanvasFromImage(
                   image,
                   resolution
                 );
             }
             const texture = getPo2TextureFromSource.getPo2TextureFromSource(
-              resource,
+              canvasAndContext ? canvasAndContext.canvas : resource,
               image.width - uvSafeOffset,
               image.height - uvSafeOffset,
               resolution
             );
             if (this._createCanvas) {
               this._renderer.texture.initSource(texture.source);
+              CanvasPool.CanvasPool.returnCanvasAndContext(canvasAndContext);
             }
             PoolGroup.BigPool.return(htmlTextData);
             return texture;
@@ -68819,8 +70420,7 @@ ${src}`;
           const { context } = canvasAndContext;
           context.clearRect(0, 0, image.width, image.height);
           context.drawImage(image, 0, 0);
-          CanvasPool.CanvasPool.returnCanvasAndContext(canvasAndContext);
-          return canvasAndContext.canvas;
+          return canvasAndContext;
         }
 
         exports.getTemporaryCanvasFromImage = getTemporaryCanvasFromImage;
@@ -69094,12 +70694,12 @@ ${src}`;
         var deprecation = __webpack_require__(
           /*! ../../utils/logging/deprecation.js */ './node_modules/pixi.js/lib/utils/logging/deprecation.js'
         );
-        var View = __webpack_require__(
-          /*! ../view/View.js */ './node_modules/pixi.js/lib/scene/view/View.js'
+        var ViewContainer = __webpack_require__(
+          /*! ../view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
         );
 
         ('use strict');
-        class AbstractText extends View.ViewContainer {
+        class AbstractText extends ViewContainer.ViewContainer {
           constructor(options, styleClass) {
             const {
               text,
@@ -69289,15 +70889,9 @@ ${src}`;
             return false;
           }
           onViewUpdate() {
-            this._didViewChangeTick++;
             this._boundsDirty = true;
-            if (this.didViewUpdate) return;
-            this.didViewUpdate = true;
-            this._didTextUpdate = true;
-            const renderGroup = this.renderGroup || this.parentRenderGroup;
-            if (renderGroup) {
-              renderGroup.onChildViewUpdate(this);
-            }
+            if (!this.didViewUpdate) this._didTextUpdate = true;
+            super.onViewUpdate();
           }
           _getKey() {
             return `${this.text}:${this._style.styleKey}:${this._resolution}`;
@@ -69498,7 +71092,7 @@ ${src}`;
             return this._fontStyle;
           }
           set fontStyle(value) {
-            this._fontStyle = value;
+            this._fontStyle = value.toLowerCase();
             this.update();
           }
           /**
@@ -70073,17 +71667,24 @@ ${src}`;
                 context.textLetterSpacing = '0px';
               }
             }
-            let width = context.measureText(text).width;
-            if (width > 0) {
+            const metrics = context.measureText(text);
+            let metricWidth = metrics.width;
+            const actualBoundingBoxLeft = -metrics.actualBoundingBoxLeft;
+            const actualBoundingBoxRight = metrics.actualBoundingBoxRight;
+            let boundsWidth = actualBoundingBoxRight - actualBoundingBoxLeft;
+            if (metricWidth > 0) {
               if (useExperimentalLetterSpacing) {
-                width -= letterSpacing;
+                metricWidth -= letterSpacing;
+                boundsWidth -= letterSpacing;
               } else {
-                width +=
+                const val =
                   (_CanvasTextMetrics.graphemeSegmenter(text).length - 1) *
                   letterSpacing;
+                metricWidth += val;
+                boundsWidth += val;
               }
             }
-            return width;
+            return Math.max(metricWidth, boundsWidth);
           }
           /**
            * Applies newlines to a string to have it optimally fit into the horizontal
@@ -70567,6 +72168,7 @@ ${src}`;
             this._destroyRenderableBound = this.destroyRenderable.bind(this);
             this._renderer = renderer;
             this._renderer.runners.resolutionChange.add(this);
+            this._renderer.renderableGC.addManagedHash(this, '_gpuText');
           }
           resolutionChange() {
             for (const i in this._gpuText) {
@@ -70583,22 +72185,6 @@ ${src}`;
             const gpuText = this._getGpuText(text);
             const newKey = text._getKey();
             if (gpuText.currentKey !== newKey) {
-              const { width, height } =
-                this._renderer.canvasText.getTextureSize(
-                  text.text,
-                  text.resolution,
-                  text._style
-                );
-              if (
-                // is only being used by this text:
-                this._renderer.canvasText.getReferenceCount(
-                  gpuText.currentKey
-                ) === 1 &&
-                width === gpuText.texture._source.width &&
-                height === gpuText.texture._source.height
-              ) {
-                return false;
-              }
               return true;
             }
             return false;
@@ -70906,13 +72492,7 @@ ${src}`;
             const height = canvas.height;
             context.resetTransform();
             context.scale(resolution, resolution);
-            const padding = style.padding * 2;
-            context.clearRect(
-              0,
-              0,
-              measured.width + 4 + padding,
-              measured.height + 4 + padding
-            );
+            context.textBaseline = style.textBaseline;
             if (style._stroke?.width) {
               const strokeStyle = style._stroke;
               context.lineWidth = strokeStyle.width;
@@ -70949,7 +72529,6 @@ ${src}`;
                   Math.sin(shadowOptions.angle) * dropShadowDistance +
                   dsOffsetShadow;
               } else {
-                context.globalAlpha = style._fill?.alpha ?? 1;
                 context.fillStyle = style._fill
                   ? getCanvasFillStyle.getCanvasFillStyle(style._fill, context)
                   : null;
@@ -71698,10 +73277,10 @@ ${src}`;
         /***/
       },
 
-    /***/ './node_modules/pixi.js/lib/scene/view/View.js':
-      /*!*****************************************************!*\
-  !*** ./node_modules/pixi.js/lib/scene/view/View.js ***!
-  \*****************************************************/
+    /***/ './node_modules/pixi.js/lib/scene/view/ViewContainer.js':
+      /*!**************************************************************!*\
+  !*** ./node_modules/pixi.js/lib/scene/view/ViewContainer.js ***!
+  \**************************************************************/
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
@@ -71755,6 +73334,16 @@ ${src}`;
               y <= bounds.maxY
             );
           }
+          /** @private */
+          onViewUpdate() {
+            this._didViewChangeTick++;
+            if (this.didViewUpdate) return;
+            this.didViewUpdate = true;
+            const renderGroup = this.renderGroup || this.parentRenderGroup;
+            if (renderGroup) {
+              renderGroup.onChildViewUpdate(this);
+            }
+          }
           destroy(options) {
             super.destroy(options);
             this._bounds = null;
@@ -71762,7 +73351,7 @@ ${src}`;
         }
 
         exports.ViewContainer = ViewContainer;
-        //# sourceMappingURL=View.js.map
+        //# sourceMappingURL=ViewContainer.js.map
 
         /***/
       },
@@ -73095,7 +74684,7 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
-        const VERSION = '8.4.1';
+        const VERSION = '8.5.1';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
@@ -73214,6 +74803,52 @@ ${src}`;
 
         exports.ViewableBuffer = ViewableBuffer;
         //# sourceMappingURL=ViewableBuffer.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/utils/data/clean.js':
+      /*!******************************************************!*\
+  !*** ./node_modules/pixi.js/lib/utils/data/clean.js ***!
+  \******************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        'use strict';
+        function cleanHash(hash) {
+          let clean = false;
+          for (const i in hash) {
+            if (hash[i] == void 0) {
+              clean = true;
+              break;
+            }
+          }
+          if (!clean) return hash;
+          const cleanHash2 = /* @__PURE__ */ Object.create(null);
+          for (const i in hash) {
+            const value = hash[i];
+            if (value) {
+              cleanHash2[i] = value;
+            }
+          }
+          return cleanHash2;
+        }
+        function cleanArray(arr) {
+          let offset = 0;
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i] == void 0) {
+              offset++;
+            } else {
+              arr[i - offset] = arr[i];
+            }
+          }
+          arr.length = arr.length - offset;
+          return arr;
+        }
+
+        exports.cleanArray = cleanArray;
+        exports.cleanHash = cleanHash;
+        //# sourceMappingURL=clean.js.map
 
         /***/
       },
@@ -73392,6 +75027,9 @@ ${src}`;
         var _const = __webpack_require__(
           /*! ./const.js */ './node_modules/pixi.js/lib/utils/const.js'
         );
+        var clean = __webpack_require__(
+          /*! ./data/clean.js */ './node_modules/pixi.js/lib/utils/data/clean.js'
+        );
         var removeItems = __webpack_require__(
           /*! ./data/removeItems.js */ './node_modules/pixi.js/lib/utils/data/removeItems.js'
         );
@@ -73460,6 +75098,8 @@ ${src}`;
           getCanvasBoundingBox.getCanvasBoundingBox;
         exports.DATA_URI = _const.DATA_URI;
         exports.VERSION = _const.VERSION;
+        exports.cleanArray = clean.cleanArray;
+        exports.cleanHash = clean.cleanHash;
         exports.removeItems = removeItems.removeItems;
         exports.resetUids = uid.resetUids;
         exports.uid = uid.uid;
@@ -89981,7 +91621,8 @@ Deprecated since v${version}`
           const scene = gameObject.scene;
           const scale = scene.stage.scale;
           const gameObjects = scene.children;
-          const safeDelta = Math.min(60, deltaTime);
+          // at 60fps deltaTime = 1.0, at 30fps deltaTime = 2.0
+          const safeDelta = Math.min(deltaTime, 2);
           const chance = safeDelta * 0.01;
           if (Math.random() < chance) {
             // goto random place
@@ -90312,67 +91953,13 @@ Deprecated since v${version}`
       /*!**************************!*\
   !*** ./src/scene-ssr.ts ***!
   \**************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __setModuleDefault =
-          (this && this.__setModuleDefault) ||
-          (Object.create
-            ? function (o, v) {
-                Object.defineProperty(o, 'default', {
-                  enumerable: true,
-                  value: v
-                });
-              }
-            : function (o, v) {
-                o['default'] = v;
-              });
-        var __importStar =
-          (this && this.__importStar) ||
-          function (mod) {
-            if (mod && mod.__esModule) return mod;
-            var result = {};
-            if (mod != null)
-              for (var k in mod)
-                if (
-                  k !== 'default' &&
-                  Object.prototype.hasOwnProperty.call(mod, k)
-                )
-                  __createBinding(result, mod, k);
-            __setModuleDefault(result, mod);
-            return result;
-          };
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.SceneSSR = void 0;
-        const PIXI = __importStar(
-          __webpack_require__(
-            /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
-          )
+        const pixi_js_1 = __webpack_require__(
+          /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
         );
         const detect_collisions_1 = __webpack_require__(
           /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
@@ -90405,8 +91992,8 @@ Deprecated since v${version}`
             this.physics = new detect_collisions_1.System(
               options.nodeMaxEntries
             );
-            this.stage = new PIXI.Container();
-            this.stage.label = 'Stage';
+            this.stage = this.createStage();
+            this.stage.label = 'SceneStage';
           }
           /**
            * Scene doesn't have parent scene
@@ -90460,7 +92047,7 @@ Deprecated since v${version}`
           stageAddChild(...children) {
             children.forEach((child) => {
               this.recursive(child, (deep) => {
-                if (deep instanceof PIXI.Container) {
+                if (deep instanceof pixi_js_1.Container) {
                   this.stage.addChild(deep);
                 }
               });
@@ -90469,7 +92056,7 @@ Deprecated since v${version}`
           stageRemoveChild(...children) {
             children.forEach((child) => {
               this.recursive(child, (deep) => {
-                if (deep instanceof PIXI.Container) {
+                if (deep instanceof pixi_js_1.Container) {
                   this.stage.removeChild(deep);
                 }
               });
@@ -90484,6 +92071,9 @@ Deprecated since v${version}`
           }
           getChildrenOfType(type) {
             return this.children.filter(({ label }) => label === type);
+          }
+          createStage() {
+            return new pixi_js_1.Container();
           }
         }
         exports.SceneSSR = SceneSSR;
@@ -90623,7 +92213,6 @@ Deprecated since v${version}`
              */
             this.disableDebug$ = new Subject_1.Subject();
             this.stage.visible = this.options.visible || false;
-            this.stage.label = 'SceneStage';
             if (this.pixi) {
               this.pixi.stage.addChild(this.stage);
               this.pixi.stage.label = 'PixiStage';
@@ -90744,21 +92333,27 @@ Deprecated since v${version}`
             const canvas = stats.domElement;
             canvas.setAttribute('style', style);
           }
-          onUpdateDebug(debug) {
-            const canvas = debug;
-            debug.clear();
-            this.physics.draw(canvas);
-            debug.stroke({
-              color: 0xffffff,
-              width: 1.5,
-              alpha: 1
-            });
-            this.physics.drawBVH(canvas);
-            debug.stroke({
-              color: 0x00ff00,
-              width: 1,
-              alpha: 0.5
-            });
+          onUpdateDebug(canvas) {
+            const context = canvas;
+            const debug =
+              typeof this.options.debug === 'object' ? this.options.debug : {};
+            canvas.clear();
+            this.physics.draw(context);
+            canvas.stroke(
+              debug.debugStroke || {
+                color: 0xffffff,
+                width: 1.5,
+                alpha: 1
+              }
+            );
+            this.physics.drawBVH(context);
+            canvas.stroke(
+              debug.debugBVHStroke || {
+                color: 0x00ff00,
+                width: 1,
+                alpha: 0.5
+              }
+            );
           }
         }
         exports.Scene = Scene;

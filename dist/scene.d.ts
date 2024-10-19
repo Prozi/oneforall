@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { DebugStroke, SceneOptions, SceneSSR } from './scene-ssr';
+import { SceneOptions, SceneSSR } from './scene-ssr';
 import { Application } from './application';
 import { Body } from 'detect-collisions';
 import { LifecycleProps } from './lifecycle';
@@ -39,10 +39,6 @@ export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * add body font family to set font of pixi-stats
    */
   showFPS(style?: string): void;
-  protected onUpdateDebug(
-    debug: PIXI.Graphics,
-    debugStroke?: DebugStroke,
-    debugBVHStroke?: DebugStroke
-  ): void;
+  protected onUpdateDebug(canvas: PIXI.Graphics): void;
 }
 //# sourceMappingURL=scene.d.ts.map
