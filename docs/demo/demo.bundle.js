@@ -6327,11 +6327,11 @@
         const model_1 = __webpack_require__(
           /*! ./model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const utils_1 = __webpack_require__(
-          /*! ./utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
         const optimized_1 = __webpack_require__(
           /*! ./optimized */ './node_modules/detect-collisions/dist/optimized.js'
+        );
+        const utils_1 = __webpack_require__(
+          /*! ./utils */ './node_modules/detect-collisions/dist/utils.js'
         );
         const box_1 = __webpack_require__(
           /*! ./bodies/box */ './node_modules/detect-collisions/dist/bodies/box.js'
@@ -6358,40 +6358,52 @@
           /**
            * create point at position with options and add to system
            */
-          createPoint(position, options) {
-            const point = new point_1.Point(position, options);
+          createPoint(position, options, Class) {
+            const PointClass = Class || point_1.Point;
+            const point = new PointClass(position, options);
             this.insert(point);
             return point;
           }
           /**
            * create line at position with options and add to system
            */
-          createLine(start, end, options) {
-            const line = new line_1.Line(start, end, options);
+          createLine(start, end, options, Class) {
+            const LineClass = Class || line_1.Line;
+            const line = new LineClass(start, end, options);
             this.insert(line);
             return line;
           }
           /**
            * create circle at position with options and add to system
            */
-          createCircle(position, radius, options) {
-            const circle = new circle_1.Circle(position, radius, options);
+          createCircle(position, radius, options, Class) {
+            const CircleClass = Class || circle_1.Circle;
+            const circle = new CircleClass(position, radius, options);
             this.insert(circle);
             return circle;
           }
           /**
            * create box at position with options and add to system
            */
-          createBox(position, width, height, options) {
-            const box = new box_1.Box(position, width, height, options);
+          createBox(position, width, height, options, Class) {
+            const BoxClass = Class || box_1.Box;
+            const box = new BoxClass(position, width, height, options);
             this.insert(box);
             return box;
           }
           /**
            * create ellipse at position with options and add to system
            */
-          createEllipse(position, radiusX, radiusY = radiusX, step, options) {
-            const ellipse = new ellipse_1.Ellipse(
+          createEllipse(
+            position,
+            radiusX,
+            radiusY = radiusX,
+            step,
+            options,
+            Class
+          ) {
+            const EllipseClass = Class || ellipse_1.Ellipse;
+            const ellipse = new EllipseClass(
               position,
               radiusX,
               radiusY,
@@ -6404,8 +6416,9 @@
           /**
            * create polygon at position with options and add to system
            */
-          createPolygon(position, points, options) {
-            const polygon = new polygon_1.Polygon(position, points, options);
+          createPolygon(position, points, options, Class) {
+            const PolygonClass = Class || polygon_1.Polygon;
+            const polygon = new PolygonClass(position, points, options);
             this.insert(polygon);
             return polygon;
           }
@@ -6526,11 +6539,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const polygon_1 = __webpack_require__(
-          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
-        );
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
+        );
+        const polygon_1 = __webpack_require__(
+          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
         );
         /**
          * collider - box
@@ -6715,6 +6728,7 @@
           get group() {
             return this._group;
           }
+          // Don't overwrite docs from BodyProps
           set group(group) {
             this._group = (0, utils_1.getGroup)(group);
           }
@@ -6860,11 +6874,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const polygon_1 = __webpack_require__(
-          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
-        );
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
+        );
+        const polygon_1 = __webpack_require__(
+          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
         );
         /**
          * collider - ellipse
@@ -6998,11 +7012,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const polygon_1 = __webpack_require__(
-          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
-        );
         const sat_1 = __webpack_require__(
           /*! sat */ './node_modules/sat/SAT.js'
+        );
+        const polygon_1 = __webpack_require__(
+          /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
         );
         /**
          * collider - line
@@ -7094,11 +7108,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const box_1 = __webpack_require__(
-          /*! ./box */ './node_modules/detect-collisions/dist/bodies/box.js'
-        );
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
+        );
+        const box_1 = __webpack_require__(
+          /*! ./box */ './node_modules/detect-collisions/dist/bodies/box.js'
         );
         /**
          * collider - point (very tiny box)
@@ -7137,25 +7151,19 @@
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Polygon = exports.isSimple = void 0;
+        exports.Polygon = void 0;
+        const poly_decomp_es_1 = __webpack_require__(
+          /*! poly-decomp-es */ './node_modules/poly-decomp-es/dist/poly-decomp-es.js'
+        );
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
-        );
-        const utils_1 = __webpack_require__(
-          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
         );
         const optimized_1 = __webpack_require__(
           /*! ../optimized */ './node_modules/detect-collisions/dist/optimized.js'
         );
-        const poly_decomp_es_1 = __webpack_require__(
-          /*! poly-decomp-es */ './node_modules/poly-decomp-es/dist/poly-decomp-es.js'
+        const utils_1 = __webpack_require__(
+          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
         );
-        Object.defineProperty(exports, 'isSimple', {
-          enumerable: true,
-          get: function () {
-            return poly_decomp_es_1.isSimple;
-          }
-        });
         const sat_1 = __webpack_require__(
           /*! sat */ './node_modules/sat/SAT.js'
         );
@@ -7200,16 +7208,14 @@
            * flag to set is polygon centered
            */
           set isCentered(isCentered) {
-            if (this.centered === isCentered) {
-              return;
+            if (this.centered !== isCentered) {
+              const { x, y } = this.getCentroidWithoutRotation();
+              if (x || y) {
+                const direction = isCentered ? 1 : -1;
+                this.translate(-x * direction, -y * direction);
+              }
+              this.centered = isCentered;
             }
-            const centroid = this.getCentroidWithoutRotation();
-            if (centroid.x || centroid.y) {
-              const x = centroid.x * (isCentered ? 1 : -1);
-              const y = centroid.y * (isCentered ? 1 : -1);
-              this.translate(-x, -y);
-            }
-            this.centered = isCentered;
           }
           /**
            * is polygon centered?
@@ -7265,6 +7271,7 @@
           get group() {
             return this._group;
           }
+          // Don't overwrite docs from BodyProps
           set group(group) {
             this._group = (0, utils_1.getGroup)(group);
           }
@@ -8150,6 +8157,8 @@
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        /* tslint:disable:trailing-whitespace */
+        /* tslint:disable:cyclomatic-complexity */
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.ensureConvex = ensureConvex;
         exports.polygonInCircle = polygonInCircle;
@@ -8163,14 +8172,14 @@
         exports.intersectLineLineFast = intersectLineLineFast;
         exports.intersectLineLine = intersectLineLine;
         exports.intersectLinePolygon = intersectLinePolygon;
+        const sat_1 = __webpack_require__(
+          /*! sat */ './node_modules/sat/SAT.js'
+        );
         const model_1 = __webpack_require__(
           /*! ./model */ './node_modules/detect-collisions/dist/model.js'
         );
         const optimized_1 = __webpack_require__(
           /*! ./optimized */ './node_modules/detect-collisions/dist/optimized.js'
-        );
-        const sat_1 = __webpack_require__(
-          /*! sat */ './node_modules/sat/SAT.js'
         );
         /**
          * replace body with array of related convex polygons
@@ -8186,12 +8195,13 @@
          * @param circle
          */
         function polygonInCircle(polygon, circle) {
-          return (0, optimized_1.every)(polygon.calcPoints, (p) =>
-            (0, sat_1.pointInCircle)(
-              { x: p.x + polygon.pos.x, y: p.y + polygon.pos.y },
-              circle
-            )
-          );
+          return (0, optimized_1.every)(polygon.calcPoints, (p) => {
+            const point = {
+              x: p.x + polygon.pos.x,
+              y: p.y + polygon.pos.y
+            };
+            return (0, sat_1.pointInCircle)(point, circle);
+          });
         }
         function pointInPolygon(point, polygon) {
           return (0, optimized_1.some)(ensureConvex(polygon), (convex) =>
@@ -8417,7 +8427,7 @@
             dX * (line2.end.y - line2.start.y) -
             (line2.end.x - line2.start.x) * dY;
           if (determinant === 0) {
-            return null;
+            return;
           }
           const lambda =
             ((line2.end.y - line2.start.y) * (line2.end.x - line1.start.x) +
@@ -8429,7 +8439,7 @@
             determinant;
           // check if there is an intersection
           if (!(lambda >= 0 && lambda <= 1) || !(gamma >= 0 && gamma <= 1)) {
-            return null;
+            return;
           }
           return {
             x: line1.start.x + lambda * dX,
@@ -8557,6 +8567,7 @@
       /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
+        /* tslint:disable:one-variable-per-declaration */
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.map =
           exports.filter =
@@ -8646,17 +8657,17 @@
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.System = void 0;
-        const model_1 = __webpack_require__(
-          /*! ./model */ './node_modules/detect-collisions/dist/model.js'
-        );
-        const utils_1 = __webpack_require__(
-          /*! ./utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
         const intersect_1 = __webpack_require__(
           /*! ./intersect */ './node_modules/detect-collisions/dist/intersect.js'
         );
+        const model_1 = __webpack_require__(
+          /*! ./model */ './node_modules/detect-collisions/dist/model.js'
+        );
         const optimized_1 = __webpack_require__(
           /*! ./optimized */ './node_modules/detect-collisions/dist/optimized.js'
+        );
+        const utils_1 = __webpack_require__(
+          /*! ./utils */ './node_modules/detect-collisions/dist/utils.js'
         );
         const base_system_1 = __webpack_require__(
           /*! ./base-system */ './node_modules/detect-collisions/dist/base-system.js'
@@ -8773,6 +8784,7 @@
             const { bbox: bboxA, padding: paddingA } = bodyA;
             const { bbox: bboxB, padding: paddingB } = bodyB;
             // assess the bodies real aabb without padding
+            /* tslint:disable-next-line:cyclomatic-complexity */
             if (
               !bboxA ||
               !bboxB ||
@@ -8824,7 +8836,7 @@
            */
           raycast(start, end, allow = utils_1.returnTrue) {
             let minDistance = Infinity;
-            let result = null;
+            let result;
             if (!this.ray) {
               this.ray = new line_1.Line(start, end, { isTrigger: true });
             } else {
@@ -8864,6 +8876,7 @@
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        /* tslint:disable:cyclomatic-complexity */
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.RAD2DEG = exports.DEG2RAD = void 0;
         exports.deg2rad = deg2rad;
@@ -8895,14 +8908,14 @@
         exports.ensureNumber = ensureNumber;
         exports.groupBits = groupBits;
         exports.move = move;
-        const model_1 = __webpack_require__(
-          /*! ./model */ './node_modules/detect-collisions/dist/model.js'
-        );
         const sat_1 = __webpack_require__(
           /*! sat */ './node_modules/sat/SAT.js'
         );
         const intersect_1 = __webpack_require__(
           /*! ./intersect */ './node_modules/detect-collisions/dist/intersect.js'
+        );
+        const model_1 = __webpack_require__(
+          /*! ./model */ './node_modules/detect-collisions/dist/model.js'
         );
         const optimized_1 = __webpack_require__(
           /*! ./optimized */ './node_modules/detect-collisions/dist/optimized.js'
@@ -9026,9 +9039,12 @@
           // Default value should be reflected in documentation of `BodyOptions.group`
           body.group =
             (_a = options.group) !== null && _a !== void 0 ? _a : 0x7fffffff;
+          if ('userData' in options) {
+            body.userData = options.userData;
+          }
           if (
-            body.typeGroup !== model_1.BodyGroup.Circle &&
-            options.isCentered
+            options.isCentered &&
+            body.typeGroup !== model_1.BodyGroup.Circle
           ) {
             body.isCentered = true;
           }
@@ -53100,7 +53116,10 @@ ${src}`;
           destroy(options = false) {
             if (this.destroyed) return;
             this.destroyed = true;
-            const oldChildren = this.removeChildren(0, this.children.length);
+            let oldChildren;
+            if (this.children.length) {
+              oldChildren = this.removeChildren(0, this.children.length);
+            }
             this.removeFromParent();
             this.parent = null;
             this._maskEffect = null;
@@ -53114,7 +53133,7 @@ ${src}`;
             this.removeAllListeners();
             const destroyChildren =
               typeof options === 'boolean' ? options : options?.children;
-            if (destroyChildren) {
+            if (destroyChildren && oldChildren) {
               for (let i = 0; i < oldChildren.length; ++i) {
                 oldChildren[i].destroy(options);
               }
@@ -64717,7 +64736,9 @@ ${src}`;
             if (typeof value === 'number') {
               this._tint = value;
             } else {
-              this._tint = Color.Color.shared.setValue(value).toBgrNumber();
+              this._tint = Color.Color.shared
+                .setValue(value ?? 16777215)
+                .toBgrNumber();
             }
             this._updateColor();
           }
@@ -66516,6 +66537,9 @@ ${src}`;
             batchableMesh.roundPixels =
               this._renderer._roundPixels | sprite._roundPixels;
             this._gpuSpriteHash[sprite.uid] = batchableMesh;
+            if (!sprite.didViewUpdate) {
+              this._updateBatchableSprite(sprite, batchableMesh);
+            }
             sprite.on('destroyed', this._destroyRenderableBound);
             return batchableMesh;
           }
@@ -70521,9 +70545,6 @@ ${src}`;
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
-        var CanvasTextMetrics = __webpack_require__(
-          /*! ../../text/canvas/CanvasTextMetrics.js */ './node_modules/pixi.js/lib/scene/text/canvas/CanvasTextMetrics.js'
-        );
         var HTMLTextRenderData = __webpack_require__(
           /*! ../HTMLTextRenderData.js */ './node_modules/pixi.js/lib/scene/text-html/HTMLTextRenderData.js'
         );
@@ -70553,14 +70574,10 @@ ${src}`;
           document.body.appendChild(svgRoot);
           const contentBounds = domElement.getBoundingClientRect();
           svgRoot.remove();
-          const descenderPadding =
-            CanvasTextMetrics.CanvasTextMetrics.measureFont(
-              style.fontStyle
-            ).descent;
           const doublePadding = style.padding * 2;
           return {
             width: contentBounds.width - doublePadding,
-            height: contentBounds.height + descenderPadding - doublePadding
+            height: contentBounds.height - doublePadding
           };
         }
 
@@ -74684,7 +74701,7 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
-        const VERSION = '8.5.1';
+        const VERSION = '8.5.2';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
@@ -92532,7 +92549,7 @@ Deprecated since v${version}`
   /******/
   /************************************************************************/
   var __webpack_exports__ = {};
-  // This entry need to be wrapped in an IIFE because it need to be in strict mode.
+  // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
   (() => {
     'use strict';
     var exports = __webpack_exports__;
