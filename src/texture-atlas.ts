@@ -12,6 +12,7 @@ export interface TextureAtlasOptions {
   offset?: number;
   count?: number;
   scaleMode?: PIXI.SCALE_MODE;
+  trim?: number; // versus extrude
 }
 
 /**
@@ -40,6 +41,11 @@ export class TextureAtlas {
   offset: number;
 
   /**
+   * how many pixels not put to slice from each side of frame
+   */
+  trim: number;
+
+  /**
    * scale mode for slices
    */
   scaleMode: PIXI.SCALE_MODE;
@@ -61,9 +67,11 @@ export class TextureAtlas {
     rows,
     count,
     offset = 0,
+    trim = 0,
     scaleMode = 'nearest'
   }: TextureAtlasOptions) {
     this.texture = texture;
+    this.trim = trim;
     if (tileWidth && tileHeight) {
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
@@ -121,7 +129,12 @@ export class TextureAtlas {
     const y: number = Math.floor(index / cols) * this.tileHeight;
     const texture: PIXI.Texture = new PIXI.Texture({
       source: this.texture.source,
-      frame: new PIXI.Rectangle(x, y, this.tileWidth, this.tileHeight)
+      frame: new PIXI.Rectangle(
+        this.trim + x,
+        this.trim + y,
+        this.tileWidth - this.trim * 2,
+        this.tileHeight - this.trim * 2
+      )
     });
 
     texture.source.scaleMode = this.scaleMode;

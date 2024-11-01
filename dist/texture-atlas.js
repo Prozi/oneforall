@@ -62,6 +62,7 @@ class TextureAtlas {
     rows,
     count,
     offset = 0,
+    trim = 0,
     scaleMode = 'nearest'
   }) {
     /**
@@ -69,6 +70,7 @@ class TextureAtlas {
      */
     this.slices = [];
     this.texture = texture;
+    this.trim = trim;
     if (tileWidth && tileHeight) {
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
@@ -119,7 +121,12 @@ class TextureAtlas {
     const y = Math.floor(index / cols) * this.tileHeight;
     const texture = new PIXI.Texture({
       source: this.texture.source,
-      frame: new PIXI.Rectangle(x, y, this.tileWidth, this.tileHeight)
+      frame: new PIXI.Rectangle(
+        this.trim + x,
+        this.trim + y,
+        this.tileWidth - this.trim * 2,
+        this.tileHeight - this.trim * 2
+      )
     });
     texture.source.scaleMode = this.scaleMode;
     return texture;

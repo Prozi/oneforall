@@ -8,6 +8,7 @@ export interface TextureAtlasOptions {
   offset?: number;
   count?: number;
   scaleMode?: PIXI.SCALE_MODE;
+  trim?: number;
 }
 /**
  * for slicing textures into tileset
@@ -31,6 +32,10 @@ export declare class TextureAtlas {
    */
   offset: number;
   /**
+   * how many pixels not put to slice from each side of frame
+   */
+  trim: number;
+  /**
    * scale mode for slices
    */
   scaleMode: PIXI.SCALE_MODE;
@@ -50,6 +55,7 @@ export declare class TextureAtlas {
     rows,
     count,
     offset,
+    trim,
     scaleMode
   }: TextureAtlasOptions);
   /**
