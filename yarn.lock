@@ -4356,10 +4356,10 @@ pixi-shim@^2.5.3:
   optionalDependencies:
     canvas "^2"
 
-pixi-stats@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-3.1.0.tgz#6ea6baa54e52f0fd9d781e1506b5dcc9784ff342"
-  integrity sha512-pq3dK6RbCxv8aSER8i9stBr3850FlXqBEilvz0rtnE86xdAFIP5vQ1CFHQ380LCKfDvpSwN4UriA6r5C7DtRxw==
+pixi-stats@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-3.1.1.tgz#2c9d0b00a7f48794f62c73d1f79a3ac19082bc46"
+  integrity sha512-n8+RrkB+bwcKeypG6VNW1bXH9FuDFapMApvgZvftxCMtlOZCoK5V+1fNLe7N8uUqAkVD6ProAaGdBKCvLS4MYA==
 
 pixi.js-legacy@^7:
   version "7.4.2"
