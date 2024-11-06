@@ -10421,6 +10421,7 @@
       /***/ function (__unused_webpack_module, exports, __webpack_require__) {
         'use strict';
 
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         var __importDefault =
           (this && this.__importDefault) ||
           function (mod) {
@@ -10500,6 +10501,7 @@
       /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         Object.defineProperty(exports, '__esModule', { value: true });
         class GLHook {
           constructor(_gl) {
@@ -10547,6 +10549,7 @@
       /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         Object.defineProperty(exports, '__esModule', { value: true });
         class TextureHook {
           constructor(_gl) {
@@ -10733,7 +10736,26 @@
             return mod && mod.__esModule ? mod : { default: mod };
           };
         Object.defineProperty(exports, '__esModule', { value: true });
-        exports.PIXIHooks = exports.StatsJSAdapter = void 0;
+        exports.PIXIHooks =
+          exports.StatsJSAdapter =
+          exports.WebGLRenderer =
+          exports.Texture =
+            void 0;
+        const pixi_js_1 = __webpack_require__(
+          /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
+        );
+        Object.defineProperty(exports, 'Texture', {
+          enumerable: true,
+          get: function () {
+            return pixi_js_1.Texture;
+          }
+        });
+        Object.defineProperty(exports, 'WebGLRenderer', {
+          enumerable: true,
+          get: function () {
+            return pixi_js_1.WebGLRenderer;
+          }
+        });
         const BaseHooks_1 = __importDefault(
           __webpack_require__(
             /*! ./hooks/BaseHooks */ './node_modules/pixi-stats/dist/hooks/BaseHooks.js'
@@ -10794,11 +10816,12 @@
               if (!glTextures || !this.texturehook) {
                 console.error('[PIXI Hooks] !glTextures || !this.texturehook');
               } else {
+                const glTexturesArray = Object.values(glTextures);
                 console.log(
                   '[PIXI Hooks] Collect used textures:',
-                  glTextures.length
+                  glTexturesArray.length
                 );
-                Object.values(glTextures).forEach((glTexture) => {
+                glTexturesArray.forEach((glTexture) => {
                   if (glTexture.gl === renderer.gl && glTexture.texture) {
                     this.texturehook.registerTexture(glTexture.texture);
                   }
