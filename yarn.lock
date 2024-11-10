@@ -3218,10 +3218,10 @@ inherits@2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha512-x00IRNXNy63jwGkJmzPigoySHbaqpNuzKbBOmzK+g2OdZpQ9w+sxCN+VSB3ja7IAge2OP2qpfxTjeNcyjmW1uw==
 
-inject.min@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/inject.min/-/inject.min-1.1.0.tgz#7e19ff33b46dcd8dcb579a5ed59a3fa8f4222fae"
-  integrity sha512-Gu7EKs0lLHFo0ajVUv5aggXYvUbML255HtjisS39CUar17wpsaDDVzqulxF2b2qTc8p0WZooijBXaqItjNteBA==
+inject.min@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/inject.min/-/inject.min-1.2.0.tgz#bbdb9717522b035bba02520c9857a1d6cb7da283"
+  integrity sha512-gEn0bff1nt4dFZSqL4sFpR4hUQyaKTQpYTvFk1YyiaaMM4qBQXe02VqmxA8gaf+qMCz6GFi7xkxWkkVYgEbnRQ==
 
 interpret@^3.1.1:
   version "3.1.1"

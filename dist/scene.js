@@ -62,6 +62,23 @@ var __importStar =
     __setModuleDefault(result, mod);
     return result;
   };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === 'function')
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require('pixi.js'));
@@ -77,7 +94,9 @@ const rxjs_1 = require('rxjs');
  * base scene for front end rendering
  */
 class Scene extends scene_ssr_1.SceneSSR {
-  constructor(options = {}) {
+  constructor(_a = {}) {
+    var { view } = _a,
+      options = __rest(_a, ['view']);
     super(options);
     this.isInitialized = false;
     this.stage = new PIXI.Container();
@@ -90,11 +109,11 @@ class Scene extends scene_ssr_1.SceneSSR {
      */
     this.disableDebug$ = new Subject_1.Subject();
     const nameKey = 'label' in this.stage ? 'label' : 'name';
+    this.pixi = this.createPixi(Object.assign({ view }, options));
     this.stage[nameKey] = 'SceneStage';
     this.stage.visible = this.options.visible || false;
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
-      const nameKey = 'label' in this.pixi.stage ? 'label' : 'name';
       this.pixi.stage[nameKey] = 'PixiStage';
     }
     if (this.options.autoSort) {
@@ -119,6 +138,9 @@ class Scene extends scene_ssr_1.SceneSSR {
         }),
       {}
     );
+  }
+  createPixi(options) {
+    return inject_min_1.DIContainer.get(PIXI.Application, options);
   }
   async init(options) {
     var _a;
@@ -303,16 +325,17 @@ class Scene extends scene_ssr_1.SceneSSR {
     }
   }
   resize() {
-    this.pixi.renderer.resize(innerWidth, innerHeight);
+    try {
+      const canvas =
+        ('canvas' in this.pixi && this.pixi.canvas) ||
+        ('view' in this.pixi && this.pixi.view);
+      this.pixi.renderer.resize(innerWidth, innerHeight);
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    } catch (_err) {}
   }
 }
 exports.Scene = Scene;
-__decorate(
-  [(0, inject_min_1.Inject)(PIXI.Application)],
-  Scene.prototype,
-  'pixi',
-  void 0
-);
 __decorate(
   [(0, inject_min_1.Inject)(resources_1.Resources)],
   Scene.prototype,

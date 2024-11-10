@@ -2,6 +2,7 @@ import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
 import { Subject } from 'rxjs/internal/Subject';
+export type PIXIAppOptions = Partial<Record<string, any>>;
 /**
  * params for debug type
  */
@@ -13,7 +14,11 @@ export interface DebugStroke {
 /**
  * possible options for scene constructor
  */
-export interface SceneOptions {
+export interface SceneOptions extends PIXIAppOptions {
+  /**
+   * pixi v6
+   */
+  view?: HTMLCanvasElement;
   /**
    * set name
    */

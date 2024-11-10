@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
 
-import { SceneOptions, SceneSSR } from './scene-ssr';
+import { PIXIAppOptions, SceneOptions, SceneSSR } from './scene-ssr';
 
 import { Body } from 'detect-collisions';
-import { Inject } from 'inject.min';
+import { DIContainer, Inject } from 'inject.min';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Stats } from 'pixi-stats';
@@ -11,8 +11,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { fromEvent } from 'rxjs';
-
-export type PIXIAppOptions = Partial<Record<string, any>>;
 
 export type PIXIWebGLRenderer = any;
 
@@ -22,9 +20,9 @@ export type PIXICanvas = any;
  * base scene for front end rendering
  */
 export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
-  @Inject(PIXI.Application) pixi: PIXI.Application;
   @Inject(Resources) resources: Resources;
 
+  pixi: PIXI.Application;
   isInitialized = false;
   stage = new PIXI.Container();
 
@@ -38,19 +36,18 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    */
   readonly disableDebug$: Subject<void> = new Subject();
 
-  constructor(options: SceneOptions = {}) {
+  constructor({ view, ...options }: SceneOptions = {}) {
     super(options);
 
     const nameKey = 'label' in this.stage ? 'label' : 'name';
+
+    this.pixi = this.createPixi({ view, ...options });
 
     this.stage[nameKey] = 'SceneStage';
     this.stage.visible = this.options.visible || false;
 
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
-
-      const nameKey = 'label' in this.pixi.stage ? 'label' : 'name';
-
       this.pixi.stage[nameKey] = 'PixiStage';
     }
 
@@ -81,6 +78,10 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
       }),
       {}
     );
+  }
+
+  createPixi(options: PIXIAppOptions): PIXI.Application {
+    return DIContainer.get(PIXI.Application, options);
   }
 
   async init(options?: PIXIAppOptions): Promise<boolean> {
@@ -268,6 +269,14 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   }
 
   resize(): void {
-    this.pixi.renderer.resize(innerWidth, innerHeight);
+    try {
+      const canvas = (('canvas' in this.pixi && this.pixi.canvas) ||
+        ('view' in this.pixi && this.pixi.view)) as HTMLCanvasElement;
+
+      this.pixi.renderer.resize(innerWidth, innerHeight);
+
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    } catch (_err) {}
   }
 }

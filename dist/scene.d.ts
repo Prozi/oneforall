@@ -1,18 +1,17 @@
 import * as PIXI from 'pixi.js';
-import { SceneOptions, SceneSSR } from './scene-ssr';
+import { PIXIAppOptions, SceneOptions, SceneSSR } from './scene-ssr';
 import { Body } from 'detect-collisions';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Subject } from 'rxjs/internal/Subject';
-export type PIXIAppOptions = Partial<Record<string, any>>;
 export type PIXIWebGLRenderer = any;
 export type PIXICanvas = any;
 /**
  * base scene for front end rendering
  */
 export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
-  pixi: PIXI.Application;
   resources: Resources;
+  pixi: PIXI.Application;
   isInitialized: boolean;
   stage: PIXI.Container<PIXI.ContainerChild>;
   /**
@@ -23,8 +22,9 @@ export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * When disableDebug is called, it emits this subject.
    */
   readonly disableDebug$: Subject<void>;
-  constructor(options?: SceneOptions);
+  constructor({ view, ...options }?: SceneOptions);
   static getQueryParams(): Record<string, string>;
+  createPixi(options: PIXIAppOptions): PIXI.Application;
   init(options?: PIXIAppOptions): Promise<boolean>;
   start(): void;
   stop(): void;

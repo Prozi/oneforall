@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
   "description": "A Unity-inspired game framework by pietal.dev",
-  "version": "9.20.1",
+  "version": "9.21.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -41,7 +41,7 @@
   "dependencies": {
     "@pietal.dev/cache": "^2.0.2",
     "detect-collisions": "^9.24.0",
-    "inject.min": "^1.1.0",
+    "inject.min": "^1.2.0",
     "pixi-stats": "^3.1.1",
     "rxjs": "^7.8.1"
   },
