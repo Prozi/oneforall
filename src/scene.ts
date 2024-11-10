@@ -89,6 +89,8 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
       return false;
     }
 
+    this.isInitialized = true;
+
     const pixi = this.pixi as {
       init?: (options?: PIXIAppOptions) => Promise<void>;
     };

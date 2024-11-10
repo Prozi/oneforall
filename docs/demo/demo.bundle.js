@@ -96182,6 +96182,7 @@ Deprecated since v${version}`
             if (this.isInitialized) {
               return false;
             }
+            this.isInitialized = true;
             const pixi = this.pixi;
             await ((_a = pixi.init) === null || _a === void 0
               ? void 0
