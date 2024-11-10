@@ -25,7 +25,6 @@ class Lifecycle {
   }
   static destroy(lifecycle) {
     var _a, _b;
-    // eslint-disable-next-line
     (_b =
       (_a = lifecycle.gameObject) === null || _a === void 0
         ? void 0

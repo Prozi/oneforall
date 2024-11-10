@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
-    <title>AnimatorData | @pietal.dev/engine</title>
+    <title>PIXIv8Loader | @pietal.dev/engine</title>
     <meta name="description" content="Documentation for @pietal.dev/engine" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../assets/style.css" />
@@ -60,42 +60,28 @@
         <div class="tsd-page-title">
           <ul class="tsd-breadcrumb">
             <li><a href="../modules.html">@pietal.dev/engine</a></li>
-            <li><a href="AnimatorData.html">AnimatorData</a></li>
+            <li><a href="PIXIv8Loader.html">PIXIv8Loader</a></li>
           </ul>
-          <h1>Interface AnimatorData</h1>
+          <h1>Interface PIXIv8Loader</h1>
         </div>
         <div class="tsd-signature">
           <span class="tsd-signature-keyword">interface </span
-          ><span class="tsd-kind-interface">AnimatorData</span>
+          ><span class="tsd-kind-interface">PIXIv8Loader</span>
           <span class="tsd-signature-symbol">{ </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="AnimatorData.html#anchor"
-            >anchor</a
-          ><span class="tsd-signature-symbol">?: </span
-          ><span class="tsd-signature-type">Vector</span
-          ><span class="tsd-signature-symbol">; </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="AnimatorData.html#animations"
-            >animations</a
+          ><a class="tsd-kind-property" href="PIXIv8Loader.html#load">load</a
           ><span class="tsd-signature-symbol">: </span
-          ><span class="tsd-signature-type">Record</span
-          ><span class="tsd-signature-symbol">&lt;</span
+          ><span class="tsd-signature-symbol">(</span
+          ><span class="tsd-signature-symbol">(</span
+          ><span class="tsd-kind-parameter">url</span
+          ><span class="tsd-signature-symbol">: </span
           ><span class="tsd-signature-type">string</span
-          ><span class="tsd-signature-symbol">, </span
-          ><span class="tsd-signature-type">number</span
-          ><span class="tsd-signature-symbol">[]</span
+          ><span class="tsd-signature-symbol">)</span
+          ><span class="tsd-signature-symbol"> =&gt; </span
+          ><span class="tsd-signature-type">Promise</span
+          ><span class="tsd-signature-symbol">&lt;</span
+          ><span class="tsd-signature-type">any</span
           ><span class="tsd-signature-symbol">&gt;</span
-          ><span class="tsd-signature-symbol">; </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="AnimatorData.html#animationSpeed"
-            >animationSpeed</a
-          ><span class="tsd-signature-symbol">?: </span
-          ><span class="tsd-signature-type">number</span
-          ><span class="tsd-signature-symbol">; </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="AnimatorData.html#cols">cols</a
-          ><span class="tsd-signature-symbol">: </span
-          ><span class="tsd-signature-type">number</span
-          ><span class="tsd-signature-symbol">; </span><br /><span>    </span
-          ><a class="tsd-kind-property" href="AnimatorData.html#rows">rows</a
-          ><span class="tsd-signature-symbol">: </span
-          ><span class="tsd-signature-type">number</span
+          ><span class="tsd-signature-symbol">)</span
           ><span class="tsd-signature-symbol">; </span><br /><span
             class="tsd-signature-symbol"
             >}</span
@@ -106,8 +92,8 @@
             <li>
               Defined in
               <a
-                href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L11"
-                >src/animator.ts:11</a
+                href="https://github.com/Prozi/oneforall/blob/main/src/resources.ts#L17"
+                >src/resources.ts:17</a
               >
             </li>
           </ul>
@@ -132,34 +118,10 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Properties</h3>
                   <div class="tsd-index-list">
-                    <a href="AnimatorData.html#anchor" class="tsd-index-link"
+                    <a href="PIXIv8Loader.html#load" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>anchor?</span></a
-                    >
-                    <a
-                      href="AnimatorData.html#animations"
-                      class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>animations</span></a
-                    >
-                    <a
-                      href="AnimatorData.html#animationSpeed"
-                      class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>animation<wbr />Speed?</span></a
-                    >
-                    <a href="AnimatorData.html#cols" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>cols</span></a
-                    >
-                    <a href="AnimatorData.html#rows" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="../assets/icons.svg#icon-1024"></use></svg
-                      ><span>rows</span></a
+                      ><span>load</span></a
                     >
                   </div>
                 </section>
@@ -178,146 +140,37 @@
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="anchor" class="tsd-anchor"></a>
+              <a id="load" class="tsd-anchor"></a>
               <h3 class="tsd-anchor-link">
-                <code class="tsd-tag">Optional</code><span>anchor</span
-                ><a
-                  href="#anchor"
-                  aria-label="Permalink"
-                  class="tsd-anchor-icon"
+                <span>load</span
+                ><a href="#load" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
                     <use href="../assets/icons.svg#icon-anchor"></use></svg
                 ></a>
               </h3>
               <div class="tsd-signature">
-                <span class="tsd-kind-property">anchor</span
-                ><span class="tsd-signature-symbol">?:</span>
-                <span class="tsd-signature-type">Vector</span>
-              </div>
-              <aside class="tsd-sources">
-                <ul>
-                  <li>
-                    Defined in
-                    <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L16"
-                      >src/animator.ts:16</a
-                    >
-                  </li>
-                </ul>
-              </aside>
-            </section>
-            <section class="tsd-panel tsd-member">
-              <a id="animations" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
-                <span>animations</span
-                ><a
-                  href="#animations"
-                  aria-label="Permalink"
-                  class="tsd-anchor-icon"
-                  ><svg viewBox="0 0 24 24">
-                    <use href="../assets/icons.svg#icon-anchor"></use></svg
-                ></a>
-              </h3>
-              <div class="tsd-signature">
-                <span class="tsd-kind-property">animations</span
+                <span class="tsd-kind-property">load</span
                 ><span class="tsd-signature-symbol">:</span>
-                <span class="tsd-signature-type">Record</span
-                ><span class="tsd-signature-symbol">&lt;</span
+                <span class="tsd-signature-symbol">(</span
+                ><span class="tsd-signature-symbol">(</span
+                ><span class="tsd-kind-parameter">url</span
+                ><span class="tsd-signature-symbol">: </span
                 ><span class="tsd-signature-type">string</span
-                ><span class="tsd-signature-symbol">, </span
-                ><span class="tsd-signature-type">number</span
-                ><span class="tsd-signature-symbol">[]</span
-                ><span class="tsd-signature-symbol">&gt;</span>
+                ><span class="tsd-signature-symbol">)</span
+                ><span class="tsd-signature-symbol"> =&gt; </span
+                ><span class="tsd-signature-type">Promise</span
+                ><span class="tsd-signature-symbol">&lt;</span
+                ><span class="tsd-signature-type">any</span
+                ><span class="tsd-signature-symbol">&gt;</span
+                ><span class="tsd-signature-symbol">)</span>
               </div>
               <aside class="tsd-sources">
                 <ul>
                   <li>
                     Defined in
                     <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L12"
-                      >src/animator.ts:12</a
-                    >
-                  </li>
-                </ul>
-              </aside>
-            </section>
-            <section class="tsd-panel tsd-member">
-              <a id="animationSpeed" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
-                <code class="tsd-tag">Optional</code
-                ><span>animation<wbr />Speed</span
-                ><a
-                  href="#animationSpeed"
-                  aria-label="Permalink"
-                  class="tsd-anchor-icon"
-                  ><svg viewBox="0 0 24 24">
-                    <use href="../assets/icons.svg#icon-anchor"></use></svg
-                ></a>
-              </h3>
-              <div class="tsd-signature">
-                <span class="tsd-kind-property">animation<wbr />Speed</span
-                ><span class="tsd-signature-symbol">?:</span>
-                <span class="tsd-signature-type">number</span>
-              </div>
-              <aside class="tsd-sources">
-                <ul>
-                  <li>
-                    Defined in
-                    <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L15"
-                      >src/animator.ts:15</a
-                    >
-                  </li>
-                </ul>
-              </aside>
-            </section>
-            <section class="tsd-panel tsd-member">
-              <a id="cols" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
-                <span>cols</span
-                ><a href="#cols" aria-label="Permalink" class="tsd-anchor-icon"
-                  ><svg viewBox="0 0 24 24">
-                    <use href="../assets/icons.svg#icon-anchor"></use></svg
-                ></a>
-              </h3>
-              <div class="tsd-signature">
-                <span class="tsd-kind-property">cols</span
-                ><span class="tsd-signature-symbol">:</span>
-                <span class="tsd-signature-type">number</span>
-              </div>
-              <aside class="tsd-sources">
-                <ul>
-                  <li>
-                    Defined in
-                    <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L13"
-                      >src/animator.ts:13</a
-                    >
-                  </li>
-                </ul>
-              </aside>
-            </section>
-            <section class="tsd-panel tsd-member">
-              <a id="rows" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
-                <span>rows</span
-                ><a href="#rows" aria-label="Permalink" class="tsd-anchor-icon"
-                  ><svg viewBox="0 0 24 24">
-                    <use href="../assets/icons.svg#icon-anchor"></use></svg
-                ></a>
-              </h3>
-              <div class="tsd-signature">
-                <span class="tsd-kind-property">rows</span
-                ><span class="tsd-signature-symbol">:</span>
-                <span class="tsd-signature-type">number</span>
-              </div>
-              <aside class="tsd-sources">
-                <ul>
-                  <li>
-                    Defined in
-                    <a
-                      href="https://github.com/Prozi/oneforall/blob/main/src/animator.ts#L14"
-                      >src/animator.ts:14</a
+                      href="https://github.com/Prozi/oneforall/blob/main/src/resources.ts#L18"
+                      >src/resources.ts:18</a
                     >
                   </li>
                 </ul>
@@ -470,26 +323,10 @@
                   >Properties
                 </summary>
                 <div>
-                  <a href="#anchor" class=""
+                  <a href="#load" class=""
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
-                    ><span>anchor</span></a
-                  ><a href="#animations" class=""
-                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                      <use href="../assets/icons.svg#icon-1024"></use></svg
-                    ><span>animations</span></a
-                  ><a href="#animationSpeed" class=""
-                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                      <use href="../assets/icons.svg#icon-1024"></use></svg
-                    ><span>animation<wbr />Speed</span></a
-                  ><a href="#cols" class=""
-                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                      <use href="../assets/icons.svg#icon-1024"></use></svg
-                    ><span>cols</span></a
-                  ><a href="#rows" class=""
-                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                      <use href="../assets/icons.svg#icon-1024"></use></svg
-                    ><span>rows</span></a
+                    ><span>load</span></a
                   >
                 </div>
               </details>

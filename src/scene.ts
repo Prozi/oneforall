@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 
 import { SceneOptions, SceneSSR } from './scene-ssr';
 
-import { Application } from './application';
+import { Application, PIXIAppOptions } from './application';
 import { Body } from 'detect-collisions';
 import { Inject } from 'inject.min';
 import { LifecycleProps } from './lifecycle';
@@ -11,6 +11,11 @@ import { Stats } from 'pixi-stats';
 import { Subject } from 'rxjs/internal/Subject';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { fromEvent } from 'rxjs';
+
+export type PIXIWebGLRenderer = any;
+
+export type PIXICanvas = any;
 
 /**
  * base scene for front end rendering
@@ -18,6 +23,8 @@ import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   @Inject(Application) pixi: Application;
   @Inject(Resources) resources: Resources;
+
+  isInitialized = false;
 
   /**
    * When disableAutoSort is called, it emits this subject.
@@ -36,7 +43,10 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
 
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
-      this.pixi.stage.label = 'PixiStage';
+
+      const nameKey = 'label' in this.pixi.stage ? 'label' : 'name';
+
+      this.pixi.stage[nameKey] = 'PixiStage';
     }
 
     if (this.options.autoSort) {
@@ -60,7 +70,6 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
 
     return [...matches].reduce(
-      // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) => ({
         ...queryParams,
         [decodeURIComponent(paramName)]: decodeURIComponent(paramValue)
@@ -69,20 +78,43 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     );
   }
 
-  async init(options?: Partial<PIXI.ApplicationOptions>): Promise<boolean> {
-    if (this.pixi.isInitialized) {
+  async init(options?: PIXIAppOptions): Promise<boolean> {
+    if (this.isInitialized) {
       return false;
     }
 
-    await this.pixi.init(options);
+    const pixi = this.pixi as {
+      init?: (options?: PIXIAppOptions) => Promise<void>;
+    };
 
-    if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
-      document.body.appendChild(this.pixi.canvas);
+    await pixi.init?.(options);
+
+    const canvasKey = 'canvas' in this.pixi ? 'canvas' : 'view';
+
+    if (this.pixi[canvasKey] && !this.pixi[canvasKey].parentElement) {
+      document.body.appendChild(this.pixi[canvasKey]);
     }
 
     const showFPS = this.options.showFPS;
     if (showFPS) {
       this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
+    }
+
+    // pixi v6
+    if (!('Assets' in PIXI)) {
+      this.resize();
+
+      fromEvent(document, 'fullscreenchange', { passive: true })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.resize();
+        });
+
+      fromEvent(window, 'resize', { passive: true })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.resize();
+        });
     }
 
     return true;
@@ -138,7 +170,9 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
     this.update$
       .pipe(takeUntil(merge(this.destroy$, this.disableDebug$)))
       .subscribe(() => {
-        this.onUpdateDebug(debug);
+        try {
+          this.onUpdateDebug(debug);
+        } catch (_err) {}
       });
   }
 
@@ -156,35 +190,59 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;'): void {
-    const stats = new Stats(this.pixi.renderer as PIXI.WebGLRenderer);
+    const stats = new Stats(this.pixi.renderer as PIXIWebGLRenderer);
     const canvas = stats.domElement;
 
     canvas.setAttribute('style', style);
   }
 
-  protected onUpdateDebug(canvas: PIXI.Graphics): void {
-    const context = canvas as unknown as CanvasRenderingContext2D;
+  protected onUpdateDebug(graphics: PIXI.Graphics): void {
+    const context = graphics as unknown as CanvasRenderingContext2D;
+    const graphicsUniversal = graphics as any;
+    const isPIXIv6 = 'stroke' in graphicsUniversal;
     const debug =
       typeof this.options.debug === 'object' ? this.options.debug : {};
 
-    canvas.clear();
+    graphicsUniversal.clear();
 
+    if (!isPIXIv6) {
+      graphicsUniversal.lineStyle(
+        debug.debugStroke?.width || 1.5,
+        debug.debugStroke?.color || 0xffffff,
+        debug.debugStroke?.alpha || 1
+      );
+    }
     this.physics.draw(context);
-    canvas.stroke(
-      debug.debugStroke || {
-        color: 0xffffff,
-        width: 1.5,
-        alpha: 1
-      }
-    );
+    if (isPIXIv6) {
+      graphicsUniversal.stroke(
+        debug.debugStroke || {
+          color: 0xffffff,
+          width: 1.5,
+          alpha: 1
+        }
+      );
+    }
 
+    if (!isPIXIv6) {
+      graphicsUniversal.lineStyle(
+        debug.debugBVHStroke?.width || 1,
+        debug.debugBVHStroke?.color || 0x00ff00,
+        debug.debugBVHStroke?.alpha || 0.5
+      );
+    }
     this.physics.drawBVH(context);
-    canvas.stroke(
-      debug.debugBVHStroke || {
-        color: 0x00ff00,
-        width: 1,
-        alpha: 0.5
-      }
-    );
+    if (isPIXIv6) {
+      graphicsUniversal.stroke(
+        debug.debugBVHStroke || {
+          color: 0x00ff00,
+          width: 1,
+          alpha: 0.5
+        }
+      );
+    }
+  }
+
+  resize(): void {
+    this.pixi.renderer.resize(innerWidth, innerHeight);
   }
 }

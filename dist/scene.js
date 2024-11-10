@@ -73,12 +73,14 @@ const pixi_stats_1 = require('pixi-stats');
 const Subject_1 = require('rxjs/internal/Subject');
 const merge_1 = require('rxjs/internal/observable/merge');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
+const rxjs_1 = require('rxjs');
 /**
  * base scene for front end rendering
  */
 class Scene extends scene_ssr_1.SceneSSR {
   constructor(options = {}) {
     super(options);
+    this.isInitialized = false;
     /**
      * When disableAutoSort is called, it emits this subject.
      */
@@ -90,7 +92,8 @@ class Scene extends scene_ssr_1.SceneSSR {
     this.stage.visible = this.options.visible || false;
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
-      this.pixi.stage.label = 'PixiStage';
+      const nameKey = 'label' in this.pixi.stage ? 'label' : 'name';
+      this.pixi.stage[nameKey] = 'PixiStage';
     }
     if (this.options.autoSort) {
       this.enableAutoSort();
@@ -108,7 +111,6 @@ class Scene extends scene_ssr_1.SceneSSR {
     }
     const matches = location.search.matchAll(/[?&]([^=?&]+)=?([^?&]*)/g);
     return [...matches].reduce(
-      // eslint-disable-next-line
       (queryParams, [_wholeMatch, paramName, paramValue]) =>
         Object.assign(Object.assign({}, queryParams), {
           [decodeURIComponent(paramName)]: decodeURIComponent(paramValue)
@@ -117,16 +119,35 @@ class Scene extends scene_ssr_1.SceneSSR {
     );
   }
   async init(options) {
-    if (this.pixi.isInitialized) {
+    var _a;
+    if (this.isInitialized) {
       return false;
     }
-    await this.pixi.init(options);
-    if (this.pixi.canvas && !this.pixi.canvas.parentElement) {
-      document.body.appendChild(this.pixi.canvas);
+    const pixi = this.pixi;
+    await ((_a = pixi.init) === null || _a === void 0
+      ? void 0
+      : _a.call(pixi, options));
+    const canvasKey = 'canvas' in this.pixi ? 'canvas' : 'view';
+    if (this.pixi[canvasKey] && !this.pixi[canvasKey].parentElement) {
+      document.body.appendChild(this.pixi[canvasKey]);
     }
     const showFPS = this.options.showFPS;
     if (showFPS) {
       this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
+    }
+    // pixi v6
+    if (!('Assets' in PIXI)) {
+      this.resize();
+      (0, rxjs_1.fromEvent)(document, 'fullscreenchange', { passive: true })
+        .pipe((0, takeUntil_1.takeUntil)(this.destroy$))
+        .subscribe(() => {
+          this.resize();
+        });
+      (0, rxjs_1.fromEvent)(window, 'resize', { passive: true })
+        .pipe((0, takeUntil_1.takeUntil)(this.destroy$))
+        .subscribe(() => {
+          this.resize();
+        });
     }
     return true;
   }
@@ -184,7 +205,9 @@ class Scene extends scene_ssr_1.SceneSSR {
         )
       )
       .subscribe(() => {
-        this.onUpdateDebug(debug);
+        try {
+          this.onUpdateDebug(debug);
+        } catch (_err) {}
       });
   }
   disableDebug() {
@@ -204,27 +227,63 @@ class Scene extends scene_ssr_1.SceneSSR {
     const canvas = stats.domElement;
     canvas.setAttribute('style', style);
   }
-  onUpdateDebug(canvas) {
-    const context = canvas;
+  onUpdateDebug(graphics) {
+    var _a, _b, _c, _d, _e, _f;
+    const context = graphics;
+    const graphicsUniversal = graphics;
+    const isPIXIv6 = 'stroke' in graphicsUniversal;
     const debug =
       typeof this.options.debug === 'object' ? this.options.debug : {};
-    canvas.clear();
+    graphicsUniversal.clear();
+    if (!isPIXIv6) {
+      graphicsUniversal.lineStyle(
+        ((_a = debug.debugStroke) === null || _a === void 0
+          ? void 0
+          : _a.width) || 1.5,
+        ((_b = debug.debugStroke) === null || _b === void 0
+          ? void 0
+          : _b.color) || 0xffffff,
+        ((_c = debug.debugStroke) === null || _c === void 0
+          ? void 0
+          : _c.alpha) || 1
+      );
+    }
     this.physics.draw(context);
-    canvas.stroke(
-      debug.debugStroke || {
-        color: 0xffffff,
-        width: 1.5,
-        alpha: 1
-      }
-    );
+    if (isPIXIv6) {
+      graphicsUniversal.stroke(
+        debug.debugStroke || {
+          color: 0xffffff,
+          width: 1.5,
+          alpha: 1
+        }
+      );
+    }
+    if (!isPIXIv6) {
+      graphicsUniversal.lineStyle(
+        ((_d = debug.debugBVHStroke) === null || _d === void 0
+          ? void 0
+          : _d.width) || 1,
+        ((_e = debug.debugBVHStroke) === null || _e === void 0
+          ? void 0
+          : _e.color) || 0x00ff00,
+        ((_f = debug.debugBVHStroke) === null || _f === void 0
+          ? void 0
+          : _f.alpha) || 0.5
+      );
+    }
     this.physics.drawBVH(context);
-    canvas.stroke(
-      debug.debugBVHStroke || {
-        color: 0x00ff00,
-        width: 1,
-        alpha: 0.5
-      }
-    );
+    if (isPIXIv6) {
+      graphicsUniversal.stroke(
+        debug.debugBVHStroke || {
+          color: 0x00ff00,
+          width: 1,
+          alpha: 0.5
+        }
+      );
+    }
+  }
+  resize() {
+    this.pixi.renderer.resize(innerWidth, innerHeight);
   }
 }
 exports.Scene = Scene;

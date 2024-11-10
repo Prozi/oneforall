@@ -111,24 +111,33 @@ class TextureAtlas {
   /**
    * used internally in get(frame) to load the slice first time
    */
-  loadSlice(frame) {
+  loadSlice(slice) {
     if (typeof headless !== 'undefined') {
       return PIXI.Texture.WHITE;
     }
     const cols = Math.floor(this.width / this.tileWidth);
-    const index = Math.floor(frame - this.offset);
+    const index = Math.floor(slice - this.offset);
     const x = (index % cols) * this.tileWidth;
     const y = Math.floor(index / cols) * this.tileHeight;
-    const texture = new PIXI.Texture({
-      source: this.texture.source,
-      frame: new PIXI.Rectangle(
-        this.trim + x,
-        this.trim + y,
-        this.tileWidth - this.trim * 2,
-        this.tileHeight - this.trim * 2
-      )
-    });
-    texture.source.scaleMode = this.scaleMode;
+    const frame = new PIXI.Rectangle(
+      this.trim + x,
+      this.trim + y,
+      this.tileWidth - this.trim * 2,
+      this.tileHeight - this.trim * 2
+    );
+    const texture =
+      'source' in this.texture
+        ? new PIXI.Texture({
+            source: this.texture.source,
+            frame
+          })
+        : new PIXI.Texture(this.texture.baseTexture, frame);
+    if ('source' in texture) {
+      texture.source.scaleMode = 'nearest';
+    }
+    if ('baseTexture' in texture) {
+      texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+    }
     return texture;
   }
   /**

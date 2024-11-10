@@ -2,12 +2,33 @@ import * as PIXI from 'pixi.js';
 
 import { Cache } from '@pietal.dev/cache';
 
-// eslint-disable-next-line
 export type PIXIResource = any;
+
+export type PIXIv6LoaderCallback = (
+  loader: PIXIv6Loader,
+  resources: Record<string, PIXIResource>
+) => void;
+
+export interface PIXIv6Loader {
+  add: (url: string) => void;
+  load: (loader: PIXIv6LoaderCallback) => void;
+}
+
+export interface PIXIv8Loader {
+  load: (url: string) => Promise<PIXIResource>;
+}
+
+export interface PIXIv8Assets {
+  loader: PIXIv8Loader;
+}
+
+export interface PIXIv8 {
+  Assets?: PIXIv8Assets;
+}
 
 export class Resources {
   static cache: Cache<PIXIResource> = new Cache(async (url: string) => {
-    return PIXI.Assets.loader.load(url);
+    return Resources.load(url);
   });
 
   static async loadResource<T = PIXIResource>(url: string): Promise<T> {
@@ -30,7 +51,27 @@ export class Resources {
     }, {});
   }
 
-  async get<T = PIXIResource>(url: string): Promise<T> {
-    return Resources.loadResource<T>(url);
+  static async get<T = PIXIResource>(url: string): Promise<T> {
+    return await Resources.loadResource<T>(url);
+  }
+
+  protected static async load(url: string) {
+    return new Promise((resolve, reject) => {
+      if ('Assets' in PIXI) {
+        const { loader } = (PIXI as PIXIv8).Assets!;
+
+        loader.load(url).then(resolve).catch(reject);
+      } else {
+        const loader = new (PIXI as any).Loader();
+
+        loader.add(url);
+        loader.onError.add(reject);
+        loader.load((_: PIXIv6Loader, resources) => {
+          const response = resources[url];
+
+          resolve(response.texture || response.data);
+        });
+      }
+    });
   }
 }

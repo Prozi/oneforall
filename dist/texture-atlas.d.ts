@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js';
+import { PIXITexture } from './model';
+export type PIXIScaleMode = 'nearest' | 'linear';
 export interface TextureAtlasOptions {
   texture: PIXI.Texture;
   tileWidth?: number;
@@ -7,7 +9,7 @@ export interface TextureAtlasOptions {
   rows?: number;
   offset?: number;
   count?: number;
-  scaleMode?: PIXI.SCALE_MODE;
+  scaleMode?: PIXIScaleMode;
   trim?: number;
 }
 /**
@@ -17,7 +19,7 @@ export declare class TextureAtlas {
   /**
    * texture atlas base texture (required in constructor)
    */
-  texture: PIXI.Texture;
+  texture: PIXITexture;
   /**
    * calculated from cols/rows or passed in constructor
    */
@@ -38,7 +40,7 @@ export declare class TextureAtlas {
   /**
    * scale mode for slices
    */
-  scaleMode: PIXI.SCALE_MODE;
+  scaleMode: PIXIScaleMode;
   /**
    * texture slices
    */
@@ -73,7 +75,7 @@ export declare class TextureAtlas {
   /**
    * used internally in get(frame) to load the slice first time
    */
-  protected loadSlice(frame: number): PIXI.Texture;
+  protected loadSlice(slice: number): PIXITexture;
   /**
    * used internally to preload cached slices
    */

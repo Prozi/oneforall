@@ -64,7 +64,7 @@ class Animator extends PIXI.Container {
       animationSpeed = 16.67,
       anchor = { x: 0.5, y: 0.5 }
     },
-    { width, height, source }
+    { width, height, source, baseTexture }
   ) {
     super();
     /**
@@ -99,12 +99,23 @@ class Animator extends PIXI.Container {
             tileWidth,
             tileHeight
           );
-          const texture = new PIXI.Texture({ source, frame });
-          texture.source.scaleMode = 'nearest';
+          const texture = source
+            ? new PIXI.Texture({
+                source,
+                frame
+              })
+            : new PIXI.Texture(baseTexture, frame);
+          if ('source' in texture) {
+            texture.source.scaleMode = 'nearest';
+          }
+          if ('baseTexture' in texture) {
+            texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          }
           return { texture, time: animationSpeed };
         })
       );
-      animatedSprite.label = `Animator_AnimatedSprite_${animation}`;
+      const nameKey = 'label' in animatedSprite ? 'label' : 'name';
+      animatedSprite[nameKey] = `Animator_AnimatedSprite_${animation}`;
       animatedSprite.anchor.set(anchor.x, anchor.y);
       this.addChild(animatedSprite);
     });

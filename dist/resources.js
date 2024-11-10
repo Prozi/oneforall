@@ -60,12 +60,28 @@ class Resources {
       return Object.assign(Object.assign({}, resolved), { [name]: resource });
     }, {});
   }
-  async get(url) {
-    return _a.loadResource(url);
+  static async get(url) {
+    return await _a.loadResource(url);
+  }
+  static async load(url) {
+    return new Promise((resolve, reject) => {
+      if ('Assets' in PIXI) {
+        const { loader } = PIXI.Assets;
+        loader.load(url).then(resolve).catch(reject);
+      } else {
+        const loader = new PIXI.Loader();
+        loader.add(url);
+        loader.onError.add(reject);
+        loader.load((_, resources) => {
+          const response = resources[url];
+          resolve(response.texture || response.data);
+        });
+      }
+    });
   }
 }
 exports.Resources = Resources;
 _a = Resources;
 Resources.cache = new cache_1.Cache(async (url) => {
-  return PIXI.Assets.loader.load(url);
+  return _a.load(url);
 });

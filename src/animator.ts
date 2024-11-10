@@ -6,6 +6,7 @@ import { GameObject } from './game-object';
 import { StateMachine } from './state-machine';
 import { Subject } from 'rxjs/internal/Subject';
 import { Vector } from 'detect-collisions';
+import { PIXITexture } from './model';
 
 export interface AnimatorData {
   animations: Record<string, number[]>;
@@ -77,7 +78,7 @@ export class Animator extends PIXI.Container implements LifecycleProps {
       animationSpeed = 16.67,
       anchor = { x: 0.5, y: 0.5 }
     }: AnimatorData,
-    { width, height, source }: PIXI.Texture
+    { width, height, source, baseTexture }: PIXITexture
   ) {
     super();
 
@@ -98,14 +99,30 @@ export class Animator extends PIXI.Container implements LifecycleProps {
             tileHeight
           );
 
-          const texture: PIXI.Texture = new PIXI.Texture({ source, frame });
-          texture.source.scaleMode = 'nearest';
+          const texture = (
+            source
+              ? new PIXI.Texture({
+                  source,
+                  frame
+                } as any)
+              : new (PIXI.Texture as any)(baseTexture, frame)
+          ) as PIXITexture;
 
-          return { texture, time: animationSpeed };
+          if ('source' in texture) {
+            texture.source.scaleMode = 'nearest';
+          }
+
+          if ('baseTexture' in texture) {
+            texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          }
+
+          return { texture, time: animationSpeed } as PIXI.FrameObject;
         })
       );
 
-      animatedSprite.label = `Animator_AnimatedSprite_${animation}`;
+      const nameKey = 'label' in animatedSprite ? 'label' : 'name';
+
+      animatedSprite[nameKey] = `Animator_AnimatedSprite_${animation}`;
       animatedSprite.anchor.set(anchor.x, anchor.y);
       this.addChild(animatedSprite);
     });

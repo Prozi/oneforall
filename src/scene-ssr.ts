@@ -109,7 +109,10 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     this.options = options;
     this.physics = new System<TBody>(options.nodeMaxEntries);
     this.stage = this.createStage();
-    this.stage.label = 'SceneStage';
+
+    const nameKey = 'label' in this.stage ? 'label' : 'name';
+
+    this.stage[nameKey] = 'SceneStage';
   }
 
   /**
@@ -119,7 +122,6 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     return undefined;
   }
 
-  // eslint-disable-next-line
   async init(_options?: Partial<Record<string, any>>): Promise<boolean> {
     return true;
   }
@@ -165,7 +167,6 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     super.addChild(...children);
     this.stageAddChild(...children);
 
-    // eslint-disable-next-line
     children.forEach(({ body }: TGameObject<any, TBody>) => {
       if (body) {
         this.physics.insert(body);

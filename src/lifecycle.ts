@@ -74,7 +74,6 @@ export abstract class Lifecycle implements LifecycleProps {
   label = 'Lifecycle';
 
   static destroy(lifecycle: LifecycleProps): void {
-    // eslint-disable-next-line
     lifecycle.gameObject?.removeChild?.(lifecycle as any);
     lifecycle.update$.complete();
     lifecycle.destroy$.next();

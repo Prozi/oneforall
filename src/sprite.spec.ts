@@ -1,5 +1,4 @@
 import 'pixi-shim';
-
 import * as PIXI from 'pixi.js-legacy';
 
 import { GameObject } from './game-object';
@@ -7,9 +6,11 @@ import { Scene } from './scene';
 import { Sprite } from './sprite';
 
 describe('GIVEN Sprite', () => {
+  const whiteTexture = PIXI.Texture.EMPTY;
+
   it('THEN update propagates x/y changes', () => {
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.WHITE);
+    const sprite = new Sprite(go, whiteTexture);
 
     go.x = 50;
     go.update(20);
@@ -31,7 +32,7 @@ describe('GIVEN Sprite', () => {
 
   it('THEN destroy works', () => {
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.WHITE);
+    const sprite = new Sprite(go, whiteTexture);
 
     sprite.destroy();
     expect(go.children.length).toBe(0);
@@ -40,7 +41,7 @@ describe('GIVEN Sprite', () => {
   it('THEN destroy works extended', () => {
     const scene = new Scene();
     const go = new GameObject();
-    const sprite = new Sprite(go, PIXI.Texture.WHITE);
+    const sprite = new Sprite(go, whiteTexture);
 
     scene.addChild(go);
     expect(go.children.length).toBe(1);

@@ -1,7 +1,10 @@
 import * as PIXI from 'pixi.js';
+import { PIXITexture } from './model';
 
 // declare this on server or in tests to save memory
 declare let headless: boolean;
+
+export type PIXIScaleMode = 'nearest' | 'linear';
 
 export interface TextureAtlasOptions {
   texture: PIXI.Texture;
@@ -11,7 +14,7 @@ export interface TextureAtlasOptions {
   rows?: number;
   offset?: number;
   count?: number;
-  scaleMode?: PIXI.SCALE_MODE;
+  scaleMode?: PIXIScaleMode;
   trim?: number; // versus extrude
 }
 
@@ -22,7 +25,7 @@ export class TextureAtlas {
   /**
    * texture atlas base texture (required in constructor)
    */
-  texture: PIXI.Texture;
+  texture: PIXITexture;
 
   /**
    * calculated from cols/rows or passed in constructor
@@ -48,7 +51,7 @@ export class TextureAtlas {
   /**
    * scale mode for slices
    */
-  scaleMode: PIXI.SCALE_MODE;
+  scaleMode: PIXIScaleMode;
 
   /**
    * texture slices
@@ -118,26 +121,38 @@ export class TextureAtlas {
   /**
    * used internally in get(frame) to load the slice first time
    */
-  protected loadSlice(frame: number): PIXI.Texture {
+  protected loadSlice(slice: number): PIXITexture {
     if (typeof headless !== 'undefined') {
       return PIXI.Texture.WHITE;
     }
 
     const cols: number = Math.floor(this.width / this.tileWidth);
-    const index: number = Math.floor(frame - this.offset);
+    const index: number = Math.floor(slice - this.offset);
     const x: number = (index % cols) * this.tileWidth;
     const y: number = Math.floor(index / cols) * this.tileHeight;
-    const texture: PIXI.Texture = new PIXI.Texture({
-      source: this.texture.source,
-      frame: new PIXI.Rectangle(
-        this.trim + x,
-        this.trim + y,
-        this.tileWidth - this.trim * 2,
-        this.tileHeight - this.trim * 2
-      )
-    });
+    const frame = new PIXI.Rectangle(
+      this.trim + x,
+      this.trim + y,
+      this.tileWidth - this.trim * 2,
+      this.tileHeight - this.trim * 2
+    );
 
-    texture.source.scaleMode = this.scaleMode;
+    const texture = (
+      'source' in this.texture
+        ? new PIXI.Texture({
+            source: this.texture.source,
+            frame
+          } as any)
+        : new (PIXI.Texture as any)(this.texture.baseTexture, frame)
+    ) as PIXITexture;
+
+    if ('source' in texture) {
+      texture.source.scaleMode = 'nearest';
+    }
+
+    if ('baseTexture' in texture) {
+      texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+    }
 
     return texture;
   }
@@ -156,7 +171,8 @@ export class TextureAtlas {
 
     Array.from({ length: count }, (_, frame) => {
       const texture = this.loadSlice(frame);
-      this.slices.push(texture);
+
+      this.slices.push(texture as any);
     });
   }
 }

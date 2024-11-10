@@ -46,16 +46,5 @@ var __importStar =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Application = void 0;
 const PIXI = __importStar(require('pixi.js'));
-class Application extends PIXI.Application {
-  constructor() {
-    super(...arguments);
-    this.isInitialized = false;
-  }
-  async init(options) {
-    if (!this.isInitialized) {
-      this.isInitialized = true;
-      await super.init(options);
-    }
-  }
-}
+class Application extends PIXI.Application {}
 exports.Application = Application;

@@ -1,12 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-export class Application extends PIXI.Application {
-  isInitialized = false;
+export type PIXIAppOptions = Partial<Record<string, any>>;
 
-  async init(options?: Partial<PIXI.ApplicationOptions>): Promise<void> {
-    if (!this.isInitialized) {
-      this.isInitialized = true;
-      await super.init(options);
-    }
-  }
-}
+export class Application extends PIXI.Application {}

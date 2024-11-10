@@ -12,7 +12,7 @@
 
 ```
 [1x Scene]
-  ├──[1x HTML Canvas]
+  ├──[1x WebGL Canvas (pixi.js v6/v8)]
   ├──[1x Collision Detection]
   └──[50x GameObject (Player)]
        ├──[1x CircleBody]
@@ -162,6 +162,7 @@ export function update(gameObject: TGameObject, deltaTime: number): void {
 - [Lifecycle cleanup management](https://www.html5gamedevs.com/topic/44780-best-way-to-remove-objects-from-the-stage/)
 - [Collision detection](https://npmjs.com/package/detect-collisions)
 - [Drawing on WebGL canvas](https://npmjs.com/package/pixi.js)
+- Compatible with pixi v6 and v8 at the same time!
 
 ## Classes this library exports
 

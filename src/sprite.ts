@@ -29,7 +29,8 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
   label = 'Sprite';
 
   constructor(gameObject: GameObject, texture: PIXI.Texture) {
-    super({ texture });
+    super(('Assets' in PIXI ? { texture } : texture) as any);
+
     gameObject.addChild(this);
   }
 
@@ -43,7 +44,7 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
   }
 
   destroy(): void {
-    super.destroy({ texture: false, textureSource: false, children: true });
+    super.destroy({ texture: false, children: true });
     Lifecycle.destroy(this);
   }
 }

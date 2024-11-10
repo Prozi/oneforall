@@ -4,6 +4,7 @@ import { GameObject } from './game-object';
 import { StateMachine } from './state-machine';
 import { Subject } from 'rxjs/internal/Subject';
 import { Vector } from 'detect-collisions';
+import { PIXITexture } from './model';
 export interface AnimatorData {
   animations: Record<string, number[]>;
   cols: number;
@@ -58,7 +59,7 @@ export declare class Animator extends PIXI.Container implements LifecycleProps {
   constructor(
     gameObject: GameObject,
     { animations, cols, rows, animationSpeed, anchor }: AnimatorData,
-    { width, height, source }: PIXI.Texture
+    { width, height, source, baseTexture }: PIXITexture
   );
   /**
    * Reference to inner State Machine's state.
