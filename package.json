@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
-  "description": "A Unity-inspired game framework by pietal.dev",
-  "version": "9.21.1",
+  "description": "PIXI v8 and v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
+  "version": "9.21.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
