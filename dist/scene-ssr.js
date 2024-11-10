@@ -1,7 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.SceneSSR = void 0;
-const pixi_js_1 = require('pixi.js');
 const detect_collisions_1 = require('detect-collisions');
 const game_object_1 = require('./game-object');
 const Subject_1 = require('rxjs/internal/Subject');
@@ -25,9 +24,6 @@ class SceneSSR extends game_object_1.GameObject {
     this.animationFrame = 0;
     this.options = options;
     this.physics = new detect_collisions_1.System(options.nodeMaxEntries);
-    this.stage = this.createStage();
-    const nameKey = 'label' in this.stage ? 'label' : 'name';
-    this.stage[nameKey] = 'SceneStage';
   }
   /**
    * Scene doesn't have parent scene
@@ -76,23 +72,11 @@ class SceneSSR extends game_object_1.GameObject {
       }
     });
   }
-  stageAddChild(...children) {
-    children.forEach((child) => {
-      this.recursive(child, (deep) => {
-        if (deep instanceof pixi_js_1.Container) {
-          this.stage.addChild(deep);
-        }
-      });
-    });
+  stageAddChild(..._children) {
+    // override in frontend scene
   }
-  stageRemoveChild(...children) {
-    children.forEach((child) => {
-      this.recursive(child, (deep) => {
-        if (deep instanceof pixi_js_1.Container) {
-          this.stage.removeChild(deep);
-        }
-      });
-    });
+  stageRemoveChild(..._children) {
+    // override in frontend scene
   }
   removeChild(...children) {
     super.removeChild(...children);
@@ -103,9 +87,6 @@ class SceneSSR extends game_object_1.GameObject {
   }
   getChildrenOfType(type) {
     return this.children.filter(({ label }) => label === type);
-  }
-  createStage() {
-    return new pixi_js_1.Container();
   }
 }
 exports.SceneSSR = SceneSSR;

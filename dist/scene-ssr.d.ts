@@ -1,4 +1,3 @@
-import { Container } from 'pixi.js';
 import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
@@ -74,10 +73,6 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
    */
   physics: System<TBody>;
   /**
-   * Top Level Container.
-   */
-  stage: Container;
-  /**
    * Scene has last update unix time stored.
    */
   lastUpdate: number;
@@ -96,11 +91,10 @@ export declare class SceneSSR<TBody extends Body = Body> extends GameObject {
   update(deltaTime: number): void;
   destroy(): void;
   addChild(...children: LifecycleProps[]): void;
-  stageAddChild(...children: LifecycleProps[]): void;
-  stageRemoveChild(...children: LifecycleProps[]): void;
+  stageAddChild(..._children: LifecycleProps[]): void;
+  stageRemoveChild(..._children: LifecycleProps[]): void;
   removeChild(...children: LifecycleProps[]): void;
   getChildOfType(type: string): LifecycleProps;
   getChildrenOfType(type: string): LifecycleProps[];
-  createStage(): Container;
 }
 //# sourceMappingURL=scene-ssr.d.ts.map

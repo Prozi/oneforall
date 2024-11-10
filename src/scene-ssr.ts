@@ -1,5 +1,3 @@
-import { Container } from 'pixi.js';
-
 import { Body, System } from 'detect-collisions';
 import { GameObject, GameObjectParent, TGameObject } from './game-object';
 import { Lifecycle, LifecycleProps } from './lifecycle';
@@ -89,11 +87,6 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
   physics: System<TBody>;
 
   /**
-   * Top Level Container.
-   */
-  stage: Container;
-
-  /**
    * Scene has last update unix time stored.
    */
   lastUpdate: number;
@@ -108,11 +101,6 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
 
     this.options = options;
     this.physics = new System<TBody>(options.nodeMaxEntries);
-    this.stage = this.createStage();
-
-    const nameKey = 'label' in this.stage ? 'label' : 'name';
-
-    this.stage[nameKey] = 'SceneStage';
   }
 
   /**
@@ -174,24 +162,12 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
     });
   }
 
-  stageAddChild(...children: LifecycleProps[]): void {
-    children.forEach((child) => {
-      this.recursive(child, (deep) => {
-        if (deep instanceof Container) {
-          this.stage.addChild(deep);
-        }
-      });
-    });
+  stageAddChild(..._children: LifecycleProps[]): void {
+    // override in frontend scene
   }
 
-  stageRemoveChild(...children: LifecycleProps[]): void {
-    children.forEach((child) => {
-      this.recursive(child, (deep) => {
-        if (deep instanceof Container) {
-          this.stage.removeChild(deep);
-        }
-      });
-    });
+  stageRemoveChild(..._children: LifecycleProps[]): void {
+    // override in frontend scene
   }
 
   removeChild(...children: LifecycleProps[]): void {
@@ -205,9 +181,5 @@ export class SceneSSR<TBody extends Body = Body> extends GameObject {
 
   getChildrenOfType(type: string): LifecycleProps[] {
     return this.children.filter(({ label }) => label === type);
-  }
-
-  createStage(): Container {
-    return new Container();
   }
 }

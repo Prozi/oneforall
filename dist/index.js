@@ -39,7 +39,6 @@ __exportStar(require('./game-object'), exports);
 __exportStar(require('./prefab'), exports);
 __exportStar(require('./scene-ssr'), exports);
 __exportStar(require('./scene'), exports);
-__exportStar(require('./application'), exports);
 __exportStar(require('./resources'), exports);
 __exportStar(require('./state-machine'), exports);
 __exportStar(require('./circle-body'), exports);

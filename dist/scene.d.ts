@@ -1,19 +1,20 @@
 import * as PIXI from 'pixi.js';
 import { SceneOptions, SceneSSR } from './scene-ssr';
-import { Application, PIXIAppOptions } from './application';
 import { Body } from 'detect-collisions';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Subject } from 'rxjs/internal/Subject';
+export type PIXIAppOptions = Partial<Record<string, any>>;
 export type PIXIWebGLRenderer = any;
 export type PIXICanvas = any;
 /**
  * base scene for front end rendering
  */
 export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
-  pixi: Application;
+  pixi: PIXI.Application;
   resources: Resources;
   isInitialized: boolean;
+  stage: PIXI.Container<PIXI.ContainerChild>;
   /**
    * When disableAutoSort is called, it emits this subject.
    */
@@ -28,6 +29,8 @@ export declare class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   start(): void;
   stop(): void;
   destroy(): void;
+  stageAddChild(...children: LifecycleProps[]): void;
+  stageRemoveChild(...children: LifecycleProps[]): void;
   addChild(
     gameObject: LifecycleProps & {
       sprite?: PIXI.Container;

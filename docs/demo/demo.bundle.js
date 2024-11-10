@@ -95343,78 +95343,6 @@ Deprecated since v${version}`
         /***/
       },
 
-    /***/ './src/application.ts':
-      /*!****************************!*\
-  !*** ./src/application.ts ***!
-  \****************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __setModuleDefault =
-          (this && this.__setModuleDefault) ||
-          (Object.create
-            ? function (o, v) {
-                Object.defineProperty(o, 'default', {
-                  enumerable: true,
-                  value: v
-                });
-              }
-            : function (o, v) {
-                o['default'] = v;
-              });
-        var __importStar =
-          (this && this.__importStar) ||
-          function (mod) {
-            if (mod && mod.__esModule) return mod;
-            var result = {};
-            if (mod != null)
-              for (var k in mod)
-                if (
-                  k !== 'default' &&
-                  Object.prototype.hasOwnProperty.call(mod, k)
-                )
-                  __createBinding(result, mod, k);
-            __setModuleDefault(result, mod);
-            return result;
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Application = void 0;
-        const PIXI = __importStar(
-          __webpack_require__(
-            /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
-          )
-        );
-        class Application extends PIXI.Application {}
-        exports.Application = Application;
-
-        /***/
-      },
-
     /***/ './src/circle-body.ts':
       /*!****************************!*\
   !*** ./src/circle-body.ts ***!
@@ -95943,9 +95871,6 @@ Deprecated since v${version}`
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.SceneSSR = void 0;
-        const pixi_js_1 = __webpack_require__(
-          /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
-        );
         const detect_collisions_1 = __webpack_require__(
           /*! detect-collisions */ './node_modules/detect-collisions/dist/index.js'
         );
@@ -95977,9 +95902,6 @@ Deprecated since v${version}`
             this.physics = new detect_collisions_1.System(
               options.nodeMaxEntries
             );
-            this.stage = this.createStage();
-            const nameKey = 'label' in this.stage ? 'label' : 'name';
-            this.stage[nameKey] = 'SceneStage';
           }
           /**
            * Scene doesn't have parent scene
@@ -96028,23 +95950,11 @@ Deprecated since v${version}`
               }
             });
           }
-          stageAddChild(...children) {
-            children.forEach((child) => {
-              this.recursive(child, (deep) => {
-                if (deep instanceof pixi_js_1.Container) {
-                  this.stage.addChild(deep);
-                }
-              });
-            });
+          stageAddChild(..._children) {
+            // override in frontend scene
           }
-          stageRemoveChild(...children) {
-            children.forEach((child) => {
-              this.recursive(child, (deep) => {
-                if (deep instanceof pixi_js_1.Container) {
-                  this.stage.removeChild(deep);
-                }
-              });
-            });
+          stageRemoveChild(..._children) {
+            // override in frontend scene
           }
           removeChild(...children) {
             super.removeChild(...children);
@@ -96055,9 +95965,6 @@ Deprecated since v${version}`
           }
           getChildrenOfType(type) {
             return this.children.filter(({ label }) => label === type);
-          }
-          createStage() {
-            return new pixi_js_1.Container();
           }
         }
         exports.SceneSSR = SceneSSR;
@@ -96161,9 +96068,6 @@ Deprecated since v${version}`
         const scene_ssr_1 = __webpack_require__(
           /*! ./scene-ssr */ './src/scene-ssr.ts'
         );
-        const application_1 = __webpack_require__(
-          /*! ./application */ './src/application.ts'
-        );
         const inject_min_1 = __webpack_require__(
           /*! inject.min */ './node_modules/inject.min/dist/index.js'
         );
@@ -96192,6 +96096,7 @@ Deprecated since v${version}`
           constructor(options = {}) {
             super(options);
             this.isInitialized = false;
+            this.stage = new PIXI.Container();
             /**
              * When disableAutoSort is called, it emits this subject.
              */
@@ -96200,6 +96105,8 @@ Deprecated since v${version}`
              * When disableDebug is called, it emits this subject.
              */
             this.disableDebug$ = new Subject_1.Subject();
+            const nameKey = 'label' in this.stage ? 'label' : 'name';
+            this.stage[nameKey] = 'SceneStage';
             this.stage.visible = this.options.visible || false;
             if (this.pixi) {
               this.pixi.stage.addChild(this.stage);
@@ -96287,6 +96194,24 @@ Deprecated since v${version}`
             (_a = this.pixi) === null || _a === void 0
               ? void 0
               : _a.stage.removeChild(this.stage);
+          }
+          stageAddChild(...children) {
+            children.forEach((child) => {
+              this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                  this.stage.addChild(deep);
+                }
+              });
+            });
+          }
+          stageRemoveChild(...children) {
+            children.forEach((child) => {
+              this.recursive(child, (deep) => {
+                if (deep instanceof PIXI.Container) {
+                  this.stage.removeChild(deep);
+                }
+              });
+            });
           }
           addChild(gameObject) {
             super.addChild(gameObject);
@@ -96405,7 +96330,7 @@ Deprecated since v${version}`
         }
         exports.Scene = Scene;
         __decorate(
-          [(0, inject_min_1.Inject)(application_1.Application)],
+          [(0, inject_min_1.Inject)(PIXI.Application)],
           Scene.prototype,
           'pixi',
           void 0

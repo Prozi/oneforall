@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 
 import { SceneOptions, SceneSSR } from './scene-ssr';
 
-import { Application, PIXIAppOptions } from './application';
 import { Body } from 'detect-collisions';
 import { Inject } from 'inject.min';
 import { LifecycleProps } from './lifecycle';
@@ -13,6 +12,8 @@ import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { fromEvent } from 'rxjs';
 
+export type PIXIAppOptions = Partial<Record<string, any>>;
+
 export type PIXIWebGLRenderer = any;
 
 export type PIXICanvas = any;
@@ -21,10 +22,11 @@ export type PIXICanvas = any;
  * base scene for front end rendering
  */
 export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
-  @Inject(Application) pixi: Application;
+  @Inject(PIXI.Application) pixi: PIXI.Application;
   @Inject(Resources) resources: Resources;
 
   isInitialized = false;
+  stage = new PIXI.Container();
 
   /**
    * When disableAutoSort is called, it emits this subject.
@@ -39,6 +41,9 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   constructor(options: SceneOptions = {}) {
     super(options);
 
+    const nameKey = 'label' in this.stage ? 'label' : 'name';
+
+    this.stage[nameKey] = 'SceneStage';
     this.stage.visible = this.options.visible || false;
 
     if (this.pixi) {
@@ -133,6 +138,26 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   destroy(): void {
     super.destroy();
     this.pixi?.stage.removeChild(this.stage);
+  }
+
+  stageAddChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.addChild(deep);
+        }
+      });
+    });
+  }
+
+  stageRemoveChild(...children: LifecycleProps[]): void {
+    children.forEach((child) => {
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.removeChild(deep);
+        }
+      });
+    });
   }
 
   addChild(

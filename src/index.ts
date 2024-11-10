@@ -7,7 +7,6 @@ export * from './game-object';
 export * from './prefab';
 export * from './scene-ssr';
 export * from './scene';
-export * from './application';
 export * from './resources';
 export * from './state-machine';
 export * from './circle-body';

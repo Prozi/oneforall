@@ -66,7 +66,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require('pixi.js'));
 const scene_ssr_1 = require('./scene-ssr');
-const application_1 = require('./application');
 const inject_min_1 = require('inject.min');
 const resources_1 = require('./resources');
 const pixi_stats_1 = require('pixi-stats');
@@ -81,6 +80,7 @@ class Scene extends scene_ssr_1.SceneSSR {
   constructor(options = {}) {
     super(options);
     this.isInitialized = false;
+    this.stage = new PIXI.Container();
     /**
      * When disableAutoSort is called, it emits this subject.
      */
@@ -89,6 +89,8 @@ class Scene extends scene_ssr_1.SceneSSR {
      * When disableDebug is called, it emits this subject.
      */
     this.disableDebug$ = new Subject_1.Subject();
+    const nameKey = 'label' in this.stage ? 'label' : 'name';
+    this.stage[nameKey] = 'SceneStage';
     this.stage.visible = this.options.visible || false;
     if (this.pixi) {
       this.pixi.stage.addChild(this.stage);
@@ -170,6 +172,24 @@ class Scene extends scene_ssr_1.SceneSSR {
     (_a = this.pixi) === null || _a === void 0
       ? void 0
       : _a.stage.removeChild(this.stage);
+  }
+  stageAddChild(...children) {
+    children.forEach((child) => {
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.addChild(deep);
+        }
+      });
+    });
+  }
+  stageRemoveChild(...children) {
+    children.forEach((child) => {
+      this.recursive(child, (deep) => {
+        if (deep instanceof PIXI.Container) {
+          this.stage.removeChild(deep);
+        }
+      });
+    });
   }
   addChild(gameObject) {
     super.addChild(gameObject);
@@ -288,7 +308,7 @@ class Scene extends scene_ssr_1.SceneSSR {
 }
 exports.Scene = Scene;
 __decorate(
-  [(0, inject_min_1.Inject)(application_1.Application)],
+  [(0, inject_min_1.Inject)(PIXI.Application)],
   Scene.prototype,
   'pixi',
   void 0

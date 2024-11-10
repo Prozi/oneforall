@@ -35,7 +35,7 @@ export function create({ scene, data, texture }): TGameObject {
 
 export function update(gameObject: TGameObject, deltaTime: number): void {
   const scene = gameObject.scene;
-  const scale = scene.stage.scale;
+  const scale = (scene as any).stage.scale;
   const gameObjects = scene.children as TGameObject[];
   // at 60fps deltaTime = 1.0, at 30fps deltaTime = 2.0
   const safeDelta = Math.min(deltaTime, 2);
