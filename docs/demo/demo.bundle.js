@@ -10146,9 +10146,10 @@
         exports.DIContainer = DIContainer;
         DIContainer.instances = new Map();
         function Inject(Class, props) {
-          return function (parent, prop) {
-            const instance = DIContainer.get(Class, props);
-            parent[prop] = instance;
+          return function (parent, propertyKey) {
+            Object.defineProperty(parent, propertyKey, {
+              get: () => DIContainer.get(Class, props)
+            });
           };
         }
 
