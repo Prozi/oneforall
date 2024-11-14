@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
-  "description": "PIXI v8 and v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
-  "version": "9.22.0",
+  "description": "PIXI v8, v7, v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
+  "version": "9.23.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -24,7 +24,10 @@
     "lint": "eslint 'src/**/*.ts' --fix",
     "format": "prettier . --write",
     "test": "jest --silent --verbose --forceExit",
-    "test:build": "node ./test-build.js",
+    "test-v6": "yarn add pixi.js@^6 pixi.js-legacy@^6 -D && node test-build",
+    "test-v7": "yarn add pixi.js@^7 pixi.js-legacy@^7 -D && node test-build",
+    "test-v8": "yarn add pixi.js@^8 pixi.js-legacy@^7 -D && node test-build",
+    "test-build": "yarn test-v6 && yarn test-v7 && yarn test-v8",
     "precommit": "yarn lint && yarn build && yarn test && yarn format",
     "amend": "yarn precommit && git commit -a --am --no-edit"
   },
@@ -51,17 +54,6 @@
     "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/plugin-transform-modules-commonjs": "^7.25.9",
     "@babel/preset-typescript": "^7.26.0",
-    "@pixi/core": "^7",
-    "@pixi/display": "^7",
-    "@pixi/extract": "^7",
-    "@pixi/graphics": "^7",
-    "@pixi/mesh": "^7",
-    "@pixi/mesh-extras": "^7",
-    "@pixi/particle-container": "^7",
-    "@pixi/prepare": "^7",
-    "@pixi/sprite": "^7",
-    "@pixi/sprite-tiling": "^7",
-    "@pixi/text": "^7",
     "@types/jest": "^29.5.14",
     "@types/offscreencanvas": "^2019.7.3",
     "babel-jest": "^29.7.0",
@@ -82,7 +74,7 @@
     "webpack-dev-server": "^5.1.0"
   },
   "peerDependencies": {
-    "pixi.js": "^6 || ^8"
+    "pixi.js": "^6 || ^7 || ^8"
   },
   "keywords": [
     "unity",

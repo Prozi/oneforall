@@ -50,7 +50,7 @@ const lifecycle_1 = require('./lifecycle');
 const Subject_1 = require('rxjs/internal/Subject');
 class Sprite extends PIXI.Sprite {
   constructor(gameObject, texture) {
-    super('Assets' in PIXI ? { texture } : texture);
+    super(!PIXI.VERSION.startsWith('8.') ? texture : { texture });
     /**
      * When Lifecycle Object is updated, it emits this subject.
      * Along with updating his children, which in turn behave the same.

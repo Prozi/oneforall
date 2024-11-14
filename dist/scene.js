@@ -160,8 +160,8 @@ class Scene extends scene_ssr_1.SceneSSR {
     if (showFPS) {
       this.showFPS(typeof showFPS === 'string' ? showFPS : undefined);
     }
-    // pixi v6
-    if (!('Assets' in PIXI)) {
+    // pixi v6 or v7
+    if (!PIXI.VERSION.startsWith('8.')) {
       this.resize();
       (0, rxjs_1.fromEvent)(document, 'fullscreenchange', { passive: true })
         .pipe((0, takeUntil_1.takeUntil)(this.destroy$))

@@ -66,7 +66,7 @@ export class Resources {
 
         loader.add(url);
         loader.onError.add(reject);
-        loader.load((_: PIXIv6Loader, resources) => {
+        loader.load((_: PIXIv6Loader, resources: Record<string, any>) => {
           const response = resources[url];
 
           resolve(response.texture || response.data);

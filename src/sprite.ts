@@ -29,7 +29,9 @@ export class Sprite extends PIXI.Sprite implements LifecycleProps {
   label = 'Sprite';
 
   constructor(gameObject: GameObject, texture: PIXI.Texture) {
-    super(('Assets' in PIXI ? { texture } : texture) as any);
+    super(
+      !PIXI.VERSION.startsWith('8.') ? (texture as any) : ({ texture } as any)
+    );
 
     gameObject.addChild(this);
   }

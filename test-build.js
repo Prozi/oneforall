@@ -1,6 +1,3 @@
-require('pixi-shim');
-require('pixi.js-legacy');
-
 const { GameObject, Component } = require('./dist/index.js');
 
 const gameObject = new GameObject();
