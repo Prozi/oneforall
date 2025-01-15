@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en">
+<html class="default" lang="en" data-base="..">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -13,6 +13,11 @@
     <script async src="../assets/icons.js" id="tsd-icons-script"></script>
     <script async src="../assets/search.js" id="tsd-search-script"></script>
     <script async src="../assets/navigation.js" id="tsd-nav-script"></script>
+    <script
+      async
+      src="../assets/hierarchy.js"
+      id="tsd-hierarchy-script"
+    ></script>
   </head>
   <body>
     <script>
@@ -27,7 +32,7 @@
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search" data-base="..">
+        <div class="table-cell" id="tsd-search">
           <div class="field">
             <label
               for="tsd-search-field"
@@ -118,7 +123,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>offset</span></a
                     >
-                    <a href="TextureAtlas.html#scaleMode" class="tsd-index-link"
+                    <a href="TextureAtlas.html#scalemode" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>scale<wbr />Mode</span></a
@@ -134,13 +139,13 @@
                       ><span>texture</span></a
                     >
                     <a
-                      href="TextureAtlas.html#tileHeight"
+                      href="TextureAtlas.html#tileheight"
                       class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>tile<wbr />Height</span></a
                     >
-                    <a href="TextureAtlas.html#tileWidth" class="tsd-index-link"
+                    <a href="TextureAtlas.html#tilewidth" class="tsd-index-link"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>tile<wbr />Width</span></a
@@ -176,7 +181,7 @@
                       ><span>get</span></a
                     >
                     <a
-                      href="TextureAtlas.html#loadSlice"
+                      href="TextureAtlas.html#loadslice"
                       class="tsd-index-link tsd-is-protected"
                       ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                         <use href="../assets/icons.svg#icon-2048"></use></svg
@@ -222,19 +227,25 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="tsd-signature tsd-anchor-link">
-                  <a id="constructor.new_TextureAtlas" class="tsd-anchor"></a
-                  ><span class="tsd-kind-constructor-signature"
-                    >new <wbr />Texture<wbr />Atlas</span
+                  <a id="constructortextureatlas" class="tsd-anchor"></a
+                  ><span class="tsd-signature-keyword">new</span>
+                  <span class="tsd-kind-constructor-signature"
+                    >TextureAtlas</span
                   ><span class="tsd-signature-symbol">(</span
                   ><span class="tsd-kind-parameter">textureAtlasOptions</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <a
+                    href="../interfaces/TextureAtlasOptions.html"
+                    class="tsd-signature-type tsd-kind-interface"
+                    >TextureAtlasOptions</a
                   ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><a
+                  ><span class="tsd-signature-symbol">:</span>
+                  <a
                     href="TextureAtlas.html"
                     class="tsd-signature-type tsd-kind-class"
                     >TextureAtlas</a
                   ><a
-                    href="#constructor.new_TextureAtlas"
+                    href="#constructortextureatlas"
                     aria-label="Permalink"
                     class="tsd-anchor-icon"
                     ><svg viewBox="0 0 24 24">
@@ -335,11 +346,11 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="scaleMode" class="tsd-anchor"></a>
+              <a id="scalemode" class="tsd-anchor"></a>
               <h3 class="tsd-anchor-link">
                 <span>scale<wbr />Mode</span
                 ><a
-                  href="#scaleMode"
+                  href="#scalemode"
                   aria-label="Permalink"
                   class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
@@ -347,7 +358,7 @@
                 ></a>
               </h3>
               <div class="tsd-signature">
-                <span class="tsd-kind-property">scale<wbr />Mode</span
+                <span class="tsd-kind-property">scaleMode</span
                 ><span class="tsd-signature-symbol">:</span>
                 <a
                   href="../types/PIXIScaleMode.html"
@@ -387,12 +398,6 @@
                 <span class="tsd-kind-property">slices</span
                 ><span class="tsd-signature-symbol">:</span>
                 <span class="tsd-signature-type">Texture</span
-                ><span class="tsd-signature-symbol">&lt;</span
-                ><span class="tsd-signature-type">TextureSource</span
-                ><span class="tsd-signature-symbol">&lt;</span
-                ><span class="tsd-signature-type">any</span
-                ><span class="tsd-signature-symbol">&gt;</span
-                ><span class="tsd-signature-symbol">&gt;</span
                 ><span class="tsd-signature-symbol">[]</span
                 ><span class="tsd-signature-symbol"> = []</span>
               </div>
@@ -446,11 +451,11 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="tileHeight" class="tsd-anchor"></a>
+              <a id="tileheight" class="tsd-anchor"></a>
               <h3 class="tsd-anchor-link">
                 <span>tile<wbr />Height</span
                 ><a
-                  href="#tileHeight"
+                  href="#tileheight"
                   aria-label="Permalink"
                   class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
@@ -458,7 +463,7 @@
                 ></a>
               </h3>
               <div class="tsd-signature">
-                <span class="tsd-kind-property">tile<wbr />Height</span
+                <span class="tsd-kind-property">tileHeight</span
                 ><span class="tsd-signature-symbol">:</span>
                 <span class="tsd-signature-type">number</span>
               </div>
@@ -479,11 +484,11 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="tileWidth" class="tsd-anchor"></a>
+              <a id="tilewidth" class="tsd-anchor"></a>
               <h3 class="tsd-anchor-link">
                 <span>tile<wbr />Width</span
                 ><a
-                  href="#tileWidth"
+                  href="#tilewidth"
                   aria-label="Permalink"
                   class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
@@ -491,7 +496,7 @@
                 ></a>
               </h3>
               <div class="tsd-signature">
-                <span class="tsd-kind-property">tile<wbr />Width</span
+                <span class="tsd-kind-property">tileWidth</span
                 ><span class="tsd-signature-symbol">:</span>
                 <span class="tsd-signature-type">number</span>
               </div>
@@ -566,13 +571,12 @@
                 ></a>
               </h3>
               <ul class="tsd-signatures">
-                <li class="tsd-signature" id="height.height-1">
-                  <span class="tsd-signature-keyword">get</span> height<span
-                    class="tsd-signature-symbol"
-                    >(</span
-                  ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><span class="tsd-signature-type">number</span>
+                <li class="tsd-signature" id="height-1">
+                  <span class="tsd-signature-keyword">get</span>
+                  <span class="tsd-kind-get-signature">height</span
+                  ><span class="tsd-signature-symbol">()</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">number</span>
                 </li>
                 <li class="tsd-description">
                   <div class="tsd-comment tsd-typography">
@@ -606,13 +610,12 @@
                 ></a>
               </h3>
               <ul class="tsd-signatures">
-                <li class="tsd-signature" id="width.width-1">
-                  <span class="tsd-signature-keyword">get</span> width<span
-                    class="tsd-signature-symbol"
-                    >(</span
-                  ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><span class="tsd-signature-type">number</span>
+                <li class="tsd-signature" id="width-1">
+                  <span class="tsd-signature-keyword">get</span>
+                  <span class="tsd-kind-get-signature">width</span
+                  ><span class="tsd-signature-symbol">()</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">number</span>
                 </li>
                 <li class="tsd-description">
                   <div class="tsd-comment tsd-typography">
@@ -659,21 +662,17 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="tsd-signature tsd-anchor-link">
-                  <a id="get.get-1" class="tsd-anchor"></a
+                  <a id="get-1" class="tsd-anchor"></a
                   ><span class="tsd-kind-call-signature">get</span
                   ><span class="tsd-signature-symbol">(</span
                   ><span class="tsd-kind-parameter">frame</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">number</span
                   ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><span class="tsd-signature-type">Texture</span
-                  ><span class="tsd-signature-symbol">&lt;</span
-                  ><span class="tsd-signature-type">TextureSource</span
-                  ><span class="tsd-signature-symbol">&lt;</span
-                  ><span class="tsd-signature-type">any</span
-                  ><span class="tsd-signature-symbol">&gt;</span
-                  ><span class="tsd-signature-symbol">&gt;</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">Texture</span
                   ><a
-                    href="#get.get-1"
+                    href="#get-1"
                     aria-label="Permalink"
                     class="tsd-anchor-icon"
                     ><svg viewBox="0 0 24 24">
@@ -696,13 +695,7 @@
                     </ul>
                   </div>
                   <h4 class="tsd-returns-title">
-                    Returns <span class="tsd-signature-type">Texture</span
-                    ><span class="tsd-signature-symbol">&lt;</span
-                    ><span class="tsd-signature-type">TextureSource</span
-                    ><span class="tsd-signature-symbol">&lt;</span
-                    ><span class="tsd-signature-type">any</span
-                    ><span class="tsd-signature-symbol">&gt;</span
-                    ><span class="tsd-signature-symbol">&gt;</span>
+                    Returns <span class="tsd-signature-type">Texture</span>
                   </h4>
                   <div class="tsd-comment tsd-typography"></div>
                   <aside class="tsd-sources">
@@ -720,12 +713,12 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member tsd-is-protected">
-              <a id="loadSlice" class="tsd-anchor"></a>
+              <a id="loadslice" class="tsd-anchor"></a>
               <h3 class="tsd-anchor-link">
                 <code class="tsd-tag">Protected</code
                 ><span>load<wbr />Slice</span
                 ><a
-                  href="#loadSlice"
+                  href="#loadslice"
                   aria-label="Permalink"
                   class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24">
@@ -734,15 +727,17 @@
               </h3>
               <ul class="tsd-signatures tsd-is-protected">
                 <li class="tsd-signature tsd-anchor-link">
-                  <a id="loadSlice.loadSlice-1" class="tsd-anchor"></a
-                  ><span class="tsd-kind-call-signature">load<wbr />Slice</span
+                  <a id="loadslice-1" class="tsd-anchor"></a
+                  ><span class="tsd-kind-call-signature">loadSlice</span
                   ><span class="tsd-signature-symbol">(</span
                   ><span class="tsd-kind-parameter">slice</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">number</span
                   ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><span class="tsd-signature-type">PIXITexture</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">PIXITexture</span
                   ><a
-                    href="#loadSlice.loadSlice-1"
+                    href="#loadslice-1"
                     aria-label="Permalink"
                     class="tsd-anchor-icon"
                     ><svg viewBox="0 0 24 24">
@@ -798,16 +793,17 @@
               </h3>
               <ul class="tsd-signatures tsd-is-protected">
                 <li class="tsd-signature tsd-anchor-link">
-                  <a id="preload.preload-1" class="tsd-anchor"></a
+                  <a id="preload-1" class="tsd-anchor"></a
                   ><span class="tsd-kind-call-signature">preload</span
                   ><span class="tsd-signature-symbol">(</span
                   ><span class="tsd-kind-parameter">count</span
-                  ><span class="tsd-signature-symbol">?</span
+                  ><span class="tsd-signature-symbol">?:</span>
+                  <span class="tsd-signature-type">number</span
                   ><span class="tsd-signature-symbol">)</span
-                  ><span class="tsd-signature-symbol">: </span
-                  ><span class="tsd-signature-type">void</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">void</span
                   ><a
-                    href="#preload.preload-1"
+                    href="#preload-1"
                     aria-label="Permalink"
                     class="tsd-anchor-icon"
                     ><svg viewBox="0 0 24 24">
@@ -990,7 +986,7 @@
               <details open class="tsd-accordion tsd-page-navigation-section">
                 <summary
                   class="tsd-accordion-summary"
-                  data-key="tsd-otp-Constructors"
+                  data-key="section-Constructors"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <use href="../assets/icons.svg#icon-chevronDown"></use></svg
@@ -1007,7 +1003,7 @@
               <details open class="tsd-accordion tsd-page-navigation-section">
                 <summary
                   class="tsd-accordion-summary"
-                  data-key="tsd-otp-Properties"
+                  data-key="section-Properties"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <use href="../assets/icons.svg#icon-chevronDown"></use></svg
@@ -1018,7 +1014,7 @@
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>offset</span></a
-                  ><a href="#scaleMode" class=""
+                  ><a href="#scalemode" class=""
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>scale<wbr />Mode</span></a
@@ -1030,11 +1026,11 @@
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>texture</span></a
-                  ><a href="#tileHeight" class=""
+                  ><a href="#tileheight" class=""
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>tile<wbr />Height</span></a
-                  ><a href="#tileWidth" class=""
+                  ><a href="#tilewidth" class=""
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>tile<wbr />Width</span></a
@@ -1048,7 +1044,7 @@
               <details open class="tsd-accordion tsd-page-navigation-section">
                 <summary
                   class="tsd-accordion-summary"
-                  data-key="tsd-otp-Accessors"
+                  data-key="section-Accessors"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <use href="../assets/icons.svg#icon-chevronDown"></use></svg
@@ -1069,7 +1065,7 @@
               <details open class="tsd-accordion tsd-page-navigation-section">
                 <summary
                   class="tsd-accordion-summary"
-                  data-key="tsd-otp-Methods"
+                  data-key="section-Methods"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <use href="../assets/icons.svg#icon-chevronDown"></use></svg
@@ -1080,7 +1076,7 @@
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>get</span></a
-                  ><a href="#loadSlice" class="tsd-is-protected"
+                  ><a href="#loadslice" class="tsd-is-protected"
                     ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>load<wbr />Slice</span></a
@@ -1096,16 +1092,8 @@
         </div>
         <div class="site-menu">
           <nav class="tsd-navigation">
-            <a href="../modules.html"
-              ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                <use href="../assets/icons.svg#icon-1"></use></svg
-              ><span>@pietal.dev/engine</span></a
-            >
-            <ul
-              class="tsd-small-nested-navigation"
-              id="tsd-nav-container"
-              data-base=".."
-            >
+            <a href="../modules.html">@pietal.dev/engine</a>
+            <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
               <li>Loading...</li>
             </ul>
           </nav>

@@ -5525,7 +5525,7 @@
           '^' +
             nameStartChar.source +
             nameChar.source +
-            '*(?::' +
+            '*(?:\:' +
             nameStartChar.source +
             nameChar.source +
             '*)?$'
@@ -10123,39 +10123,74 @@
         /***/
       },
 
-    /***/ './node_modules/inject.min/dist/index.js':
-      /*!***********************************************!*\
-  !*** ./node_modules/inject.min/dist/index.js ***!
-  \***********************************************/
+    /***/ './node_modules/inject.min/dist/di-container.js':
+      /*!******************************************************!*\
+  !*** ./node_modules/inject.min/dist/di-container.js ***!
+  \******************************************************/
       /***/ (__unused_webpack_module, exports) => {
         'use strict';
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.DIContainer = void 0;
-        exports.Inject = Inject;
         class DIContainer {
-          static get(Class, props) {
-            const propertyKey = DIContainer.createPropertyKey(Class, props);
+          /**
+           * for future references overwrite Original class with Override
+           * @param Original the class to search for in DIContainer
+           * @param Override the extended class to replace that first one
+           */
+          static bind(Original, Override) {
+            DIContainer.overrides[Original.name] = Override;
+          }
+          /**
+           * get instance of Class/Override unique with constructor props
+           * @param Class the class to search for in DIContainer
+           * @param props the optional props for constructor of instance
+           * @returns {instanceof Class}
+           */
+          static get(Class, ...props) {
+            const propertyKey = DIContainer.createPropertyKey(props);
             if (!DIContainer.instances[Class.name]) {
               DIContainer.instances[Class.name] = {};
             }
             if (!DIContainer.instances[Class.name][propertyKey]) {
-              const ResolvedClass = DIContainer.resolveClass(Class);
+              const ResolvedClass = DIContainer.getClass(Class);
               DIContainer.instances[Class.name][propertyKey] =
-                new ResolvedClass(props);
+                new ResolvedClass(...props);
             }
             return DIContainer.instances[Class.name][propertyKey];
           }
-          static bind(Target, Source) {
-            DIContainer.overrides[Target.name] = Source;
-          }
-          static resolveClass(Class) {
+          /**
+           * get the Class/Override that was used with bind
+           * @param Class the class to search for in DIContainer
+           * @returns {class}
+           */
+          static getClass(Class) {
             const overwrite = this.overrides[Class.name];
             return overwrite || Class;
           }
-          static createPropertyKey(Class, props) {
-            return `${typeof props}:${DIContainer.tryStringify(props)}`;
+          /**
+           * the api to free class instances to prevent possible oom
+           * @param Class the class to search for in DIContainer
+           */
+          static free(Class) {
+            DIContainer.instances[Class.name] = {};
           }
+          /**
+           * creates property key string for index in records
+           * @param props anything really
+           * @returns {string}
+           */
+          static createPropertyKey(props) {
+            if (typeof props !== 'undefined') {
+              return DIContainer.tryStringify(props);
+            }
+            return 'undefined';
+          }
+          /**
+           * stringify anything or return {} if not possible
+           * @param props anything really
+           * @returns {string}
+           */
           static tryStringify(props) {
             try {
               return JSON.stringify(props);
@@ -10165,16 +10200,110 @@
           }
         }
         exports.DIContainer = DIContainer;
-        DIContainer.classes = {};
         DIContainer.overrides = {};
         DIContainer.instances = {};
+
+        /***/
+      },
+
+    /***/ './node_modules/inject.min/dist/index.js':
+      /*!***********************************************!*\
+  !*** ./node_modules/inject.min/dist/index.js ***!
+  \***********************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __createBinding =
+          (this && this.__createBinding) ||
+          (Object.create
+            ? function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (
+                  !desc ||
+                  ('get' in desc
+                    ? !m.__esModule
+                    : desc.writable || desc.configurable)
+                ) {
+                  desc = {
+                    enumerable: true,
+                    get: function () {
+                      return m[k];
+                    }
+                  };
+                }
+                Object.defineProperty(o, k2, desc);
+              }
+            : function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                o[k2] = m[k];
+              });
+        var __exportStar =
+          (this && this.__exportStar) ||
+          function (m, exports) {
+            for (var p in m)
+              if (
+                p !== 'default' &&
+                !Object.prototype.hasOwnProperty.call(exports, p)
+              )
+                __createBinding(exports, m, p);
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        __exportStar(
+          __webpack_require__(
+            /*! ./di-container */ './node_modules/inject.min/dist/di-container.js'
+          ),
+          exports
+        );
+        __exportStar(
+          __webpack_require__(
+            /*! ./inject-decorator */ './node_modules/inject.min/dist/inject-decorator.js'
+          ),
+          exports
+        );
+        __exportStar(
+          __webpack_require__(
+            /*! ./types */ './node_modules/inject.min/dist/types.js'
+          ),
+          exports
+        );
+
+        /***/
+      },
+
+    /***/ './node_modules/inject.min/dist/inject-decorator.js':
+      /*!**********************************************************!*\
+  !*** ./node_modules/inject.min/dist/inject-decorator.js ***!
+  \**********************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Inject = Inject;
+        const di_container_1 = __webpack_require__(
+          /*! ./di-container */ './node_modules/inject.min/dist/di-container.js'
+        );
         function Inject(Class, props) {
-          return function (parent, propertyKey) {
-            Object.defineProperty(parent, propertyKey, {
-              get: () => DIContainer.get(Class, props)
+          return function (target, propertyKey) {
+            Object.defineProperty(target, propertyKey, {
+              get: () => di_container_1.DIContainer.get(Class, props),
+              enumerable: true,
+              configurable: true
             });
           };
         }
+
+        /***/
+      },
+
+    /***/ './node_modules/inject.min/dist/types.js':
+      /*!***********************************************!*\
+  !*** ./node_modules/inject.min/dist/types.js ***!
+  \***********************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
 
         /***/
       },

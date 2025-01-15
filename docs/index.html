@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en">
+<html class="default" lang="en" data-base=".">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -13,6 +13,7 @@
     <script async src="assets/icons.js" id="tsd-icons-script"></script>
     <script async src="assets/search.js" id="tsd-search-script"></script>
     <script async src="assets/navigation.js" id="tsd-nav-script"></script>
+    <script async src="assets/hierarchy.js" id="tsd-hierarchy-script"></script>
   </head>
   <body>
     <script>
@@ -27,7 +28,7 @@
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search" data-base=".">
+        <div class="table-cell" id="tsd-search">
           <div class="field">
             <label
               for="tsd-search-field"
@@ -59,10 +60,10 @@
       <div class="col-content">
         <div class="tsd-page-title"><h1>@pietal.dev/engine</h1></div>
         <div class="tsd-panel tsd-typography">
-          <a id="md:one-for-all" class="tsd-anchor"></a>
+          <a id="one-for-all" class="tsd-anchor"></a>
           <h1 class="tsd-anchor-link">
             One For All<a
-              href="#md:one-for-all"
+              href="#one-for-all"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -77,12 +78,12 @@
             style="image-rendering: pixelated; max-width: 100%"
           />
           <a
-            id="md:typescript-gamedev-library-inspired-by-unity"
+            id="typescript-gamedev-library-inspired-by-unity"
             class="tsd-anchor"
           ></a>
           <h3 class="tsd-anchor-link">
             TypeScript gamedev library inspired by Unity<a
-              href="#md:typescript-gamedev-library-inspired-by-unity"
+              href="#typescript-gamedev-library-inspired-by-unity"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -92,35 +93,24 @@
           <p>
             <a
               href="https://www.npmjs.com/package/@pietal.dev/engine?activeTab=versions"
-              target="_blank"
-              class="external"
               ><img
                 src="https://img.shields.io/npm/v/@pietal.dev/engine?style=for-the-badge&color=success"
                 alt="npm version"
             /></a>
-            <a
-              href="https://app.circleci.com/pipelines/github/Prozi/oneforall"
-              target="_blank"
-              class="external"
+            <a href="https://app.circleci.com/pipelines/github/Prozi/oneforall"
               ><img
                 src="https://img.shields.io/circleci/build/github/Prozi/oneforall/main?style=for-the-badge"
                 alt="build status"
             /></a>
-            <a
-              href="https://github.com/Prozi/oneforall/blob/main/LICENSE"
-              target="_blank"
-              class="external"
+            <a href="https://github.com/Prozi/oneforall/blob/main/LICENSE"
               ><img
                 src="https://img.shields.io/npm/l/@pietal.dev/engine.svg?style=for-the-badge&color=success"
                 alt="license: MIT"
             /></a>
           </p>
-          <a id="md:demo" class="tsd-anchor"></a>
+          <a id="demo" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
-            Demo<a
-              href="#md:demo"
-              aria-label="Permalink"
-              class="tsd-anchor-icon"
+            Demo<a href="#demo" aria-label="Permalink" class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
                 <use href="assets/icons.svg#icon-anchor"></use></svg
             ></a>
@@ -130,27 +120,21 @@
 
           <p>
             Tiny code, big results! Check out the
-            <a
-              href="https://prozi.github.io/oneforall/demo/?fps&amp;debug"
-              target="_blank"
-              class="external"
+            <a href="https://prozi.github.io/oneforall/demo/?fps&amp;debug"
               >demo</a
             >
             to see below code in action.
           </p>
           <p>
             Also, here is the
-            <a
-              href="https://prozi.github.io/oneforall/modules.html"
-              target="_blank"
-              class="external"
+            <a href="https://prozi.github.io/oneforall/modules.html"
               >documentation</a
             >.
           </p>
-          <a id="md:demo-code" class="tsd-anchor"></a>
+          <a id="demo-code" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
             Demo Code<a
-              href="#md:demo-code"
+              href="#demo-code"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -165,10 +149,10 @@
           <pre><code class="typescript"><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">function</span><span class="hl-0"> </span><span class="hl-2">create</span><span class="hl-0">({ </span><span class="hl-1">scene</span><span class="hl-0">, </span><span class="hl-1">data</span><span class="hl-0">, </span><span class="hl-1">texture</span><span class="hl-0"> }): </span><span class="hl-4">TGameObject</span><span class="hl-0"> {</span><br/><span class="hl-0">  </span><span class="hl-6">// create game object</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">gameObject</span><span class="hl-0"> = </span><span class="hl-3">new</span><span class="hl-0"> </span><span class="hl-2">GameObject</span><span class="hl-0">(</span><span class="hl-7">&#39;Player&#39;</span><span class="hl-0">) </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-4">TGameObject</span><span class="hl-0">;</span><br/><br/><span class="hl-0">  </span><span class="hl-6">// create body</span><br/><span class="hl-0">  </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">body</span><span class="hl-0"> = </span><span class="hl-3">new</span><span class="hl-0"> </span><span class="hl-2">CircleBody</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">, </span><span class="hl-9">20</span><span class="hl-0">, </span><span class="hl-9">14</span><span class="hl-0">, </span><span class="hl-9">20</span><span class="hl-0">, { </span><span class="hl-1">padding:</span><span class="hl-0"> </span><span class="hl-9">7</span><span class="hl-0"> });</span><br/><span class="hl-0">  </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">body</span><span class="hl-0">.</span><span class="hl-2">setPosition</span><span class="hl-0">(</span><br/><span class="hl-0">    </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() * </span><span class="hl-1">innerWidth</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() * </span><span class="hl-1">innerHeight</span><br/><span class="hl-0">  );</span><br/><br/><span class="hl-0">  </span><span class="hl-6">// create animator with few animations from json + texture</span><br/><span class="hl-0">  </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0"> = </span><span class="hl-3">new</span><span class="hl-0"> </span><span class="hl-2">Animator</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">, </span><span class="hl-1">data</span><span class="hl-0">, </span><span class="hl-1">texture</span><span class="hl-0">);</span><br/><span class="hl-0">  </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-2">setState</span><span class="hl-0">(</span><span class="hl-7">&#39;idle&#39;</span><span class="hl-0">);</span><br/><br/><span class="hl-0">  </span><span class="hl-6">// insert body to physics and game object to scene</span><br/><span class="hl-0">  </span><span class="hl-1">scene</span><span class="hl-0">.</span><span class="hl-2">addChild</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">);</span><br/><br/><span class="hl-0">  </span><span class="hl-6">// subscribe to *own* update function until *own* destroy</span><br/><span class="hl-0">  </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">update$</span><br/><span class="hl-0">    .</span><span class="hl-2">pipe</span><span class="hl-0">(</span><span class="hl-2">takeUntil</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">destroy$</span><span class="hl-0">))</span><br/><span class="hl-0">    .</span><span class="hl-2">subscribe</span><span class="hl-0">((</span><span class="hl-1">deltaTime</span><span class="hl-0">) </span><span class="hl-3">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">      </span><span class="hl-2">update</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">, </span><span class="hl-1">deltaTime</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span><br/><br/><span class="hl-0">  </span><span class="hl-8">return</span><span class="hl-0"> </span><span class="hl-1">gameObject</span><span class="hl-0">;</span><br/><span class="hl-0">}</span><br/><br/><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">function</span><span class="hl-0"> </span><span class="hl-2">update</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">: </span><span class="hl-4">TGameObject</span><span class="hl-0">, </span><span class="hl-1">deltaTime</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">): </span><span class="hl-4">void</span><span class="hl-0"> {</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">scene</span><span class="hl-0"> = </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">scene</span><span class="hl-0">;</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">scale</span><span class="hl-0"> = </span><span class="hl-1">scene</span><span class="hl-0">.</span><span class="hl-1">stage</span><span class="hl-0">.</span><span class="hl-1">scale</span><span class="hl-0">;</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">gameObjects</span><span class="hl-0"> = </span><span class="hl-1">scene</span><span class="hl-0">.</span><span class="hl-1">children</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-4">TGameObject</span><span class="hl-0">[];</span><br/><span class="hl-0">  </span><span class="hl-6">// at 60fps deltaTime = 1.0, at 30fps deltaTime = 2.0</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">safeDelta</span><span class="hl-0"> = </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">min</span><span class="hl-0">(</span><span class="hl-1">deltaTime</span><span class="hl-0">, </span><span class="hl-9">2</span><span class="hl-0">);</span><br/><span class="hl-0">  </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">chance</span><span class="hl-0"> = </span><span class="hl-1">safeDelta</span><span class="hl-0"> * </span><span class="hl-9">0.01</span><span class="hl-0">;</span><br/><br/><span class="hl-0">  </span><span class="hl-8">if</span><span class="hl-0"> (</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() &lt; </span><span class="hl-1">chance</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-6">// goto random place</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0"> = {</span><br/><span class="hl-0">      </span><span class="hl-1">x:</span><span class="hl-0"> (</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() * </span><span class="hl-1">innerWidth</span><span class="hl-0">) / </span><span class="hl-1">scale</span><span class="hl-0">.</span><span class="hl-1">x</span><span class="hl-0">,</span><br/><span class="hl-0">      </span><span class="hl-1">y:</span><span class="hl-0"> (</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() * </span><span class="hl-1">innerHeight</span><span class="hl-0">) / </span><span class="hl-1">scale</span><span class="hl-0">.</span><span class="hl-1">y</span><br/><span class="hl-0">    };</span><br/><span class="hl-0">  } </span><span class="hl-8">else</span><span class="hl-0"> </span><span class="hl-8">if</span><span class="hl-0"> (</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() &lt; </span><span class="hl-1">chance</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-6">// goto random target</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0"> =</span><br/><span class="hl-0">      </span><span class="hl-1">gameObjects</span><span class="hl-0">[</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">floor</span><span class="hl-0">(</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() * </span><span class="hl-1">gameObjects</span><span class="hl-0">.</span><span class="hl-1">length</span><span class="hl-0">)];</span><br/><span class="hl-0">  } </span><span class="hl-8">else</span><span class="hl-0"> </span><span class="hl-8">if</span><span class="hl-0"> (</span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">random</span><span class="hl-0">() &lt; </span><span class="hl-1">chance</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-6">// stop</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0"> = </span><span class="hl-3">null</span><span class="hl-0">;</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">  </span><span class="hl-8">if</span><span class="hl-0"> (</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0"> &amp;&amp; </span><span class="hl-2">distance</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0">, </span><span class="hl-1">gameObject</span><span class="hl-0">) &lt; </span><span class="hl-9">9</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0"> = </span><span class="hl-3">null</span><span class="hl-0">;</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">  </span><span class="hl-8">if</span><span class="hl-0"> (!</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-2">setState</span><span class="hl-0">(</span><span class="hl-7">&#39;idle&#39;</span><span class="hl-0">);</span><br/><span class="hl-0">  } </span><span class="hl-8">else</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-2">setState</span><span class="hl-0">(</span><span class="hl-7">&#39;run&#39;</span><span class="hl-0">);</span><br/><br/><span class="hl-0">    </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">angle</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0"> = </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">atan2</span><span class="hl-0">(</span><br/><span class="hl-0">      </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0">.</span><span class="hl-1">y</span><span class="hl-0"> - </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">y</span><span class="hl-0">,</span><br/><span class="hl-0">      </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">target</span><span class="hl-0">.</span><span class="hl-1">x</span><span class="hl-0"> - </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">x</span><br/><span class="hl-0">    );</span><br/><span class="hl-0">    </span><span class="hl-8">if</span><span class="hl-0"> (!</span><span class="hl-2">isNaN</span><span class="hl-0">(</span><span class="hl-1">angle</span><span class="hl-0">)) {</span><br/><span class="hl-0">      </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">offsetX</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0"> = </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">cos</span><span class="hl-0">(</span><span class="hl-1">angle</span><span class="hl-0">);</span><br/><span class="hl-0">      </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">offsetY</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0"> = </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">sin</span><span class="hl-0">(</span><span class="hl-1">angle</span><span class="hl-0">);</span><br/><br/><span class="hl-0">      </span><span class="hl-8">if</span><span class="hl-0"> (</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0"> </span><span class="hl-3">instanceof</span><span class="hl-0"> </span><span class="hl-4">Animator</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-3">const</span><span class="hl-0"> </span><span class="hl-5">flipX</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0"> =</span><br/><span class="hl-0">          </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">sign</span><span class="hl-0">(</span><span class="hl-1">offsetX</span><span class="hl-0"> || </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-1">scale</span><span class="hl-0">.</span><span class="hl-1">x</span><span class="hl-0">) *</span><br/><span class="hl-0">          </span><span class="hl-1">Math</span><span class="hl-0">.</span><span class="hl-2">abs</span><span class="hl-0">(</span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-1">scale</span><span class="hl-0">.</span><span class="hl-1">x</span><span class="hl-0">);</span><br/><span class="hl-0">        </span><span class="hl-6">// flip x so there is no need to duplicate sprites</span><br/><span class="hl-0">        </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-2">setScale</span><span class="hl-0">(</span><span class="hl-1">flipX</span><span class="hl-0">, </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">sprite</span><span class="hl-0">.</span><span class="hl-1">scale</span><span class="hl-0">.</span><span class="hl-1">y</span><span class="hl-0">);</span><br/><span class="hl-0">      }</span><br/><br/><span class="hl-0">      </span><span class="hl-6">// update body which updates gameObject game object</span><br/><span class="hl-0">      </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">body</span><span class="hl-0">.</span><span class="hl-2">setPosition</span><span class="hl-0">(</span><br/><span class="hl-0">        </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">body</span><span class="hl-0">.</span><span class="hl-1">x</span><span class="hl-0"> + </span><span class="hl-1">safeDelta</span><span class="hl-0"> * </span><span class="hl-1">offsetX</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-1">gameObject</span><span class="hl-0">.</span><span class="hl-1">body</span><span class="hl-0">.</span><span class="hl-1">y</span><span class="hl-0"> + </span><span class="hl-1">safeDelta</span><span class="hl-0"> * </span><span class="hl-1">offsetY</span><br/><span class="hl-0">      );</span><br/><span class="hl-0">    }</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span>
 </code><button type="button">Copy</button></pre>
 
-          <a id="md:features" class="tsd-anchor"></a>
+          <a id="features" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
             Features<a
-              href="#md:features"
+              href="#features"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -177,59 +161,43 @@
           </h2>
           <ul>
             <li>
-              <a
-                href="https://docs.unity3d.com/Manual/CreatingGameplay.html"
-                target="_blank"
-                class="external"
+              <a href="https://docs.unity3d.com/Manual/CreatingGameplay.html"
                 >Unity-inspired architecture</a
               >
             </li>
             <li>
               <a
                 href="https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867"
-                target="_blank"
-                class="external"
                 >State management</a
               >
             </li>
             <li>
-              <a
-                href="https://www.learnrxjs.io/learn-rxjs/subjects"
-                target="_blank"
-                class="external"
+              <a href="https://www.learnrxjs.io/learn-rxjs/subjects"
                 >Reactive events</a
               >
             </li>
             <li>
               <a
                 href="https://www.html5gamedevs.com/topic/44780-best-way-to-remove-objects-from-the-stage/"
-                target="_blank"
-                class="external"
                 >Lifecycle cleanup management</a
               >
             </li>
             <li>
-              <a
-                href="https://npmjs.com/package/detect-collisions"
-                target="_blank"
-                class="external"
+              <a href="https://npmjs.com/package/detect-collisions"
                 >Collision detection</a
               >
             </li>
             <li>
-              <a
-                href="https://npmjs.com/package/pixi.js"
-                target="_blank"
-                class="external"
+              <a href="https://npmjs.com/package/pixi.js"
                 >Drawing on WebGL canvas</a
               >
             </li>
             <li>Compatible with pixi v6 and v8 at the same time!</li>
           </ul>
-          <a id="md:classes-this-library-exports" class="tsd-anchor"></a>
+          <a id="classes-this-library-exports" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
             Classes this library exports<a
-              href="#md:classes-this-library-exports"
+              href="#classes-this-library-exports"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -281,10 +249,10 @@
               smaller cached slices.
             </li>
           </ul>
-          <a id="md:installation" class="tsd-anchor"></a>
+          <a id="installation" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
             Installation<a
-              href="#md:installation"
+              href="#installation"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -294,10 +262,10 @@
           <pre><code class="bash"><span class="hl-2">npm</span><span class="hl-0"> </span><span class="hl-7">i</span><span class="hl-0"> </span><span class="hl-7">@pietal.dev/engine</span><span class="hl-0"> </span><span class="hl-3">-D</span>
 </code><button type="button">Copy</button></pre>
 
-          <a id="md:we-also-have-tests" class="tsd-anchor"></a>
+          <a id="we-also-have-tests" class="tsd-anchor"></a>
           <h2 class="tsd-anchor-link">
             We also have tests<a
-              href="#md:we-also-have-tests"
+              href="#we-also-have-tests"
               aria-label="Permalink"
               class="tsd-anchor-icon"
               ><svg viewBox="0 0 24 24">
@@ -442,14 +410,14 @@
               </h3>
             </summary>
             <div class="tsd-accordion-details">
-              <a href="#md:one-for-all"
+              <a href="#one-for-all"
                 ><span>One <wbr />For <wbr />All</span></a
               >
               <ul>
                 <li>
                   <ul>
                     <li>
-                      <a href="#md:typescript-gamedev-library-inspired-by-unity"
+                      <a href="#typescript-gamedev-library-inspired-by-unity"
                         ><span
                           >Type<wbr />Script gamedev library inspired by
                           <wbr />Unity</span
@@ -459,26 +427,26 @@
                   </ul>
                 </li>
                 <li>
-                  <a href="#md:demo"><span>Demo</span></a>
+                  <a href="#demo"><span>Demo</span></a>
                 </li>
                 <li>
-                  <a href="#md:demo-code"
+                  <a href="#demo-code"
                     ><span>Demo <wbr />Code</span></a
                   >
                 </li>
                 <li>
-                  <a href="#md:features"><span>Features</span></a>
+                  <a href="#features"><span>Features</span></a>
                 </li>
                 <li>
-                  <a href="#md:classes-this-library-exports"
+                  <a href="#classes-this-library-exports"
                     ><span>Classes this library exports</span></a
                   >
                 </li>
                 <li>
-                  <a href="#md:installation"><span>Installation</span></a>
+                  <a href="#installation"><span>Installation</span></a>
                 </li>
                 <li>
-                  <a href="#md:we-also-have-tests"
+                  <a href="#we-also-have-tests"
                     ><span>We also have tests</span></a
                   >
                 </li>
@@ -488,16 +456,8 @@
         </div>
         <div class="site-menu">
           <nav class="tsd-navigation">
-            <a href="modules.html" class="current"
-              ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                <use href="assets/icons.svg#icon-1"></use></svg
-              ><span>@pietal.dev/engine</span></a
-            >
-            <ul
-              class="tsd-small-nested-navigation"
-              id="tsd-nav-container"
-              data-base="."
-            >
+            <a href="modules.html">@pietal.dev/engine</a>
+            <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
               <li>Loading...</li>
             </ul>
           </nav>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en">
+<html class="default" lang="en" data-base="..">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -13,6 +13,11 @@
     <script async src="../assets/icons.js" id="tsd-icons-script"></script>
     <script async src="../assets/search.js" id="tsd-search-script"></script>
     <script async src="../assets/navigation.js" id="tsd-nav-script"></script>
+    <script
+      async
+      src="../assets/hierarchy.js"
+      id="tsd-hierarchy-script"
+    ></script>
   </head>
   <body>
     <script>
@@ -27,7 +32,7 @@
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search" data-base="..">
+        <div class="table-cell" id="tsd-search">
           <div class="field">
             <label
               for="tsd-search-field"
@@ -67,32 +72,102 @@
           <h1>Type Alias PIXIv6LoaderCallback</h1>
         </div>
         <div class="tsd-signature">
-          <span class="tsd-kind-type-alias"
-            >PIXIv6<wbr />Loader<wbr />Callback</span
+          <span class="tsd-kind-type-alias">PIXIv6LoaderCallback</span
           ><span class="tsd-signature-symbol">:</span>
-          <span class="tsd-signature-symbol">(</span
-          ><span class="tsd-signature-symbol">(</span
-          ><span class="tsd-kind-parameter">loader</span
-          ><span class="tsd-signature-symbol">: </span
-          ><a
+          <span class="tsd-signature-symbol">(</span><br />    <span
+            class="tsd-kind-parameter"
+            >loader</span
+          ><span class="tsd-signature-symbol">:</span>
+          <a
             href="../interfaces/PIXIv6Loader.html"
             class="tsd-signature-type tsd-kind-interface"
             >PIXIv6Loader</a
-          >, <span class="tsd-kind-parameter">resources</span
-          ><span class="tsd-signature-symbol">: </span
-          ><span class="tsd-signature-type">Record</span
+          ><span class="tsd-signature-symbol">,</span><br />    <span
+            class="tsd-kind-parameter"
+            >resources</span
+          ><span class="tsd-signature-symbol">:</span>
+          <span class="tsd-signature-type">Record</span
           ><span class="tsd-signature-symbol">&lt;</span
           ><span class="tsd-signature-type">string</span
-          ><span class="tsd-signature-symbol">, </span
-          ><a
+          ><span class="tsd-signature-symbol">,</span>
+          <a
             href="PIXIResource.html"
             class="tsd-signature-type tsd-kind-type-alias"
             >PIXIResource</a
           ><span class="tsd-signature-symbol">&gt;</span
-          ><span class="tsd-signature-symbol">)</span
-          ><span class="tsd-signature-symbol"> =&gt; </span
-          ><span class="tsd-signature-type">void</span
-          ><span class="tsd-signature-symbol">)</span>
+          ><span class="tsd-signature-symbol">,</span><br /><span
+            class="tsd-signature-symbol"
+            >)</span
+          >
+          <span class="tsd-signature-symbol">=&gt;</span>
+          <span class="tsd-signature-type">void</span>
+        </div>
+        <div class="tsd-type-declaration">
+          <h4>Type declaration</h4>
+          <ul class="tsd-parameters">
+            <li class="tsd-parameter-signature">
+              <ul class="tsd-signatures">
+                <li class="tsd-signature" id="__type">
+                  <span class="tsd-signature-symbol">(</span
+                  ><span class="tsd-kind-parameter">loader</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <a
+                    href="../interfaces/PIXIv6Loader.html"
+                    class="tsd-signature-type tsd-kind-interface"
+                    >PIXIv6Loader</a
+                  ><span class="tsd-signature-symbol">,</span>
+                  <span class="tsd-kind-parameter">resources</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">Record</span
+                  ><span class="tsd-signature-symbol">&lt;</span
+                  ><span class="tsd-signature-type">string</span
+                  ><span class="tsd-signature-symbol">,</span>
+                  <a
+                    href="PIXIResource.html"
+                    class="tsd-signature-type tsd-kind-type-alias"
+                    >PIXIResource</a
+                  ><span class="tsd-signature-symbol">&gt;</span
+                  ><span class="tsd-signature-symbol">)</span
+                  ><span class="tsd-signature-symbol">:</span>
+                  <span class="tsd-signature-type">void</span>
+                </li>
+                <li class="tsd-description">
+                  <div class="tsd-parameters">
+                    <h4 class="tsd-parameters-title">Parameters</h4>
+                    <ul class="tsd-parameter-list">
+                      <li>
+                        <span
+                          ><span class="tsd-kind-parameter">loader</span>:
+                          <a
+                            href="../interfaces/PIXIv6Loader.html"
+                            class="tsd-signature-type tsd-kind-interface"
+                            >PIXIv6Loader</a
+                          ></span
+                        >
+                      </li>
+                      <li>
+                        <span
+                          ><span class="tsd-kind-parameter">resources</span>:
+                          <span class="tsd-signature-type">Record</span
+                          ><span class="tsd-signature-symbol">&lt;</span
+                          ><span class="tsd-signature-type">string</span
+                          ><span class="tsd-signature-symbol">,</span>
+                          <a
+                            href="PIXIResource.html"
+                            class="tsd-signature-type tsd-kind-type-alias"
+                            >PIXIResource</a
+                          ><span class="tsd-signature-symbol">&gt;</span></span
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <h4 class="tsd-returns-title">
+                    Returns <span class="tsd-signature-type">void</span>
+                  </h4>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
         <aside class="tsd-sources">
           <ul>
@@ -234,16 +309,8 @@
         </div>
         <div class="site-menu">
           <nav class="tsd-navigation">
-            <a href="../modules.html"
-              ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                <use href="../assets/icons.svg#icon-1"></use></svg
-              ><span>@pietal.dev/engine</span></a
-            >
-            <ul
-              class="tsd-small-nested-navigation"
-              id="tsd-nav-container"
-              data-base=".."
-            >
+            <a href="../modules.html">@pietal.dev/engine</a>
+            <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
               <li>Loading...</li>
             </ul>
           </nav>
