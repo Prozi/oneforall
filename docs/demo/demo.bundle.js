@@ -10567,6 +10567,686 @@
         /***/
       },
 
+    /***/ './node_modules/pixi-stats/dist/hooks/BaseHooks.js':
+      /*!*********************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/BaseHooks.js ***!
+  \*********************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        const GLHook_1 = __importDefault(
+          __webpack_require__(
+            /*! ./GLHook */ './node_modules/pixi-stats/dist/hooks/GLHook.js'
+          )
+        );
+        const TextureHook_1 = __importDefault(
+          __webpack_require__(
+            /*! ./TextureHook */ './node_modules/pixi-stats/dist/hooks/TextureHook.js'
+          )
+        );
+        class BaseHooks {
+          constructor() {
+            this._drawCalls = -1;
+            this._maxDeltaDrawCalls = -1;
+          }
+          attach(gl) {
+            this.glhook = new GLHook_1.default(gl);
+            this.texturehook = new TextureHook_1.default(gl);
+          }
+          get drawCalls() {
+            if (this.glhook && this.glhook.isInit) {
+              return this.glhook.drawPasses;
+            }
+            return -1;
+          }
+          get maxDeltaDrawCalls() {
+            return this._maxDeltaDrawCalls;
+          }
+          get deltaDrawCalls() {
+            if (this._drawCalls == -1) {
+              this._drawCalls = this.drawCalls;
+              return 0;
+            }
+            const dc = this.drawCalls;
+            const delta = dc - this._drawCalls;
+            this._drawCalls = dc;
+            this._maxDeltaDrawCalls = Math.max(this._maxDeltaDrawCalls, delta);
+            return delta;
+          }
+          get maxTextureCount() {
+            if (this.texturehook && this.texturehook.isInit)
+              return this.texturehook.maxTexturesCount;
+            return 0;
+          }
+          get texturesCount() {
+            if (this.texturehook && this.texturehook.isInit)
+              return this.texturehook.currentTextureCount;
+            return 0;
+          }
+          reset() {
+            this._maxDeltaDrawCalls = -1;
+            this._drawCalls = -1;
+            if (this.glhook) this.glhook.reset();
+            if (this.texturehook) this.texturehook.reset();
+          }
+          release() {
+            if (this.glhook) this.glhook.release();
+            if (this.texturehook) this.texturehook.release();
+          }
+        }
+        exports['default'] = BaseHooks;
+        //# sourceMappingURL=BaseHooks.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/hooks/GLHook.js':
+      /*!******************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/GLHook.js ***!
+  \******************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class GLHook {
+          constructor(_gl) {
+            this.drawPasses = 0;
+            this.isInit = false;
+            this.realGLDrawElements = function () {};
+            if (!_gl) {
+              console.warn("[GLHook] GL can't be NULL");
+            } else if (_gl.__proto__.drawElements) {
+              this.gl = _gl;
+              this.realGLDrawElements = this.gl.__proto__.drawElements;
+              // replace with new function
+              this.gl.__proto__.drawElements =
+                this.fakeGLdrawElements.bind(this);
+              this.isInit = true;
+              console.info('[GLHook] GL was Hooked!');
+            }
+          }
+          fakeGLdrawElements(mode, count, type, offset) {
+            this.drawPasses++;
+            this.realGLDrawElements.call(this.gl, mode, count, type, offset);
+          }
+          reset() {
+            this.drawPasses = 0;
+          }
+          release() {
+            if (this.isInit) {
+              this.gl.__proto__.drawElements = this.realGLDrawElements;
+              console.info('[GLHook] Hook was removed!');
+            }
+            this.isInit = false;
+          }
+        }
+        exports['default'] = GLHook;
+        //# sourceMappingURL=GLHook.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/hooks/TextureHook.js':
+      /*!***********************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/hooks/TextureHook.js ***!
+  \***********************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        Object.defineProperty(exports, '__esModule', { value: true });
+        class TextureHook {
+          constructor(_gl) {
+            this.createdTextures = new Array();
+            this.maxTexturesCount = 0;
+            this.isInit = false;
+            this.realGLCreateTexture = function () {};
+            this.realGLDeleteTexture = function () {};
+            if (!_gl) {
+              console.warn("[TextureHook] GL can't be NULL");
+            } else if (_gl.__proto__.createTexture) {
+              this.gl = _gl;
+              this.realGLCreateTexture = this.gl.__proto__.createTexture;
+              this.realGLDeleteTexture = this.gl.__proto__.deleteTexture;
+              // replace with new function
+              this.gl.__proto__.createTexture =
+                this.fakeGLCreateTexture.bind(this);
+              this.gl.__proto__.deleteTexture =
+                this.fakeGLDeleteTexture.bind(this);
+              this.isInit = true;
+              console.info('[TextureHook] GL was Hooked!');
+            }
+          }
+          get currentTextureCount() {
+            return this.createdTextures.length;
+          }
+          registerTexture(texture) {
+            this.createdTextures.push(texture); // ++;
+            this.maxTexturesCount = Math.max(
+              this.createdTextures.length,
+              this.maxTexturesCount
+            );
+          }
+          fakeGLCreateTexture() {
+            const texture = this.realGLCreateTexture.call(this.gl);
+            this.registerTexture(texture);
+            return texture;
+          }
+          fakeGLDeleteTexture(texture) {
+            const index = this.createdTextures.indexOf(texture);
+            if (index > -1) {
+              this.createdTextures.splice(index, 1);
+            }
+            this.realGLDeleteTexture.call(this.gl, texture);
+          }
+          reset() {
+            this.createdTextures = new Array();
+            this.maxTexturesCount = 0;
+          }
+          release() {
+            if (this.isInit) {
+              this.gl.__proto__.createTexture = this.realGLCreateTexture;
+              this.gl.__proto__.deleteTexture = this.realGLDeleteTexture;
+              console.info('[TextureHook] Hook was removed!');
+            }
+            this.isInit = false;
+          }
+        }
+        exports['default'] = TextureHook;
+        //# sourceMappingURL=TextureHook.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/index.js':
+      /*!***********************************************!*\
+  !*** ./node_modules/pixi-stats/dist/index.js ***!
+  \***********************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __createBinding =
+          (this && this.__createBinding) ||
+          (Object.create
+            ? function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (
+                  !desc ||
+                  ('get' in desc
+                    ? !m.__esModule
+                    : desc.writable || desc.configurable)
+                ) {
+                  desc = {
+                    enumerable: true,
+                    get: function () {
+                      return m[k];
+                    }
+                  };
+                }
+                Object.defineProperty(o, k2, desc);
+              }
+            : function (o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                o[k2] = m[k];
+              });
+        var __exportStar =
+          (this && this.__exportStar) ||
+          function (m, exports) {
+            for (var p in m)
+              if (
+                p !== 'default' &&
+                !Object.prototype.hasOwnProperty.call(exports, p)
+              )
+                __createBinding(exports, m, p);
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        __exportStar(
+          __webpack_require__(
+            /*! ./stats-constants */ './node_modules/pixi-stats/dist/stats-constants.js'
+          ),
+          exports
+        );
+        __exportStar(
+          __webpack_require__(
+            /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
+          ),
+          exports
+        );
+        __exportStar(
+          __webpack_require__(
+            /*! ./stats-adapter */ './node_modules/pixi-stats/dist/stats-adapter.js'
+          ),
+          exports
+        );
+        __exportStar(
+          __webpack_require__(
+            /*! ./stats */ './node_modules/pixi-stats/dist/stats.js'
+          ),
+          exports
+        );
+        //# sourceMappingURL=index.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/pixi-hooks.js':
+      /*!****************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/pixi-hooks.js ***!
+  \****************************************************/
+      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
+        'use strict';
+
+        var __importDefault =
+          (this && this.__importDefault) ||
+          function (mod) {
+            return mod && mod.__esModule ? mod : { default: mod };
+          };
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.PIXIHooks = void 0;
+        const BaseHooks_1 = __importDefault(
+          __webpack_require__(
+            /*! ./hooks/BaseHooks */ './node_modules/pixi-stats/dist/hooks/BaseHooks.js'
+          )
+        );
+        class PIXIHooks extends BaseHooks_1.default {
+          get hooked() {
+            return !!this.glhook;
+          }
+          constructor(renderer) {
+            super();
+            if (!renderer) {
+              console.warn('[PIXI Hooks] renderer in constructor undefined');
+              return;
+            }
+            if (!renderer.gl) {
+              console.warn('[PIXI Hooks] gl in renderer not found');
+              return;
+            }
+            this.attach(renderer.gl);
+            if (!this.texturehook) {
+              console.warn('[PIXI Hooks] attach hook to gl in renderer failed');
+              return;
+            }
+            const texture = renderer.texture;
+            // pixi v6 compatibility
+            const glTextures = texture._glTextures || texture.managedTextures;
+            // pixi v6 compatibility
+            const glTexturesArray = Array.isArray(glTextures)
+              ? glTextures
+              : Object.values(glTextures);
+            if (!glTexturesArray) {
+              console.warn('[PIXI Hooks] no gl textures found');
+              return;
+            }
+            console.info(
+              '[PIXI Hooks] Collect used textures:',
+              glTexturesArray.length
+            );
+            glTexturesArray.forEach((glTexture) => {
+              if (glTexture.gl === renderer.gl && glTexture.texture) {
+                this.texturehook.registerTexture(glTexture.texture);
+              }
+            });
+          }
+        }
+        exports.PIXIHooks = PIXIHooks;
+        //# sourceMappingURL=pixi-hooks.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/stats-adapter.js':
+      /*!*******************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/stats-adapter.js ***!
+  \*******************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.StatsJSAdapter = void 0;
+        const stats_panel_1 = __webpack_require__(
+          /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
+        );
+        class StatsJSAdapter {
+          constructor(hook, stats) {
+            this.hook = hook;
+            this.stats = stats;
+            if (this.hook.hooked) {
+              this.dcPanel = this.stats.addPanel(
+                new stats_panel_1.Panel('DC', '#f60', '#300')
+              );
+              this.tcPanel = this.stats.addPanel(
+                new stats_panel_1.Panel('TC', '#0c6', '#033')
+              );
+            }
+          }
+          update() {
+            var _a, _b;
+            if (!this.stats) {
+              return;
+            }
+            if (this.hook) {
+              (_a = this.dcPanel) === null || _a === void 0
+                ? void 0
+                : _a.update(
+                    this.hook.deltaDrawCalls,
+                    Math.max(50, this.hook.maxDeltaDrawCalls)
+                  );
+              (_b = this.tcPanel) === null || _b === void 0
+                ? void 0
+                : _b.update(
+                    this.hook.texturesCount,
+                    Math.max(20, this.hook.maxTextureCount)
+                  );
+            }
+            this.stats.update();
+          }
+          reset() {
+            if (this.hook) {
+              this.hook.reset();
+            }
+          }
+        }
+        exports.StatsJSAdapter = StatsJSAdapter;
+        //# sourceMappingURL=stats-adapter.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/stats-constants.js':
+      /*!*********************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/stats-constants.js ***!
+  \*********************************************************/
+      /***/ (__unused_webpack_module, exports) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.GRAPH_HEIGHT =
+          exports.GRAPH_WIDTH =
+          exports.GRAPH_Y =
+          exports.FONT_SIZE =
+          exports.GRAPH_X =
+          exports.TEXT_Y =
+          exports.TEXT_X =
+          exports.HEIGHT =
+          exports.WIDTH =
+          exports.PR =
+            void 0;
+        exports.PR = 4;
+        exports.WIDTH = 50 * exports.PR;
+        exports.HEIGHT = 30 * exports.PR;
+        exports.TEXT_X = 7;
+        exports.TEXT_Y = 7;
+        exports.GRAPH_X = exports.TEXT_X;
+        exports.FONT_SIZE = 20; // tested @ 120.0 FPS (120~120)
+        exports.GRAPH_Y = exports.FONT_SIZE + exports.TEXT_Y;
+        exports.GRAPH_WIDTH = exports.WIDTH - exports.GRAPH_X * 2;
+        exports.GRAPH_HEIGHT =
+          exports.HEIGHT - exports.GRAPH_X - exports.GRAPH_Y;
+        //# sourceMappingURL=stats-constants.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/stats-panel.js':
+      /*!*****************************************************!*\
+  !*** ./node_modules/pixi-stats/dist/stats-panel.js ***!
+  \*****************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Panel = void 0;
+        const stats_constants_1 = __webpack_require__(
+          /*! ./stats-constants */ './node_modules/pixi-stats/dist/stats-constants.js'
+        );
+        class Panel {
+          constructor(name, fg, bg) {
+            this.values = [];
+            this.snapshotSize = 30; // min~max of X frames total
+            const canvas = document.createElement('canvas');
+            canvas.width = stats_constants_1.WIDTH;
+            canvas.height = stats_constants_1.HEIGHT;
+            const context = canvas.getContext('2d');
+            if (!context) {
+              throw new Error('Cant get context on canvas');
+            }
+            context.font = `bold ${stats_constants_1.FONT_SIZE}px ${getComputedStyle(document.body).fontFamily}`;
+            context.textBaseline = 'top';
+            context.fillStyle = bg;
+            context.fillRect(
+              0,
+              0,
+              stats_constants_1.WIDTH,
+              stats_constants_1.HEIGHT
+            );
+            context.fillStyle = fg;
+            context.fillText(
+              name,
+              stats_constants_1.TEXT_X,
+              stats_constants_1.TEXT_Y
+            );
+            context.fillRect(
+              stats_constants_1.GRAPH_X,
+              stats_constants_1.GRAPH_Y,
+              stats_constants_1.GRAPH_WIDTH,
+              stats_constants_1.GRAPH_HEIGHT
+            );
+            context.fillStyle = bg;
+            context.globalAlpha = 0.8;
+            context.fillRect(
+              stats_constants_1.GRAPH_X,
+              stats_constants_1.GRAPH_Y,
+              stats_constants_1.GRAPH_WIDTH,
+              stats_constants_1.GRAPH_HEIGHT
+            );
+            this.name = name;
+            this.dom = canvas;
+            this.context = context;
+            this.fg = fg;
+            this.bg = bg;
+          }
+          get min() {
+            return this.values
+              .reduce((min, value) => Math.min(min, value), Infinity)
+              .toFixed();
+          }
+          get max() {
+            return this.values
+              .reduce((max, value) => Math.max(max, value), 0)
+              .toFixed();
+          }
+          get averageValue() {
+            return (
+              this.values.reduce((sum, value) => sum + value, 0) /
+              this.values.length
+            ).toFixed(1);
+          }
+          pushValue(value) {
+            this.values.push(value);
+            if (this.values.length > this.snapshotSize) {
+              this.values = this.values.slice(-this.snapshotSize);
+            }
+          }
+          update(value, maxValue) {
+            const context = this.context;
+            this.pushValue(value);
+            context.fillStyle = this.bg;
+            context.globalAlpha = 1;
+            context.fillRect(
+              0,
+              0,
+              stats_constants_1.WIDTH,
+              stats_constants_1.GRAPH_Y
+            );
+            context.fillStyle = this.fg;
+            context.font = `bold ${stats_constants_1.FONT_SIZE}px ${getComputedStyle(document.body).fontFamily}`;
+            context.fillText(
+              `${this.averageValue} ${this.name} (${this.min}-${this.max})`,
+              stats_constants_1.TEXT_X,
+              stats_constants_1.TEXT_Y
+            );
+            context.drawImage(
+              this.dom,
+              stats_constants_1.GRAPH_X + stats_constants_1.PR,
+              stats_constants_1.GRAPH_Y,
+              stats_constants_1.GRAPH_WIDTH - stats_constants_1.PR,
+              stats_constants_1.GRAPH_HEIGHT,
+              stats_constants_1.GRAPH_X,
+              stats_constants_1.GRAPH_Y,
+              stats_constants_1.GRAPH_WIDTH - stats_constants_1.PR,
+              stats_constants_1.GRAPH_HEIGHT
+            );
+            context.fillRect(
+              stats_constants_1.GRAPH_X +
+                stats_constants_1.GRAPH_WIDTH -
+                stats_constants_1.PR,
+              stats_constants_1.GRAPH_Y,
+              stats_constants_1.PR,
+              stats_constants_1.GRAPH_HEIGHT
+            );
+            context.fillStyle = this.bg;
+            context.globalAlpha = 0.8;
+            context.fillRect(
+              stats_constants_1.GRAPH_X +
+                stats_constants_1.GRAPH_WIDTH -
+                stats_constants_1.PR,
+              stats_constants_1.GRAPH_Y,
+              2 * stats_constants_1.PR,
+              Math.round(
+                (1 - value / maxValue) * stats_constants_1.GRAPH_HEIGHT
+              )
+            );
+          }
+        }
+        exports.Panel = Panel;
+        //# sourceMappingURL=stats-panel.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi-stats/dist/stats.js':
+      /*!***********************************************!*\
+  !*** ./node_modules/pixi-stats/dist/stats.js ***!
+  \***********************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        Object.defineProperty(exports, '__esModule', { value: true });
+        exports.Stats = void 0;
+        const pixi_hooks_1 = __webpack_require__(
+          /*! ./pixi-hooks */ './node_modules/pixi-stats/dist/pixi-hooks.js'
+        );
+        const stats_adapter_1 = __webpack_require__(
+          /*! ./stats-adapter */ './node_modules/pixi-stats/dist/stats-adapter.js'
+        );
+        const stats_panel_1 = __webpack_require__(
+          /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
+        );
+        class Stats {
+          constructor(renderer, containerElement = document.body) {
+            this.mode = 0;
+            this.frames = 0;
+            this.beginTime = (performance || Date).now();
+            this.prevTime = this.beginTime;
+            this.domElement = document.createElement('div');
+            this.domElement.id = 'stats';
+            this.domElement.addEventListener(
+              'click',
+              (event) => {
+                event.preventDefault();
+                this.showPanel(++this.mode % this.domElement.children.length);
+              },
+              false
+            );
+            this.fpsPanel = this.addPanel(
+              new stats_panel_1.Panel('FPS', '#3ff', '#002')
+            );
+            this.msPanel = this.addPanel(
+              new stats_panel_1.Panel('MS', '#0f0', '#020')
+            );
+            if ('memory' in performance) {
+              this.memPanel = this.addPanel(
+                new stats_panel_1.Panel('MB', '#f08', '#200')
+              );
+            }
+            this.pixiHooks = new pixi_hooks_1.PIXIHooks(renderer);
+            this.adapter = new stats_adapter_1.StatsJSAdapter(
+              this.pixiHooks,
+              this
+            );
+            this.showPanel(0);
+            containerElement.appendChild(this.domElement);
+            if ('animations' in renderer) {
+              renderer.animations.push(() => {
+                this.adapter.update();
+              });
+            } else {
+              const frame = () => {
+                this.adapter.update();
+                requestAnimationFrame(frame);
+              };
+              frame();
+            }
+          }
+          addPanel(panel) {
+            this.domElement.appendChild(panel.dom);
+            return panel;
+          }
+          showPanel(id) {
+            for (
+              let index = 0;
+              index < this.domElement.children.length;
+              index++
+            ) {
+              const element = this.domElement.children[index];
+              element.style.display = index === id ? 'block' : 'none';
+            }
+            this.mode = id;
+          }
+          begin() {
+            this.beginTime = (performance || Date).now();
+          }
+          end() {
+            this.frames++;
+            const time = (performance || Date).now();
+            this.msPanel.update(time - this.beginTime, 200);
+            if (time > this.prevTime + 1000) {
+              this.fpsPanel.update(
+                (this.frames * 1000) / (time - this.prevTime),
+                100
+              );
+              this.prevTime = time;
+              this.frames = 0;
+              if (this.memPanel && 'memory' in performance) {
+                const memory = performance.memory;
+                this.memPanel.update(
+                  memory.usedJSHeapSize / 1048576,
+                  memory.jsHeapSizeLimit / 1048576
+                );
+              }
+            }
+            return time;
+          }
+          update() {
+            this.beginTime = this.end();
+          }
+        }
+        exports.Stats = Stats;
+        //# sourceMappingURL=stats.js.map
+
+        /***/
+      },
+
     /***/ './node_modules/pixi.js/lib/_virtual/basis.worker.js':
       /*!***********************************************************!*\
   !*** ./node_modules/pixi.js/lib/_virtual/basis.worker.js ***!
@@ -95598,7 +96278,7 @@ Deprecated since v${version}`
           /*! ./resources */ './src/resources.ts'
         );
         const pixi_stats_1 = __webpack_require__(
-          /*! pixi-stats */ '../pixi-stats/dist/index.js'
+          /*! pixi-stats */ './node_modules/pixi-stats/dist/index.js'
         );
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
@@ -95947,683 +96627,6 @@ Deprecated since v${version}`
           }
         }
         exports.StateMachine = StateMachine;
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/hooks/BaseHooks.js':
-      /*!*********************************************!*\
-  !*** ../pixi-stats/dist/hooks/BaseHooks.js ***!
-  \*********************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        const GLHook_1 = __importDefault(
-          __webpack_require__(
-            /*! ./GLHook */ '../pixi-stats/dist/hooks/GLHook.js'
-          )
-        );
-        const TextureHook_1 = __importDefault(
-          __webpack_require__(
-            /*! ./TextureHook */ '../pixi-stats/dist/hooks/TextureHook.js'
-          )
-        );
-        class BaseHooks {
-          constructor() {
-            this._drawCalls = -1;
-            this._maxDeltaDrawCalls = -1;
-          }
-          attach(gl) {
-            this.glhook = new GLHook_1.default(gl);
-            this.texturehook = new TextureHook_1.default(gl);
-          }
-          get drawCalls() {
-            if (this.glhook && this.glhook.isInit) {
-              return this.glhook.drawPasses;
-            }
-            return -1;
-          }
-          get maxDeltaDrawCalls() {
-            return this._maxDeltaDrawCalls;
-          }
-          get deltaDrawCalls() {
-            if (this._drawCalls == -1) {
-              this._drawCalls = this.drawCalls;
-              return 0;
-            }
-            const dc = this.drawCalls;
-            const delta = dc - this._drawCalls;
-            this._drawCalls = dc;
-            this._maxDeltaDrawCalls = Math.max(this._maxDeltaDrawCalls, delta);
-            return delta;
-          }
-          get maxTextureCount() {
-            if (this.texturehook && this.texturehook.isInit)
-              return this.texturehook.maxTexturesCount;
-            return 0;
-          }
-          get texturesCount() {
-            if (this.texturehook && this.texturehook.isInit)
-              return this.texturehook.currentTextureCount;
-            return 0;
-          }
-          reset() {
-            this._maxDeltaDrawCalls = -1;
-            this._drawCalls = -1;
-            if (this.glhook) this.glhook.reset();
-            if (this.texturehook) this.texturehook.reset();
-          }
-          release() {
-            if (this.glhook) this.glhook.release();
-            if (this.texturehook) this.texturehook.release();
-          }
-        }
-        exports['default'] = BaseHooks;
-        //# sourceMappingURL=BaseHooks.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/hooks/GLHook.js':
-      /*!******************************************!*\
-  !*** ../pixi-stats/dist/hooks/GLHook.js ***!
-  \******************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class GLHook {
-          constructor(_gl) {
-            this.drawPasses = 0;
-            this.isInit = false;
-            this.realGLDrawElements = function () {};
-            if (_gl) {
-              if (_gl.__proto__.drawElements) {
-                this.gl = _gl;
-                this.realGLDrawElements = _gl.__proto__.drawElements;
-                //replace to new function
-                _gl.__proto__.drawElements = this.fakeGLdrawElements.bind(this);
-                this.isInit = true;
-                console.log('[GLHook] GL was Hooked!');
-              }
-            } else {
-              console.error("[GLHook] GL can't be NULL");
-            }
-          }
-          fakeGLdrawElements(mode, count, type, offset) {
-            this.drawPasses++;
-            this.realGLDrawElements.call(this.gl, mode, count, type, offset);
-          }
-          reset() {
-            this.drawPasses = 0;
-          }
-          release() {
-            if (this.isInit) {
-              this.gl.__proto__.drawElements = this.realGLDrawElements;
-              console.log('[GLHook] Hook was removed!');
-            }
-            this.isInit = false;
-          }
-        }
-        exports['default'] = GLHook;
-        //# sourceMappingURL=GLHook.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/hooks/TextureHook.js':
-      /*!***********************************************!*\
-  !*** ../pixi-stats/dist/hooks/TextureHook.js ***!
-  \***********************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        Object.defineProperty(exports, '__esModule', { value: true });
-        class TextureHook {
-          constructor(_gl) {
-            this.createdTextures = new Array();
-            this.maxTexturesCount = 0;
-            this.isInit = false;
-            this.realGLCreateTexture = function () {};
-            this.realGLDeleteTexture = function () {};
-            if (_gl) {
-              if (_gl.__proto__.createTexture) {
-                this.gl = _gl;
-                this.realGLCreateTexture = _gl.__proto__.createTexture;
-                this.realGLDeleteTexture = _gl.__proto__.deleteTexture;
-                //replace to new function
-                _gl.__proto__.createTexture =
-                  this.fakeGLCreateTexture.bind(this);
-                _gl.__proto__.deleteTexture =
-                  this.fakeGLDeleteTexture.bind(this);
-                this.isInit = true;
-                console.log('[TextureHook] GL was Hooked!');
-              }
-            } else {
-              console.error("[TextureHook] GL can't be NULL");
-            }
-          }
-          get currentTextureCount() {
-            return this.createdTextures.length;
-          }
-          registerTexture(texture) {
-            this.createdTextures.push(texture); // ++;
-            this.maxTexturesCount = Math.max(
-              this.createdTextures.length,
-              this.maxTexturesCount
-            );
-          }
-          fakeGLCreateTexture() {
-            const texture = this.realGLCreateTexture.call(this.gl);
-            this.registerTexture(texture);
-            return texture;
-          }
-          fakeGLDeleteTexture(texture) {
-            const index = this.createdTextures.indexOf(texture);
-            if (index > -1) {
-              this.createdTextures.splice(index, 1);
-            }
-            this.realGLDeleteTexture.call(this.gl, texture);
-          }
-          reset() {
-            this.createdTextures = new Array();
-            this.maxTexturesCount = 0;
-          }
-          release() {
-            if (this.isInit) {
-              this.gl.__proto__.createTexture = this.realGLCreateTexture;
-              this.gl.__proto__.deleteTexture = this.realGLDeleteTexture;
-              console.log('[TextureHook] Hook was removed!');
-            }
-            this.isInit = false;
-          }
-        }
-        exports['default'] = TextureHook;
-        //# sourceMappingURL=TextureHook.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/index.js':
-      /*!***********************************!*\
-  !*** ../pixi-stats/dist/index.js ***!
-  \***********************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __createBinding =
-          (this && this.__createBinding) ||
-          (Object.create
-            ? function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (
-                  !desc ||
-                  ('get' in desc
-                    ? !m.__esModule
-                    : desc.writable || desc.configurable)
-                ) {
-                  desc = {
-                    enumerable: true,
-                    get: function () {
-                      return m[k];
-                    }
-                  };
-                }
-                Object.defineProperty(o, k2, desc);
-              }
-            : function (o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-              });
-        var __exportStar =
-          (this && this.__exportStar) ||
-          function (m, exports) {
-            for (var p in m)
-              if (
-                p !== 'default' &&
-                !Object.prototype.hasOwnProperty.call(exports, p)
-              )
-                __createBinding(exports, m, p);
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        __exportStar(
-          __webpack_require__(
-            /*! ./stats-constants */ '../pixi-stats/dist/stats-constants.js'
-          ),
-          exports
-        );
-        __exportStar(
-          __webpack_require__(
-            /*! ./stats-panel */ '../pixi-stats/dist/stats-panel.js'
-          ),
-          exports
-        );
-        __exportStar(
-          __webpack_require__(
-            /*! ./stats-adapter */ '../pixi-stats/dist/stats-adapter.js'
-          ),
-          exports
-        );
-        __exportStar(
-          __webpack_require__(/*! ./stats */ '../pixi-stats/dist/stats.js'),
-          exports
-        );
-        //# sourceMappingURL=index.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/pixi-hooks.js':
-      /*!****************************************!*\
-  !*** ../pixi-stats/dist/pixi-hooks.js ***!
-  \****************************************/
-      /***/ function (__unused_webpack_module, exports, __webpack_require__) {
-        'use strict';
-
-        var __importDefault =
-          (this && this.__importDefault) ||
-          function (mod) {
-            return mod && mod.__esModule ? mod : { default: mod };
-          };
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.PIXIHooks = void 0;
-        const BaseHooks_1 = __importDefault(
-          __webpack_require__(
-            /*! ./hooks/BaseHooks */ '../pixi-stats/dist/hooks/BaseHooks.js'
-          )
-        );
-        class PIXIHooks extends BaseHooks_1.default {
-          get hooked() {
-            return !!this.glhook;
-          }
-          constructor(renderer) {
-            super();
-            if (!renderer) {
-              console.error('[PIXI Hooks] missing Renderer');
-              return;
-            }
-            if (renderer.gl) {
-              this.attach(renderer.gl);
-              const texture = renderer.texture;
-              // pixi v6 compatibility
-              const glTextures = texture._glTextures || texture.managedTextures;
-              // pixi v6 compatibility
-              const glTexturesArray = Array.isArray(glTextures)
-                ? glTextures
-                : Object.values(glTextures);
-              if (!glTexturesArray || !this.texturehook) {
-                console.error('[PIXI Stats] !glTextures || !this.texturehook');
-              } else {
-                console.log(
-                  '[PIXI Hooks] Collect used textures:',
-                  glTexturesArray.length
-                );
-                glTexturesArray.forEach((glTexture) => {
-                  if (glTexture.gl === renderer.gl && glTexture.texture) {
-                    this.texturehook.registerTexture(glTexture.texture);
-                  }
-                });
-              }
-            } else {
-              console.warn('[PIXI Stats] gl in renderer not hooked');
-            }
-          }
-        }
-        exports.PIXIHooks = PIXIHooks;
-        //# sourceMappingURL=pixi-hooks.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/stats-adapter.js':
-      /*!*******************************************!*\
-  !*** ../pixi-stats/dist/stats-adapter.js ***!
-  \*******************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.StatsJSAdapter = void 0;
-        const stats_panel_1 = __webpack_require__(
-          /*! ./stats-panel */ '../pixi-stats/dist/stats-panel.js'
-        );
-        class StatsJSAdapter {
-          constructor(hook, stats) {
-            this.hook = hook;
-            this.stats = stats;
-            if (this.hook.hooked) {
-              this.dcPanel = this.stats.addPanel(
-                new stats_panel_1.Panel('DC', '#f60', '#300')
-              );
-              this.tcPanel = this.stats.addPanel(
-                new stats_panel_1.Panel('TC', '#0c6', '#033')
-              );
-            }
-          }
-          update() {
-            var _a, _b;
-            if (!this.stats) {
-              return;
-            }
-            if (this.hook) {
-              (_a = this.dcPanel) === null || _a === void 0
-                ? void 0
-                : _a.update(
-                    this.hook.deltaDrawCalls,
-                    Math.max(50, this.hook.maxDeltaDrawCalls)
-                  );
-              (_b = this.tcPanel) === null || _b === void 0
-                ? void 0
-                : _b.update(
-                    this.hook.texturesCount,
-                    Math.max(20, this.hook.maxTextureCount)
-                  );
-            }
-            this.stats.update();
-          }
-          reset() {
-            if (this.hook) {
-              this.hook.reset();
-            }
-          }
-        }
-        exports.StatsJSAdapter = StatsJSAdapter;
-        //# sourceMappingURL=stats-adapter.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/stats-constants.js':
-      /*!*********************************************!*\
-  !*** ../pixi-stats/dist/stats-constants.js ***!
-  \*********************************************/
-      /***/ (__unused_webpack_module, exports) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.GRAPH_HEIGHT =
-          exports.GRAPH_WIDTH =
-          exports.GRAPH_Y =
-          exports.FONT_SIZE =
-          exports.GRAPH_X =
-          exports.TEXT_Y =
-          exports.TEXT_X =
-          exports.HEIGHT =
-          exports.WIDTH =
-          exports.PR =
-            void 0;
-        exports.PR = 4;
-        exports.WIDTH = 50 * exports.PR;
-        exports.HEIGHT = 30 * exports.PR;
-        exports.TEXT_X = 7;
-        exports.TEXT_Y = 7;
-        exports.GRAPH_X = exports.TEXT_X;
-        exports.FONT_SIZE = 20; // tested @ 120.0 FPS (120~120)
-        exports.GRAPH_Y = exports.FONT_SIZE + exports.TEXT_Y;
-        exports.GRAPH_WIDTH = exports.WIDTH - exports.GRAPH_X * 2;
-        exports.GRAPH_HEIGHT =
-          exports.HEIGHT - exports.GRAPH_X - exports.GRAPH_Y;
-        //# sourceMappingURL=stats-constants.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/stats-panel.js':
-      /*!*****************************************!*\
-  !*** ../pixi-stats/dist/stats-panel.js ***!
-  \*****************************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Panel = void 0;
-        const stats_constants_1 = __webpack_require__(
-          /*! ./stats-constants */ '../pixi-stats/dist/stats-constants.js'
-        );
-        class Panel {
-          constructor(name, fg, bg) {
-            this.values = [];
-            this.snapshotSize = 30; // min~max of X frames total
-            const canvas = document.createElement('canvas');
-            canvas.width = stats_constants_1.WIDTH;
-            canvas.height = stats_constants_1.HEIGHT;
-            const context = canvas.getContext('2d');
-            if (!context) {
-              throw new Error('Cant get context on canvas');
-            }
-            context.font = `bold ${stats_constants_1.FONT_SIZE}px ${getComputedStyle(document.body).fontFamily}`;
-            context.textBaseline = 'top';
-            context.fillStyle = bg;
-            context.fillRect(
-              0,
-              0,
-              stats_constants_1.WIDTH,
-              stats_constants_1.HEIGHT
-            );
-            context.fillStyle = fg;
-            context.fillText(
-              name,
-              stats_constants_1.TEXT_X,
-              stats_constants_1.TEXT_Y
-            );
-            context.fillRect(
-              stats_constants_1.GRAPH_X,
-              stats_constants_1.GRAPH_Y,
-              stats_constants_1.GRAPH_WIDTH,
-              stats_constants_1.GRAPH_HEIGHT
-            );
-            context.fillStyle = bg;
-            context.globalAlpha = 0.8;
-            context.fillRect(
-              stats_constants_1.GRAPH_X,
-              stats_constants_1.GRAPH_Y,
-              stats_constants_1.GRAPH_WIDTH,
-              stats_constants_1.GRAPH_HEIGHT
-            );
-            this.name = name;
-            this.dom = canvas;
-            this.context = context;
-            this.fg = fg;
-            this.bg = bg;
-          }
-          get min() {
-            return this.values
-              .reduce((min, value) => Math.min(min, value), Infinity)
-              .toFixed();
-          }
-          get max() {
-            return this.values
-              .reduce((max, value) => Math.max(max, value), 0)
-              .toFixed();
-          }
-          get averageValue() {
-            return (
-              this.values.reduce((sum, value) => sum + value, 0) /
-              this.values.length
-            ).toFixed(1);
-          }
-          pushValue(value) {
-            this.values.push(value);
-            if (this.values.length > this.snapshotSize) {
-              this.values = this.values.slice(-this.snapshotSize);
-            }
-          }
-          update(value, maxValue) {
-            const context = this.context;
-            this.pushValue(value);
-            context.fillStyle = this.bg;
-            context.globalAlpha = 1;
-            context.fillRect(
-              0,
-              0,
-              stats_constants_1.WIDTH,
-              stats_constants_1.GRAPH_Y
-            );
-            context.fillStyle = this.fg;
-            context.font = `bold ${stats_constants_1.FONT_SIZE}px ${getComputedStyle(document.body).fontFamily}`;
-            context.fillText(
-              `${this.averageValue} ${this.name} (${this.min}-${this.max})`,
-              stats_constants_1.TEXT_X,
-              stats_constants_1.TEXT_Y
-            );
-            context.drawImage(
-              this.dom,
-              stats_constants_1.GRAPH_X + stats_constants_1.PR,
-              stats_constants_1.GRAPH_Y,
-              stats_constants_1.GRAPH_WIDTH - stats_constants_1.PR,
-              stats_constants_1.GRAPH_HEIGHT,
-              stats_constants_1.GRAPH_X,
-              stats_constants_1.GRAPH_Y,
-              stats_constants_1.GRAPH_WIDTH - stats_constants_1.PR,
-              stats_constants_1.GRAPH_HEIGHT
-            );
-            context.fillRect(
-              stats_constants_1.GRAPH_X +
-                stats_constants_1.GRAPH_WIDTH -
-                stats_constants_1.PR,
-              stats_constants_1.GRAPH_Y,
-              stats_constants_1.PR,
-              stats_constants_1.GRAPH_HEIGHT
-            );
-            context.fillStyle = this.bg;
-            context.globalAlpha = 0.8;
-            context.fillRect(
-              stats_constants_1.GRAPH_X +
-                stats_constants_1.GRAPH_WIDTH -
-                stats_constants_1.PR,
-              stats_constants_1.GRAPH_Y,
-              2 * stats_constants_1.PR,
-              Math.round(
-                (1 - value / maxValue) * stats_constants_1.GRAPH_HEIGHT
-              )
-            );
-          }
-        }
-        exports.Panel = Panel;
-        //# sourceMappingURL=stats-panel.js.map
-
-        /***/
-      },
-
-    /***/ '../pixi-stats/dist/stats.js':
-      /*!***********************************!*\
-  !*** ../pixi-stats/dist/stats.js ***!
-  \***********************************/
-      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-        'use strict';
-
-        Object.defineProperty(exports, '__esModule', { value: true });
-        exports.Stats = void 0;
-        const pixi_hooks_1 = __webpack_require__(
-          /*! ./pixi-hooks */ '../pixi-stats/dist/pixi-hooks.js'
-        );
-        const stats_adapter_1 = __webpack_require__(
-          /*! ./stats-adapter */ '../pixi-stats/dist/stats-adapter.js'
-        );
-        const stats_panel_1 = __webpack_require__(
-          /*! ./stats-panel */ '../pixi-stats/dist/stats-panel.js'
-        );
-        class Stats {
-          constructor(renderer, containerElement = document.body) {
-            this.mode = 0;
-            this.frames = 0;
-            this.beginTime = (performance || Date).now();
-            this.prevTime = this.beginTime;
-            this.domElement = document.createElement('div');
-            this.domElement.id = 'stats';
-            this.domElement.addEventListener(
-              'click',
-              (event) => {
-                event.preventDefault();
-                this.showPanel(++this.mode % this.domElement.children.length);
-              },
-              false
-            );
-            this.fpsPanel = this.addPanel(
-              new stats_panel_1.Panel('FPS', '#3ff', '#002')
-            );
-            this.msPanel = this.addPanel(
-              new stats_panel_1.Panel('MS', '#0f0', '#020')
-            );
-            if ('memory' in performance) {
-              this.memPanel = this.addPanel(
-                new stats_panel_1.Panel('MB', '#f08', '#200')
-              );
-            }
-            this.pixiHooks = new pixi_hooks_1.PIXIHooks(renderer);
-            this.adapter = new stats_adapter_1.StatsJSAdapter(
-              this.pixiHooks,
-              this
-            );
-            this.showPanel(0);
-            containerElement.appendChild(this.domElement);
-            if ('animations' in renderer) {
-              renderer.animations.push(() => {
-                this.adapter.update();
-              });
-            } else {
-              const frame = () => {
-                this.adapter.update();
-                requestAnimationFrame(frame);
-              };
-              frame();
-            }
-          }
-          addPanel(panel) {
-            this.domElement.appendChild(panel.dom);
-            return panel;
-          }
-          showPanel(id) {
-            for (
-              let index = 0;
-              index < this.domElement.children.length;
-              index++
-            ) {
-              const element = this.domElement.children[index];
-              element.style.display = index === id ? 'block' : 'none';
-            }
-            this.mode = id;
-          }
-          begin() {
-            this.beginTime = (performance || Date).now();
-          }
-          end() {
-            this.frames++;
-            const time = (performance || Date).now();
-            this.msPanel.update(time - this.beginTime, 200);
-            if (time > this.prevTime + 1000) {
-              this.fpsPanel.update(
-                (this.frames * 1000) / (time - this.prevTime),
-                100
-              );
-              this.prevTime = time;
-              this.frames = 0;
-              if (this.memPanel && 'memory' in performance) {
-                const memory = performance.memory;
-                this.memPanel.update(
-                  memory.usedJSHeapSize / 1048576,
-                  memory.jsHeapSizeLimit / 1048576
-                );
-              }
-            }
-            return time;
-          }
-          update() {
-            this.beginTime = this.end();
-          }
-        }
-        exports.Stats = Stats;
-        //# sourceMappingURL=stats.js.map
 
         /***/
       }
