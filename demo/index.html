@@ -17,18 +17,18 @@
         overflow: hidden;
         font-family: monospace;
       }
+
       #stats {
-        transform-origin: top right;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
       }
-      @media (max-width: 1280px) {
-        #stats {
-          transform: scale(0.75);
-        }
-      }
-      @media (max-width: 640px) {
-        #stats {
-          transform: scale(0.5);
-        }
+
+      #stats canvas {
+        width: max(100px, 10vw, 10vh);
+        height: max(60px, 6vh, 6vw);
+        user-select: none;
       }
     </style>
   </head>
