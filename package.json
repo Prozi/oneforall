@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
   "description": "PIXI v8, v7, v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
-  "version": "9.26.1",
+  "version": "9.27.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -43,13 +43,13 @@
   },
   "dependencies": {
     "@pietal.dev/cache": "^2.0.2",
-    "detect-collisions": "^9.24.0",
+    "detect-collisions": "^9.25.1",
     "inject.min": "^1.6.4",
     "pixi-stats": "^4.1.1",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.8",
+    "@babel/core": "^7.26.9",
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/plugin-transform-modules-commonjs": "^7.26.3",
@@ -59,17 +59,17 @@
     "babel-jest": "^29.7.0",
     "chef-express": "^2.4.2",
     "eslint": "^9.20.1",
-    "globals": "^15.14.0",
+    "globals": "^15.15.0",
     "jest": "29.7.0",
     "pixi-shim": "^2.5.3",
     "pixi.js": "^8",
     "pixi.js-legacy": "^7",
-    "prettier": "^3.5.0",
+    "prettier": "^3.5.1",
     "ts-loader": "^9.5.2",
     "typedoc": "^0.27.7",
     "typescript": "^5",
     "typescript-eslint": "^8.24.0",
-    "webpack": "^5.97.1",
+    "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0"
   },

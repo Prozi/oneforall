@@ -7155,6 +7155,9 @@
         const poly_decomp_es_1 = __webpack_require__(
           /*! poly-decomp-es */ './node_modules/poly-decomp-es/dist/poly-decomp-es.js'
         );
+        const sat_1 = __webpack_require__(
+          /*! sat */ './node_modules/sat/SAT.js'
+        );
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
@@ -7163,9 +7166,6 @@
         );
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
-        const sat_1 = __webpack_require__(
-          /*! sat */ './node_modules/sat/SAT.js'
         );
         /**
          * collider - polygon
@@ -7328,6 +7328,22 @@
               maxX: pos.x + w,
               maxY: pos.y + h
             };
+          }
+          /**
+           * Get edge line by index
+           */
+          getEdge(index) {
+            const { x, y } = this.calcPoints[index];
+            const next = this.calcPoints[(index + 1) % this.calcPoints.length];
+            const start = {
+              x: this.x + x,
+              y: this.y + y
+            };
+            const end = {
+              x: this.x + next.x,
+              y: this.y + next.y
+            };
+            return { start, end };
           }
           /**
            * Draws exact collider on canvas context
@@ -8172,6 +8188,7 @@
         exports.intersectLineLineFast = intersectLineLineFast;
         exports.intersectLineLine = intersectLineLine;
         exports.intersectLinePolygon = intersectLinePolygon;
+        exports.intersectCircleCircle = intersectCircleCircle;
         const sat_1 = __webpack_require__(
           /*! sat */ './node_modules/sat/SAT.js'
         );
@@ -8463,6 +8480,40 @@
           });
           return results;
         }
+        /**
+         * @param circle1
+         * @param circle2
+         */
+        function intersectCircleCircle(circle1, circle2) {
+          const results = [];
+          const x1 = circle1.pos.x;
+          const y1 = circle1.pos.y;
+          const r1 = circle1.r;
+          const x2 = circle2.pos.x;
+          const y2 = circle2.pos.y;
+          const r2 = circle2.r;
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > r1 + r2 || dist < Math.abs(r1 - r2) || dist === 0) {
+            return results;
+          }
+          const a = (r1 * r1 - r2 * r2 + dist * dist) / (2 * dist);
+          const h = Math.sqrt(r1 * r1 - a * a);
+          const px = x1 + (dx * a) / dist;
+          const py = y1 + (dy * a) / dist;
+          const intersection1 = {
+            x: px + (h * dy) / dist,
+            y: py - (h * dx) / dist
+          };
+          results.push(intersection1);
+          const intersection2 = {
+            x: px - (h * dy) / dist,
+            y: py + (h * dx) / dist
+          };
+          results.push(intersection2);
+          return results;
+        }
 
         /***/
       },
@@ -8657,6 +8708,12 @@
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.System = void 0;
+        const base_system_1 = __webpack_require__(
+          /*! ./base-system */ './node_modules/detect-collisions/dist/base-system.js'
+        );
+        const line_1 = __webpack_require__(
+          /*! ./bodies/line */ './node_modules/detect-collisions/dist/bodies/line.js'
+        );
         const intersect_1 = __webpack_require__(
           /*! ./intersect */ './node_modules/detect-collisions/dist/intersect.js'
         );
@@ -8668,12 +8725,6 @@
         );
         const utils_1 = __webpack_require__(
           /*! ./utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
-        const base_system_1 = __webpack_require__(
-          /*! ./base-system */ './node_modules/detect-collisions/dist/base-system.js'
-        );
-        const line_1 = __webpack_require__(
-          /*! ./bodies/line */ './node_modules/detect-collisions/dist/bodies/line.js'
         );
         /**
          * collision system
@@ -8862,6 +8913,61 @@
             });
             this.remove(this.ray);
             return result;
+          }
+          /**
+           * find collisions points between 2 bodies
+           */
+          getCollisionPoints(a, b) {
+            const collisionPoints = [];
+            if (
+              a.typeGroup === model_1.BodyGroup.Circle &&
+              b.typeGroup === model_1.BodyGroup.Circle
+            ) {
+              collisionPoints.push(
+                ...(0, intersect_1.intersectCircleCircle)(a, b)
+              );
+            }
+            if (
+              a.typeGroup === model_1.BodyGroup.Circle &&
+              b.typeGroup !== model_1.BodyGroup.Circle
+            ) {
+              for (let indexB = 0; indexB < b.calcPoints.length; indexB++) {
+                const lineB = b.getEdge(indexB);
+                collisionPoints.push(
+                  ...(0, intersect_1.intersectLineCircle)(lineB, a)
+                );
+              }
+            }
+            if (a.typeGroup !== model_1.BodyGroup.Circle) {
+              for (let indexA = 0; indexA < a.calcPoints.length; indexA++) {
+                const lineA = a.getEdge(indexA);
+                if (b.typeGroup === model_1.BodyGroup.Circle) {
+                  collisionPoints.push(
+                    ...(0, intersect_1.intersectLineCircle)(lineA, b)
+                  );
+                } else {
+                  for (let indexB = 0; indexB < b.calcPoints.length; indexB++) {
+                    const lineB = b.getEdge(indexB);
+                    const hit = (0, intersect_1.intersectLineLine)(
+                      lineA,
+                      lineB
+                    );
+                    if (hit) {
+                      collisionPoints.push(hit);
+                    }
+                  }
+                }
+              }
+            }
+            // unique
+            return collisionPoints.filter(
+              ({ x, y }, index) =>
+                index ===
+                collisionPoints.findIndex(
+                  (collisionPoint) =>
+                    collisionPoint.x === x && collisionPoint.y === y
+                )
+            );
           }
         }
         exports.System = System;
