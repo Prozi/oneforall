@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en" data-base="..">
+<html class="default" lang="en" data-base="../">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -26,58 +26,66 @@
       document.body.style.display = 'none';
       setTimeout(
         () =>
-          app ? app.showPage() : document.body.style.removeProperty('display'),
+          window.app
+            ? app.showPage()
+            : document.body.style.removeProperty('display'),
         500
       );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search">
-          <div class="field">
-            <label
-              for="tsd-search-field"
-              class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="../index.html" class="title">@pietal.dev/engine</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="../index.html" class="title">@pietal.dev/engine</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <use href="../assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
       <div class="col-content">
         <div class="tsd-page-title">
-          <ul class="tsd-breadcrumb">
-            <li><a href="../modules.html">@pietal.dev/engine</a></li>
-            <li><a href="Component.html">Component</a></li>
+          <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+            <li><a href="" aria-current="page">Component</a></li>
           </ul>
           <h1>Class Component</h1>
         </div>
@@ -127,29 +135,22 @@
           <section class="tsd-panel tsd-index-panel">
             <details class="tsd-index-content tsd-accordion" open>
               <summary class="tsd-accordion-summary tsd-index-summary">
-                <h5
-                  class="tsd-index-heading uppercase"
-                  role="button"
-                  aria-expanded="false"
-                  tabindex="0"
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronSmall"></use>
-                  </svg>
-                  Index
-                </h5>
+                  <use href="../assets/icons.svg#icon-chevronSmall"></use>
+                </svg>
+                <h5 class="tsd-index-heading uppercase">Index</h5>
               </summary>
               <div class="tsd-accordion-details">
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Constructors</h3>
                   <div class="tsd-index-list">
-                    <a href="Component.html#constructor" class="tsd-index-link"
+                    <a href="#constructor" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -163,7 +164,7 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Properties</h3>
                   <div class="tsd-index-list">
-                    <a href="Component.html#destroy" class="tsd-index-link"
+                    <a href="#destroy" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -172,7 +173,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>destroy$</span></a
                     >
-                    <a href="Component.html#gameobject" class="tsd-index-link"
+                    <a href="#gameobject" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -181,7 +182,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>game<wbr />Object</span></a
                     >
-                    <a href="Component.html#label" class="tsd-index-link"
+                    <a href="#label" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -190,7 +191,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>label</span></a
                     >
-                    <a href="Component.html#update" class="tsd-index-link"
+                    <a href="#update" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -204,7 +205,7 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Methods</h3>
                   <div class="tsd-index-list">
-                    <a href="Component.html#destroy-1" class="tsd-index-link"
+                    <a href="#destroy-1" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -213,7 +214,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>destroy</span></a
                     >
-                    <a href="Component.html#update-1" class="tsd-index-link"
+                    <a href="#update-1" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -233,23 +234,20 @@
             class="tsd-accordion-summary"
             data-key="section-Constructors"
           >
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Constructors
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Constructors</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="constructor" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="constructor">
                 <span>constructor</span
                 ><a
                   href="#constructor"
@@ -261,9 +259,11 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="constructorcomponent" class="tsd-anchor"></a
-                    ><span class="tsd-signature-keyword">new</span>
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="constructorcomponent"
+                  >
+                    <span class="tsd-signature-keyword">new</span>
                     <span class="tsd-kind-constructor-signature">Component</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">gameObject</span
@@ -274,9 +274,7 @@
                       >GameObject</a
                     ><span class="tsd-signature-symbol">)</span
                     ><span class="tsd-signature-symbol">:</span>
-                    <a
-                      href="Component.html"
-                      class="tsd-signature-type tsd-kind-class"
+                    <a href="" class="tsd-signature-type tsd-kind-class"
                       >Component</a
                     ><a
                       href="#constructorcomponent"
@@ -304,9 +302,7 @@
                     </div>
                     <h4 class="tsd-returns-title">
                       Returns
-                      <a
-                        href="Component.html"
-                        class="tsd-signature-type tsd-kind-class"
+                      <a href="" class="tsd-signature-type tsd-kind-class"
                         >Component</a
                       >
                     </h4>
@@ -329,23 +325,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Properties">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Properties
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Properties</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="destroy" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="destroy">
                 <code class="tsd-tag">Readonly</code><span>destroy$</span
                 ><a
                   href="#destroy"
@@ -392,8 +385,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="gameobject" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="gameobject">
                 <span>game<wbr />Object</span
                 ><a
                   href="#gameobject"
@@ -436,8 +428,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="label" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="label">
                 <span>label</span
                 ><a href="#label" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -474,8 +465,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="update" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="update">
                 <code class="tsd-tag">Readonly</code><span>update$</span
                 ><a
                   href="#update"
@@ -524,23 +514,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Methods">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Methods
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Methods</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="destroy-1" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="destroy-1">
                 <span>destroy</span
                 ><a
                   href="#destroy-1"
@@ -552,9 +539,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="destroy-2" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">destroy</span
+                  <div class="tsd-signature tsd-anchor-link" id="destroy-2">
+                    <span class="tsd-kind-call-signature">destroy</span
                     ><span class="tsd-signature-symbol">()</span
                     ><span class="tsd-signature-symbol">:</span>
                     <span class="tsd-signature-type">void</span
@@ -598,8 +584,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="update-1" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="update-1">
                 <span>update</span
                 ><a
                   href="#update-1"
@@ -611,9 +596,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="update-2" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">update</span
+                  <div class="tsd-signature tsd-anchor-link" id="update-2">
+                    <span class="tsd-kind-call-signature">update</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">deltaTime</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -680,17 +664,16 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <use href="../assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
@@ -808,17 +791,16 @@
           </div>
           <details open class="tsd-accordion tsd-page-navigation">
             <summary class="tsd-accordion-summary">
-              <h3>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                >On This Page
-              </h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <use href="../assets/icons.svg#icon-chevronDown"></use>
+              </svg>
+              <h3>On This Page</h3>
             </summary>
             <div class="tsd-accordion-details">
               <details open class="tsd-accordion tsd-page-navigation-section">
@@ -837,7 +819,7 @@
                   >Constructors
                 </summary>
                 <div>
-                  <a href="#constructor" class=""
+                  <a href="#constructor"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -864,7 +846,7 @@
                   >Properties
                 </summary>
                 <div>
-                  <a href="#destroy" class=""
+                  <a href="#destroy"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -872,7 +854,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>destroy$</span></a
-                  ><a href="#gameobject" class=""
+                  ><a href="#gameobject"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -880,7 +862,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>game<wbr />Object</span></a
-                  ><a href="#label" class=""
+                  ><a href="#label"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -888,7 +870,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>label</span></a
-                  ><a href="#update" class=""
+                  ><a href="#update"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -915,7 +897,7 @@
                   >Methods
                 </summary>
                 <div>
-                  <a href="#destroy-1" class=""
+                  <a href="#destroy-1"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -923,7 +905,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>destroy</span></a
-                  ><a href="#update-1" class=""
+                  ><a href="#update-1"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"

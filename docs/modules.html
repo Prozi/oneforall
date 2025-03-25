@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en" data-base=".">
+<html class="default" lang="en" data-base="./">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -22,79 +22,83 @@
       document.body.style.display = 'none';
       setTimeout(
         () =>
-          app ? app.showPage() : document.body.style.removeProperty('display'),
+          window.app
+            ? app.showPage()
+            : document.body.style.removeProperty('display'),
         500
       );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search">
-          <div class="field">
-            <label
-              for="tsd-search-field"
-              class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="index.html" class="title">@pietal.dev/engine</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="index.html" class="title">@pietal.dev/engine</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <use href="assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
       <div class="col-content">
         <div class="tsd-page-title">
-          <ul class="tsd-breadcrumb">
-            <li><a href="modules.html">@pietal.dev/engine</a></li>
-          </ul>
+          <ul class="tsd-breadcrumb" aria-label="Breadcrumb"></ul>
           <h1>@pietal.dev/engine</h1>
         </div>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Classes">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Classes
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Classes</h2>
           </summary>
           <dl class="tsd-member-summaries">
-            <dt class="tsd-member-summary">
-              <a id="animator" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="animator">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -111,9 +115,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="circlebody" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="circlebody">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -130,9 +133,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="component" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="component">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -149,9 +151,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="container" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="container">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -168,9 +169,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="gameobject" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="gameobject">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -187,9 +187,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="lifecycle" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="lifecycle">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -206,9 +205,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="polygonbody" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="polygonbody">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -225,9 +223,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="prefab" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="prefab">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -244,9 +241,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="resources" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="resources">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -263,9 +259,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="scene" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="scene">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -279,9 +274,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="scenessr" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="scenessr">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -298,9 +292,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="sprite" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="sprite">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -317,9 +310,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="statemachine" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="statemachine">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -336,9 +328,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="textureatlas" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="textureatlas">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -359,23 +350,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Interfaces">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Interfaces
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Interfaces</h2>
           </summary>
           <dl class="tsd-member-summaries">
-            <dt class="tsd-member-summary">
-              <a id="animatordata" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="animatordata">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -392,9 +380,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="debugstroke" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="debugstroke">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -411,9 +398,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="lifecycleprops" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="lifecycleprops">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -430,9 +416,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiv6loader" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiv6loader">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -449,9 +434,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiv8" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiv8">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -468,9 +452,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiv8assets" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiv8assets">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -487,9 +470,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiv8loader" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiv8loader">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -506,9 +488,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="sceneoptions" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="sceneoptions">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -525,9 +506,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="textureatlasoptions" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="textureatlasoptions">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -545,9 +525,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="tgameobject" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="tgameobject">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -571,23 +550,20 @@
             class="tsd-accordion-summary"
             data-key="section-Type Aliases"
           >
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Type Aliases
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Type Aliases</h2>
           </summary>
           <dl class="tsd-member-summaries">
-            <dt class="tsd-member-summary">
-              <a id="gameobjectparent" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="gameobjectparent">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -604,9 +580,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="lifecyclechild" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="lifecyclechild">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -623,9 +598,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="lifecycleparent" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="lifecycleparent">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -642,9 +616,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiappoptions" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiappoptions">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -661,9 +634,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixicanvas" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixicanvas">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -680,9 +652,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiresource" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiresource">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -699,9 +670,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiscalemode" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiscalemode">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -718,9 +688,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiv6loadercallback" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiv6loadercallback">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -738,9 +707,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="pixiwebglrenderer" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="pixiwebglrenderer">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -757,9 +725,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="scenetype" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="scenetype">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -776,9 +743,8 @@
               ></span>
             </dt>
             <dd class="tsd-member-summary"></dd>
-            <dt class="tsd-member-summary">
-              <a id="tstatevalidator" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="tstatevalidator">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -799,23 +765,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Functions">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Functions
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Functions</h2>
           </summary>
           <dl class="tsd-member-summaries">
-            <dt class="tsd-member-summary">
-              <a id="getroot" class="tsd-anchor"></a
-              ><span class="tsd-member-summary-name"
+            <dt class="tsd-member-summary" id="getroot">
+              <span class="tsd-member-summary-name"
                 ><svg
                   class="tsd-kind-icon"
                   viewBox="0 0 24 24"
@@ -840,17 +803,16 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <use href="assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
@@ -968,17 +930,16 @@
           </div>
           <details open class="tsd-accordion tsd-page-navigation">
             <summary class="tsd-accordion-summary">
-              <h3>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <use href="assets/icons.svg#icon-chevronDown"></use></svg
-                >On This Page
-              </h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <use href="assets/icons.svg#icon-chevronDown"></use>
+              </svg>
+              <h3>On This Page</h3>
             </summary>
             <div class="tsd-accordion-details">
               <details open class="tsd-accordion tsd-page-navigation-section">
@@ -997,7 +958,7 @@
                   >Classes
                 </summary>
                 <div>
-                  <a href="#animator" class=""
+                  <a href="#animator"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1005,7 +966,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Animator</span></a
-                  ><a href="#circlebody" class=""
+                  ><a href="#circlebody"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1013,7 +974,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Circle<wbr />Body</span></a
-                  ><a href="#component" class=""
+                  ><a href="#component"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1021,7 +982,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Component</span></a
-                  ><a href="#container" class=""
+                  ><a href="#container"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1029,7 +990,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Container</span></a
-                  ><a href="#gameobject" class=""
+                  ><a href="#gameobject"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1037,7 +998,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Game<wbr />Object</span></a
-                  ><a href="#lifecycle" class=""
+                  ><a href="#lifecycle"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1045,7 +1006,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Lifecycle</span></a
-                  ><a href="#polygonbody" class=""
+                  ><a href="#polygonbody"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1053,7 +1014,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Polygon<wbr />Body</span></a
-                  ><a href="#prefab" class=""
+                  ><a href="#prefab"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1061,7 +1022,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Prefab</span></a
-                  ><a href="#resources" class=""
+                  ><a href="#resources"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1069,7 +1030,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Resources</span></a
-                  ><a href="#scene" class=""
+                  ><a href="#scene"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1077,7 +1038,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Scene</span></a
-                  ><a href="#scenessr" class=""
+                  ><a href="#scenessr"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1085,7 +1046,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>SceneSSR</span></a
-                  ><a href="#sprite" class=""
+                  ><a href="#sprite"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1093,7 +1054,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>Sprite</span></a
-                  ><a href="#statemachine" class=""
+                  ><a href="#statemachine"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1101,7 +1062,7 @@
                     >
                       <use href="assets/icons.svg#icon-128"></use></svg
                     ><span>State<wbr />Machine</span></a
-                  ><a href="#textureatlas" class=""
+                  ><a href="#textureatlas"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1128,7 +1089,7 @@
                   >Interfaces
                 </summary>
                 <div>
-                  <a href="#animatordata" class=""
+                  <a href="#animatordata"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1136,7 +1097,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>Animator<wbr />Data</span></a
-                  ><a href="#debugstroke" class=""
+                  ><a href="#debugstroke"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1144,7 +1105,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>Debug<wbr />Stroke</span></a
-                  ><a href="#lifecycleprops" class=""
+                  ><a href="#lifecycleprops"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1152,7 +1113,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>Lifecycle<wbr />Props</span></a
-                  ><a href="#pixiv6loader" class=""
+                  ><a href="#pixiv6loader"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1160,7 +1121,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>PIXIv6<wbr />Loader</span></a
-                  ><a href="#pixiv8" class=""
+                  ><a href="#pixiv8"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1168,7 +1129,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>PIXIv8</span></a
-                  ><a href="#pixiv8assets" class=""
+                  ><a href="#pixiv8assets"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1176,7 +1137,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>PIXIv8<wbr />Assets</span></a
-                  ><a href="#pixiv8loader" class=""
+                  ><a href="#pixiv8loader"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1184,7 +1145,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>PIXIv8<wbr />Loader</span></a
-                  ><a href="#sceneoptions" class=""
+                  ><a href="#sceneoptions"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1192,7 +1153,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>Scene<wbr />Options</span></a
-                  ><a href="#textureatlasoptions" class=""
+                  ><a href="#textureatlasoptions"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1200,7 +1161,7 @@
                     >
                       <use href="assets/icons.svg#icon-256"></use></svg
                     ><span>Texture<wbr />Atlas<wbr />Options</span></a
-                  ><a href="#tgameobject" class=""
+                  ><a href="#tgameobject"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1227,7 +1188,7 @@
                   >Type Aliases
                 </summary>
                 <div>
-                  <a href="#gameobjectparent" class=""
+                  <a href="#gameobjectparent"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1235,7 +1196,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>Game<wbr />Object<wbr />Parent</span></a
-                  ><a href="#lifecyclechild" class=""
+                  ><a href="#lifecyclechild"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1243,7 +1204,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>Lifecycle<wbr />Child</span></a
-                  ><a href="#lifecycleparent" class=""
+                  ><a href="#lifecycleparent"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1251,7 +1212,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>Lifecycle<wbr />Parent</span></a
-                  ><a href="#pixiappoptions" class=""
+                  ><a href="#pixiappoptions"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1259,7 +1220,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXIApp<wbr />Options</span></a
-                  ><a href="#pixicanvas" class=""
+                  ><a href="#pixicanvas"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1267,7 +1228,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXICanvas</span></a
-                  ><a href="#pixiresource" class=""
+                  ><a href="#pixiresource"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1275,7 +1236,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXIResource</span></a
-                  ><a href="#pixiscalemode" class=""
+                  ><a href="#pixiscalemode"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1283,7 +1244,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXIScale<wbr />Mode</span></a
-                  ><a href="#pixiv6loadercallback" class=""
+                  ><a href="#pixiv6loadercallback"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1291,7 +1252,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXIv6<wbr />Loader<wbr />Callback</span></a
-                  ><a href="#pixiwebglrenderer" class=""
+                  ><a href="#pixiwebglrenderer"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1299,7 +1260,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>PIXIWebGLRenderer</span></a
-                  ><a href="#scenetype" class=""
+                  ><a href="#scenetype"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1307,7 +1268,7 @@
                     >
                       <use href="assets/icons.svg#icon-2097152"></use></svg
                     ><span>Scene<wbr />Type</span></a
-                  ><a href="#tstatevalidator" class=""
+                  ><a href="#tstatevalidator"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -1334,7 +1295,7 @@
                   >Functions
                 </summary>
                 <div>
-                  <a href="#getroot" class=""
+                  <a href="#getroot"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en" data-base="..">
+<html class="default" lang="en" data-base="../">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -26,58 +26,66 @@
       document.body.style.display = 'none';
       setTimeout(
         () =>
-          app ? app.showPage() : document.body.style.removeProperty('display'),
+          window.app
+            ? app.showPage()
+            : document.body.style.removeProperty('display'),
         500
       );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search">
-          <div class="field">
-            <label
-              for="tsd-search-field"
-              class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="../index.html" class="title">@pietal.dev/engine</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="../index.html" class="title">@pietal.dev/engine</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <use href="../assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
       <div class="col-content">
         <div class="tsd-page-title">
-          <ul class="tsd-breadcrumb">
-            <li><a href="../modules.html">@pietal.dev/engine</a></li>
-            <li><a href="TextureAtlasOptions.html">TextureAtlasOptions</a></li>
+          <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+            <li><a href="" aria-current="page">TextureAtlasOptions</a></li>
           </ul>
           <h1>Interface TextureAtlasOptions</h1>
         </div>
@@ -86,31 +94,31 @@
           <span class="tsd-kind-interface">TextureAtlasOptions</span>
           <span class="tsd-signature-symbol">{</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#cols"
+            href="#cols"
             >cols</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#count"
+            href="#count"
             >count</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#offset"
+            href="#offset"
             >offset</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#rows"
+            href="#rows"
             >rows</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#scalemode"
+            href="#scalemode"
             >scaleMode</a
           ><span class="tsd-signature-symbol">?:</span>
           <a
@@ -119,25 +127,25 @@
             >PIXIScaleMode</a
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#texture"
+            href="#texture"
             >texture</a
           ><span class="tsd-signature-symbol">:</span>
           <span class="tsd-signature-type">Texture</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#tileheight"
+            href="#tileheight"
             >tileHeight</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#tilewidth"
+            href="#tilewidth"
             >tileWidth</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
           ><span class="tsd-signature-symbol">;</span><br />    <a
             class="tsd-kind-property"
-            href="TextureAtlasOptions.html#trim"
+            href="#trim"
             >trim</a
           ><span class="tsd-signature-symbol">?:</span>
           <span class="tsd-signature-type">number</span
@@ -161,31 +169,22 @@
           <section class="tsd-panel tsd-index-panel">
             <details class="tsd-index-content tsd-accordion" open>
               <summary class="tsd-accordion-summary tsd-index-summary">
-                <h5
-                  class="tsd-index-heading uppercase"
-                  role="button"
-                  aria-expanded="false"
-                  tabindex="0"
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronSmall"></use>
-                  </svg>
-                  Index
-                </h5>
+                  <use href="../assets/icons.svg#icon-chevronSmall"></use>
+                </svg>
+                <h5 class="tsd-index-heading uppercase">Index</h5>
               </summary>
               <div class="tsd-accordion-details">
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Properties</h3>
                   <div class="tsd-index-list">
-                    <a
-                      href="TextureAtlasOptions.html#cols"
-                      class="tsd-index-link"
+                    <a href="#cols" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -194,9 +193,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>cols?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#count"
-                      class="tsd-index-link"
+                    <a href="#count" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -205,9 +202,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>count?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#offset"
-                      class="tsd-index-link"
+                    <a href="#offset" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -216,9 +211,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>offset?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#rows"
-                      class="tsd-index-link"
+                    <a href="#rows" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -227,9 +220,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>rows?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#scalemode"
-                      class="tsd-index-link"
+                    <a href="#scalemode" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -238,9 +229,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>scale<wbr />Mode?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#texture"
-                      class="tsd-index-link"
+                    <a href="#texture" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -249,9 +238,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>texture</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#tileheight"
-                      class="tsd-index-link"
+                    <a href="#tileheight" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -260,9 +247,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>tile<wbr />Height?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#tilewidth"
-                      class="tsd-index-link"
+                    <a href="#tilewidth" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -271,9 +256,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>tile<wbr />Width?</span></a
                     >
-                    <a
-                      href="TextureAtlasOptions.html#trim"
-                      class="tsd-index-link"
+                    <a href="#trim" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -290,23 +273,20 @@
         </section>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Properties">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Properties
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Properties</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="cols" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="cols">
                 <code class="tsd-tag">Optional</code><span>cols</span
                 ><a href="#cols" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -331,8 +311,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="count" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="count">
                 <code class="tsd-tag">Optional</code><span>count</span
                 ><a href="#count" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -357,8 +336,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="offset" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="offset">
                 <code class="tsd-tag">Optional</code><span>offset</span
                 ><a
                   href="#offset"
@@ -386,8 +364,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="rows" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="rows">
                 <code class="tsd-tag">Optional</code><span>rows</span
                 ><a href="#rows" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -412,8 +389,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="scalemode" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="scalemode">
                 <code class="tsd-tag">Optional</code
                 ><span>scale<wbr />Mode</span
                 ><a
@@ -446,8 +422,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="texture" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="texture">
                 <span>texture</span
                 ><a
                   href="#texture"
@@ -475,8 +450,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="tileheight" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="tileheight">
                 <code class="tsd-tag">Optional</code
                 ><span>tile<wbr />Height</span
                 ><a
@@ -505,8 +479,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="tilewidth" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="tilewidth">
                 <code class="tsd-tag">Optional</code
                 ><span>tile<wbr />Width</span
                 ><a
@@ -535,8 +508,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="trim" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="trim">
                 <code class="tsd-tag">Optional</code><span>trim</span
                 ><a href="#trim" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -568,17 +540,16 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <use href="../assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
@@ -696,17 +667,16 @@
           </div>
           <details open class="tsd-accordion tsd-page-navigation">
             <summary class="tsd-accordion-summary">
-              <h3>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                >On This Page
-              </h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <use href="../assets/icons.svg#icon-chevronDown"></use>
+              </svg>
+              <h3>On This Page</h3>
             </summary>
             <div class="tsd-accordion-details">
               <details open class="tsd-accordion tsd-page-navigation-section">
@@ -725,7 +695,7 @@
                   >Properties
                 </summary>
                 <div>
-                  <a href="#cols" class=""
+                  <a href="#cols"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -733,7 +703,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>cols</span></a
-                  ><a href="#count" class=""
+                  ><a href="#count"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -741,7 +711,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>count</span></a
-                  ><a href="#offset" class=""
+                  ><a href="#offset"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -749,7 +719,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>offset</span></a
-                  ><a href="#rows" class=""
+                  ><a href="#rows"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -757,7 +727,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>rows</span></a
-                  ><a href="#scalemode" class=""
+                  ><a href="#scalemode"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -765,7 +735,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>scale<wbr />Mode</span></a
-                  ><a href="#texture" class=""
+                  ><a href="#texture"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -773,7 +743,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>texture</span></a
-                  ><a href="#tileheight" class=""
+                  ><a href="#tileheight"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -781,7 +751,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>tile<wbr />Height</span></a
-                  ><a href="#tilewidth" class=""
+                  ><a href="#tilewidth"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -789,7 +759,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>tile<wbr />Width</span></a
-                  ><a href="#trim" class=""
+                  ><a href="#trim"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"

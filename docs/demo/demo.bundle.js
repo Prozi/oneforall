@@ -6600,13 +6600,9 @@
            * see https://github.com/Prozi/detect-collisions/issues/70
            */
           afterUpdateSize() {
-            if (this.isCentered) {
-              this.retranslate(false);
-            }
-            this.setPoints((0, utils_1.createBox)(this._width, this._height));
-            if (this.isCentered) {
-              this.retranslate();
-            }
+            this.withAngle0(() => {
+              this.setPoints((0, utils_1.createBox)(this._width, this._height));
+            });
           }
           /**
            * do not attempt to use Polygon.updateIsConvex()
@@ -6635,13 +6631,10 @@
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
         );
-        const sat_1 = __webpack_require__(
-          /*! sat */ './node_modules/sat/SAT.js'
-        );
         /**
          * collider - circle
          */
-        class Circle extends sat_1.Circle {
+        class Circle extends model_1.SATCircle {
           /**
            * collider - circle
            */
@@ -7012,9 +7005,6 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const sat_1 = __webpack_require__(
-          /*! sat */ './node_modules/sat/SAT.js'
-        );
         const polygon_1 = __webpack_require__(
           /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
         );
@@ -7079,7 +7069,7 @@
             this.setPoints(this.points);
           }
           getCentroid() {
-            return new sat_1.Vector(
+            return new model_1.SATVector(
               (this.end.x - this.start.x) / 2,
               (this.end.y - this.start.y) / 2
             );
@@ -7152,12 +7142,6 @@
 
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.Polygon = void 0;
-        const poly_decomp_es_1 = __webpack_require__(
-          /*! poly-decomp-es */ './node_modules/poly-decomp-es/dist/poly-decomp-es.js'
-        );
-        const sat_1 = __webpack_require__(
-          /*! sat */ './node_modules/sat/SAT.js'
-        );
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
@@ -7170,7 +7154,7 @@
         /**
          * collider - polygon
          */
-        class Polygon extends sat_1.Polygon {
+        class Polygon extends model_1.SATPolygon {
           /**
            * collider - polygon
            */
@@ -7207,15 +7191,21 @@
           /**
            * flag to set is polygon centered
            */
-          set isCentered(isCentered) {
-            if (this.centered !== isCentered) {
-              const { x, y } = this.getCentroidWithoutRotation();
-              if (x || y) {
-                const direction = isCentered ? 1 : -1;
-                this.translate(-x * direction, -y * direction);
-              }
-              this.centered = isCentered;
-            }
+          set isCentered(center) {
+            if (this.centered === center) return;
+            let centroid;
+            this.withAngle0(() => {
+              centroid = this.getCentroid();
+            });
+            const offsetX = center ? -centroid.x : -this.points[0].x;
+            const offsetY = center ? -centroid.y : -this.points[0].y;
+            this.setPoints(
+              (0, optimized_1.map)(
+                this.points,
+                ({ x, y }) => new model_1.SATVector(x + offsetX, y + offsetY)
+              )
+            );
+            this.centered = center;
           }
           /**
            * is polygon centered?
@@ -7298,11 +7288,14 @@
             this.scaleVector.x = Math.abs(x);
             this.scaleVector.y = Math.abs(y);
             super.setPoints(
-              (0, optimized_1.map)(this.points, (point, index) => {
-                point.x = this.pointsBackup[index].x * this.scaleVector.x;
-                point.y = this.pointsBackup[index].y * this.scaleVector.y;
-                return point;
-              })
+              (0, optimized_1.map)(
+                this.points,
+                (_point, index) =>
+                  new model_1.SATVector(
+                    this.pointsBackup[index].x * this.scaleVector.x,
+                    this.pointsBackup[index].y * this.scaleVector.y
+                  )
+              )
             );
             this.markAsDirty(updateNow);
             return this;
@@ -7358,23 +7351,6 @@
             (0, utils_1.drawBVH)(context, this);
           }
           /**
-           * get body centroid without applied angle
-           */
-          getCentroidWithoutRotation() {
-            // keep angle copy
-            const angle = this.angle;
-            if (angle) {
-              // reset angle for get centroid
-              this.setAngle(0);
-              // get centroid
-              const centroid = this.getCentroid();
-              // revert angle change
-              this.setAngle(angle);
-              return centroid;
-            }
-            return this.getCentroid();
-          }
-          /**
            * sets polygon points to new array of vectors
            */
           setPoints(points) {
@@ -7403,7 +7379,7 @@
            * if true, polygon is not an invalid, self-crossing polygon
            */
           isSimple() {
-            return (0, poly_decomp_es_1.isSimple)(
+            return (0, model_1.isSimple)(
               (0, optimized_1.map)(this.calcPoints, utils_1.mapVectorToArray)
             );
           }
@@ -7420,13 +7396,14 @@
               this.dirty = false;
             }
           }
-          retranslate(isCentered = this.isCentered) {
-            const centroid = this.getCentroidWithoutRotation();
-            if (centroid.x || centroid.y) {
-              const x = centroid.x * (isCentered ? 1 : -1);
-              const y = centroid.y * (isCentered ? 1 : -1);
-              this.translate(-x, -y);
-            }
+          /**
+           * used to do staff with rotation temporarily disabled
+           */
+          withAngle0(callback, updateNow = true) {
+            const angle = this.angle;
+            this.setAngle(0, false);
+            callback();
+            this.setAngle(angle, updateNow);
           }
           /**
            * update instantly or mark as dirty
@@ -7470,7 +7447,7 @@
               this.calcPoints,
               utils_1.mapVectorToArray
             );
-            return (0, poly_decomp_es_1.quickDecomp)(points);
+            return (0, model_1.quickDecomp)(points);
           }
           /**
            * updates convex polygons cache in body
@@ -7485,7 +7462,7 @@
             (0, optimized_1.forEach)(convex, (points, index) => {
               // lazy create
               if (!this.convexPolygons[index]) {
-                this.convexPolygons[index] = new sat_1.Polygon();
+                this.convexPolygons[index] = new model_1.SATPolygon();
               }
               this.convexPolygons[index].pos.x = this.pos.x;
               this.convexPolygons[index].pos.y = this.pos.y;
@@ -8533,16 +8510,23 @@
         Object.defineProperty(exports, '__esModule', { value: true });
         exports.BodyGroup =
           exports.BodyType =
-          exports.SATCircle =
-          exports.SATPolygon =
           exports.SATVector =
+          exports.SATPolygon =
+          exports.SATCircle =
           exports.Response =
           exports.RBush =
+          exports.quickDecomp =
           exports.isSimple =
             void 0;
         const sat_1 = __webpack_require__(
           /*! sat */ './node_modules/sat/SAT.js'
         );
+        Object.defineProperty(exports, 'Response', {
+          enumerable: true,
+          get: function () {
+            return sat_1.Response;
+          }
+        });
         Object.defineProperty(exports, 'SATCircle', {
           enumerable: true,
           get: function () {
@@ -8553,12 +8537,6 @@
           enumerable: true,
           get: function () {
             return sat_1.Polygon;
-          }
-        });
-        Object.defineProperty(exports, 'Response', {
-          enumerable: true,
-          get: function () {
-            return sat_1.Response;
           }
         });
         Object.defineProperty(exports, 'SATVector', {
@@ -8581,6 +8559,12 @@
           enumerable: true,
           get: function () {
             return poly_decomp_es_1.isSimple;
+          }
+        });
+        Object.defineProperty(exports, 'quickDecomp', {
+          enumerable: true,
+          get: function () {
+            return poly_decomp_es_1.quickDecomp;
           }
         });
         /**
@@ -9082,7 +9066,7 @@
             const value = (index / length) * 2 * Math.PI;
             const x = Math.cos(value) * radiusX;
             const y = Math.sin(value) * radiusY;
-            ellipse.push(new sat_1.Vector(x, y));
+            ellipse.push(new model_1.SATVector(x, y));
           }
           return ellipse;
         }
@@ -9091,19 +9075,19 @@
          */
         function createBox(width, height) {
           return [
-            new sat_1.Vector(0, 0),
-            new sat_1.Vector(width, 0),
-            new sat_1.Vector(width, height),
-            new sat_1.Vector(0, height)
+            new model_1.SATVector(0, 0),
+            new model_1.SATVector(width, 0),
+            new model_1.SATVector(width, height),
+            new model_1.SATVector(0, height)
           ];
         }
         /**
          * ensure SATVector type point result
          */
         function ensureVectorPoint(point = {}) {
-          return point instanceof sat_1.Vector
+          return point instanceof model_1.SATVector
             ? point
-            : new sat_1.Vector(point.x || 0, point.y || 0);
+            : new model_1.SATVector(point.x || 0, point.y || 0);
         }
         /**
          * ensure Vector points (for polygon) in counter-clockwise order
@@ -9223,13 +9207,11 @@
          * canInteract(body3, body3) // returns true (identical groups can always interact)
          */
         function canInteract({ group: groupA }, { group: groupB }) {
-          return (
-            // most common case
-            groupA === groupB ||
-            // otherwise do some binary magick
-            (((groupA >> 16) & (groupB & 0xffff)) !== 0 &&
-              ((groupB >> 16) & (groupA & 0xffff)) !== 0)
-          );
+          const categoryA = groupA >> 16;
+          const categoryB = groupB >> 16;
+          const maskA = groupA & 0xffff;
+          const maskB = groupB & 0xffff;
+          return (categoryA & maskB) !== 0 && (categoryB & maskA) !== 0; // Box2D rules
         }
         /**
          * checks if body a is in body b
@@ -9267,10 +9249,16 @@
          * given 2 bodies calculate vector of bounce assuming equal mass and they are circles
          */
         function getBounceDirection(body, collider) {
-          const v2 = new sat_1.Vector(collider.x - body.x, collider.y - body.y);
-          const v1 = new sat_1.Vector(body.x - collider.x, body.y - collider.y);
+          const v2 = new model_1.SATVector(
+            collider.x - body.x,
+            collider.y - body.y
+          );
+          const v1 = new model_1.SATVector(
+            body.x - collider.x,
+            body.y - collider.y
+          );
           const len = v1.dot(v2.normalize()) * 2;
-          return new sat_1.Vector(
+          return new model_1.SATVector(
             v2.x * len - v1.x,
             v2.y * len - v1.y
           ).normalize();
@@ -9361,7 +9349,7 @@
          * clone response object returning new response with previous ones values
          */
         function cloneResponse(response) {
-          const clone = new sat_1.Response();
+          const clone = new model_1.Response();
           const { a, b, overlap, overlapN, overlapV, aInB, bInA } = response;
           clone.a = a;
           clone.b = b;
@@ -21050,6 +21038,291 @@ ${e}`);
         /***/
       },
 
+    /***/ './node_modules/pixi.js/lib/dom/DOMContainer.js':
+      /*!******************************************************!*\
+  !*** ./node_modules/pixi.js/lib/dom/DOMContainer.js ***!
+  \******************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Point = __webpack_require__(
+          /*! ../maths/point/Point.js */ './node_modules/pixi.js/lib/maths/point/Point.js'
+        );
+        var ViewContainer = __webpack_require__(
+          /*! ../scene/view/ViewContainer.js */ './node_modules/pixi.js/lib/scene/view/ViewContainer.js'
+        );
+
+        ('use strict');
+        class DOMContainer extends ViewContainer.ViewContainer {
+          /**
+           * @param options - The options for creating the DOM container.
+           */
+          constructor(options = {}) {
+            const { element, anchor, ...rest } = options;
+            super({
+              label: 'DOMContainer',
+              ...rest
+            });
+            /** @private */
+            this.renderPipeId = 'dom';
+            /** @private */
+            this.batched = false;
+            this._anchor = new Point.Point(0, 0);
+            if (anchor) {
+              this.anchor = anchor;
+            }
+            this.element = options.element || document.createElement('div');
+          }
+          /**
+           * The anchor sets the origin point of the container.
+           * The default is `(0,0)`, this means the container's origin is the top left.
+           *
+           * Setting the anchor to `(0.5,0.5)` means the container's origin is centered.
+           * Setting the anchor to `(1,1)` would mean the container's origin point will be the bottom right corner.
+           *
+           * If you pass only single parameter, it will set both x and y to the same value as shown in the example below.
+           */
+          get anchor() {
+            return this._anchor;
+          }
+          set anchor(value) {
+            typeof value === 'number'
+              ? this._anchor.set(value)
+              : this._anchor.copyFrom(value);
+          }
+          set element(value) {
+            if (this._element === value) return;
+            this._element = value;
+            this.onViewUpdate();
+          }
+          /** The DOM element that this container is using. */
+          get element() {
+            return this._element;
+          }
+          /** @private */
+          updateBounds() {
+            const bounds = this._bounds;
+            const element = this._element;
+            if (!element) {
+              bounds.minX = 0;
+              bounds.minY = 0;
+              bounds.maxX = 0;
+              bounds.maxY = 0;
+              return;
+            }
+            const { offsetWidth, offsetHeight } = element;
+            bounds.minX = 0;
+            bounds.maxX = offsetWidth;
+            bounds.minY = 0;
+            bounds.maxY = offsetHeight;
+          }
+          /**
+           * Destroys this DOM container.
+           * @param options - Options parameter. A boolean will act as if all options
+           *  have been set to that value
+           */
+          destroy(options = false) {
+            super.destroy(options);
+            this._element?.parentNode?.removeChild(this._element);
+            this._element = null;
+            this._anchor = null;
+          }
+        }
+
+        exports.DOMContainer = DOMContainer;
+        //# sourceMappingURL=DOMContainer.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/dom/DOMPipe.js':
+      /*!*************************************************!*\
+  !*** ./node_modules/pixi.js/lib/dom/DOMPipe.js ***!
+  \*************************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+
+        ('use strict');
+        class DOMPipe {
+          /**
+           * Constructor for the DOMPipe class.
+           * @param renderer - The renderer instance that this DOMPipe will be associated with.
+           */
+          constructor(renderer) {
+            this._destroyRenderableBound = this.destroyRenderable.bind(this);
+            /** Array to keep track of attached DOM elements */
+            this._attachedDomElements = [];
+            this._renderer = renderer;
+            this._renderer.runners.postrender.add(this);
+            this._domElement = document.createElement('div');
+            this._domElement.style.position = 'absolute';
+            this._domElement.style.top = '0';
+            this._domElement.style.left = '0';
+            this._domElement.style.pointerEvents = 'none';
+            this._domElement.style.zIndex = '1000';
+          }
+          /**
+           * Adds a renderable DOM container to the list of attached elements.
+           * @param domContainer - The DOM container to be added.
+           * @param _instructionSet - The instruction set (unused).
+           */
+          addRenderable(domContainer, _instructionSet) {
+            if (!this._attachedDomElements.includes(domContainer)) {
+              this._attachedDomElements.push(domContainer);
+              domContainer.on('destroyed', this._destroyRenderableBound);
+            }
+          }
+          /**
+           * Updates a renderable DOM container.
+           * @param _domContainer - The DOM container to be updated (unused).
+           */
+          updateRenderable(_domContainer) {}
+          /**
+           * Validates a renderable DOM container.
+           * @param _domContainer - The DOM container to be validated (unused).
+           * @returns Always returns true as validation is not required.
+           */
+          validateRenderable(_domContainer) {
+            return true;
+          }
+          /**
+           * Destroys a renderable DOM container, removing it from the list of attached elements.
+           * @param domContainer - The DOM container to be destroyed.
+           */
+          destroyRenderable(domContainer) {
+            const index = this._attachedDomElements.indexOf(domContainer);
+            if (index !== -1) {
+              this._attachedDomElements.splice(index, 1);
+            }
+            domContainer.off('destroyed', this._destroyRenderableBound);
+          }
+          /** Handles the post-rendering process, ensuring DOM elements are correctly positioned and visible. */
+          postrender() {
+            const attachedDomElements = this._attachedDomElements;
+            if (attachedDomElements.length === 0) {
+              this._domElement.remove();
+              return;
+            }
+            const canvas = this._renderer.view.canvas;
+            if (this._domElement.parentNode !== canvas.parentNode) {
+              canvas.parentNode?.appendChild(this._domElement);
+            }
+            this._domElement.style.transform = `translate(${canvas.offsetLeft}px, ${canvas.offsetTop}px)`;
+            for (let i = 0; i < attachedDomElements.length; i++) {
+              const domContainer = attachedDomElements[i];
+              const element = domContainer.element;
+              if (
+                !domContainer.parent ||
+                domContainer.globalDisplayStatus < 7
+              ) {
+                element.remove();
+                attachedDomElements.splice(i, 1);
+                i--;
+              } else {
+                if (!this._domElement.contains(element)) {
+                  element.style.position = 'absolute';
+                  element.style.pointerEvents = 'auto';
+                  this._domElement.appendChild(element);
+                }
+                const wt = domContainer.worldTransform;
+                const anchor = domContainer._anchor;
+                const ax = domContainer.width * anchor.x;
+                const ay = domContainer.height * anchor.y;
+                element.style.transformOrigin = `${ax}px ${ay}px`;
+                element.style.transform = `matrix(${wt.a}, ${wt.b}, ${wt.c}, ${wt.d}, ${wt.tx - ax}, ${wt.ty - ay})`;
+                element.style.opacity = domContainer.groupAlpha.toString();
+              }
+            }
+          }
+          /** Destroys the DOMPipe, removing all attached DOM elements and cleaning up resources. */
+          destroy() {
+            this._renderer.runners.postrender.remove(this);
+            for (let i = 0; i < this._attachedDomElements.length; i++) {
+              const domContainer = this._attachedDomElements[i];
+              domContainer.off('destroyed', this._destroyRenderableBound);
+              domContainer.element.remove();
+            }
+            this._attachedDomElements.length = 0;
+            this._domElement.remove();
+            this._renderer = null;
+          }
+        }
+        /**
+         * Static property defining the extension type and name for the DOMPipe.
+         * This is used to register the DOMPipe with different rendering pipelines.
+         */
+        DOMPipe.extension = {
+          type: [
+            Extensions.ExtensionType.WebGLPipes,
+            Extensions.ExtensionType.WebGPUPipes,
+            Extensions.ExtensionType.CanvasPipes
+          ],
+          name: 'dom'
+        };
+
+        exports.DOMPipe = DOMPipe;
+        //# sourceMappingURL=DOMPipe.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/dom/index.js':
+      /*!***********************************************!*\
+  !*** ./node_modules/pixi.js/lib/dom/index.js ***!
+  \***********************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var DOMContainer = __webpack_require__(
+          /*! ./DOMContainer.js */ './node_modules/pixi.js/lib/dom/DOMContainer.js'
+        );
+        var DOMPipe = __webpack_require__(
+          /*! ./DOMPipe.js */ './node_modules/pixi.js/lib/dom/DOMPipe.js'
+        );
+
+        ('use strict');
+
+        exports.DOMContainer = DOMContainer.DOMContainer;
+        exports.DOMPipe = DOMPipe.DOMPipe;
+        //# sourceMappingURL=index.js.map
+
+        /***/
+      },
+
+    /***/ './node_modules/pixi.js/lib/dom/init.js':
+      /*!**********************************************!*\
+  !*** ./node_modules/pixi.js/lib/dom/init.js ***!
+  \**********************************************/
+      /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        'use strict';
+
+        var Extensions = __webpack_require__(
+          /*! ../extensions/Extensions.js */ './node_modules/pixi.js/lib/extensions/Extensions.js'
+        );
+        var DOMPipe = __webpack_require__(
+          /*! ./DOMPipe.js */ './node_modules/pixi.js/lib/dom/DOMPipe.js'
+        );
+        __webpack_require__(
+          /*! ./index.js */ './node_modules/pixi.js/lib/dom/index.js'
+        );
+        var DOMContainer = __webpack_require__(
+          /*! ./DOMContainer.js */ './node_modules/pixi.js/lib/dom/DOMContainer.js'
+        );
+
+        ('use strict');
+        Extensions.extensions.add(DOMPipe.DOMPipe);
+
+        exports.DOMPipe = DOMPipe.DOMPipe;
+        exports.DOMContainer = DOMContainer.DOMContainer;
+        //# sourceMappingURL=init.js.map
+
+        /***/
+      },
+
     /***/ './node_modules/pixi.js/lib/environment-browser/BrowserAdapter.js':
       /*!************************************************************************!*\
   !*** ./node_modules/pixi.js/lib/environment-browser/BrowserAdapter.js ***!
@@ -21102,6 +21375,9 @@ ${e}`);
         );
         __webpack_require__(
           /*! ../events/init.js */ './node_modules/pixi.js/lib/events/init.js'
+        );
+        __webpack_require__(
+          /*! ../dom/init.js */ './node_modules/pixi.js/lib/dom/init.js'
         );
         __webpack_require__(
           /*! ../spritesheet/init.js */ './node_modules/pixi.js/lib/spritesheet/init.js'
@@ -27981,6 +28257,9 @@ ${e}`);
           /*! ./culling/index.js */ './node_modules/pixi.js/lib/culling/index.js'
         );
         __webpack_require__(
+          /*! ./dom/index.js */ './node_modules/pixi.js/lib/dom/index.js'
+        );
+        __webpack_require__(
           /*! ./environment/index.js */ './node_modules/pixi.js/lib/environment/index.js'
         );
         __webpack_require__(
@@ -28270,6 +28549,12 @@ ${e}`);
         );
         var cullingMixin = __webpack_require__(
           /*! ./culling/cullingMixin.js */ './node_modules/pixi.js/lib/culling/cullingMixin.js'
+        );
+        var DOMContainer = __webpack_require__(
+          /*! ./dom/DOMContainer.js */ './node_modules/pixi.js/lib/dom/DOMContainer.js'
+        );
+        var DOMPipe = __webpack_require__(
+          /*! ./dom/DOMPipe.js */ './node_modules/pixi.js/lib/dom/DOMPipe.js'
         );
         var adapter = __webpack_require__(
           /*! ./environment/adapter.js */ './node_modules/pixi.js/lib/environment/adapter.js'
@@ -29778,6 +30063,8 @@ ${e}`);
         exports.Culler = Culler.Culler;
         exports.CullerPlugin = CullerPlugin.CullerPlugin;
         exports.cullingMixin = cullingMixin.cullingMixin;
+        exports.DOMContainer = DOMContainer.DOMContainer;
+        exports.DOMPipe = DOMPipe.DOMPipe;
         exports.DOMAdapter = adapter.DOMAdapter;
         exports.autoDetectEnvironment =
           autoDetectEnvironment.autoDetectEnvironment;
@@ -38663,6 +38950,7 @@ ${parts.join('\n')}
           }
           /** Handles a restored webgl context. */
           handleContextRestored() {
+            this.getExtensions();
             this._renderer.runners.contextChange.emit(this.gl);
           }
           destroy() {
@@ -52151,7 +52439,7 @@ ${src}`;
             this.transparent = !!options.transparent;
           }
           resizeCanvas() {
-            if (this.autoDensity) {
+            if (this.autoDensity && 'style' in this.resource) {
               this.resource.style.width = `${this.width}px`;
               this.resource.style.height = `${this.height}px`;
             }
@@ -53417,6 +53705,7 @@ ${src}`;
         const _ViewSystem = class _ViewSystem {
           /**
            * Whether CSS dimensions of canvas view should be resized to screen dimensions automatically.
+           * This is only supported for HTMLCanvasElement and will be ignored if the canvas is an OffscreenCanvas.
            * @member {boolean}
            */
           get autoDensity() {
@@ -77315,7 +77604,7 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
-        const VERSION = '8.8.0';
+        const VERSION = '8.9.0';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
@@ -88057,9 +88346,6 @@ Deprecated since v${version}`
         var lift_1 = __webpack_require__(
           /*! ../util/lift */ './node_modules/rxjs/dist/cjs/internal/util/lift.js'
         );
-        var argsOrArgArray_1 = __webpack_require__(
-          /*! ../util/argsOrArgArray */ './node_modules/rxjs/dist/cjs/internal/util/argsOrArgArray.js'
-        );
         var mergeAll_1 = __webpack_require__(
           /*! ./mergeAll */ './node_modules/rxjs/dist/cjs/internal/operators/mergeAll.js'
         );
@@ -88076,7 +88362,6 @@ Deprecated since v${version}`
           }
           var scheduler = args_1.popScheduler(args);
           var concurrent = args_1.popNumber(args, Infinity);
-          args = argsOrArgArray_1.argsOrArgArray(args);
           return lift_1.operate(function (source, subscriber) {
             mergeAll_1
               .mergeAll(concurrent)(
@@ -92455,6 +92740,7 @@ Deprecated since v${version}`
             var actions = scheduler.actions;
             if (
               id != null &&
+              id === scheduler._scheduled &&
               ((_a = actions[actions.length - 1]) === null || _a === void 0
                 ? void 0
                 : _a.id) !== id
@@ -92526,8 +92812,13 @@ Deprecated since v${version}`
           }
           AnimationFrameScheduler.prototype.flush = function (action) {
             this._active = true;
-            var flushId = this._scheduled;
-            this._scheduled = undefined;
+            var flushId;
+            if (action) {
+              flushId = action.id;
+            } else {
+              flushId = this._scheduled;
+              this._scheduled = undefined;
+            }
             var actions = this.actions;
             var error;
             action = action || actions.shift();

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en" data-base="..">
+<html class="default" lang="en" data-base="../">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -26,58 +26,66 @@
       document.body.style.display = 'none';
       setTimeout(
         () =>
-          app ? app.showPage() : document.body.style.removeProperty('display'),
+          window.app
+            ? app.showPage()
+            : document.body.style.removeProperty('display'),
         500
       );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search">
-          <div class="field">
-            <label
-              for="tsd-search-field"
-              class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="../index.html" class="title">@pietal.dev/engine</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="../index.html" class="title">@pietal.dev/engine</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <use href="../assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="../assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
       <div class="col-content">
         <div class="tsd-page-title">
-          <ul class="tsd-breadcrumb">
-            <li><a href="../modules.html">@pietal.dev/engine</a></li>
-            <li><a href="SceneSSR.html">SceneSSR</a></li>
+          <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+            <li><a href="" aria-current="page">SceneSSR</a></li>
           </ul>
           <h1>Class SceneSSR&lt;TBody&gt;</h1>
         </div>
@@ -91,11 +99,10 @@
           <h4>Type Parameters</h4>
           <ul class="tsd-type-parameter-list">
             <li>
-              <span
-                ><a id="tbody" class="tsd-anchor"></a
-                ><span class="tsd-kind-type-parameter">TBody</span
-                ><span class="tsd-signature-keyword"> extends </span
-                ><span class="tsd-signature-type">Body</span> =
+              <span id="tbody"
+                ><span class="tsd-kind-type-parameter">TBody</span>
+                <span class="tsd-signature-keyword">extends</span>
+                <span class="tsd-signature-type">Body</span> =
                 <span class="tsd-signature-type">Body</span></span
               >
             </li>
@@ -144,29 +151,22 @@
           <section class="tsd-panel tsd-index-panel">
             <details class="tsd-index-content tsd-accordion" open>
               <summary class="tsd-accordion-summary tsd-index-summary">
-                <h5
-                  class="tsd-index-heading uppercase"
-                  role="button"
-                  aria-expanded="false"
-                  tabindex="0"
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronSmall"></use>
-                  </svg>
-                  Index
-                </h5>
+                  <use href="../assets/icons.svg#icon-chevronSmall"></use>
+                </svg>
+                <h5 class="tsd-index-heading uppercase">Index</h5>
               </summary>
               <div class="tsd-accordion-details">
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Constructors</h3>
                   <div class="tsd-index-list">
-                    <a href="SceneSSR.html#constructor" class="tsd-index-link"
+                    <a href="#constructor" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -180,9 +180,7 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Properties</h3>
                   <div class="tsd-index-list">
-                    <a
-                      href="SceneSSR.html#animationframe"
-                      class="tsd-index-link"
+                    <a href="#animationframe" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -191,9 +189,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>animation<wbr />Frame</span></a
                     >
-                    <a
-                      href="SceneSSR.html#children"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#children" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -202,7 +198,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>children</span></a
                     >
-                    <a href="SceneSSR.html#children-1" class="tsd-index-link"
+                    <a href="#children-1" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -211,9 +207,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>children$</span></a
                     >
-                    <a
-                      href="SceneSSR.html#destroy"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#destroy" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -222,7 +216,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>destroy$</span></a
                     >
-                    <a href="SceneSSR.html#gameobject" class="tsd-index-link"
+                    <a href="#gameobject" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -231,9 +225,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>game<wbr />Object</span></a
                     >
-                    <a
-                      href="SceneSSR.html#label"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#label" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -242,7 +234,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>label</span></a
                     >
-                    <a href="SceneSSR.html#lastupdate" class="tsd-index-link"
+                    <a href="#lastupdate" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -251,7 +243,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>last<wbr />Update</span></a
                     >
-                    <a href="SceneSSR.html#options" class="tsd-index-link"
+                    <a href="#options" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -260,7 +252,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>options</span></a
                     >
-                    <a href="SceneSSR.html#physics" class="tsd-index-link"
+                    <a href="#physics" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -269,9 +261,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>physics</span></a
                     >
-                    <a
-                      href="SceneSSR.html#update"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#update" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -280,9 +270,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>update$</span></a
                     >
-                    <a
-                      href="SceneSSR.html#x"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#x" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -291,9 +279,7 @@
                         <use href="../assets/icons.svg#icon-1024"></use></svg
                       ><span>x</span></a
                     >
-                    <a
-                      href="SceneSSR.html#y"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#y" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -307,7 +293,7 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Accessors</h3>
                   <div class="tsd-index-list">
-                    <a href="SceneSSR.html#scene" class="tsd-index-link"
+                    <a href="#scene" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -321,7 +307,7 @@
                 <section class="tsd-index-section">
                   <h3 class="tsd-index-heading">Methods</h3>
                   <div class="tsd-index-list">
-                    <a href="SceneSSR.html#addchild" class="tsd-index-link"
+                    <a href="#addchild" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -330,7 +316,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>add<wbr />Child</span></a
                     >
-                    <a href="SceneSSR.html#destroy-1" class="tsd-index-link"
+                    <a href="#destroy-1" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -339,9 +325,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>destroy</span></a
                     >
-                    <a
-                      href="SceneSSR.html#getchildoftype"
-                      class="tsd-index-link"
+                    <a href="#getchildoftype" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -350,9 +334,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>get<wbr />Child<wbr />Of<wbr />Type</span></a
                     >
-                    <a
-                      href="SceneSSR.html#getchildrenoftype"
-                      class="tsd-index-link"
+                    <a href="#getchildrenoftype" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -361,7 +343,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>get<wbr />Children<wbr />Of<wbr />Type</span></a
                     >
-                    <a href="SceneSSR.html#init" class="tsd-index-link"
+                    <a href="#init" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -370,9 +352,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>init</span></a
                     >
-                    <a
-                      href="SceneSSR.html#recursive"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#recursive" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -381,7 +361,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>recursive</span></a
                     >
-                    <a href="SceneSSR.html#removechild" class="tsd-index-link"
+                    <a href="#removechild" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -390,7 +370,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>remove<wbr />Child</span></a
                     >
-                    <a href="SceneSSR.html#stageaddchild" class="tsd-index-link"
+                    <a href="#stageaddchild" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -399,9 +379,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>stage<wbr />Add<wbr />Child</span></a
                     >
-                    <a
-                      href="SceneSSR.html#stageremovechild"
-                      class="tsd-index-link"
+                    <a href="#stageremovechild" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -410,7 +388,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>stage<wbr />Remove<wbr />Child</span></a
                     >
-                    <a href="SceneSSR.html#start" class="tsd-index-link"
+                    <a href="#start" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -419,7 +397,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>start</span></a
                     >
-                    <a href="SceneSSR.html#stop" class="tsd-index-link"
+                    <a href="#stop" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -428,7 +406,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>stop</span></a
                     >
-                    <a href="SceneSSR.html#update-1" class="tsd-index-link"
+                    <a href="#update-1" class="tsd-index-link"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -437,9 +415,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>update</span></a
                     >
-                    <a
-                      href="SceneSSR.html#destroy-3"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#destroy-3" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -449,7 +425,7 @@
                       ><span>destroy</span></a
                     >
                     <a
-                      href="SceneSSR.html#instantiate"
+                      href="#instantiate"
                       class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
@@ -459,9 +435,7 @@
                         <use href="../assets/icons.svg#icon-2048"></use></svg
                       ><span>instantiate</span></a
                     >
-                    <a
-                      href="SceneSSR.html#update-3"
-                      class="tsd-index-link tsd-is-inherited"
+                    <a href="#update-3" class="tsd-index-link tsd-is-inherited"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -481,23 +455,20 @@
             class="tsd-accordion-summary"
             data-key="section-Constructors"
           >
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Constructors
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Constructors</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="constructor" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="constructor">
                 <span>constructor</span
                 ><a
                   href="#constructor"
@@ -509,14 +480,16 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="constructorscenessr" class="tsd-anchor"></a
-                    ><span class="tsd-signature-keyword">new</span>
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="constructorscenessr"
+                  >
+                    <span class="tsd-signature-keyword">new</span>
                     <span class="tsd-kind-constructor-signature">SceneSSR</span
                     ><span class="tsd-signature-symbol">&lt;</span
                     ><a
                       class="tsd-signature-type tsd-kind-type-parameter"
-                      href="SceneSSR.html#constructorscenessrtbody"
+                      href="#constructorscenessrtbody"
                       >TBody</a
                     >
                     <span class="tsd-signature-keyword">extends</span>
@@ -533,14 +506,12 @@
                       >SceneOptions</a
                     ><span class="tsd-signature-symbol">)</span
                     ><span class="tsd-signature-symbol">:</span>
-                    <a
-                      href="SceneSSR.html"
-                      class="tsd-signature-type tsd-kind-class"
+                    <a href="" class="tsd-signature-type tsd-kind-class"
                       >SceneSSR</a
                     ><span class="tsd-signature-symbol">&lt;</span
                     ><a
                       class="tsd-signature-type tsd-kind-type-parameter"
-                      href="SceneSSR.html#constructorscenessrtbody"
+                      href="#constructorscenessrtbody"
                       >TBody</a
                     ><span class="tsd-signature-symbol">&gt;</span
                     ><a
@@ -556,14 +527,10 @@
                       <h4>Type Parameters</h4>
                       <ul class="tsd-type-parameter-list">
                         <li>
-                          <span
-                            ><a
-                              id="constructorscenessrtbody"
-                              class="tsd-anchor"
-                            ></a
-                            ><span class="tsd-kind-type-parameter">TBody</span
-                            ><span class="tsd-signature-keyword"> extends </span
-                            ><span class="tsd-signature-type">Body</span> =
+                          <span id="constructorscenessrtbody"
+                            ><span class="tsd-kind-type-parameter">TBody</span>
+                            <span class="tsd-signature-keyword">extends</span>
+                            <span class="tsd-signature-type">Body</span> =
                             <span class="tsd-signature-type">Body</span></span
                           >
                         </li>
@@ -588,14 +555,12 @@
                     </div>
                     <h4 class="tsd-returns-title">
                       Returns
-                      <a
-                        href="SceneSSR.html"
-                        class="tsd-signature-type tsd-kind-class"
+                      <a href="" class="tsd-signature-type tsd-kind-class"
                         >SceneSSR</a
                       ><span class="tsd-signature-symbol">&lt;</span
                       ><a
                         class="tsd-signature-type tsd-kind-type-parameter"
-                        href="SceneSSR.html#constructorscenessrtbody"
+                        href="#constructorscenessrtbody"
                         >TBody</a
                       ><span class="tsd-signature-symbol">&gt;</span>
                     </h4>
@@ -624,23 +589,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Properties">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Properties
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Properties</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="animationframe" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="animationframe">
                 <span>animation<wbr />Frame</span
                 ><a
                   href="#animationframe"
@@ -673,8 +635,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="children" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="children">
                 <span>children</span
                 ><a
                   href="#children"
@@ -717,8 +678,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="children-1" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="children-1">
                 <code class="tsd-tag">Readonly</code><span>children$</span
                 ><a
                   href="#children-1"
@@ -760,8 +720,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="destroy" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="destroy">
                 <code class="tsd-tag">Readonly</code><span>destroy$</span
                 ><a
                   href="#destroy"
@@ -807,8 +766,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="gameobject" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="gameobject">
                 <span>game<wbr />Object</span
                 ><a
                   href="#gameobject"
@@ -850,8 +808,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="label" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="label">
                 <span>label</span
                 ><a href="#label" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -886,8 +843,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="lastupdate" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="lastupdate">
                 <span>last<wbr />Update</span
                 ><a
                   href="#lastupdate"
@@ -919,8 +875,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="options" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="options">
                 <code class="tsd-tag">Readonly</code><span>options</span
                 ><a
                   href="#options"
@@ -956,8 +911,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="physics" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="physics">
                 <span>physics</span
                 ><a
                   href="#physics"
@@ -974,7 +928,7 @@
                 ><span class="tsd-signature-symbol">&lt;</span
                 ><a
                   class="tsd-signature-type tsd-kind-type-parameter"
-                  href="SceneSSR.html#constructorscenessrtbody"
+                  href="#constructorscenessrtbody"
                   >TBody</a
                 ><span class="tsd-signature-symbol">&gt;</span>
               </div>
@@ -995,8 +949,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="update" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="update">
                 <code class="tsd-tag">Readonly</code><span>update$</span
                 ><a
                   href="#update"
@@ -1041,8 +994,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="x" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="x">
                 <span>x</span
                 ><a href="#x" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1075,8 +1027,7 @@
               </aside>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="y" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="y">
                 <span>y</span
                 ><a href="#y" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1112,23 +1063,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Accessors">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Accessors
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Accessors</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="scene" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="scene">
                 <span>scene</span
                 ><a href="#scene" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1136,8 +1084,8 @@
                 ></a>
               </h3>
               <ul class="tsd-signatures">
-                <li class="">
-                  <div class="tsd-signature" id="scene-1">
+                <li>
+                  <div class="tsd-signature" id="scenescene">
                     <span class="tsd-signature-keyword">get</span>
                     <span class="tsd-kind-get-signature">scene</span
                     ><span class="tsd-signature-symbol">()</span
@@ -1172,23 +1120,20 @@
         </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-Methods">
-            <h2>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="../assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              Methods
-            </h2>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <use href="../assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Methods</h2>
           </summary>
           <section>
             <section class="tsd-panel tsd-member">
-              <a id="addchild" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="addchild">
                 <span>add<wbr />Child</span
                 ><a
                   href="#addchild"
@@ -1200,9 +1145,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="addchild-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">addChild</span
+                  <div class="tsd-signature tsd-anchor-link" id="addchild-1">
+                    <span class="tsd-kind-call-signature">addChild</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-signature-symbol">...</span
                     ><span class="tsd-kind-parameter">children</span
@@ -1265,8 +1209,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="destroy-1" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="destroy-1">
                 <span>destroy</span
                 ><a
                   href="#destroy-1"
@@ -1278,9 +1221,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="destroy-2" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">destroy</span
+                  <div class="tsd-signature tsd-anchor-link" id="destroy-2">
+                    <span class="tsd-kind-call-signature">destroy</span
                     ><span class="tsd-signature-symbol">()</span
                     ><span class="tsd-signature-symbol">:</span>
                     <span class="tsd-signature-type">void</span
@@ -1322,8 +1264,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="getchildoftype" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="getchildoftype">
                 <span>get<wbr />Child<wbr />Of<wbr />Type</span
                 ><a
                   href="#getchildoftype"
@@ -1335,9 +1276,11 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="getchildoftype-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">getChildOfType</span
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="getchildoftype-1"
+                  >
+                    <span class="tsd-kind-call-signature">getChildOfType</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">type</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -1398,8 +1341,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="getchildrenoftype" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="getchildrenoftype">
                 <span>get<wbr />Children<wbr />Of<wbr />Type</span
                 ><a
                   href="#getchildrenoftype"
@@ -1411,9 +1353,11 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="getchildrenoftype-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature"
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="getchildrenoftype-1"
+                  >
+                    <span class="tsd-kind-call-signature"
                       >getChildrenOfType</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">type</span
@@ -1476,8 +1420,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="init" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="init">
                 <span>init</span
                 ><a href="#init" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1486,9 +1429,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="init-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">init</span
+                  <div class="tsd-signature tsd-anchor-link" id="init-1">
+                    <span class="tsd-kind-call-signature">init</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">_options</span
                     ><span class="tsd-signature-symbol">?:</span>
@@ -1560,8 +1502,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="recursive" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="recursive">
                 <span>recursive</span
                 ><a
                   href="#recursive"
@@ -1573,9 +1514,8 @@
               </h3>
               <ul class="tsd-signatures tsd-is-inherited">
                 <li class="tsd-is-inherited">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="recursive-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">recursive</span
+                  <div class="tsd-signature tsd-anchor-link" id="recursive-1">
+                    <span class="tsd-kind-call-signature">recursive</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">child</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -1664,8 +1604,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="removechild" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="removechild">
                 <span>remove<wbr />Child</span
                 ><a
                   href="#removechild"
@@ -1677,9 +1616,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="removechild-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">removeChild</span
+                  <div class="tsd-signature tsd-anchor-link" id="removechild-1">
+                    <span class="tsd-kind-call-signature">removeChild</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-signature-symbol">...</span
                     ><span class="tsd-kind-parameter">children</span
@@ -1742,8 +1680,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="stageaddchild" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="stageaddchild">
                 <span>stage<wbr />Add<wbr />Child</span
                 ><a
                   href="#stageaddchild"
@@ -1755,9 +1692,11 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="stageaddchild-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">stageAddChild</span
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="stageaddchild-1"
+                  >
+                    <span class="tsd-kind-call-signature">stageAddChild</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-signature-symbol">...</span
                     ><span class="tsd-kind-parameter">_children</span
@@ -1814,8 +1753,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="stageremovechild" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="stageremovechild">
                 <span>stage<wbr />Remove<wbr />Child</span
                 ><a
                   href="#stageremovechild"
@@ -1827,10 +1765,11 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="stageremovechild-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature"
-                      >stageRemoveChild</span
+                  <div
+                    class="tsd-signature tsd-anchor-link"
+                    id="stageremovechild-1"
+                  >
+                    <span class="tsd-kind-call-signature">stageRemoveChild</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-signature-symbol">...</span
                     ><span class="tsd-kind-parameter">_children</span
@@ -1887,8 +1826,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="start" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="start">
                 <span>start</span
                 ><a href="#start" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1897,9 +1835,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="start-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">start</span
+                  <div class="tsd-signature tsd-anchor-link" id="start-1">
+                    <span class="tsd-kind-call-signature">start</span
                     ><span class="tsd-signature-symbol">()</span
                     ><span class="tsd-signature-symbol">:</span>
                     <span class="tsd-signature-type">void</span
@@ -1931,8 +1868,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="stop" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="stop">
                 <span>stop</span
                 ><a href="#stop" aria-label="Permalink" class="tsd-anchor-icon"
                   ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1941,9 +1877,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="stop-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">stop</span
+                  <div class="tsd-signature tsd-anchor-link" id="stop-1">
+                    <span class="tsd-kind-call-signature">stop</span
                     ><span class="tsd-signature-symbol">()</span
                     ><span class="tsd-signature-symbol">:</span>
                     <span class="tsd-signature-type">void</span
@@ -1975,8 +1910,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member">
-              <a id="update-1" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="update-1">
                 <span>update</span
                 ><a
                   href="#update-1"
@@ -1988,9 +1922,8 @@
               </h3>
               <ul class="tsd-signatures">
                 <li class="">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="update-2" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">update</span
+                  <div class="tsd-signature tsd-anchor-link" id="update-2">
+                    <span class="tsd-kind-call-signature">update</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">deltaTime</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -2048,8 +1981,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="destroy-3" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="destroy-3">
                 <code class="tsd-tag">Static</code><span>destroy</span
                 ><a
                   href="#destroy-3"
@@ -2061,9 +1993,8 @@
               </h3>
               <ul class="tsd-signatures tsd-is-inherited">
                 <li class="tsd-is-inherited">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="destroy-4" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">destroy</span
+                  <div class="tsd-signature tsd-anchor-link" id="destroy-4">
+                    <span class="tsd-kind-call-signature">destroy</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">lifecycle</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -2124,8 +2055,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="instantiate" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="instantiate">
                 <code class="tsd-tag">Static</code><span>instantiate</span
                 ><a
                   href="#instantiate"
@@ -2137,9 +2067,8 @@
               </h3>
               <ul class="tsd-signatures tsd-is-inherited">
                 <li class="tsd-is-inherited">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="instantiate-1" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">instantiate</span
+                  <div class="tsd-signature tsd-anchor-link" id="instantiate-1">
+                    <span class="tsd-kind-call-signature">instantiate</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">prefab</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -2212,8 +2141,7 @@
               </ul>
             </section>
             <section class="tsd-panel tsd-member tsd-is-inherited">
-              <a id="update-3" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
+              <h3 class="tsd-anchor-link" id="update-3">
                 <code class="tsd-tag">Static</code><span>update</span
                 ><a
                   href="#update-3"
@@ -2225,9 +2153,8 @@
               </h3>
               <ul class="tsd-signatures tsd-is-inherited">
                 <li class="tsd-is-inherited">
-                  <div class="tsd-signature tsd-anchor-link">
-                    <a id="update-4" class="tsd-anchor"></a
-                    ><span class="tsd-kind-call-signature">update</span
+                  <div class="tsd-signature tsd-anchor-link" id="update-4">
+                    <span class="tsd-kind-call-signature">update</span
                     ><span class="tsd-signature-symbol">(</span
                     ><span class="tsd-kind-parameter">lifecycle</span
                     ><span class="tsd-signature-symbol">:</span>
@@ -2305,17 +2232,16 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <use href="../assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
@@ -2433,17 +2359,16 @@
           </div>
           <details open class="tsd-accordion tsd-page-navigation">
             <summary class="tsd-accordion-summary">
-              <h3>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <use href="../assets/icons.svg#icon-chevronDown"></use></svg
-                >On This Page
-              </h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <use href="../assets/icons.svg#icon-chevronDown"></use>
+              </svg>
+              <h3>On This Page</h3>
             </summary>
             <div class="tsd-accordion-details">
               <details open class="tsd-accordion tsd-page-navigation-section">
@@ -2462,7 +2387,7 @@
                   >Constructors
                 </summary>
                 <div>
-                  <a href="#constructor" class=""
+                  <a href="#constructor"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2489,7 +2414,7 @@
                   >Properties
                 </summary>
                 <div>
-                  <a href="#animationframe" class=""
+                  <a href="#animationframe"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2505,7 +2430,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>children</span></a
-                  ><a href="#children-1" class=""
+                  ><a href="#children-1"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2521,7 +2446,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>destroy$</span></a
-                  ><a href="#gameobject" class=""
+                  ><a href="#gameobject"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2537,7 +2462,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>label</span></a
-                  ><a href="#lastupdate" class=""
+                  ><a href="#lastupdate"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2545,7 +2470,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>last<wbr />Update</span></a
-                  ><a href="#options" class=""
+                  ><a href="#options"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2553,7 +2478,7 @@
                     >
                       <use href="../assets/icons.svg#icon-1024"></use></svg
                     ><span>options</span></a
-                  ><a href="#physics" class=""
+                  ><a href="#physics"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2604,7 +2529,7 @@
                   >Accessors
                 </summary>
                 <div>
-                  <a href="#scene" class=""
+                  <a href="#scene"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2631,7 +2556,7 @@
                   >Methods
                 </summary>
                 <div>
-                  <a href="#addchild" class=""
+                  <a href="#addchild"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2639,7 +2564,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>add<wbr />Child</span></a
-                  ><a href="#destroy-1" class=""
+                  ><a href="#destroy-1"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2647,7 +2572,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>destroy</span></a
-                  ><a href="#getchildoftype" class=""
+                  ><a href="#getchildoftype"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2655,7 +2580,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>get<wbr />Child<wbr />Of<wbr />Type</span></a
-                  ><a href="#getchildrenoftype" class=""
+                  ><a href="#getchildrenoftype"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2663,7 +2588,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>get<wbr />Children<wbr />Of<wbr />Type</span></a
-                  ><a href="#init" class=""
+                  ><a href="#init"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2679,7 +2604,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>recursive</span></a
-                  ><a href="#removechild" class=""
+                  ><a href="#removechild"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2687,7 +2612,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>remove<wbr />Child</span></a
-                  ><a href="#stageaddchild" class=""
+                  ><a href="#stageaddchild"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2695,7 +2620,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>stage<wbr />Add<wbr />Child</span></a
-                  ><a href="#stageremovechild" class=""
+                  ><a href="#stageremovechild"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2703,7 +2628,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>stage<wbr />Remove<wbr />Child</span></a
-                  ><a href="#start" class=""
+                  ><a href="#start"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2711,7 +2636,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>start</span></a
-                  ><a href="#stop" class=""
+                  ><a href="#stop"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"
@@ -2719,7 +2644,7 @@
                     >
                       <use href="../assets/icons.svg#icon-2048"></use></svg
                     ><span>stop</span></a
-                  ><a href="#update-1" class=""
+                  ><a href="#update-1"
                     ><svg
                       class="tsd-kind-icon"
                       viewBox="0 0 24 24"

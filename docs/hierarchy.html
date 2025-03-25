@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en" data-base=".">
+<html class="default" lang="en" data-base="./">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -22,50 +22,59 @@
       document.body.style.display = 'none';
       setTimeout(
         () =>
-          app ? app.showPage() : document.body.style.removeProperty('display'),
+          window.app
+            ? app.showPage()
+            : document.body.style.removeProperty('display'),
         500
       );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search">
-          <div class="field">
-            <label
-              for="tsd-search-field"
-              class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <use href="assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="index.html" class="title">@pietal.dev/engine</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="index.html" class="title">@pietal.dev/engine</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <use href="assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <use href="assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
@@ -73,9 +82,8 @@
         <div class="tsd-page-title"><h1>@pietal.dev/engine</h1></div>
         <h2>Hierarchy Summary</h2>
         <ul class="tsd-full-hierarchy">
-          <li data-refl="3">
-            <a id="LifecycleProps" class="tsd-anchor"></a
-            ><a href="interfaces/LifecycleProps.html"
+          <li data-refl="3" id="LifecycleProps">
+            <a href="interfaces/LifecycleProps.html"
               ><svg
                 class="tsd-kind-icon"
                 viewBox="0 0 24 24"
@@ -85,9 +93,8 @@
               >LifecycleProps</a
             >
             <ul>
-              <li data-refl="1064">
-                <a id="Animator" class="tsd-anchor"></a
-                ><a href="classes/Animator.html"
+              <li data-refl="1064" id="Animator">
+                <a href="classes/Animator.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -97,9 +104,8 @@
                   >Animator</a
                 >
               </li>
-              <li data-refl="1998">
-                <a id="CircleBody" class="tsd-anchor"></a
-                ><a href="classes/CircleBody.html"
+              <li data-refl="1998" id="CircleBody">
+                <a href="classes/CircleBody.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -109,9 +115,8 @@
                   >CircleBody</a
                 >
               </li>
-              <li data-refl="558">
-                <a id="Component" class="tsd-anchor"></a
-                ><a href="classes/Component.html"
+              <li data-refl="558" id="Component">
+                <a href="classes/Component.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -121,9 +126,8 @@
                   >Component</a
                 >
                 <ul>
-                  <li data-refl="1967">
-                    <a id="StateMachine" class="tsd-anchor"></a
-                    ><a href="classes/StateMachine.html"
+                  <li data-refl="1967" id="StateMachine">
+                    <a href="classes/StateMachine.html"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -135,9 +139,8 @@
                   </li>
                 </ul>
               </li>
-              <li data-refl="571">
-                <a id="Container" class="tsd-anchor"></a
-                ><a href="classes/Container.html"
+              <li data-refl="571" id="Container">
+                <a href="classes/Container.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -147,9 +150,8 @@
                   >Container</a
                 >
               </li>
-              <li data-refl="13">
-                <a id="Lifecycle" class="tsd-anchor"></a
-                ><a href="classes/Lifecycle.html"
+              <li data-refl="13" id="Lifecycle">
+                <a href="classes/Lifecycle.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -159,9 +161,8 @@
                   >Lifecycle</a
                 >
                 <ul>
-                  <li data-refl="1627">
-                    <a id="GameObject" class="tsd-anchor"></a
-                    ><a href="classes/GameObject.html"
+                  <li data-refl="1627" id="GameObject">
+                    <a href="classes/GameObject.html"
                       ><svg
                         class="tsd-kind-icon"
                         viewBox="0 0 24 24"
@@ -171,9 +172,8 @@
                       >GameObject</a
                     >
                     <ul>
-                      <li data-refl="1583">
-                        <a id="TGameObject" class="tsd-anchor"></a
-                        ><a href="interfaces/TGameObject.html"
+                      <li data-refl="1583" id="TGameObject">
+                        <a href="interfaces/TGameObject.html"
                           ><svg
                             class="tsd-kind-icon"
                             viewBox="0 0 24 24"
@@ -183,9 +183,8 @@
                           >TGameObject</a
                         >
                       </li>
-                      <li data-refl="1676">
-                        <a id="Prefab" class="tsd-anchor"></a
-                        ><a href="classes/Prefab.html"
+                      <li data-refl="1676" id="Prefab">
+                        <a href="classes/Prefab.html"
                           ><svg
                             class="tsd-kind-icon"
                             viewBox="0 0 24 24"
@@ -195,9 +194,8 @@
                           >Prefab</a
                         >
                       </li>
-                      <li data-refl="1751">
-                        <a id="SceneSSR" class="tsd-anchor"></a
-                        ><a href="classes/SceneSSR.html"
+                      <li data-refl="1751" id="SceneSSR">
+                        <a href="classes/SceneSSR.html"
                           ><svg
                             class="tsd-kind-icon"
                             viewBox="0 0 24 24"
@@ -207,9 +205,8 @@
                           >SceneSSR</a
                         >
                         <ul>
-                          <li data-refl="1820">
-                            <a id="Scene" class="tsd-anchor"></a
-                            ><a href="classes/Scene.html"
+                          <li data-refl="1820" id="Scene">
+                            <a href="classes/Scene.html"
                               ><svg
                                 class="tsd-kind-icon"
                                 viewBox="0 0 24 24"
@@ -227,9 +224,8 @@
                   </li>
                 </ul>
               </li>
-              <li data-refl="2160">
-                <a id="PolygonBody" class="tsd-anchor"></a
-                ><a href="classes/PolygonBody.html"
+              <li data-refl="2161" id="PolygonBody">
+                <a href="classes/PolygonBody.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -239,9 +235,8 @@
                   >PolygonBody</a
                 >
               </li>
-              <li data-refl="33">
-                <a id="Sprite" class="tsd-anchor"></a
-                ><a href="classes/Sprite.html"
+              <li data-refl="33" id="Sprite">
+                <a href="classes/Sprite.html"
                   ><svg
                     class="tsd-kind-icon"
                     viewBox="0 0 24 24"
@@ -260,17 +255,16 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <use href="assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
