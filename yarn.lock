@@ -2019,10 +2019,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.26.3:
-  version "9.26.3"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.26.3.tgz#a9b76390a4ce40a1649a7edf59c25c210819d8eb"
-  integrity sha512-Ei4YpVTf72ALB8wbN0FOceGNDpbTiexUK37J25EBREotcPBxkw5i/PGyU1HiKfNf1HoDdZz6v1bWGmtZICfF6Q==
+detect-collisions@^9.26.4:
+  version "9.26.4"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.26.4.tgz#ad60210394641f98303be03074729f6a604556a7"
+  integrity sha512-cEBbjGRzjeOrPvkLklpRU3PrAtJ+6bCcLX8Qtf/bsJJ1qJIm55GdXNdKwmjJwwkejf6s/bjmNAJ3pEwcE/3JFA==
   dependencies:
     "@types/sat" "^0.0.35"
     poly-decomp-es "^0.4.2"

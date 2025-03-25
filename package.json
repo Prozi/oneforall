@@ -1,7 +1,7 @@
 {
   "name": "@pietal.dev/engine",
   "description": "PIXI v8, v7, v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
-  "version": "9.27.3",
+  "version": "9.27.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@pietal.dev/cache": "^2.0.2",
-    "detect-collisions": "^9.26.3",
+    "detect-collisions": "^9.26.4",
     "inject.min": "^1.6.4",
     "pixi-stats": "^4.1.1"
   },
