@@ -10607,45 +10607,45 @@
         exports.DIContainer = void 0;
         class DIContainer {
           /**
-           * for future references overwrite Original class with Override
+           * get the Class/Override that was used with setClass
+           * @param Original the class to search for in DIContainer
+           * @returns {BaseClass}
+           */
+          static getClass(Original) {
+            const Override = this.overrides[Original.name];
+            return Override || Original;
+          }
+          /**
+           * for future references override Original class with Override
            * @param Original the class to search for in DIContainer
            * @param Override the extended class to replace that first one
            */
-          static bind(Original, Override) {
+          static setClass(Original, Override) {
             DIContainer.overrides[Original.name] = Override;
           }
           /**
-           * get instance of Class/Override unique with constructor props
-           * @param Class the class to search for in DIContainer
+           * get instance of Class/Override that was used with setClass with optional props
+           * @param Original the class to search for in DIContainer
            * @param props the optional props for constructor of instance
            * @returns {instanceof Class}
            */
-          static get(Class, ...props) {
+          static getInstance(Original, ...props) {
             const propertyKey = DIContainer.createPropertyKey(props);
-            if (!DIContainer.instances[Class.name]) {
-              DIContainer.instances[Class.name] = {};
+            if (!DIContainer.instances[Original.name]) {
+              DIContainer.instances[Original.name] = {};
             }
-            if (!DIContainer.instances[Class.name][propertyKey]) {
-              const ResolvedClass = DIContainer.getClass(Class);
-              DIContainer.instances[Class.name][propertyKey] =
-                new ResolvedClass(...props);
+            if (!DIContainer.instances[Original.name][propertyKey]) {
+              const Class = DIContainer.getClass(Original);
+              const instance = new Class(...props);
+              DIContainer.instances[Original.name][propertyKey] = instance;
             }
-            return DIContainer.instances[Class.name][propertyKey];
+            return DIContainer.instances[Original.name][propertyKey];
           }
           /**
-           * get the Class/Override that was used with bind
-           * @param Class the class to search for in DIContainer
-           * @returns {class}
-           */
-          static getClass(Class) {
-            const overwrite = this.overrides[Class.name];
-            return overwrite || Class;
-          }
-          /**
-           * the api to free class instances to prevent possible oom
+           * the api to free class instances to prevent eventual oom
            * @param Class the class to search for in DIContainer
            */
-          static free(Class) {
+          static freeInstances(Class) {
             DIContainer.instances[Class.name] = {};
           }
           /**
@@ -10759,7 +10759,7 @@
         function Inject(Class, props) {
           return function (target, propertyKey) {
             Object.defineProperty(target, propertyKey, {
-              get: () => di_container_1.DIContainer.get(Class, props),
+              get: () => di_container_1.DIContainer.getInstance(Class, props),
               enumerable: true,
               configurable: true
             });
@@ -11619,14 +11619,14 @@
         const pixi_hooks_1 = __webpack_require__(
           /*! ./pixi-hooks */ './node_modules/pixi-stats/dist/pixi-hooks.js'
         );
-        const stats_adapter_1 = __webpack_require__(
-          /*! ./stats-adapter */ './node_modules/pixi-stats/dist/stats-adapter.js'
-        );
         const stats_panel_1 = __webpack_require__(
           /*! ./stats-panel */ './node_modules/pixi-stats/dist/stats-panel.js'
         );
+        const stats_adapter_1 = __webpack_require__(
+          /*! ./stats-adapter */ './node_modules/pixi-stats/dist/stats-adapter.js'
+        );
         class Stats {
-          constructor(renderer, containerElement = document.body) {
+          constructor(renderer, containerElement = document.body, ticker) {
             this.mode = 0;
             this.frames = 0;
             this.beginTime = (performance || Date).now();
@@ -11664,11 +11664,17 @@
                 this.adapter.update();
               });
             } else {
-              const frame = () => {
-                this.adapter.update();
-                requestAnimationFrame(frame);
-              };
-              frame();
+              if (ticker) {
+                ticker.add(() => {
+                  this.adapter.update();
+                });
+              } else {
+                const frame = () => {
+                  this.adapter.update();
+                  requestAnimationFrame(frame);
+                };
+                frame();
+              }
             }
           }
           addPanel(panel) {
@@ -41752,7 +41758,13 @@ ${src}`;
         const WINDING = 4;
         const DEPTH_MASK = 5;
         const _GlStateSystem = class _GlStateSystem {
-          constructor() {
+          constructor(renderer) {
+            /**
+             * Whether to invert the front face when rendering
+             * This is used for render textures where the Y-coordinate is flipped
+             * @default false
+             */
+            this._invertFrontFace = false;
             this.gl = null;
             this.stateId = 0;
             this.polygonOffset = 0;
@@ -41767,6 +41779,15 @@ ${src}`;
             this.map[DEPTH_MASK] = this.setDepthMask;
             this.checks = [];
             this.defaultState = State.State.for2d();
+            renderer.renderTarget.onRenderTargetChange.add(this);
+          }
+          onRenderTargetChange(renderTarget) {
+            this._invertFrontFace = !renderTarget.isRoot;
+            if (this._cullFace) {
+              this.setFrontFace(this._frontFace);
+            } else {
+              this._frontFaceDirty = true;
+            }
           }
           contextChange(gl) {
             this.gl = gl;
@@ -41845,14 +41866,24 @@ ${src}`;
            * @param {boolean} value - Turn on or off webgl cull face.
            */
           setCullFace(value) {
+            this._cullFace = value;
             this.gl[value ? 'enable' : 'disable'](this.gl.CULL_FACE);
+            if (this._cullFace && this._frontFaceDirty) {
+              this.setFrontFace(this._frontFace);
+            }
           }
           /**
            * Sets the gl front face.
            * @param {boolean} value - true is clockwise and false is counter-clockwise
            */
           setFrontFace(value) {
-            this.gl.frontFace(this.gl[value ? 'CW' : 'CCW']);
+            this._frontFace = value;
+            this._frontFaceDirty = false;
+            const faceMode = this._invertFrontFace ? !value : value;
+            if (this._glFrontFace !== faceMode) {
+              this._glFrontFace = faceMode;
+              this.gl.frontFace(this.gl[faceMode ? 'CW' : 'CCW']);
+            }
           }
           /**
            * Sets the blend mode.
@@ -41892,6 +41923,12 @@ ${src}`;
           // used
           /** Resets all the logic and disables the VAOs. */
           resetState() {
+            this._glFrontFace = false;
+            this._frontFace = false;
+            this._cullFace = false;
+            this._frontFaceDirty = false;
+            this._invertFrontFace = false;
+            this.gl.frontFace(this.gl.CCW);
             this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, false);
             this.forceState(this.defaultState);
             this._blendEq = true;
@@ -42409,6 +42446,12 @@ ${src}`;
             this._activeTextureLocation = -1;
             this._boundTextures.fill(Texture.Texture.EMPTY.source);
             this._boundSamplers = /* @__PURE__ */ Object.create(null);
+            const gl = this._gl;
+            this._premultiplyAlpha = false;
+            gl.pixelStorei(
+              gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,
+              this._premultiplyAlpha
+            );
           }
         }
         /** @ignore */
@@ -49373,6 +49416,9 @@ ${src}`;
         var EventEmitter = __webpack_require__(
           /*! eventemitter3 */ './node_modules/eventemitter3/index.js'
         );
+        var uid = __webpack_require__(
+          /*! ../../../../utils/data/uid.js */ './node_modules/pixi.js/lib/utils/data/uid.js'
+        );
         var GlProgram = __webpack_require__(
           /*! ../../gl/shader/GlProgram.js */ './node_modules/pixi.js/lib/rendering/renderers/gl/shader/GlProgram.js'
         );
@@ -49387,9 +49433,6 @@ ${src}`;
         );
         var UniformGroup = __webpack_require__(
           /*! ./UniformGroup.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/shader/UniformGroup.js'
-        );
-        var uid = __webpack_require__(
-          /*! ../../../../utils/data/uid.js */ './node_modules/pixi.js/lib/utils/data/uid.js'
         );
 
         ('use strict');
@@ -56256,7 +56299,9 @@ ${src}`;
                 renderGroup.removeChildren(removed);
               }
               for (let i = 0; i < removed.length; ++i) {
-                this.emit('childRemoved', removed[i], this, i);
+                const child = removed[i];
+                child.parentRenderLayer?.detach(child);
+                this.emit('childRemoved', child, this, i);
                 removed[i].emit('removed', this);
               }
               if (removed.length > 0) {
@@ -61741,6 +61786,7 @@ ${src}`;
                 : _FillGradient.defaultLinearOptions;
             options = { ...defaults, ...definedProps.definedProps(options) };
             this._textureSize = options.textureSize;
+            this._wrapMode = options.wrapMode;
             if (options.type === 'radial') {
               this.center = options.center;
               this.outerCenter = options.outerCenter ?? this.center;
@@ -61778,32 +61824,45 @@ ${src}`;
            */
           buildLinearGradient() {
             if (this.texture) return;
+            let { x: x0, y: y0 } = this.start;
+            let { x: x1, y: y1 } = this.end;
+            let dx = x1 - x0;
+            let dy = y1 - y0;
+            const flip = dx < 0 || dy < 0;
+            if (this._wrapMode === 'clamp-to-edge') {
+              if (dx < 0) {
+                const temp = x0;
+                x0 = x1;
+                x1 = temp;
+                dx *= -1;
+              }
+              if (dy < 0) {
+                const temp = y0;
+                y0 = y1;
+                y1 = temp;
+                dy *= -1;
+              }
+            }
             const colorStops = this.colorStops.length
               ? this.colorStops
               : emptyColorStops;
             const defaultSize = this._textureSize;
             const { canvas, context } = getCanvas(defaultSize, 1);
-            const gradient = context.createLinearGradient(
-              0,
-              0,
-              this._textureSize,
-              0
-            );
+            const gradient = !flip
+              ? context.createLinearGradient(0, 0, this._textureSize, 0)
+              : context.createLinearGradient(this._textureSize, 0, 0, 0);
             addColorStops(gradient, colorStops);
             context.fillStyle = gradient;
             context.fillRect(0, 0, defaultSize, 1);
             this.texture = new Texture.Texture({
               source: new ImageSource.ImageSource({
-                resource: canvas
+                resource: canvas,
+                addressMode: this._wrapMode
               })
             });
-            const { x: x0, y: y0 } = this.start;
-            const { x: x1, y: y1 } = this.end;
-            const m = new Matrix.Matrix();
-            const dx = x1 - x0;
-            const dy = y1 - y0;
             const dist = Math.sqrt(dx * dx + dy * dy);
             const angle = Math.atan2(dy, dx);
+            const m = new Matrix.Matrix();
             m.scale(dist / defaultSize, 1);
             m.rotate(angle);
             m.translate(x0, y0);
@@ -61855,8 +61914,7 @@ ${src}`;
             this.texture = new Texture.Texture({
               source: new ImageSource.ImageSource({
                 resource: canvas,
-                addressModeU: 'clamp-to-edge',
-                addressModeV: 'clamp-to-edge'
+                addressMode: this._wrapMode
               })
             });
             const m = new Matrix.Matrix();
@@ -61888,6 +61946,7 @@ ${src}`;
          * @property {number} textureSize - The size of the texture to use for the gradient (default: 256)
          * @property {Array<{offset: number, color: ColorSource}>} colorStops - Array of color stops (default: empty array)
          * @property {GradientType} type - Type of gradient (default: 'linear')
+         * @property {WRAP_MODE} wrapMode - The wrap mode of the gradient (default: 'clamp-to-edge')
          */
         _FillGradient.defaultLinearOptions = {
           start: { x: 0, y: 0 },
@@ -61895,7 +61954,8 @@ ${src}`;
           colorStops: [],
           textureSpace: 'local',
           type: 'linear',
-          textureSize: 256
+          textureSize: 256,
+          wrapMode: 'clamp-to-edge'
         };
         /**
          * Default options for creating a radial gradient fill
@@ -61907,6 +61967,7 @@ ${src}`;
          * @property {number} textureSize - The size of the texture to use for the gradient (default: 256)
          * @property {Array<{offset: number, color: ColorSource}>} colorStops - Array of color stops (default: empty array)
          * @property {GradientType} type - Type of gradient (default: 'radial')
+         * @property {WRAP_MODE} wrapMode - The wrap mode of the gradient (default: 'clamp-to-edge')
          */
         _FillGradient.defaultRadialOptions = {
           center: { x: 0.5, y: 0.5 },
@@ -61916,7 +61977,8 @@ ${src}`;
           scale: 1,
           textureSpace: 'local',
           type: 'radial',
-          textureSize: 256
+          textureSize: 256,
+          wrapMode: 'clamp-to-edge'
         };
         let FillGradient = _FillGradient;
         function addColorStops(gradient, colorStops) {
@@ -64499,6 +64561,9 @@ ${src}`;
         var Rectangle = __webpack_require__(
           /*! ../../../../maths/shapes/Rectangle.js */ './node_modules/pixi.js/lib/maths/shapes/Rectangle.js'
         );
+        var FillGradient = __webpack_require__(
+          /*! ../fill/FillGradient.js */ './node_modules/pixi.js/lib/scene/graphics/shared/fill/FillGradient.js'
+        );
 
         ('use strict');
         const tempTextureMatrix = new Matrix.Matrix();
@@ -64509,8 +64574,24 @@ ${src}`;
             : out.identity();
           if (style.textureSpace === 'local') {
             const bounds = shape.getBounds(tempRect);
-            textureMatrix.translate(-bounds.x, -bounds.y);
-            textureMatrix.scale(1 / bounds.width, 1 / bounds.height);
+            if (style.width) {
+              bounds.pad(style.width);
+            }
+            const { x: tx, y: ty } = bounds;
+            const sx = 1 / bounds.width;
+            const sy = 1 / bounds.height;
+            const mTx = -tx * sx;
+            const mTy = -ty * sy;
+            const a1 = textureMatrix.a;
+            const b1 = textureMatrix.b;
+            const c1 = textureMatrix.c;
+            const d1 = textureMatrix.d;
+            textureMatrix.a *= sx;
+            textureMatrix.b *= sx;
+            textureMatrix.c *= sy;
+            textureMatrix.d *= sy;
+            textureMatrix.tx = mTx * a1 + mTy * c1 + textureMatrix.tx;
+            textureMatrix.ty = mTx * b1 + mTy * d1 + textureMatrix.ty;
           } else {
             textureMatrix.translate(
               style.texture.frame.x,
@@ -64520,11 +64601,14 @@ ${src}`;
               1 / style.texture.source.width,
               1 / style.texture.source.height
             );
-            const sourceStyle = style.texture.source.style;
-            if (sourceStyle.addressMode === 'clamp-to-edge') {
-              sourceStyle.addressMode = 'repeat';
-              sourceStyle.update();
-            }
+          }
+          const sourceStyle = style.texture.source.style;
+          if (
+            !(style.fill instanceof FillGradient.FillGradient) &&
+            sourceStyle.addressMode === 'clamp-to-edge'
+          ) {
+            sourceStyle.addressMode = 'repeat';
+            sourceStyle.update();
           }
           if (matrix) {
             textureMatrix.append(tempTextureMatrix.copyFrom(matrix).invert());
@@ -69031,6 +69115,9 @@ ${src}`;
       /***/ (__unused_webpack_module, exports, __webpack_require__) => {
         'use strict';
 
+        var ObservablePoint = __webpack_require__(
+          /*! ../../maths/point/ObservablePoint.js */ './node_modules/pixi.js/lib/maths/point/ObservablePoint.js'
+        );
         var Texture = __webpack_require__(
           /*! ../../rendering/renderers/shared/texture/Texture.js */ './node_modules/pixi.js/lib/rendering/renderers/shared/texture/Texture.js'
         );
@@ -69042,9 +69129,6 @@ ${src}`;
         );
         var NineSliceGeometry = __webpack_require__(
           /*! ./NineSliceGeometry.js */ './node_modules/pixi.js/lib/scene/sprite-nine-slice/NineSliceGeometry.js'
-        );
-        var ObservablePoint = __webpack_require__(
-          /*! ../../maths/point/ObservablePoint.js */ './node_modules/pixi.js/lib/maths/point/ObservablePoint.js'
         );
 
         ('use strict');
@@ -77602,7 +77686,7 @@ ${src}`;
         ('use strict');
         const DATA_URI =
           /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
-        const VERSION = '8.9.0';
+        const VERSION = '8.9.2';
 
         exports.EventEmitter = EventEmitter;
         exports.DATA_URI = DATA_URI;
@@ -98629,11 +98713,11 @@ Deprecated since v${version}`
             /*! pixi.js */ './node_modules/pixi.js/lib/index.js'
           )
         );
-        const scene_ssr_1 = __webpack_require__(
-          /*! ./scene-ssr */ './src/scene-ssr.ts'
-        );
         const inject_min_1 = __webpack_require__(
           /*! inject.min */ './node_modules/inject.min/dist/index.js'
+        );
+        const scene_ssr_1 = __webpack_require__(
+          /*! ./scene-ssr */ './src/scene-ssr.ts'
         );
         const resources_1 = __webpack_require__(
           /*! ./resources */ './src/resources.ts'
@@ -98644,14 +98728,14 @@ Deprecated since v${version}`
         const Subject_1 = __webpack_require__(
           /*! rxjs/internal/Subject */ './node_modules/rxjs/dist/cjs/internal/Subject.js'
         );
+        const rxjs_1 = __webpack_require__(
+          /*! rxjs */ './node_modules/rxjs/dist/cjs/index.js'
+        );
         const merge_1 = __webpack_require__(
           /*! rxjs/internal/observable/merge */ './node_modules/rxjs/dist/cjs/internal/observable/merge.js'
         );
         const takeUntil_1 = __webpack_require__(
           /*! rxjs/internal/operators/takeUntil */ './node_modules/rxjs/dist/cjs/internal/operators/takeUntil.js'
-        );
-        const rxjs_1 = __webpack_require__(
-          /*! rxjs */ './node_modules/rxjs/dist/cjs/index.js'
         );
         /**
          * base scene for front end rendering
@@ -98706,7 +98790,10 @@ Deprecated since v${version}`
             );
           }
           createPixi(options) {
-            return inject_min_1.DIContainer.get(PIXI.Application, options);
+            return inject_min_1.DIContainer.getInstance(
+              PIXI.Application,
+              options
+            );
           }
           async init(options) {
             var _a;

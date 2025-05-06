@@ -94,14 +94,14 @@ var __rest =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.Scene = void 0;
 const PIXI = __importStar(require('pixi.js'));
-const scene_ssr_1 = require('./scene-ssr');
 const inject_min_1 = require('inject.min');
+const scene_ssr_1 = require('./scene-ssr');
 const resources_1 = require('./resources');
 const pixi_stats_1 = require('pixi-stats');
 const Subject_1 = require('rxjs/internal/Subject');
+const rxjs_1 = require('rxjs');
 const merge_1 = require('rxjs/internal/observable/merge');
 const takeUntil_1 = require('rxjs/internal/operators/takeUntil');
-const rxjs_1 = require('rxjs');
 /**
  * base scene for front end rendering
  */
@@ -152,7 +152,7 @@ class Scene extends scene_ssr_1.SceneSSR {
     );
   }
   createPixi(options) {
-    return inject_min_1.DIContainer.get(PIXI.Application, options);
+    return inject_min_1.DIContainer.getInstance(PIXI.Application, options);
   }
   async init(options) {
     var _a;

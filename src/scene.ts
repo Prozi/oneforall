@@ -1,16 +1,16 @@
 import * as PIXI from 'pixi.js';
 
+import { DIContainer, Inject } from 'inject.min';
 import { PIXIAppOptions, SceneOptions, SceneSSR } from './scene-ssr';
 
 import { Body } from 'detect-collisions';
-import { DIContainer, Inject } from 'inject.min';
 import { LifecycleProps } from './lifecycle';
 import { Resources } from './resources';
 import { Stats } from 'pixi-stats';
 import { Subject } from 'rxjs/internal/Subject';
+import { fromEvent } from 'rxjs';
 import { merge } from 'rxjs/internal/observable/merge';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { fromEvent } from 'rxjs';
 
 export type PIXIWebGLRenderer = any;
 
@@ -81,7 +81,7 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
   }
 
   createPixi(options: PIXIAppOptions): PIXI.Application {
-    return DIContainer.get(PIXI.Application, options);
+    return DIContainer.getInstance(PIXI.Application, options);
   }
 
   async init(options?: PIXIAppOptions): Promise<boolean> {
