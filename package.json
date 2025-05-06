@@ -1,15 +1,13 @@
 {
   "name": "@pietal.dev/engine",
   "description": "PIXI v8, v7, v6 compatible: inspired by Unity, reactive Game Framework: GameObject, StateMachine, CircleBody, PolygonBody, Physics, Sprite, Container, Animator, TextureAtlas, Resources loading",
-  "version": "9.30.0",
+  "version": "9.30.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "chef-express docs",
-    "start:demo": "chef-express docs/demo",
-    "demo": "yarn build && yarn start",
+    "start": "chef-express docs/demo",
+    "docs": "chef-express docs",
     "dev": "webpack serve",
-    "docs": "yarn build && yarn start",
     "build:demo": "webpack",
     "postbuild:demo": "cp -r demo/*.* docs/demo",
     "prebuild": "rimraf dist",
@@ -42,7 +40,7 @@
   },
   "dependencies": {
     "@pietal.dev/cache": "^2.0.2",
-    "detect-collisions": "^9.27.1",
+    "detect-collisions": "^9.27.3",
     "inject.min": "^2.0.0",
     "pixi-stats": "^4.2.0"
   },
@@ -54,7 +52,7 @@
     "@babel/preset-typescript": "^7.27.1",
     "@types/jest": "^29.5.14",
     "babel-jest": "^29.7.0",
-    "chef-express": "^3.2.1",
+    "chef-express": "^3.2.3",
     "eslint": "^9.26.0",
     "globals": "^16.0.0",
     "jest": "29.7.0",
@@ -68,7 +66,7 @@
     "typedoc": "^0.28.4",
     "typescript": "^5",
     "typescript-eslint": "^8.32.0",
-    "webpack": "^5.99.7",
+    "webpack": "^5.99.8",
     "webpack-cli": "^6.0.1"
   },
   "peerDependencies": {

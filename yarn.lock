@@ -1862,21 +1862,21 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chef-core@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/chef-core/-/chef-core-4.2.0.tgz#04cd4c1beee8636364816d3e1428ffac3a16efb9"
-  integrity sha512-HKOQJB8Xai2MrU4ltpdEk6b1czYI3MU3CPNo87h/nB2erZRCSJrE65Rzki5msqFpKJBSN40BwyLtctqRrsI0/g==
+chef-core@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/chef-core/-/chef-core-4.2.1.tgz#281311304b49064eaabfb330c1a8224294a18675"
+  integrity sha512-gtsX86gQ8cuolSjSiQuo1eL+aJuJ5ARuLiI1ZQS/nSstMcfu838XiuyQ08k0JRv1wpWDVl0Il5g+XV6+DYKWRg==
   dependencies:
     "@pietal.dev/cache" "^2.0.2"
     mime-types "^3.0.1"
 
-chef-express@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/chef-express/-/chef-express-3.2.1.tgz#07523012a67d880468503611dba74fde8734db59"
-  integrity sha512-IhVB09AhTy4v8Co0KLFvix4qDKPmyLtYj1/mM806zs0GJ/zG0r8FZD1KyklocTOfIeaFOKXciFxHXWtAfCJ34g==
+chef-express@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/chef-express/-/chef-express-3.2.3.tgz#fb8f3b11b8dcaadad8396b6caed4deb912112bf3"
+  integrity sha512-Nt52DJx1rEbXYy6N6NESJDAY2Z1EyX76okKq5N/sbJS9EQRE8BaZwNE583T0QAfeMMrGRUWr35MvhEWJ2KS3HA==
   dependencies:
     "@pietal.dev/cache" "^2.0.2"
-    chef-core "^4.2.0"
+    chef-core "^4.2.1"
     express "^4"
 
 chrome-trace-event@^1.0.2:
@@ -2100,10 +2100,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-collisions@^9.27.1:
-  version "9.27.2"
-  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.27.2.tgz#37691a1d816c27bbe20c2c6c9bd0f38ffe675947"
-  integrity sha512-yQ2/ux0L4qCsSJCYhYxvr12/pzSFcG1oCsiLhPW53dQd3Fpci6t0JIfxCuGeD4jsgBqrdKGSCZgd3eps/O3law==
+detect-collisions@^9.27.3:
+  version "9.27.3"
+  resolved "https://registry.yarnpkg.com/detect-collisions/-/detect-collisions-9.27.3.tgz#551fe359be54d290e20cdb23791f18e0fa83c6fd"
+  integrity sha512-NXFR1HIITiq/esxq1h12BzhUWkkXVWCoBBIOFLKy1MQ0Yuf2WCxpUriZL3pI1SSrbP76/QOgXzkUf62RCZFYIQ==
   dependencies:
     "@types/sat" "^0.0.35"
     poly-decomp-es "^0.4.2"
@@ -4918,7 +4918,7 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@^5.99.7:
+webpack@^5.99.8:
   version "5.99.8"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.99.8.tgz#dd31a020b7c092d30c4c6d9a4edb95809e7f5946"
   integrity sha512-lQ3CPiSTpfOnrEGeXDwoq5hIGzSjmwD72GdfVzF7CQAI7t47rJG9eDWvcEkEn3CUQymAElVvDg3YNTlCYj+qUQ==
