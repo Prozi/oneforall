@@ -11,4 +11,5 @@ export * from './resources';
 export * from './state-machine';
 export * from './circle-body';
 export * from './polygon-body';
+export * from './box-body';
 export * from './texture-atlas';
