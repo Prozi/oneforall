@@ -99214,6 +99214,9 @@ Deprecated since v${version}`
           scene.physics.separate();
         });
       globalThis.scene = scene;
+      if (queryParams.eval) {
+        eval(queryParams.eval);
+      }
     }
     start();
   })();
