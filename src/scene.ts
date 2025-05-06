@@ -218,10 +218,13 @@ export class Scene<TBody extends Body = Body> extends SceneSSR<TBody> {
    * add body font family to set font of pixi-stats
    */
   showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;'): void {
-    const stats = new Stats(this.pixi.renderer as PIXIWebGLRenderer);
-    const canvas = stats.domElement;
+    const stats = new Stats(
+      this.pixi.renderer as PIXIWebGLRenderer,
+      document.body,
+      this.pixi.ticker
+    );
 
-    canvas.setAttribute('style', style);
+    stats.domElement.setAttribute('style', style);
   }
 
   protected onUpdateDebug(graphics: PIXI.Graphics): void {

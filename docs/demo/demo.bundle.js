@@ -98922,9 +98922,12 @@ Deprecated since v${version}`
            * add body font family to set font of pixi-stats
            */
           showFPS(style = 'position: fixed; top: 0; right: 0; z-index: 1000;') {
-            const stats = new pixi_stats_1.Stats(this.pixi.renderer);
-            const canvas = stats.domElement;
-            canvas.setAttribute('style', style);
+            const stats = new pixi_stats_1.Stats(
+              this.pixi.renderer,
+              document.body,
+              this.pixi.ticker
+            );
+            stats.domElement.setAttribute('style', style);
           }
           onUpdateDebug(graphics) {
             var _a, _b, _c, _d, _e, _f;
