@@ -43,4 +43,5 @@ __exportStar(require('./resources'), exports);
 __exportStar(require('./state-machine'), exports);
 __exportStar(require('./circle-body'), exports);
 __exportStar(require('./polygon-body'), exports);
+__exportStar(require('./box-body'), exports);
 __exportStar(require('./texture-atlas'), exports);
