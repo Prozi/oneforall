@@ -6539,11 +6539,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const utils_1 = __webpack_require__(
-          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
         const polygon_1 = __webpack_require__(
           /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
+        );
+        const utils_1 = __webpack_require__(
+          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
         );
         /**
          * collider - box
@@ -6603,9 +6603,9 @@
             this.setPoints((0, utils_1.createBox)(this._width, this._height));
           }
           /**
-           * do not attempt to use Polygon.updateIsConvex()
+           * do not attempt to use Polygon.updateConvex()
            */
-          updateIsConvex() {
+          updateConvex() {
             return;
           }
         }
@@ -6865,11 +6865,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const utils_1 = __webpack_require__(
-          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
-        );
         const polygon_1 = __webpack_require__(
           /*! ./polygon */ './node_modules/detect-collisions/dist/bodies/polygon.js'
+        );
+        const utils_1 = __webpack_require__(
+          /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
         );
         /**
          * collider - ellipse
@@ -6980,9 +6980,9 @@
             return;
           }
           /**
-           * do not attempt to use Polygon.updateIsConvex()
+           * do not attempt to use Polygon.updateConvex()
            */
-          updateIsConvex() {
+          updateConvex() {
             return;
           }
         }
@@ -7073,9 +7073,9 @@
             );
           }
           /**
-           * do not attempt to use Polygon.updateIsConvex()
+           * do not attempt to use Polygon.updateConvex()
            */
-          updateIsConvex() {
+          updateConvex() {
             return;
           }
         }
@@ -7143,11 +7143,11 @@
         const model_1 = __webpack_require__(
           /*! ../model */ './node_modules/detect-collisions/dist/model.js'
         );
-        const optimized_1 = __webpack_require__(
-          /*! ../optimized */ './node_modules/detect-collisions/dist/optimized.js'
-        );
         const utils_1 = __webpack_require__(
           /*! ../utils */ './node_modules/detect-collisions/dist/utils.js'
+        );
+        const optimized_1 = __webpack_require__(
+          /*! ../optimized */ './node_modules/detect-collisions/dist/optimized.js'
         );
         /**
          * collider - polygon
@@ -7285,6 +7285,7 @@
           setScale(x, y = x, updateNow = true) {
             this.scaleVector.x = Math.abs(x);
             this.scaleVector.y = Math.abs(y);
+            // super instead of this to not taint pointsBackup
             super.setPoints(
               (0, optimized_1.map)(
                 this.points,
@@ -7295,6 +7296,7 @@
                   )
               )
             );
+            this.updateConvex();
             this.markAsDirty(updateNow);
             return this;
           }
@@ -7353,7 +7355,7 @@
            */
           setPoints(points) {
             super.setPoints(points);
-            this.updateIsConvex();
+            this.updateConvex();
             this.pointsBackup = (0, utils_1.clonePointsArray)(points);
             return this;
           }
@@ -7477,7 +7479,7 @@
           /**
            * after points update set is convex
            */
-          updateIsConvex() {
+          updateConvex() {
             // all other types other than polygon are always convex
             const convex = this.getConvex();
             // everything with empty array or one element array
